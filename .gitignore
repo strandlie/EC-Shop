@@ -1,0 +1,20 @@
+// output folders
+bin/
+target/
+.idea/
+.DS_Store
+
+// temporary generated files
+*.xtendbin
+*._trace
+
+node_modules/
+
+// vim-files
+*.swp
+*.swo
+*.swe
+*.swn
+*.sw
+
+
