@@ -34,5 +34,9 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/CDC-1.0%Foundation-1.0"/>
 	<classpathentry kind="lib" path="/usr/lib/jvm/java-8-openjdk/jre/lib/ext/jfxrt.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/tdt4140-gr1864/tdt4140-gr1864.app.core/0.0.1-SNAPSHOT/tdt4140-gr1864.app.core-0.0.1-SNAPSHOT.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/junit/junit/4.12/junit-4.12.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/testfx/testfx-core/4.0.10-alpha/testfx-core-4.0.10-alpha.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/testfx/testfx-junit/4.0.10-alpha/testfx-junit-4.0.10-alpha.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -36,4 +36,21 @@
 		</dependency>
 	</dependencies>
 
+  <properties>
+    <skip-ui-tests>false</skip-ui-tests>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupID>org.apache.maven.plugins</groupID>
+        <artifactID>maven-surefire-plugin</artifactID>
+        <version>2.20.1</version>
+        <configuration>
+          <skipTests>${skip-ui-tests}</skipTests>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
 </project>
