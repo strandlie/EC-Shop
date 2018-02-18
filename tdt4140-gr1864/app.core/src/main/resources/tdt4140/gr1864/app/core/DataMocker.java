@@ -1,6 +1,7 @@
 package tdt4140.gr1864.app.core;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -15,13 +16,13 @@ public class DataMocker {
 	 * Zones where a customer may stop to pick up goods. We use a List instead of a collection
 	 * so that we can easily shuffle the zones in order to pick a random subset. 
 	 */
-	private List<Rectangle> zones;
+	private List<Rack> zones;
 	
 	/**
 	 * @param home A rectangle containing the cashier desks.
 	 * @param zones A collection of zones where the customer may stop to pick up goods.
 	 */
-	public DataMocker(Rectangle home, List<Rectangle> zones) {
+	public DataMocker(Rectangle home, List<Rack> zones) {
 		this.home = home;
 		this.zones = zones;
 	}
@@ -84,40 +85,62 @@ public class DataMocker {
 	 * @param fuzz The amount of randomness added to samples.
 	 * @return A list of coordinates between a random set of zones, starting and ending in the home zone.
 	 */
-	public List<Coordinate> generateRandomPath(double intensity, double fuzz) {
+	public Trip generateRandomPath(double intensity, double fuzz) {
 		List<Coordinate> coordinates = new ArrayList<>();
+		
+		List<PickUpAction> actions = new ArrayList<>();
 		
 		Coordinate previous = generateRandomCoordinateInsideRectangle(home);
 		
-		// Shuffle the zones. This is used to create a random subset of zones to visit.
-		List<Rectangle> shuffledZones = new ArrayList<>(zones);
+		coordinates.add(previous);
 		
-		Collections.shuffle(shuffledZones);
+		// Shuffle the racks. This is used to create a random subset of zones to visit.
+		List<Rack> shuffledRacks = new ArrayList<>(zones);
+		
+		Collections.shuffle(shuffledRacks);
 		
 		// Select a random amount of zones from the shuffled list of zones.
-		for (Rectangle box : shuffledZones.subList(0, ThreadLocalRandom.current().nextInt(0, shuffledZones.size()))) {
+		for (Rack box : shuffledRacks.subList(0, ThreadLocalRandom.current().nextInt(0, shuffledRacks.size() + 1))) {
 			Coordinate position = generateRandomCoordinateInsideRectangle(box);
 			coordinates.addAll(getAllPointsAtSlopeBetweenCoordinates(previous, position, intensity, fuzz));
 			previous = position;
+			
+			actions.add(new PickUpAction(box.getRandomItem().getCode()));
 		}
 		
 		Coordinate goal = generateRandomCoordinateInsideRectangle(home);
 		
 		coordinates.addAll(getAllPointsAtSlopeBetweenCoordinates(previous, goal, intensity, fuzz));
 		
-		return coordinates;
+		return new Trip(coordinates, actions);
 	}
 	
 	public static void main(String[] args) {
 		Rectangle home = new Rectangle(new Coordinate(0, 0), new Coordinate(10, 10));
-		List<Rectangle> zones = new ArrayList<>();
-		zones.add(new Rectangle(new Coordinate(50, 100), new Coordinate(60, 150)));
-		zones.add(new Rectangle(new Coordinate(200, 200), new Coordinate(300, 300)));
-		zones.add(new Rectangle(new Coordinate(400, 10), new Coordinate(500, 100)));
-		DataMocker mocker = new DataMocker(home, zones);	
-		List<Coordinate> path = mocker.generateRandomPath(10, 5);
+		
+		Collection<Item> fruits = new ArrayList<>();
+		
+		fruits.add(new Item("Banana", 1337));
+		fruits.add(new Item("Strawberry", 6969));
+		
+		List<Rack> zones = new ArrayList<>();
+		
+		Rack fruitRack = new Rack(new Coordinate(50, 100), new Coordinate(60, 150), fruits);
+
+		zones.add(fruitRack);
+		
+		DataMocker mocker = new DataMocker(home, zones);
+		
+		Trip trip = mocker.generateRandomPath(10, 5);
+		
+		List<Coordinate> path = trip.getPath();
+		
+		for (PickUpAction action : trip.getActions()) {
+			System.out.println(action.getCode());
+		}
+		
 		for (Coordinate point : path) {
-			System.out.println("("+point.getX() + ", " + point.getY()+"),");
+			System.out.println("(" + point.getX() + ", " + point.getY() + "),");
 		}
 	}
 }
