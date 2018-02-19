@@ -4,9 +4,9 @@ import java.util.List;
 
 public class Trip {
 	private List<Position> path;
-	private List<PickUpAction> actions;
+	private List<Action> actions;
 	
-	public Trip(List<Position> path, List<PickUpAction> actions) {
+	public Trip(List<Position> path, List<Action> actions) {
 		this.path = path;
 		this.actions = actions;
 	}
@@ -15,7 +15,7 @@ public class Trip {
 		return path;
 	}
 	
-	public List<PickUpAction> getActions() {
+	public List<Action> getActions() {
 		return actions;
 	}
 }

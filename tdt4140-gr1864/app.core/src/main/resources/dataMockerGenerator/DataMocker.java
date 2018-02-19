@@ -97,10 +97,10 @@ public class DataMocker {
 	public Trip generateRandomPath(double intensity, double fuzz, double speed) {
 		List<Position> coordinates = new ArrayList<>();
 		
-		List<PickUpAction> actions = new ArrayList<>();
+		List<Action> actions = new ArrayList<>();
 		
+		// New date element for timestamp
 		Date time = new Date();
-		
 		
 		Coordinate previous = new Position(generateRandomCoordinateInsideRectangle(home), time);
 		
@@ -123,14 +123,13 @@ public class DataMocker {
 			
 			previous = target;
 			
-			actions.add(new PickUpAction(box.getRandomItem().getCode(), time));
+			actions.add(generateNewAction(time, box));
 		}
 		
 		Coordinate goal = generateRandomCoordinateInsideRectangle(home);
 		
 		for (Coordinate coordinate : getAllPointsAtSlopeBetweenCoordinates(previous, goal, intensity, fuzz)) {
 			time = addTime(time, Double.valueOf(intensity * speed).intValue());
-			
 			coordinates.add(new Position(coordinate, time));
 		}
 		
@@ -138,7 +137,25 @@ public class DataMocker {
 	}
 	
 	/**
-	 * 
+	 * Generates an action at 'time' where a product from the 'box' is either picked up or
+	 * dropped. The product cannot be dropped if it has never been picked up.
+	 * @param time Date object for when the action happened
+	 * @param box A Rekt object where a random product is picked from
+	 * @return Returns an action object with the product and time for whether the product was picked up or dropped.
+	 */
+	public Action generateNewAction(Date time, Rack box) {
+		Product product = box.getRandomItem();
+		int action = ThreadLocalRandom.current().nextInt(Action.DROP, Action.PICK_UP+1);
+		
+		if (!product.canBeDropped()) {
+			action = 1;
+		}
+		
+		return new Action(product, time, action);
+	}
+	
+	/**
+	 * A basic function to add time in seconds to a given Date time object
 	 * @param time The date to add time to
 	 * @param seconds Amount of seconds to add
 	 * @return A Date object where the Date object 'time' has been added amount of 'seconds'.
@@ -150,22 +167,35 @@ public class DataMocker {
 		time = cal.getTime();
 		return time;
 	}
-	
+
+	// TODO minus koordinat på x
 	public static void main(String[] args) throws JsonProcessingException {
 		Rectangle home = new Rectangle(new Coordinate(0, 0), new Coordinate(10, 10));
 	
 		List<Rack> zones = new ArrayList<>();
 
-		Collection<Item> fruits = new ArrayList<>();
-		fruits.add(new Item());
-		fruits.add(new Item());
-		Rack fruitRack = new Rack(new Coordinate(50, 100), new Coordinate(60, 150), fruits);
-				
-		zones.add(fruitRack);
+		/**
+		 * For each row in a rack, creates a new product and fills products with each product corresponding
+		 * to amount of rows. Creates amount_of_racks racks.
+		 * Adds every rack to zones.
+		 */
+		
+		int amount_of_racks = 10;
+		int amount_of_rows = 4;
+
+		for (int i = 0; i < amount_of_racks; i++) {
+			Collection<Product> products = new ArrayList<>();
+			
+			for (int j = 0; j < amount_of_rows; j++) {
+				products.add(new Product());
+			}
+			Rack productRack = new Rack(new Coordinate(10*i, 20*i), new Coordinate(10*i+10, 20*i+10), products);
+			zones.add(productRack);
+		}
 		
 		DataMocker mocker = new DataMocker(home, zones);
 
-		Trip trip = mocker.generateRandomPath(10, 5, 1);		
+		Trip trip = mocker.generateRandomPath(ThreadLocalRandom.current().nextInt(0, 500), 5, ThreadLocalRandom.current().nextInt(0, 60));		
 		List<Position> path = trip.getPath();
 		
 		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();

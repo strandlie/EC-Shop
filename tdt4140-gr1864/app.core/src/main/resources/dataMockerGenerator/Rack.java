@@ -4,24 +4,24 @@ import java.util.Collection;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Rack extends Rectangle {
-	private Collection<Item> items;
+	private Collection<Product> items;
 	
-	public Rack(Coordinate lower, Coordinate upper, Collection<Item> items) {
+	public Rack(Coordinate lower, Coordinate upper, Collection<Product> items) {
 		super(lower, upper);
 		
 		this.items = items;
 	}
 	
-	public Collection<Item> getItems() {
+	public Collection<Product> getItems() {
 		return items;
 	}
 	
-	public Item getRandomItem() {
+	public Product getRandomItem() {
 		int index = 0;
 		
 		int target = ThreadLocalRandom.current().nextInt(items.size());
 		
-		for (Item item : items) {
+		for (Product item : items) {
 			if  (index == target) {
 				return item;
 			}
