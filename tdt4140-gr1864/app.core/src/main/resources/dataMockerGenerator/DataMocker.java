@@ -75,9 +75,11 @@ public class DataMocker {
 		for (double i = 0; i <= distance; i += intensity) {
 			Coordinate position = getPointAtSlopeBetweenCoordinates(start, end, i / distance);
 			
-			// Add some noise to the coordinates.
-			position.setX(position.getX() + ThreadLocalRandom.current().nextDouble(-fuzz / 2, fuzz / 2));
-			position.setY(position.getY() + ThreadLocalRandom.current().nextDouble(-fuzz / 2, fuzz / 2));
+			// Add some noise to the coordinates. Clamp the values so that they are not negative.
+			// This slightly changes the probability distribution for coordinates close to the edges, which
+			// should not really be a problem in practice.
+			position.setX(Math.max(position.getX() + ThreadLocalRandom.current().nextDouble(-fuzz / 2, fuzz / 2), 0));
+			position.setY(Math.max(position.getY() + ThreadLocalRandom.current().nextDouble(-fuzz / 2, fuzz / 2), 0));
 			
 			coordinates.add(position);
 		}
