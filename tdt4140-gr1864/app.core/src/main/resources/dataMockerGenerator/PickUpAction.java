@@ -1,10 +1,12 @@
 package dataMockerGenerator;
 
+import java.util.Date;
+
 public class PickUpAction {
 	private int code;
-	private double time;
+	private Date time;
 	
-	public PickUpAction(int code, double time) {
+	public PickUpAction(int code, Date time) {
 		this.code = code;
 		this.time = time;
 	}
@@ -13,7 +15,7 @@ public class PickUpAction {
 		return code;
 	}
 	
-	public double getTime() {
+	public Date getTime() {
 		return time;
 	}
 }

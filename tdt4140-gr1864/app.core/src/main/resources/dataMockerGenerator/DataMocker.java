@@ -1,8 +1,10 @@
 package dataMockerGenerator;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -32,7 +34,7 @@ public class DataMocker {
 	}
 	
 	/**
-	 * Genenrates a random coordinate inside a given rectangle.
+	 * Generates a random coordinate inside a given rectangle.
 	 * @param rectangle
 	 * @return A random coordinate contained within the given rectangle.
 	 */
@@ -85,6 +87,7 @@ public class DataMocker {
 	
 	/**
 	 * Generate a sequence of coordinates describing an users path through the shop.
+	 * UNIT: five units is one meter, maximum speed is 60 units per second
 	 * @param intensity The distance between samples.
 	 * @param fuzz The amount of randomness added to samples.
 	 * @param speed The number of units the person walks each second.
@@ -96,7 +99,8 @@ public class DataMocker {
 		
 		List<PickUpAction> actions = new ArrayList<>();
 		
-		double time = 0;
+		Date time = new Date();
+		
 		
 		Coordinate previous = new Position(generateRandomCoordinateInsideRectangle(home), time);
 		
@@ -110,10 +114,10 @@ public class DataMocker {
 		// Select a random amount of zones from the shuffled list of zones.
 		for (Rack box : shuffledRacks.subList(0, ThreadLocalRandom.current().nextInt(0, shuffledRacks.size() + 1))) {
 			// The target position.
-			Coordinate target = new Position(generateRandomCoordinateInsideRectangle(box), 0);
+			Coordinate target = new Position(generateRandomCoordinateInsideRectangle(box), new Date());
 			
 			for (Coordinate coordinate : getAllPointsAtSlopeBetweenCoordinates(previous, target, intensity, fuzz)) {
-				time += intensity * speed;
+				time = addTime(time, Double.valueOf(intensity * speed).intValue());
 				coordinates.add(new Position(coordinate, time));
 			}
 			
@@ -125,11 +129,26 @@ public class DataMocker {
 		Coordinate goal = generateRandomCoordinateInsideRectangle(home);
 		
 		for (Coordinate coordinate : getAllPointsAtSlopeBetweenCoordinates(previous, goal, intensity, fuzz)) {
-			time += intensity * speed;
+			time = addTime(time, Double.valueOf(intensity * speed).intValue());
+			
 			coordinates.add(new Position(coordinate, time));
 		}
 		
 		return new Trip(coordinates, actions);
+	}
+	
+	/**
+	 * 
+	 * @param time The date to add time to
+	 * @param seconds Amount of seconds to add
+	 * @return A Date object where the Date object 'time' has been added amount of 'seconds'.
+	 */
+	public Date addTime(Date time, int seconds) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(time);
+		cal.add(Calendar.SECOND, seconds);
+		time = cal.getTime();
+		return time;
 	}
 	
 	public static void main(String[] args) throws JsonProcessingException {
@@ -138,8 +157,8 @@ public class DataMocker {
 		List<Rack> zones = new ArrayList<>();
 
 		Collection<Item> fruits = new ArrayList<>();
-		fruits.add(new Item("Banana", 1337));
-		fruits.add(new Item("Strawberry", 6969));
+		fruits.add(new Item());
+		fruits.add(new Item());
 		Rack fruitRack = new Rack(new Coordinate(50, 100), new Coordinate(60, 150), fruits);
 				
 		zones.add(fruitRack);

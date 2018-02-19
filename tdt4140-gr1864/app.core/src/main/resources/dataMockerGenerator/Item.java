@@ -1,16 +1,12 @@
 package dataMockerGenerator;
 
 public class Item {
-	private String name;
 	private int code;
+	private static int productNum = 0;
 	
-	public Item(String name, int code) {
-		this.name = name;
-		this.code = code;
-	}
-
-	public String getName() {
-		return name;
+	public Item() {
+		this.code = productNum;
+		productNum++;
 	}
 
 	public int getCode() {

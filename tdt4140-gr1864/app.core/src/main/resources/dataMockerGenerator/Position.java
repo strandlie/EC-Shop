@@ -1,21 +1,22 @@
 package dataMockerGenerator;
 
+import java.util.Date;
+
 public class Position extends Coordinate {
-	private double time;
+	private Date time;
 	
-	public Position(double x, double y, double time) {
+	public Position(double x, double y, Date time) {
 		super(x, y);
 		
 		this.time = time;
 	}
 
-	public Position(Coordinate coordinate, double time) {
+	public Position(Coordinate coordinate, Date time) {
 		super(coordinate.getX(), coordinate.getY());
-		
 		this.time = time;
 	}
 	
-	public double getTime() {
+	public Date getTime() {
 		return time;
 	}
 }
