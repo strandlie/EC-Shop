@@ -1,4 +1,4 @@
-package tdt4140.gr1864.app.core;
+package dataMockerGenerator;
 
 public class Item {
 	private String name;

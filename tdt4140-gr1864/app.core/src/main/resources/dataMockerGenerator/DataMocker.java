@@ -1,4 +1,4 @@
-package tdt4140.gr1864.app.core;
+package dataMockerGenerator;
 
 import java.util.ArrayList;
 import java.util.Collection;
