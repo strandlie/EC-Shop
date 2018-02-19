@@ -89,7 +89,7 @@ public class DataMocker {
 	
 	/**
 	 * Generate a sequence of coordinates describing an users path through the shop.
-	 * UNIT: five units is one meter, maximum speed is 60 units per second
+	 * Five units is one meter, and the maximum speed 60 units per second.
 	 * @param intensity The distance between samples.
 	 * @param fuzz The amount of randomness added to samples.
 	 * @param speed The number of units the person walks each second.
@@ -112,7 +112,7 @@ public class DataMocker {
 		List<Rack> shuffledRacks = new ArrayList<>(zones);
 		
 		Collections.shuffle(shuffledRacks);
-		
+	
 		// Select a random amount of zones from the shuffled list of zones.
 		for (Rack box : shuffledRacks.subList(0, ThreadLocalRandom.current().nextInt(0, shuffledRacks.size() + 1))) {
 			// The target position.
@@ -125,7 +125,7 @@ public class DataMocker {
 			
 			previous = target;
 			
-			actions.add(generateNewAction(time, box));
+			actions.add(generateAction(time, box));
 		}
 		
 		Coordinate goal = generateRandomCoordinateInsideRectangle(home);
@@ -139,28 +139,23 @@ public class DataMocker {
 	}
 	
 	/**
-	 * Generates an action at 'time' where a product from the 'box' is either picked up or
+	 * Generates an action at time where a product from the box is either picked up or
 	 * dropped. The product cannot be dropped if it has never been picked up.
 	 * @param time Date object for when the action happened
-	 * @param box A Rekt object where a random product is picked from
+	 * @param box A Rectangle object where a random product is picked from
 	 * @return Returns an action object with the product and time for whether the product was picked up or dropped.
 	 */
-	public Action generateNewAction(Date time, Rack box) {
+	public Action generateAction(Date time, Rack box) {
 		Product product = box.getRandomItem();
-		int action = ThreadLocalRandom.current().nextInt(Action.DROP, Action.PICK_UP+1);
-		
-		if (!product.canBeDropped()) {
-			action = 1;
-		}
-		
+		int action = product.canBeDropped() ? ThreadLocalRandom.current().nextInt(Action.DROP, Action.PICK_UP + 1) : 1;
 		return new Action(product, time, action);
 	}
 	
 	/**
-	 * A basic function to add time in seconds to a given Date time object
+	 * A basic function to add time in seconds to a given Date time object.
 	 * @param time The date to add time to
 	 * @param seconds Amount of seconds to add
-	 * @return A Date object where the Date object 'time' has been added amount of 'seconds'.
+	 * @return A Date object where the the given amount of seconds has been added to the time.
 	 */
 	public Date addTime(Date time, int seconds) {
 		Calendar cal = Calendar.getInstance();
@@ -175,22 +170,20 @@ public class DataMocker {
 	
 		List<Rack> zones = new ArrayList<>();
 
-		/**
-		 * For each row in a rack, creates a new product and fills products with each product corresponding
-		 * to amount of rows. Creates amount_of_racks racks.
-		 * Adds every rack to zones.
-		 */
-		
-		int amount_of_racks = 10;
-		int amount_of_rows = 4;
+		// For each row in a rack, creates a new product and fills products with each product corresponding
+		// to amount of rows. Creates the given amount of racks and adds every rack to zones.
+		int rackAmount = 10;
+		int rowAmount = 4;
 
-		for (int i = 0; i < amount_of_racks; i++) {
+		for (int i = 0; i < rackAmount; i++) {
 			Collection<Product> products = new ArrayList<>();
 			
-			for (int j = 0; j < amount_of_rows; j++) {
+			for (int j = 0; j < rowAmount; j++) {
 				products.add(new Product());
 			}
-			Rack productRack = new Rack(new Coordinate(10*i, 20*i), new Coordinate(10*i+10, 20*i+10), products);
+			
+			Rack productRack = new Rack(new Coordinate(10 * i, 20 * i), new Coordinate(10 * i + 10, 20 * i + 10), products);
+			
 			zones.add(productRack);
 		}
 		

@@ -1,29 +1,54 @@
 package dataMockerGenerator;
 
 public class Product {
-	private int code;
-	private int amount_of_picked = 0;
-	private static int productNum = 0;
+	/**
+	 * An unique ID for used to uniquely identify products.
+	 */
+	private static int productCounter = 0;
 	
+	/**
+	 * The unique code for a specific product.
+	 */
+	private int code;
+	
+	/**
+	 * The number of items of this Product which the user currently being simulated is carrying.
+	 */
+	private int carrying = 0;
+	
+	/**
+	 * Create a new Product with a fresh ID.
+	 */
 	public Product() {
-		this.code = productNum;
-		productNum++;
+		code = productCounter;
+		productCounter += 1;
 	}
 
+	/**
+	 * @return The code for this product.
+	 */
 	public int getCode() {
 		return code;
 	}
 	
+	/**
+	 * Increase the number of items being carried.
+	 */
 	public void pickUp() {
-		this.amount_of_picked++;
+		carrying += 1;
 	}
 	
+	/**
+	 * Decrease the number of items being carried.
+	 */
 	public void drop() {
-		this.amount_of_picked--;
+		carrying -= 1;
 	}
 	
+	/**
+	 * @return Whether or not we are carrying any items of this type.
+	 */
 	public boolean canBeDropped() {
-		return amount_of_picked > 0;
+		return carrying > 0;
 	}
-	
 }
