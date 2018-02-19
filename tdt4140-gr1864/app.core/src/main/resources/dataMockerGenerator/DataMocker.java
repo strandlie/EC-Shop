@@ -168,7 +168,6 @@ public class DataMocker {
 		return time;
 	}
 
-	// TODO minus koordinat på x
 	public static void main(String[] args) throws JsonProcessingException {
 		Rectangle home = new Rectangle(new Coordinate(0, 0), new Coordinate(10, 10));
 	
