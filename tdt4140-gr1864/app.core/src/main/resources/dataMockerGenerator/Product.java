@@ -18,6 +18,10 @@ public class Product {
 		this.amount_of_picked++;
 	}
 	
+	public void drop() {
+		this.amount_of_picked--;
+	}
+	
 	public boolean canBeDropped() {
 		return amount_of_picked > 0;
 	}

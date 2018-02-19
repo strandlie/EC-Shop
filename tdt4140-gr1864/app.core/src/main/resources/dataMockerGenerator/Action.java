@@ -11,6 +11,14 @@ public class Action {
 	public static int DROP = 0;
 	
 	public Action(Product product, Date time, int type) {
+		if (type == DROP && product.canBeDropped()) {
+			product.drop();
+		} else if (type == PICK_UP) {
+			product.pickUp();
+		} else {
+			throw new IllegalStateException("Cannot pick up product that's not dropped");
+		}
+
 		this.product = product;
 		this.time = time;
 		this.type = type;
