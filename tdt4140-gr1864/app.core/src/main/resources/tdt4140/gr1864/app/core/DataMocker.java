@@ -6,6 +6,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+
 public class DataMocker {
 	/**
 	 * A Rectangle containing the start and end of all paths. Typically the cashier desks.
@@ -83,16 +87,20 @@ public class DataMocker {
 	 * Generate a sequence of coordinates describing an users path through the shop.
 	 * @param intensity The distance between samples.
 	 * @param fuzz The amount of randomness added to samples.
-	 * @return A list of coordinates between a random set of zones, starting and ending in the home zone.
+	 * @param speed The number of units the person walks each second.
+	 * @return A list of coordinates between a random set of zones, starting and ending in the home zone, and'
+	 * a list of actions performed by the user.
 	 */
-	public Trip generateRandomPath(double intensity, double fuzz) {
-		List<Coordinate> coordinates = new ArrayList<>();
+	public Trip generateRandomPath(double intensity, double fuzz, double speed) {
+		List<Position> coordinates = new ArrayList<>();
 		
 		List<PickUpAction> actions = new ArrayList<>();
 		
-		Coordinate previous = generateRandomCoordinateInsideRectangle(home);
+		double time = 0;
 		
-		coordinates.add(previous);
+		Coordinate previous = new Position(generateRandomCoordinateInsideRectangle(home), time);
+		
+		coordinates.add((Position) previous);
 		
 		// Shuffle the racks. This is used to create a random subset of zones to visit.
 		List<Rack> shuffledRacks = new ArrayList<>(zones);
@@ -101,46 +109,48 @@ public class DataMocker {
 		
 		// Select a random amount of zones from the shuffled list of zones.
 		for (Rack box : shuffledRacks.subList(0, ThreadLocalRandom.current().nextInt(0, shuffledRacks.size() + 1))) {
-			Coordinate position = generateRandomCoordinateInsideRectangle(box);
-			coordinates.addAll(getAllPointsAtSlopeBetweenCoordinates(previous, position, intensity, fuzz));
-			previous = position;
+			// The target position.
+			Coordinate target = new Position(generateRandomCoordinateInsideRectangle(box), 0);
 			
-			actions.add(new PickUpAction(box.getRandomItem().getCode()));
+			for (Coordinate coordinate : getAllPointsAtSlopeBetweenCoordinates(previous, target, intensity, fuzz)) {
+				time += intensity * speed;
+				coordinates.add(new Position(coordinate, time));
+			}
+			
+			previous = target;
+			
+			actions.add(new PickUpAction(box.getRandomItem().getCode(), time));
 		}
 		
 		Coordinate goal = generateRandomCoordinateInsideRectangle(home);
 		
-		coordinates.addAll(getAllPointsAtSlopeBetweenCoordinates(previous, goal, intensity, fuzz));
+		for (Coordinate coordinate : getAllPointsAtSlopeBetweenCoordinates(previous, goal, intensity, fuzz)) {
+			time += intensity * speed;
+			coordinates.add(new Position(coordinate, time));
+		}
 		
 		return new Trip(coordinates, actions);
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws JsonProcessingException {
 		Rectangle home = new Rectangle(new Coordinate(0, 0), new Coordinate(10, 10));
-		
+	
+		List<Rack> zones = new ArrayList<>();
+
 		Collection<Item> fruits = new ArrayList<>();
-		
 		fruits.add(new Item("Banana", 1337));
 		fruits.add(new Item("Strawberry", 6969));
-		
-		List<Rack> zones = new ArrayList<>();
-		
 		Rack fruitRack = new Rack(new Coordinate(50, 100), new Coordinate(60, 150), fruits);
-
+				
 		zones.add(fruitRack);
 		
 		DataMocker mocker = new DataMocker(home, zones);
+
+		Trip trip = mocker.generateRandomPath(10, 5, 1);		
+		List<Position> path = trip.getPath();
 		
-		Trip trip = mocker.generateRandomPath(10, 5);
-		
-		List<Coordinate> path = trip.getPath();
-		
-		for (PickUpAction action : trip.getActions()) {
-			System.out.println(action.getCode());
-		}
-		
-		for (Coordinate point : path) {
-			System.out.println("(" + point.getX() + ", " + point.getY() + "),");
-		}
+		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+		String json = ow.writeValueAsString(trip);
+		System.out.println(json);
 	}
 }
