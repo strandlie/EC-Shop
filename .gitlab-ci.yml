@@ -18,7 +18,6 @@ build-job:
   stage: build
   script:
     - "mvn clean compile -f tdt4140-gr1864/pom.xml $MAVEN_CLI_OPTS"
-    - "cat tdt4140-gr1864/app.core/target/site/jacoco/index.html"
 
 unittest-job:
   stage: test
@@ -26,6 +25,7 @@ unittest-job:
     - build-job
   script:
     - "mvn package -f tdt4140-gr1864/pom.xml $MAVEN_CLI_OPTS"
+    - "cat tdt4140-gr1864/app.core/target/site/jacoco/index.html"
 
 integrationtest-job:
   stage: test
