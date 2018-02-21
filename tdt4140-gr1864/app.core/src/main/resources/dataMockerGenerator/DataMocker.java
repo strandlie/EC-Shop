@@ -1,5 +1,8 @@
 package dataMockerGenerator;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -96,7 +99,7 @@ public class DataMocker {
 	 * @return A list of coordinates between a random set of zones, starting and ending in the home zone, and'
 	 * a list of actions performed by the user.
 	 */
-	public Trip generateRandomPath(double intensity, double fuzz, double speed) {
+	private Trip generateRandomPath(double intensity, double fuzz, double speed) {
 		List<Position> coordinates = new ArrayList<>();
 		
 		List<Action> actions = new ArrayList<>();
@@ -145,7 +148,7 @@ public class DataMocker {
 	 * @param box A Rectangle object where a random product is picked from
 	 * @return Returns an action object with the product and time for whether the product was picked up or dropped.
 	 */
-	public Action generateAction(Date time, Rack box) {
+	private Action generateAction(Date time, Rack box) {
 		Product product = box.getRandomItem();
 		int action = product.canBeDropped() ? ThreadLocalRandom.current().nextInt(Action.DROP, Action.PICK_UP + 1) : 1;
 		return new Action(product, time, action);
@@ -157,14 +160,14 @@ public class DataMocker {
 	 * @param seconds Amount of seconds to add
 	 * @return A Date object where the the given amount of seconds has been added to the time.
 	 */
-	public Date addTime(Date time, int seconds) {
+	private Date addTime(Date time, int seconds) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(time);
 		cal.add(Calendar.SECOND, seconds);
 		time = cal.getTime();
 		return time;
 	}
-
+	
 	public static void main(String[] args) throws JsonProcessingException {
 		Rectangle home = new Rectangle(new Coordinate(0, 0), new Coordinate(10, 10));
 	
@@ -189,11 +192,17 @@ public class DataMocker {
 		
 		DataMocker mocker = new DataMocker(home, zones);
 
-		Trip trip = mocker.generateRandomPath(ThreadLocalRandom.current().nextInt(0, 500), 5, ThreadLocalRandom.current().nextInt(0, 60));		
-		List<Position> path = trip.getPath();
-		
+		Trip trip = mocker.generateRandomPath(5, 5, ThreadLocalRandom.current().nextInt(0, 60));		
 		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 		String json = ow.writeValueAsString(trip);
-		System.out.println(json);
+		
+        try {
+            FileWriter fw = new FileWriter("./src/main/resources/data.json");
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(json);
+            bw.close();
+        } catch (IOException error) {
+        	error.printStackTrace();
+        }
 	}
 }
