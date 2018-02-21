@@ -1,6 +1,9 @@
+"""Plots a data dump from the data mocking program.
+Installing dependencies: pip install -r requirements.txt
+Usage: python plot.py data.json"""
+
 import json
 import matplotlib.pyplot as plt
-import numpy as np
 import sys
 
 data = json.loads(open(sys.argv[1]).read())
@@ -13,4 +16,3 @@ for coordinate in data['path']:
 
 plt.scatter(x, y)
 plt.show()
-
