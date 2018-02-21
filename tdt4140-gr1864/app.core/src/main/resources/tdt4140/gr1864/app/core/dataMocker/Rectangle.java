@@ -1,4 +1,4 @@
-package dataMocker;
+package tdt4140.gr1864.app.core.dataMocker;
 
 public class Rectangle {
 	/**
