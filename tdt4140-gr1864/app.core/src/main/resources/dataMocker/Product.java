@@ -1,4 +1,4 @@
-package dataMockerGenerator;
+package dataMocker;
 
 public class Product {
 	/**
