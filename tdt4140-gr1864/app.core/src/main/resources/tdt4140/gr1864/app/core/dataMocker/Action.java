@@ -39,7 +39,7 @@ public class Action {
 		} else if (type == PICK_UP) {
 			product.pickUp();
 		} else {
-			throw new IllegalStateException("Cannot DROP up product which is not being carried.");
+			throw new IllegalStateException("Cannot DROP a product which is not being carried.");
 		}
 
 		this.product = product;
