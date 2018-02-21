@@ -79,12 +79,23 @@ public class Mode {
 	 * @return Visualization element, or null. Returns null if not found
 	 */
 	public VisualizationElement getVisualizationElement(String name) {
-		
 		for (int i = 0; i < visuElements.size(); i++) {
 			if (this.visuElements.get(i).getName().equals(name)) {
 				return this.visuElements.get(i);
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Gets a VisualizationElement based on its relative importance. Throws an Exception if asking for nonexistant index 
+	 * @param index The index (importance) of the visualizationElements. 0 is the most important
+	 * @return The visualization element
+	 */
+	public VisualizationElement getVisualizationElement(Integer index) {
+		if (this.visuElements.size() == 0 || index >= visuElements.size() || index < 0) {
+			throw new IllegalArgumentException("There is no element at index " + index.toString()  + " in visualizationElements");
+		}
+		return this.visuElements.get(index);
 	}
 }
