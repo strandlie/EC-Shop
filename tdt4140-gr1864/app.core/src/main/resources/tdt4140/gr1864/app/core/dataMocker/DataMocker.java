@@ -96,7 +96,7 @@ public class DataMocker {
 	 * @param intensity The distance between samples.
 	 * @param fuzz The amount of randomness added to samples.
 	 * @param speed The number of units the person walks each second.
-	 * @return A list of coordinates between a random set of zones, starting and ending in the home zone, and'
+	 * @return A list of coordinates between a random set of zones, starting and ending in the home zone, and
 	 * a list of actions performed by the user.
 	 */
 	private Trip generateRandomPath(double intensity, double fuzz, double speed) {
