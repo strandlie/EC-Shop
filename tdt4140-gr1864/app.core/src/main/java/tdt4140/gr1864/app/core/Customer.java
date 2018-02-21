@@ -1,14 +1,20 @@
 package tdt4140.gr1864.app.core;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Customer {
 	private int customerId;
 	private String firstName;
 	private String lastName;
+	private ArrayList<ShoppingTrip> shoppingTrips;
 	
-	public Customer(int customerId, String firstName, String lastName) {
+	public Customer(int customerId, String firstName, String lastName, 
+			ArrayList<ShoppingTrip> shoppingTrips) {
 		this.customerId = customerId;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.shoppingTrips = shoppingTrips;
 	}
 
 	public int getUserId() {
@@ -33,6 +39,14 @@ public class Customer {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+	
+	public List<ShoppingTrip> getShoppingTrips() {
+		return shoppingTrips;
+	}
+
+	public void setShoppingTrips(List<ShoppingTrip> shoppingTrips) {
+		this.shoppingTrips = shoppingTrips;
 	}
 
 	@Override
@@ -70,5 +84,7 @@ public class Customer {
 			return false;
 		return true;
 	}
+
+	
 }
 
