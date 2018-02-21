@@ -11,9 +11,9 @@ public class Rack extends Rectangle {
 	
 	/**
 	 * Create a Rack, which is a Rectangle with a collection of items belonging to it.
-	 * @param lower
-	 * @param upper
-	 * @param items
+	 * @param lower The lower-left corner of the rectangle.
+	 * @param upper The upper-right corner of the rectangle.
+	 * @param items Items belonging this rack
 	 */
 	public Rack(Coordinate lower, Coordinate upper, Collection<Product> items) {
 		super(lower, upper);
