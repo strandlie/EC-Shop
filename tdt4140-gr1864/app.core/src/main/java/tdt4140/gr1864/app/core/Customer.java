@@ -41,11 +41,11 @@ public class Customer {
 		this.lastName = lastName;
 	}
 	
-	public List<ShoppingTrip> getShoppingTrips() {
+	public ArrayList<ShoppingTrip> getShoppingTrips() {
 		return shoppingTrips;
 	}
 
-	public void setShoppingTrips(List<ShoppingTrip> shoppingTrips) {
+	public void setShoppingTrips(ArrayList<ShoppingTrip> shoppingTrips) {
 		this.shoppingTrips = shoppingTrips;
 	}
 
