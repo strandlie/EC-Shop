@@ -172,27 +172,39 @@ public class DataMocker {
 		Rectangle home = new Rectangle(new Coordinate(0, 0), new Coordinate(10, 10));
 	
 		List<Rack> zones = new ArrayList<>();
+		Collection<Product> products = new ArrayList<>();
 
-		// For each row in a rack, creates a new product and fills products with each product corresponding
-		// to amount of rows. Creates the given amount of racks and adds every rack to zones.
-		int rackAmount = 10;
+		// Define amount of rows, height and width of racks (in the coordinate system)		
 		int rowAmount = 4;
+		int productsPerRack = 4;
+		int rackLength = 20;
+		int rackHeight = 10;
+		
+		
+		// Y coordinate in store grid 
+		for (int y = 10; y < rowAmount*20; y+=20) {
 
-		for (int i = 0; i < rackAmount; i++) {
-			Collection<Product> products = new ArrayList<>();
-			
-			for (int j = 0; j < rowAmount; j++) {
-				products.add(new Product());
+			// X coordinate in store grid
+			for (int x = 10; x < rowAmount*40; x+=40) {
+				
+				// Generates productsPerRack products per Rack in products
+				for (int i = 0; i < productsPerRack; i++) {
+					products.add(new Product());
+				}
+
+				// Creates a rack with following x and y coordinates and corresponding products
+				Rack productRack = new Rack(
+						new Coordinate(x, y), 
+						new Coordinate((x + rackLength), (y + rackHeight)), 
+						products);
+
+				zones.add(productRack);
 			}
-			
-			Rack productRack = new Rack(new Coordinate(10 * i, 20 * i), new Coordinate(10 * i + 10, 20 * i + 10), products);
-			
-			zones.add(productRack);
 		}
 		
 		DataMocker mocker = new DataMocker(home, zones);
 
-		Trip trip = mocker.generateRandomPath(5, 5, ThreadLocalRandom.current().nextInt(0, 60));		
+		Trip trip = mocker.generateRandomPath(5, 2, ThreadLocalRandom.current().nextInt(0, 60));		
 		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 		String json = ow.writeValueAsString(trip);
 		
