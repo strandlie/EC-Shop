@@ -19,16 +19,18 @@ public class DataLoader {
 	public static void main(String [] args) {
 		DataLoader loader = new DataLoader();
 		String path = "../../src/main/resources/test-data.json";
-		loader.loadData(path);
+		ShoppingTrip trip = loader.loadData(path);
 	}
 	
 	/*
 	 * Loads JSON-data from path, creates ShoppingTrip object 
 	 * @param path	relative path to JSON-data (relative to this)
 	 */
-	public void loadData(String path) {
+	public ShoppingTrip loadData(String path) {
 		String relativePath = getClass().getClassLoader().getResource(".").getPath();
 		JSONParser parser = new JSONParser();
+		
+		ShoppingTrip shoppingTrip = null;
 		
 		try {
 			Object obj = parser.parse(new FileReader(relativePath + path));
@@ -43,12 +45,12 @@ public class DataLoader {
 			ArrayList<Action> actions = (ArrayList<Action>) createActions(actionsArray);
 			
 			// create ShoppingTrip
-			ShoppingTrip shoppingTrip = createShoppingTrip(coordinates, actions);
-
+			shoppingTrip = createShoppingTrip(coordinates, actions);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+		return shoppingTrip;
 	}
 	
 	/*
