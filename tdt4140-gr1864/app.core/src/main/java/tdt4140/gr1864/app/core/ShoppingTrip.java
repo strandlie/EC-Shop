@@ -5,9 +5,9 @@ import java.util.List;
 public class ShoppingTrip {
 	
 	/* start-time of ShoppingTrip in UNIX-time */
-	private int start;
+	private long start;
 	/* end-time of ShoppingTrip in UNIX-time */
-	private int end;
+	private long end;
 	
 	/* Coordinates that makes up the trip */
 	private List<Coordinate> coordinates;
@@ -18,8 +18,8 @@ public class ShoppingTrip {
 		this.coordinates = coordinates;
 		this.actions = actions;
 		
-		long start = findStart(coordinates);
-		long end = findEnd(coordinates);
+		this.start = findStart(coordinates);
+		this.end = findEnd(coordinates);
 	}
 	
 	/*
@@ -52,11 +52,19 @@ public class ShoppingTrip {
 		return max;
 	}
 
-	public int getStart() {
+	public long getStart() {
 		return start;
 	}
 	
-	public int getEnd() {
+	public long getEnd() {
 		return end;
+	}
+	
+	public List<Coordinate> getCoordinates() {
+		return coordinates;
+	}
+	
+	public List<Action> getActions() {
+		return actions;
 	}
 }
