@@ -1,7 +1,5 @@
 package tdt4140.gr1864.app.core;
 
-import static org.junit.Assert.*;
-
 import java.util.List;
 
 import org.junit.Before;
