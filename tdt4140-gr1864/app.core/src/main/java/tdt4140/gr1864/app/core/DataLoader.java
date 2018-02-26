@@ -20,6 +20,51 @@ public class DataLoader {
 		DataLoader loader = new DataLoader();
 		String path = "../../src/main/resources/test-data.json";
 		ShoppingTrip trip = loader.loadShoppingTrips(path);
+		
+		String pathToProducts = "../../src/main/resources/mock-products.json";
+		List<Product> p = loader.loadProducts(pathToProducts);
+		
+	}
+	
+	
+	public List<Product> loadProducts(String path) {
+		String relativePath = getClass().getClassLoader().getResource(".").getPath();
+		JSONParser parser = new JSONParser();
+		
+		List<Product> products = null;
+
+		try {
+			Object obj = parser.parse(new FileReader(relativePath + path));
+			JSONArray groceries = (JSONArray) obj;
+			
+			createProducts(groceries);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/*
+	 * Creates list of Products
+	 * @param productArray JSONArray with generated products 
+	 * @return list of Products 
+	 */
+	public List<Product> createProducts(JSONArray productArray) {
+		List<Product> products = new ArrayList<>();
+		String name;
+		double price;
+		
+		for (Object o : productArray) {
+			JSONObject jsonGroceries = (JSONObject) o;
+			name = (String) jsonGroceries.get("grocery");
+			price = (double) jsonGroceries.get("price");
+			
+			Product newProduct = new Product(name, price); 
+			products.add(newProduct);
+		}
+		
+		return products;
 	}
 	
 	/*
