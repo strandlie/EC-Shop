@@ -4,17 +4,34 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 import java.beans.Statement;
+import java.io.IOException;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.junit.runners.MethodSorters;
-
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class DatabaseTest {
+	
+	/*
+	 * Setting up database before running tests
+	 */
+	@BeforeClass
+	public static void setup() throws IOException {
+		CreateDatabase.main(null);
+	}
 	
 	@Test
 	public void AconnectionTest() {
@@ -98,7 +115,24 @@ public class DatabaseTest {
 	         System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 	         System.exit(0);
 	      }
-	    
+	}
+	
+	/*
+	 * Deleting database after running test
+	 */
+	@AfterClass
+	public static void finish() {
+		Path path = Paths.get("test.db");
+		try {
+		    Files.delete(path);
+		} catch (NoSuchFileException x) {
+		    System.err.format("%s: no such" + " file or directory%n", path);
+		} catch (DirectoryNotEmptyException x) {
+		    System.err.format("%s not empty%n", path);
+		} catch (IOException x) {
+		    // File permission problems are caught here.
+		    System.err.println(x);
+		}
 	}
 	
 }
