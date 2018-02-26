@@ -5,6 +5,7 @@ import java.util.List;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleStringProperty;
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationElement;
 
 /**
  * 
