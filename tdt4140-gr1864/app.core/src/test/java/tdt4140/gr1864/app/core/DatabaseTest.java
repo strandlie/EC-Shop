@@ -40,8 +40,8 @@ public class DatabaseTest {
 	         connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 	         
 	         statement = connection.createStatement();
-	         String sql = "INSERT INTO user (user_id, first_name, last_name) " +
-	                        "VALUES (1, 'Ben', 'Ten');"; 
+	         String sql = "INSERT INTO customer (customer_id, first_name, last_name, age, sex) " +
+	                        "VALUES (-1, 'Ben', 'Ten', 15, 'M');"; 
 	         statement.executeUpdate(sql);
 	         statement.close();
 	         connection.close();
@@ -62,7 +62,7 @@ public class DatabaseTest {
 	         connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 	         
 	         statement = connection.createStatement();
-	         String sql = "SELECT * FROM user WHERE user_id = 1;";
+	         String sql = "SELECT * FROM customer WHERE customer_id = -1;";
 	         
 	         resultSet = statement.executeQuery(sql);
 	         assertEquals(resultSet.next(), true);
@@ -85,10 +85,10 @@ public class DatabaseTest {
 	         connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 	         
 	         statement = connection.createStatement();
-	         String sql = "DELETE FROM user WHERE user_id = 1;"; 
+	         String sql = "DELETE FROM customer WHERE customer_id = -1;"; 
 	         statement.executeUpdate(sql);
 	         
-	         sql = "SELECT * FROM user WHERE user_id = 1;"; 
+	         sql = "SELECT * FROM customer WHERE customer_id = -1;"; 
 	         resultSet = statement.executeQuery(sql);
 	         assertEquals(resultSet.next(), false);
 	         statement.close();
