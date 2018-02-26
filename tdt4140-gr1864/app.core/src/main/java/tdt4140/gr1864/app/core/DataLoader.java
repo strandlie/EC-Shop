@@ -17,16 +17,75 @@ import org.json.simple.parser.JSONParser;
 public class DataLoader {
 	
 	public static void main(String [] args) {
+		
+		// Runs dataloader for shoppingtrip
 		DataLoader loader = new DataLoader();
 		String path = "../../src/main/resources/test-data.json";
-		ShoppingTrip trip = loader.loadData(path);
+		ShoppingTrip trip = loader.loadShoppingTrips(path);
+
+		// Runs dataloader for products
+		String pathToProducts = "../../src/main/resources/mock-products.json";
+		List<Product> p = loader.loadProducts(pathToProducts);
+		
+	}
+	
+	/**
+	 * Loads mock-products file and creates Product objects with corresponding name and price
+	 * @param path Path to .json file
+	 * @return A list of products which are generated from .json file.
+	 */
+	public List<Product> loadProducts(String path) {
+		String relativePath = getClass().getClassLoader().getResource(".").getPath();
+		JSONParser parser = new JSONParser();
+		
+		List<Product> products = null;
+
+		try {
+			Object obj = parser.parse(new FileReader(relativePath + path));
+			JSONArray groceries = (JSONArray) obj;
+			
+			// Creates a list with products with groceries JSONArray
+			products = createProducts(groceries);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return products;
+	}
+	
+	/*
+	 * Creates list of Products
+	 * @param productArray JSONArray with generated products 
+	 * @return list of products  
+	 */
+	public List<Product> createProducts(JSONArray productArray) {
+		List<Product> products = new ArrayList<>();
+		String name;
+		double price;
+		
+		for (Object o : productArray) {
+
+			// {"grocery": String, "price": double}
+			JSONObject jsonGrocery = (JSONObject) o;
+			
+			// Gets grocery name and price for each product
+			name = (String) jsonGrocery.get("grocery");
+			price = Double.parseDouble((String) jsonGrocery.get("price"));
+			
+			// Creates a new products and adds it to the list
+			Product newProduct = new Product(name, price); 
+			products.add(newProduct);
+		}
+		
+		return products;
 	}
 	
 	/*
 	 * Loads JSON-data from path, creates ShoppingTrip object 
 	 * @param path	relative path to JSON-data (relative to this)
 	 */
-	public ShoppingTrip loadData(String path) {
+	public ShoppingTrip loadShoppingTrips(String path) {
 		String relativePath = getClass().getClassLoader().getResource(".").getPath();
 		JSONParser parser = new JSONParser();
 		
