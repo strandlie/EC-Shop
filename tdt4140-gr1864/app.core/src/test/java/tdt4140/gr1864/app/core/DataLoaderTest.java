@@ -20,12 +20,12 @@ public class DataLoaderTest {
 
 	@Test
 	public void testReadingFromJsonFileExpectNoException() {
-		loader.loadData(path);
+		loader.loadShoppingTrips(path);
 	}
 	
 	@Test
 	public void testCoordinateLoadingFromFileExpectFirstCoordFromDataFile() {
-		ShoppingTrip shoppingTrip = loader.loadData(path);
+		ShoppingTrip shoppingTrip = loader.loadShoppingTrips(path);
 		List<Coordinate> coords = shoppingTrip.getCoordinates();
 		Coordinate coord = coords.get(0);
 		double expectedX = 8.622905145346992;
@@ -39,7 +39,7 @@ public class DataLoaderTest {
 	
 	@Test
 	public void testActionLoadingFromFileExpectFirstActionFromDataFile() {
-		ShoppingTrip shoppingTrip  = loader.loadData(path);
+		ShoppingTrip shoppingTrip  = loader.loadShoppingTrips(path);
 		List<Action> actions = shoppingTrip.getActions();
 		Action action = actions.get(0);
 		long expectedTime = 1519220923919L;

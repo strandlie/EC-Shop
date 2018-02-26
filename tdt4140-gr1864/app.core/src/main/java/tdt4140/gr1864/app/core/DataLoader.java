@@ -19,14 +19,14 @@ public class DataLoader {
 	public static void main(String [] args) {
 		DataLoader loader = new DataLoader();
 		String path = "../../src/main/resources/test-data.json";
-		ShoppingTrip trip = loader.loadData(path);
+		ShoppingTrip trip = loader.loadShoppingTrips(path);
 	}
 	
 	/*
 	 * Loads JSON-data from path, creates ShoppingTrip object 
 	 * @param path	relative path to JSON-data (relative to this)
 	 */
-	public ShoppingTrip loadData(String path) {
+	public ShoppingTrip loadShoppingTrips(String path) {
 		String relativePath = getClass().getClassLoader().getResource(".").getPath();
 		JSONParser parser = new JSONParser();
 		

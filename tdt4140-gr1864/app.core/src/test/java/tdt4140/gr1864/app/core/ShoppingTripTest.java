@@ -15,7 +15,7 @@ public class ShoppingTripTest {
 	public void setup() {
 		DataLoader loader = new DataLoader();
 		String path = "../../src/main/resources/test-data.json";
-		shoppingTrip = loader.loadData(path);
+		shoppingTrip = loader.loadShoppingTrips(path);
 	}
 
 	@Test
