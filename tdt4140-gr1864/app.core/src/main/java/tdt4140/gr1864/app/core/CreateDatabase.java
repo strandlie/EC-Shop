@@ -13,7 +13,7 @@ import java.sql.Statement;
 public class CreateDatabase {
     public static void createNewDatabase() throws IOException {
     		
-    		String url = "jdbc:sqlite:test.db";
+        String url = "jdbc:sqlite:database.db";
     	
         BufferedReader in = new BufferedReader(new FileReader("database.sql"));
         String str;
