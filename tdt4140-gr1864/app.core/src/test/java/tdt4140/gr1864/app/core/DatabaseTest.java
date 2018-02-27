@@ -3,7 +3,6 @@ package tdt4140.gr1864.app.core;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import java.beans.Statement;
 import java.io.IOException;
 import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.Files;
@@ -14,11 +13,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import org.junit.runners.MethodSorters;
 
-import org.junit.After;
+import org.junit.runners.MethodSorters;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -115,7 +112,6 @@ public class DatabaseTest {
 	         sql = "SELECT * FROM customer WHERE customer_id = -1;"; 
 	         resultSet = statement.executeQuery(sql);
 	         assertEquals(resultSet.next(), false);
-	         statement.close();
 	         statement.close();
 	         connection.close();
 	      } catch (Exception e) {

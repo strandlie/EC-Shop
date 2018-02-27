@@ -1,11 +1,9 @@
 package tdt4140.gr1864.app.core;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,7 +13,7 @@ public class CreateDatabase {
     		
         String url = "jdbc:sqlite:database.db";
     	
-        BufferedReader in = new BufferedReader(new FileReader("database.sql"));
+        BufferedReader in = new BufferedReader(new FileReader("src/main/resources/database.sql"));
         String str;
         StringBuffer sql = new StringBuffer();
         while ((str = in.readLine()) != null) {
