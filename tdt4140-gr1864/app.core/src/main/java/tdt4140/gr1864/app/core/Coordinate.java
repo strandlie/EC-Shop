@@ -4,9 +4,9 @@ public class Coordinate {
 	
 	private double x;
 	private double y;
-	private long timeStamp;
+	private int timeStamp;
 	
-	public Coordinate(double x, double y, long timeStamp) {
+	public Coordinate(double x, double y, int timeStamp) {
 		this.x = x;
 		this.y = y;
 		this.timeStamp = timeStamp;
@@ -20,7 +20,7 @@ public class Coordinate {
 		return y;
 	}
 	
-	public long getTimeStamp() {
+	public int getTimeStamp() {
 		return timeStamp;
 	}
 
