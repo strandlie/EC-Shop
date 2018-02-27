@@ -7,6 +7,18 @@ public class Action {
 	private int productID;
 	private ShoppingTrip trip;
 	
+	
+	/*
+	 * Constructor for creating Actions in ActionDatabaseController.
+	 * Needs to handle getting correct ShoppingTrip based on it's ID
+	 */
+	public Action(int timeStamp, int actionType, int productID, int shoppingTripID) {
+		this.timeStamp = timeStamp;
+		this.actionType = actionType;
+		this.productID = productID;
+		
+	}
+	
 	public Action(int timeStamp, int actionType, int productID) {
 		this.timeStamp = timeStamp;
 		this.actionType = actionType;
