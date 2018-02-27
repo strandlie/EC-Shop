@@ -8,14 +8,14 @@ import java.sql.SQLException;
 
 import interfaces.DatabaseCRUD;
 
-public class ActionDatabaseController implements DatabaseCRUD {
-	
+public class ProductDatabaseController implements DatabaseCRUD {
+
 	/* connection to SQLite database */
 	Connection connection;
 	/* SQL statement executed on database */
 	PreparedStatement statement;
 	
-	public ActionDatabaseController() {
+	public ProductDatabaseController() {
 		try {
 			this.connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 		}
@@ -24,39 +24,39 @@ public class ActionDatabaseController implements DatabaseCRUD {
 		}
 	}
 	
-	public void write(Action action, String sql) {
+	
+	public void write(Product product, String sql) {
 		try {
 			statement = connection.prepareStatement(sql);
-			statement.setInt(1, action.getShoppingTripID());
-			statement.setInt(2, action.getTimeStamp());
-			statement.setInt(3, action.getActionType());
+			statement.setString(1, product.getName());
+			statement.setDouble(2, product.getPrice());
 			statement.executeUpdate();
 			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-
+	
+	
 	@Override
 	public void create(Object object) {
-		Action action = objectIsAction(object);
-		String sql = "INSERT INTO action (shopping_trip_id, timestamp, type, product_id) "
-										+ "values (?, ?, ?, ?)";
-		this.write(action, sql);
+		Product product = objectIsProduct(object);
+		String sql = "INSERT INTO product (name, price) "
+										+ "values (?, ?)";
+		this.write(product, sql);
 	}
 
 	@Override
 	public void update(Object object) {
-		Action action = this.objectIsAction(object);
-		String sql = "UPDATE action SET timestamp=?, type=?";
-		this.write(action, sql);
+		Product product = this.objectIsProduct(object);
+		String sql = "UPDATE product SET name=?, price=?";
+		this.write(product, sql);
 	}
 
-	@Override
 	public Object retrieve(int id) {
 		try {
 			statement = connection
-					.prepareStatement("SELECT shopping_trip_id, timestamp, type, product_id"
+					.prepareStatement("SELECT product_id, name, price"
 										+ "WHERE shopping_trip_id=?");
 			statement.setInt(1, id);
 			ResultSet rs = statement.executeQuery();
@@ -65,9 +65,9 @@ public class ActionDatabaseController implements DatabaseCRUD {
 				return null;
 			}
 
-			Action action = new Action(rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getInt(1));
+			Product product = new Product(rs.getString(2), rs.getDouble(3));
 			connection.close();
-			return action;
+			return product;
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -79,7 +79,7 @@ public class ActionDatabaseController implements DatabaseCRUD {
 	public void delete(int id) {
 		try {
 			statement = connection
-					.prepareStatement("DELETE FROM action WHERE shopping_trip_id=?)");
+					.prepareStatement("DELETE FROM product WHERE product_id=?)");
 			statement.setInt(1, id);
 			statement.executeQuery();
 			connection.close();
@@ -90,13 +90,15 @@ public class ActionDatabaseController implements DatabaseCRUD {
 		
 	}
 	
-	public Action objectIsAction(Object object) {
-		Action action = (Action) object;
-		if (!(object instanceof Action)) {
-			throw new IllegalArgumentException("Object is not instance of Action");
+	public Product objectIsProduct(Object object) {
+		Product product = (Product) object;
+		if (!(object instanceof Product)) {
+			throw new IllegalArgumentException("Object is not instance of Product");
 		} else {
-			return action;
+			return product;
 		}
 	}
 
+	
+	
 }
