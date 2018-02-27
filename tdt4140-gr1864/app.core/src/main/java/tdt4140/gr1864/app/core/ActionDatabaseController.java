@@ -24,39 +24,49 @@ public class ActionDatabaseController implements DatabaseCRUD {
 		}
 	}
 	
-	public void write(Action action, String sql) {
+	@Override
+	public void create(Object object) {
+		Action action = objectIsAction(object);
 		try {
-			statement = connection.prepareStatement(sql);
-			statement.setInt(1, action.getShoppingTripID());
-			statement.setInt(2, action.getTimeStamp());
-			statement.setInt(3, action.getActionType());
-			statement.executeUpdate();
+			String sql = "INSERT INTO action (timestamp, actionType, product_id, shopping_trip_id=?) "
+										+ "values (?, ?, ?, ?)";
+			statement=connection.prepareStatement(sql);
+			statement.setString(1,  Long.toString(action.getTimeStamp()));
+			statement.setInt(2, action.getActionType());
+			statement.setInt(3, action.getProductID());
+			statement.setInt(4, action.getShoppingTripID());
+			statement.executeQuery();
 			connection.close();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public void create(Object object) {
-		Action action = objectIsAction(object);
-		String sql = "INSERT INTO action (shopping_trip_id, timestamp, type, product_id) "
-										+ "values (?, ?, ?, ?)";
-		this.write(action, sql);
-	}
-
-	@Override
 	public void update(Object object) {
 		Action action = this.objectIsAction(object);
-		String sql = "UPDATE action SET timestamp=?, type=?";
-		this.write(action, sql);
+		try {
+			String sql = "UPDATE action SET timestamp=?, actionType=?, product_id=?"
+						+ "WHERE shopping_trip_id=? and timestamp=?";		
+			statement=connection.prepareStatement(sql);
+			statement.setString(2, Long.toString(action.getTimeStamp()));
+			statement.setInt(3, action.getActionType());
+			statement.setInt(4, action.getProductID());
+			statement.setInt(1, action.getShoppingTripID());
+			statement.executeQuery();
+			connection.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public Object retrieve(int id) {
 		try {
 			statement = connection
-					.prepareStatement("SELECT shopping_trip_id, timestamp, type, product_id"
+					.prepareStatement("SELECT shopping_trip_id, timestamp, actionType, product_id, action_id"
 										+ "WHERE shopping_trip_id=?");
 			statement.setInt(1, id);
 			ResultSet rs = statement.executeQuery();
@@ -65,7 +75,7 @@ public class ActionDatabaseController implements DatabaseCRUD {
 				return null;
 			}
 
-			Action action = new Action(rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getInt(1));
+			Action action = new Action(rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(1));
 			connection.close();
 			return action;
 
