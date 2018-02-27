@@ -1,5 +1,6 @@
 package tdt4140.gr1864.app.core;
 
+import java.beans.Statement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -34,12 +35,12 @@ public class ProductDatabaseController implements DatabaseCRUD {
 	 * @param sql SQL code for sql operation
 	 * @param productID The product objects given ID from sql.
 	 */
-	public void write(Product product, String sql, int productID) {
+	public int write(Product product, String sql) {
 		try {
-			statement = connection.prepareStatement(sql);
+			statement = connection.prepareStatement(sql, statement.RETURN_GENERATED_KEYS);
 			
 			// Object has been given an ID:
-			if (productID != -1) {
+			if (product.getID() instanceof Integer) {
 				statement.setString(1, product.getName());
 				statement.setDouble(2, product.getPrice());
 			} else {
@@ -48,27 +49,41 @@ public class ProductDatabaseController implements DatabaseCRUD {
 				statement.setDouble(3, product.getPrice());
 			}
 			
+			try {
+				// Retrieves all generated keys and returns the ID obtained by java object
+				// which is inserted into the database
+				ResultSet generatedKeys = statement.getGeneratedKeys();
+				if (generatedKeys.next()) {
+					return Math.toIntExact(generatedKeys.getLong(1));
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
 			statement.executeUpdate();
 			connection.close();
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		return -1;
 	}
 	
 	
 	@Override
-	public void create(Object object) {
+	public int create(Object object) {
 		Product product = objectIsProduct(object);
 		String sql = "INSERT INTO product (name, price) "
-										+ "values (?, ?)";
-		this.write(product, sql, -1);
+										+ "VALUES (?, ?)";
+		return this.write(product, sql);
 	}
 
 	@Override
 	public void update(Object object) {
 		Product product = this.objectIsProduct(object);
 		String sql = "UPDATE product SET name=?, price=? WHERE product_id=?";
-		this.write(product, sql, product.getID());
+		this.write(product, sql);
 	}
 
 	public Object retrieve(int id) {
@@ -82,7 +97,8 @@ public class ProductDatabaseController implements DatabaseCRUD {
 			if (!rs.next()) {
 				return null;
 			}
-
+			
+			// Creates product with (productID from table, name and price)
 			Product product = new Product(rs.getInt(1), rs.getString(2), rs.getDouble(3));
 			connection.close();
 			return product;

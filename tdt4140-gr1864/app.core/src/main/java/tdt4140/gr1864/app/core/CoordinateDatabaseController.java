@@ -24,7 +24,7 @@ public class CoordinateDatabaseController implements DatabaseCRUD{
 	}
 	
 	@Override
-	public void create(Object object) {
+	public int create(Object object) {
 		Coordinate coord = this.objectIsCoordinate(object);
 		try {
 			String sql = "INSERT INTO coordinate (shopping_trip_id, timestamp, x, y) values (?, ?, ?, ?)";
@@ -35,10 +35,14 @@ public class CoordinateDatabaseController implements DatabaseCRUD{
 			statement.setDouble(4, coord.getY());
 			statement.executeQuery();
 			connection.close();
-					
+			
+			return coord.getShoppingTripID();
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		return -1;
 	}
 
 	@Override

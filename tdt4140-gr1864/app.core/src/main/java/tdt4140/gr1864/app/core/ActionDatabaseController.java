@@ -25,7 +25,7 @@ public class ActionDatabaseController implements DatabaseCRUD {
 	}
 	
 	@Override
-	public void create(Object object) {
+	public int create(Object object) {
 		Action action = objectIsAction(object);
 		try {
 			String sql = "INSERT INTO action (timestamp, actionType, product_id, shopping_trip_id=?) "
@@ -37,10 +37,14 @@ public class ActionDatabaseController implements DatabaseCRUD {
 			statement.setInt(4, action.getShoppingTripID());
 			statement.executeQuery();
 			connection.close();
+			
+			return action.getShoppingTripID();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		return -1;
 	}
 
 	@Override

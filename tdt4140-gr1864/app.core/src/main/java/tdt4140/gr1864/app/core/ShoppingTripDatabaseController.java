@@ -25,7 +25,7 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 
 	/* Cannot be implemented until SHOP and CUSTOMER is implemented */
 	@Override
-	public void create(Object object) {
+	public int create(Object object) {
 		/*
 		ShoppingTrip trip = this.objectIsShoppingTrip(object);
 		try {
@@ -33,11 +33,28 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 			connection.prepareStatement(sql);
 			statement.executeQuery();
 			connection.close();
+		
+			try {
+				// Retrieves all generated keys and returns the ID obtained by java object
+				// which is inserted into the database
+				ResultSet generatedKeys = statement.getGeneratedKeys();
+				if (generatedKeys.next()) {
+					return Math.toIntExact(generatedKeys.getLong(1));
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+					
 					
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
 		*/
+		
+		
+		
+		return -1;
 	}
 
 	/* Cannot be implemented until SHOP and CUSTOMER is implemented */
