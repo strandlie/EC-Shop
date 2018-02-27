@@ -10,7 +10,7 @@ public class CoordinateTest {
 
 	@Before
 	public void setup() {
-		coord = new Coordinate(1.0, 2.0, 123);
+		coord = new Coordinate(1.0, 2.0, 123L);
 	}
 	
 	@Test
