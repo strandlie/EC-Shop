@@ -26,7 +26,7 @@ public class Mode {
 	 * The list of the VisualizationElements that is shown in the Visualization Area for this mode
 	 * Implemented as List to get an implicit ordering of elements
 	 */
-	private List<VisualizationElement> visuElements;
+	private List<VisualizationElement> visualizationElements;
 	
 	/**
 	 * 
@@ -38,7 +38,7 @@ public class Mode {
 		this.nameProperty = new SimpleStringProperty();
 		
 		setName(name); // setName() handles catching nulls
-		this.visuElements = visuElements;
+		this.visualizationElements = visuElements;
 	}
 	
 	
@@ -62,7 +62,7 @@ public class Mode {
 		if (element.equals(null)) {
 			throw new IllegalArgumentException("Mode cannot add a null element to its VisualizationElements");
 		}
-		this.visuElements.add(element);
+		this.visualizationElements.add(element);
 	}
 	
 	
@@ -71,7 +71,7 @@ public class Mode {
 	 * @return
 	 */
 	public List<VisualizationElement> getVisualizationElements() {
-		return this.visuElements;
+		return this.visualizationElements;
 	}
 	
 	/**
@@ -80,9 +80,9 @@ public class Mode {
 	 * @return Visualization element, or null. Returns null if not found
 	 */
 	public VisualizationElement getVisualizationElement(String name) {
-		for (int i = 0; i < visuElements.size(); i++) {
-			if (this.visuElements.get(i).getName().equals(name)) {
-				return this.visuElements.get(i);
+		for (int i = 0; i < visualizationElements.size(); i++) {
+			if (this.visualizationElements.get(i).getName().equals(name)) {
+				return this.visualizationElements.get(i);
 			}
 		}
 		return null;
@@ -94,9 +94,9 @@ public class Mode {
 	 * @return The visualization element
 	 */
 	public VisualizationElement getVisualizationElement(Integer index) {
-		if (this.visuElements.size() == 0 || index >= visuElements.size() || index < 0) {
+		if (this.visualizationElements.size() == 0 || index >= visualizationElements.size() || index < 0) {
 			throw new IllegalArgumentException("There is no element at index " + index.toString()  + " in visualizationElements");
 		}
-		return this.visuElements.get(index);
+		return this.visualizationElements.get(index);
 	}
 }

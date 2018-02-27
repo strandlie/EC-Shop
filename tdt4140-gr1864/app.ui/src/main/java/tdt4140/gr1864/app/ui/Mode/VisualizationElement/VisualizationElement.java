@@ -1,9 +1,14 @@
 package tdt4140.gr1864.app.ui.Mode.VisualizationElement;
 
-public class VisualizationElement {
+import java.util.List;
+
+import tdt4140.gr1864.app.ui.Mode.Option.InteractionOption;
+
+public abstract class VisualizationElement {
 	
 	private String name;
 	private boolean isActive;
+	private List<InteractionOption> options;
 	
 	public VisualizationElement(String name) {
 		if (name.equals(null)) {
