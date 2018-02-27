@@ -3,6 +3,7 @@ package tdt4140.gr1864.app.core;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import interfaces.DatabaseCRUD;
@@ -22,11 +23,38 @@ public class CoordinateDatabaseController implements DatabaseCRUD{
 		}
 	}
 	
-	public void write(Coordinate coord, String sql) {
+	@Override
+	public void create(Object object) {
+		Coordinate coord = this.objectIsCoordinate(object);
 		try {
-			statement = connection.prepareStatement(sql);
+			String sql = "INSERT INTO coordinate (shopping_trip_id, timestamp, x, y) values (?, ?, ?, ?)";
+			connection.prepareStatement(sql);
 			statement.setInt(1, coord.getShoppingTripID());
-			statement.setInt(2, coord.getTimeStamp());
+			statement.setString(2,  Long.toString(coord.getTimeStamp()));
+			statement.setDouble(3, coord.getX());
+			statement.setDouble(4, coord.getY());
+			statement.executeQuery();
+			connection.close();
+					
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void update(Object object) {
+		Coordinate coord = this.objectIsCoordinate(object);
+		try {
+			String sql = "UPDATE coordinate SET timestamp=?, x=?, y=?"
+					+ "WHERE shopping_trip_id=? and timestamp=?";	
+			connection.prepareStatement(sql);
+			statement.setString(2, Long.toString(coord.getTimeStamp()));
+			statement.setDouble(3,  coord.getX());
+			statement.setDouble(4, coord.getY());
+			statement.setInt(1,  coord.getShoppingTripID());
+			statement.setString(2, Long.toString(coord.getTimeStamp()));
+			statement.executeQuery();
+			connection.close();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -34,26 +62,50 @@ public class CoordinateDatabaseController implements DatabaseCRUD{
 	}
 
 	@Override
-	public void create(Object object) {
-		
-	}
-
-	@Override
-	public void update(Object object) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public Object retrieve(int id) {
-		// TODO Auto-generated method stub
+		try {
+			statement = connection
+					.prepareStatement("SELECT shopping_trip_id, timestamp, x, y"
+										+ "WHERE shopping_trip_id=?");
+			statement.setInt(1, id);
+			ResultSet rs = statement.executeQuery();
+			
+			if (!rs.next()) {
+				return null;
+			}
+
+			Coordinate coord = new Coordinate(rs.getDouble(3), rs.getDouble(4), rs.getString(2), rs.getInt(1));
+			connection.close();
+			return coord;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 
 	@Override
 	public void delete(int id) {
-		// TODO Auto-generated method stub
-		
+		try {
+			statement = connection
+					.prepareStatement("DELETE FROM coordinate WHERE shopping_trip_id=?)");
+			statement.setInt(1, id);
+			statement.executeQuery();
+			connection.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
 	}
+
+	public Coordinate objectIsCoordinate(Object object) {
+		Coordinate coord = (Coordinate) object;
+		if (!(object instanceof Coordinate)) {
+			throw new IllegalArgumentException("Object is not instance of Coordinate");
+		} else {
+			return coord;
+		}
+	}
+
 
 }

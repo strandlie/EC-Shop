@@ -4,12 +4,23 @@ public class Coordinate {
 	
 	private double x;
 	private double y;
-	private int timeStamp;
+	private long timeStamp;
+	private ShoppingTrip trip;
 	
-	public Coordinate(double x, double y, int timeStamp) {
+	/*
+	 * Constructor for creating Coordinates in CoordinateDatabaseController.
+	 * Needs to handle getting correct ShoppingTrip based on it's ID
+	 */
+	public Coordinate(double x, double y, String timeStamp, int shoppingTripID) {
 		this.x = x;
 		this.y = y;
-		this.timeStamp = timeStamp;
+		this.timeStamp = Long.parseLong(timeStamp);
+	}
+	
+	public Coordinate(double x, double y, String timeStamp) {
+		this.x = x;
+		this.y = y;
+		this.timeStamp = Long.parseLong(timeStamp);
 	}
 	
 	public double getX() {
@@ -20,8 +31,12 @@ public class Coordinate {
 		return y;
 	}
 	
-	public int getTimeStamp() {
+	public long getTimeStamp() {
 		return timeStamp;
+	}
+	
+	public int getShoppingTripID() {
+		return 0;
 	}
 
 }
