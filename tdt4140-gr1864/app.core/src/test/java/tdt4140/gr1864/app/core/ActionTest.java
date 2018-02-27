@@ -11,7 +11,7 @@ public class ActionTest {
 	
 	@Before
 	public void setup() {
-		action = new Action(1L, 1L, 2L);
+		action = new Action(1, 1, 2);
 	}
 	
 	@Test

@@ -86,8 +86,7 @@ public class ActionDatabaseController implements DatabaseCRUD {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
-		
+		}	
 	}
 	
 	public Action objectIsAction(Object object) {
