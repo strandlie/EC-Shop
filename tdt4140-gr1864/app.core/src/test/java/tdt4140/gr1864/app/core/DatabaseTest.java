@@ -15,6 +15,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.junit.runners.MethodSorters;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -27,24 +28,30 @@ public class DatabaseTest {
 	
 	/*
 	 * Setting up database before running tests
+	 * Checks for occurence of database before creating one
 	 */
 	@BeforeClass
 	public static void setup() throws IOException {
-		CreateDatabase.main(null);
+		Path path = Paths.get("database.db");
+		
+		if (! Files.exists(path)) {
+			CreateDatabase.main(null);
+		}
 	}
 	
 	@Test
 	public void AconnectionTest() {
+		
 		Connection connection = null;
-	      
-	      try {
-	         Class.forName("org.sqlite.JDBC");
-	         connection = DriverManager.getConnection("jdbc:sqlite:database.db");
-	      } catch (Exception e) {
-	         System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-	         System.exit(0);
-	      }
-	      assertNotEquals(connection, null);
+      
+		try {
+			Class.forName("org.sqlite.JDBC");
+			connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+		} catch (Exception e) {
+			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+			System.exit(0);
+		}
+		assertNotEquals(connection, null);
 	}
 	
 	@Test
