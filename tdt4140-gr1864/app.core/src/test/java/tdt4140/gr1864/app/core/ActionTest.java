@@ -11,7 +11,7 @@ public class ActionTest {
 	
 	@Before
 	public void setup() {
-		action = new Action(1L, 1L, 2L);
+		action = new Action("1", 1, 2);
 	}
 	
 	@Test
@@ -21,11 +21,11 @@ public class ActionTest {
 	
 	@Test
 	public void testGetActionTypeExpectOne() {
-		Assert.assertEquals(1L, action.getActionType());
+		Assert.assertEquals(1, action.getActionType());
 	}
 	
 	@Test
 	public void testGetProductIdExpectedTwo() {
-		Assert.assertEquals(2L, action.getProductID());
+		Assert.assertEquals(2, action.getProductID());
 	}
 }

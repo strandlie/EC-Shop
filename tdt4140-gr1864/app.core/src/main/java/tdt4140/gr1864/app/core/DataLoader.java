@@ -133,13 +133,13 @@ public class DataLoader {
 		Coordinate coordinate;
 		List<Coordinate> coordinates = new ArrayList<Coordinate>();
 		double x, y;
-		int timeStamp;
+		String timeStamp;
 		
 		for (Object o : coordsArray) {
 			JSONObject jsonCoord = (JSONObject) o;
 			x = (double) jsonCoord.get("x");
 			y = (double) jsonCoord.get("y");
-			timeStamp = toIntExact((long) jsonCoord.get("time"));
+			timeStamp = Long.toString((long) jsonCoord.get("time"));
 
 			coordinate = new Coordinate(x, y, timeStamp);
 			coordinates.add(coordinate);
@@ -157,11 +157,11 @@ public class DataLoader {
 		List<Action> actions = new ArrayList<Action>();
 		int actionType;
 		int productID;
-		int timeStamp;
+		String timeStamp;
 		
 		for (Object o : actionsArray) {
 			JSONObject jsonAction = (JSONObject) o;
-			timeStamp = toIntExact((long) jsonAction.get("timestamp"));
+			timeStamp = Long.toString((long) jsonAction.get("timestamp"));
 			actionType = toIntExact((long) jsonAction.get("action"));
 			productID = toIntExact((long) jsonAction.get("productID"));
 			

@@ -20,7 +20,7 @@ city varchar(30) not null
 
 CREATE TABLE coordinate(
 shopping_trip_id int,
-timestamp int,
+timestamp varchar(255),
 x real not null,
 y real not null,
 primary key(shopping_trip_id, timestamp)
@@ -28,8 +28,8 @@ primary key(shopping_trip_id, timestamp)
 
 CREATE TABLE action(
 shopping_trip_id int,
-timestamp int,
-description varchar(255) not null,
+timestamp varchar(255),
+actionType int not null,
 product_id int not null,
 primary key(shopping_trip_id, timestamp),
 foreign key (product_id) references product(product_id)
