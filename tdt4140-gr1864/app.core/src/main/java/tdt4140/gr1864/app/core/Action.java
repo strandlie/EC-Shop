@@ -2,26 +2,31 @@ package tdt4140.gr1864.app.core;
 
 public class Action {
 	
-	private long timeStamp;
-	private long actionType;
-	private long productID;
+	private int timeStamp;
+	private int actionType;
+	private int productID;
+	private ShoppingTrip trip;
 	
-	public Action(long timeStamp, long actionType, long productID) {
+	public Action(int timeStamp, int actionType, int productID) {
 		this.timeStamp = timeStamp;
 		this.actionType = actionType;
 		this.productID = productID;
 	}
 	
-	public long getTimeStamp() {
+	public int getTimeStamp() {
 		return timeStamp;
 	}
 	
-	public long getActionType() {
+	public int getActionType() {
 		return actionType;
 	}
 	
-	public long getProductID() {
+	public int getProductID() {
 		return productID;
+	}
+	
+	public int getShoppingTripID() {
+		return 0;
 	}
 
 }

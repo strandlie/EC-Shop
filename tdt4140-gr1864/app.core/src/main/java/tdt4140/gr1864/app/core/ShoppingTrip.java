@@ -5,13 +5,13 @@ import java.util.List;
 public class ShoppingTrip {
 	
 	/* start-time of ShoppingTrip in UNIX-time */
-	private long start;
+	private int start;
 	/* end-time of ShoppingTrip in UNIX-time */
-	private long end;
+	private int end;
 	
 	/* Coordinates that makes up the trip */
 	private List<Coordinate> coordinates;
-	/* Actions perfored during trip */
+	/* Actions performed during trip */
 	private List<Action> actions;
 
 	public ShoppingTrip(List<Coordinate> coordinates, List<Action> actions) {
@@ -26,8 +26,8 @@ public class ShoppingTrip {
 	 * @param coordinates list of coordinates that makes up the trip
 	 * @return time of first data-point in the list of coordinates
 	 */
-	private long findStart(List<Coordinate> coordinates) {
-		long min = coordinates.get(0).getTimeStamp();
+	private int findStart(List<Coordinate> coordinates) {
+		int min = coordinates.get(0).getTimeStamp();
 
 		for (Coordinate coord : coordinates) {
 			if (coord.getTimeStamp() < min) {
@@ -41,8 +41,8 @@ public class ShoppingTrip {
 	 * @param coordinates list of coordinates that makes up the trip
 	 * @return time of last data-point in the list of coordinates
 	 */
-	private long findEnd(List<Coordinate> coordinates) {
-		long max = coordinates.get(0).getTimeStamp();
+	private int findEnd(List<Coordinate> coordinates) {
+		int max = coordinates.get(0).getTimeStamp();
 		
 		for (Coordinate coord : coordinates) {
 			if (coord.getTimeStamp() > max) {
@@ -52,11 +52,11 @@ public class ShoppingTrip {
 		return max;
 	}
 
-	public long getStart() {
+	public int getStart() {
 		return start;
 	}
 	
-	public long getEnd() {
+	public int getEnd() {
 		return end;
 	}
 	

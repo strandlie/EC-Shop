@@ -1,8 +1,11 @@
 package tdt4140.gr1864.app.core;
 
 import java.io.FileReader;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.Math.toIntExact;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -130,13 +133,13 @@ public class DataLoader {
 		Coordinate coordinate;
 		List<Coordinate> coordinates = new ArrayList<Coordinate>();
 		double x, y;
-		long timeStamp;
+		int timeStamp;
 		
 		for (Object o : coordsArray) {
 			JSONObject jsonCoord = (JSONObject) o;
 			x = (double) jsonCoord.get("x");
 			y = (double) jsonCoord.get("y");
-			timeStamp = (long) jsonCoord.get("time");
+			timeStamp = toIntExact((long) jsonCoord.get("time"));
 
 			coordinate = new Coordinate(x, y, timeStamp);
 			coordinates.add(coordinate);
@@ -152,15 +155,15 @@ public class DataLoader {
 	public List<Action> createActions(JSONArray actionsArray) {
 		Action action;
 		List<Action> actions = new ArrayList<Action>();
-		long actionType;
-		long productID;
-		long timeStamp;
+		int actionType;
+		int productID;
+		int timeStamp;
 		
 		for (Object o : actionsArray) {
 			JSONObject jsonAction = (JSONObject) o;
-			timeStamp = (long) jsonAction.get("timestamp");
-			actionType = (long) jsonAction.get("action");
-			productID = (long) jsonAction.get("productID");
+			timeStamp = toIntExact((long) jsonAction.get("timestamp"));
+			actionType = toIntExact((long) jsonAction.get("action"));
+			productID = toIntExact((long) jsonAction.get("productID"));
 			
 			action = new Action(timeStamp, actionType, productID);
 			actions.add(action);
