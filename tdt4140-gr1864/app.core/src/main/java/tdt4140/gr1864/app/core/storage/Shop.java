@@ -4,28 +4,64 @@ package tdt4140.gr1864.app.core.storage;
 public class Shop {
 	
 	/* Values */
-	private int shopID;
 	private String adress;
 	private Storage storage;
 	private Shelfs shelfs;
 	
 	
-	public void Shop() {
-		shopID = -1;
-		adress = "";
-		storage = null;
-		shelfs = null;
+	/* Constructor */
+	public Shop() {
+		adress = new String();
+		storage = new Storage();
+		shelfs = new Shelfs();
 	}
 	
-	public void setID(int shopID) {
-		this.shopID = shopID;
-	}
-	
+	/* Set the address */
 	public void setAdress(String adress) {
 		this.adress = adress;
 	}
 	
-	public void setStorage(Storage storage) {
-		this.storage = storage;
+	public void addProductToStorage(Product product, int amount) {
+		storage.AddProducts(product, amount);
 	}
+	
+	public void addProductToShelfs(Product product, int amount) {
+		shelfs.AddProducts(product, amount);
+	}
+	
+	public void removeProductFromStorage(Product product, int amount) throws Exception{
+		try {
+		storage.RemoveProducts(product, amount);
+		}
+		catch (Exception e1) {
+			/* How should we handle exceptions? Re-throw and catch in test, or print to console? */
+			throw e1;
+		}
+	}
+	
+	public void removeProductFromShelfs(Product product, int amount) throws Exception{
+		try {
+		shelfs.RemoveProducts(product, amount);
+		}
+		catch (Exception e1) {
+			/* How should we handle exceptions? Re-throw and catch in test, or print to console? */
+			throw e1;
+		}
+	}
+	
+	public void deleteProductFromStorage(Product product) throws Exception{
+		
+	}
+	
+	public void deleteProductFromShelfs(Product product) throws Exception{
+		
+	}
+	
+	public int getAmountInStorage(Product product) throws Exception {
+		try {
+			return storage.GetAmount(product);
+		}
+		catch (Exception e2) { throw e2;}
+	}
+	/* Add function for mowing from storage to shelfs? Or just handle that with remove and add */
 }
