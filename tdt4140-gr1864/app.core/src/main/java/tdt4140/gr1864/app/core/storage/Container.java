@@ -1,11 +1,10 @@
 package tdt4140.gr1864.app.core.storage;
 
-import interfaces.DatabaseCRUD;
-
 import java.util.ArrayList;
 
-/* An abstract class for something that can contain products, like storage or shelfs */
-public abstract class Container implements DatabaseCRUD{
+/* An abstract class for something that can contain products, like storage or shelfs
+ * Illegal operations are simply ignored */
+public abstract class Container{
 	
 	/* Values */
 	private ArrayList<Product> products;
@@ -18,8 +17,13 @@ public abstract class Container implements DatabaseCRUD{
 		this.amounts = new ArrayList<>();
 	}
 	
-	/* Adds amount of product, if not already in list it's added to the list */
-	public void AddProducts(Product product, int amount) {
+	/* Adds amount of product, if not already in list it's added to the list
+	 * amount must be larger than one */
+	public void addProducts(Product product, int amount){
+		if (amount < 1) {
+			System.out.println("Can't add a negative value to a container");
+			return;
+		}
 		int index = products.indexOf(product);
 		if (index == -1) {
 			products.add(product);
@@ -34,13 +38,13 @@ public abstract class Container implements DatabaseCRUD{
 	/* Remove an amount of a product from container
 	 * @exception	If it tries to remove too much, an exception is thrown
 	 * @exception	If it tries to remove a product that's not in storage, an exception is thrown */
-	public void RemoveProducts(Product product, int amount) throws Exception {
+	public void removeProducts(Product product, int amount){
 		int index = products.indexOf(product);
 		if (index == -1) {
-			throw new Exception("Product not in Container, can't decrease amount");
+			return;
 		}
 		else if (amount > amounts.get(index)) {
-			throw new Exception("Removing more than is in Container");
+			return;
 		}
 		else {
 			int newAmount = amounts.get(index) - amount;
@@ -50,10 +54,10 @@ public abstract class Container implements DatabaseCRUD{
 	
 	/* Get the amount of a product in a container
 	 * @exception If product isn't in the container */
-	public int GetAmount(Product product) throws Exception{
+	public int getAmount(Product product){
 		int index = products.indexOf(product);
 		if (index == -1) {
-			throw new Exception("Product not in container, can't get amount");
+			return -1;
 		}
 		else {
 			return amounts.get(index);
@@ -63,13 +67,13 @@ public abstract class Container implements DatabaseCRUD{
 	/* Deletes a product from a container, meant to be used if product is discontinued
 	 * @exception If product isn't in the container
 	 * @exception If amount isn't zero */
-	public void delete(Product product) throws Exception{
+	public void delete(Product product){
 		int index = products.indexOf(product);
 		if (index == -1) {
-			throw new Exception("Product not in container, can't delete it");
+			return;
 		}
 		else if (amounts.get(index) != 0) {
-			throw new Exception("Amount isn't zero, can't delte the product");
+			return;
 		}
 		else {
 			products.remove(index);
