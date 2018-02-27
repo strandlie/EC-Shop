@@ -5,9 +5,13 @@ import java.util.List;
 public class ShoppingTrip {
 	
 	/* start-time of ShoppingTrip in UNIX-time */
-	private int start;
+	private long start;
 	/* end-time of ShoppingTrip in UNIX-time */
-	private int end;
+	private long end;
+	
+	private int shopID;
+	private int customerID;
+	private int shoppingTripID;
 	
 	/* Coordinates that makes up the trip */
 	private List<Coordinate> coordinates;
@@ -22,12 +26,18 @@ public class ShoppingTrip {
 		this.end = findEnd(coordinates);
 	}
 	
+	public ShoppingTrip(int shoppingTripId, int customerId, int shopId) {
+		this.shoppingTripID = shoppingTripId;
+		this.customerID = customerId;
+		this.shopID = shopId;
+	}
+	
 	/*
 	 * @param coordinates list of coordinates that makes up the trip
 	 * @return time of first data-point in the list of coordinates
 	 */
-	private int findStart(List<Coordinate> coordinates) {
-		int min = coordinates.get(0).getTimeStamp();
+	private long findStart(List<Coordinate> coordinates) {
+		long min = coordinates.get(0).getTimeStamp();
 
 		for (Coordinate coord : coordinates) {
 			if (coord.getTimeStamp() < min) {
@@ -41,8 +51,8 @@ public class ShoppingTrip {
 	 * @param coordinates list of coordinates that makes up the trip
 	 * @return time of last data-point in the list of coordinates
 	 */
-	private int findEnd(List<Coordinate> coordinates) {
-		int max = coordinates.get(0).getTimeStamp();
+	private long findEnd(List<Coordinate> coordinates) {
+		long max = coordinates.get(0).getTimeStamp();
 		
 		for (Coordinate coord : coordinates) {
 			if (coord.getTimeStamp() > max) {
@@ -52,11 +62,11 @@ public class ShoppingTrip {
 		return max;
 	}
 
-	public int getStart() {
+	public long getStart() {
 		return start;
 	}
 	
-	public int getEnd() {
+	public long getEnd() {
 		return end;
 	}
 	
@@ -66,5 +76,17 @@ public class ShoppingTrip {
 	
 	public List<Action> getActions() {
 		return actions;
+	}
+	
+	public int getShopID() {
+		return shopID;
+	}
+	
+	public int getCustomerID() {
+		return customerID;
+	}
+
+	public int getShoppingTripID() {
+		return shoppingTripID;
 	}
 }
