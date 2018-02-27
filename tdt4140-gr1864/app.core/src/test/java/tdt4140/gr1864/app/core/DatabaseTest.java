@@ -122,7 +122,7 @@ public class DatabaseTest {
 	 */
 	@AfterClass
 	public static void finish() {
-		Path path = Paths.get("test.db");
+		Path path = Paths.get("database.db");
 		try {
 		    Files.delete(path);
 		} catch (NoSuchFileException x) {
