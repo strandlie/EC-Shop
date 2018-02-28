@@ -18,12 +18,11 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 					Customer customer = (Customer) object;
 					Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 					
-					String sql = "INSERT INTO customer (id, first_name, last_name) values (?, ?, ?)";
+					String sql = "INSERT INTO customer (first_name, last_name) values (?, ?)";
 					PreparedStatement statement = connection
 						.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-					statement.setInt(1, customer.getUserId());
-					statement.setString(2, customer.getFirstName());
-					statement.setString(3, customer.getLastName());
+					statement.setString(1, customer.getFirstName());
+					statement.setString(2, customer.getLastName());
 					statement.executeUpdate();
 						
 					try {
@@ -49,7 +48,7 @@ public class CustomerDatabaseController implements DatabaseCRUD {
         try {
             Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
             PreparedStatement statement = connection
-                    .prepareStatement("SELECT id, first_name, last_name FROM customer WHERE id = ?",
+                    .prepareStatement("SELECT * FROM customer WHERE customer_id= ?",
                     		ResultSet.TYPE_FORWARD_ONLY, 
                             ResultSet.CONCUR_READ_ONLY);
             statement.setInt(1, userId);
@@ -60,7 +59,7 @@ public class CustomerDatabaseController implements DatabaseCRUD {
                 return null;
             }
             
-            Customer user = new Customer(rs.getInt(1), rs.getString(2), rs.getString(3), new ArrayList<ShoppingTrip>());
+            Customer user = new Customer(rs.getString("first_name"), rs.getString("last_name"), rs.getInt("customer_id"));
             connection.close();
             return user;
       
@@ -81,12 +80,11 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 	        	
 	            Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 	            PreparedStatement statement = connection
-	                    .prepareStatement("UPDATE customer SET first_name=?, last_name=? WHERE id=?");
+	                    .prepareStatement("UPDATE customer SET first_name=?, last_name=? WHERE customer_id=?");
 	            statement.setString(1, customer.getFirstName());
 	            statement.setString(2, customer.getLastName());
 	            statement.setInt(3, customer.getUserId());
 	            statement.executeUpdate();
-	            connection.close();
 	        } 
 	        catch (SQLException e) {
 	        		System.err.println(e.getMessage());
@@ -98,10 +96,9 @@ public class CustomerDatabaseController implements DatabaseCRUD {
         try {
         		Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
             PreparedStatement stmt = connection
-                    .prepareStatement("DELETE FROM customer WHERE id=?");
+                    .prepareStatement("DELETE FROM customer WHERE customer_id=?");
             stmt.setInt(1, customerId);
             stmt.executeUpdate();
-            connection.close();
         } 
         catch (SQLException e) {
         		System.err.println(e.getMessage());

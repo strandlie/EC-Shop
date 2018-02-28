@@ -1,9 +1,7 @@
 CREATE TABLE customer(
 customer_id integer primary key autoincrement,
 first_name varchar(30) not null,
-last_name varchar(30) not null,
-age integer not null,
-sex varchar(15) not null
+last_name varchar(30) not null
 );
 
 CREATE TABLE bought(
