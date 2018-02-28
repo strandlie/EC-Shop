@@ -17,6 +17,8 @@ node_modules/
 *.swn
 *.sw
 
+// generated data
+data.json
 //Database
 *.db
 
