@@ -1,5 +1,6 @@
 package tdt4140.gr1864.app.core;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.junit.Assert;
