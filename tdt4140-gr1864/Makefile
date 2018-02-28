@@ -1,2 +1,2 @@
 create-database:
-	sqlite3 dataabse.db < database.sql
+	sqlite3 database.db < database.sql
