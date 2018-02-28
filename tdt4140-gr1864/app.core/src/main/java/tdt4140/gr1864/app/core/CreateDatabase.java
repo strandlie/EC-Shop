@@ -42,7 +42,11 @@ public class CreateDatabase {
      * @param args the command line arguments
      * @throws IOException 
      */
-    public static void main(String[] args) throws IOException {
-        createNewDatabase();
+    public static void main(String[] args) {
+    	try {
+    		createNewDatabase();
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
     }
 }

@@ -7,8 +7,9 @@ public interface DatabaseCRUD {
 	 * should implement this framework
 	 */
 
-	/*
+	/**
 	 * @param object Persist object to database
+	 * @return ID of the object persistent to database
 	 */
 	int create(Object object);
 
@@ -16,7 +17,7 @@ public interface DatabaseCRUD {
 	 * @param object Save changes made to persistent object in database
 	 */
 	void update(Object object);
-
+	
 	/*
 	 * @param id Id of persisted object to retrieve from database
 	 * @return The object retrieved

@@ -22,7 +22,7 @@ primary key(shopping_trip_id, timestamp)
 );
 
 CREATE TABLE action(
-shopping_trip_id int,
+shopping_trip_id integer,
 timestamp varchar(255),
 actionType integer not null,
 product_id integer not null,
@@ -31,10 +31,9 @@ foreign key (product_id) references product(product_id)
 );
 
 CREATE TABLE on_shelf(
-shop_id int,
-product_id int,
-total_amount integer not null,
-shelf_amount integer not null,
+shop_id integer,
+product_id integer,
+amount int not null,
 primary key(shop_id, product_id)
 );
 
@@ -59,8 +58,5 @@ foreign key(shopping_trip_id) references bought(shopping_trip_id)
 CREATE TABLE product(
 product_id integer primary key autoincrement,
 name varchar(255) not null,
-price real not null,
-foreign key(product_id) references on_shelf(product_id),
-foreign key(product_id) references bought(product_id)
+price double not null
 );
-
