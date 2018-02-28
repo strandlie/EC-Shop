@@ -54,7 +54,6 @@ public class ShopDatabaseController implements DatabaseCRUD{
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		connection.close();
 		return -1;
 	}
 
@@ -89,7 +88,7 @@ public class ShopDatabaseController implements DatabaseCRUD{
 				return null;
 			}
 			
-			Shop shop = new Shop(rs.getInt(1), rs.getString(2), rs.getInt(3));
+			Shop shop = new Shop( rs.getString(2), rs.getInt(3), rs.getInt(1));
 			connection.close();
 			return shop;
 

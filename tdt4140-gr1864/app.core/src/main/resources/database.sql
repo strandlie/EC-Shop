@@ -62,3 +62,4 @@ price real not null,
 foreign key(product_id) references on_shelf(product_id),
 foreign key(product_id) references bought(product_id)
 );
+
