@@ -41,6 +41,14 @@ public class StorageTest {
 	
 	@Test
 	public void testRemove() {
-		
+		storage.removeProducts(product2, 2);
+		Assert.assertEquals(4, storage.getAmount(product2));
+	}
+	
+	@Test
+	public void testDelete() {
+		storage.removeProducts(product, 5);
+		storage.delete(product);
+		Assert.assertEquals(-1, storage.getAmount(product));
 	}
 }

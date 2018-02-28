@@ -9,19 +9,29 @@ public abstract class Container{
 	/* Values */
 	private ArrayList<Product> products;
 	private ArrayList<Integer> amounts;
+	private int ID;
 	
 	
 	/* Constructor */
 	public Container() {
+		this.ID = -1;
 		this.products = new ArrayList<Product>();
 		this.amounts = new ArrayList<>();
 	}
 	
+	public void setID(int ID) {
+		this.ID = ID;
+	}
+	
+	public int getID() {
+		return this.ID;
+	}
+	
 	/* Adds amount of product, if not already in list it's added to the list
-	 * amount must be larger than one */
+	 * amount must be larger than zero */
 	public void addProducts(Product product, int amount){
-		if (amount < 1) {
-			System.out.println("Can't add a negative value to a container");
+		if (amount <= 0) {
+			System.out.println("Can't add a value less than or 0 to a container");
 			return;
 		}
 		int index = products.indexOf(product);
@@ -39,8 +49,13 @@ public abstract class Container{
 	 * @exception	If it tries to remove too much, an exception is thrown
 	 * @exception	If it tries to remove a product that's not in storage, an exception is thrown */
 	public void removeProducts(Product product, int amount){
+		if (amount <= 0) {
+			System.out.println("Can't remove a value less than or 0 from container");
+			return;
+		}
 		int index = products.indexOf(product);
 		if (index == -1) {
+			System.out.println("Can't remove amount from product not in list");
 			return;
 		}
 		else if (amount > amounts.get(index)) {
@@ -53,10 +68,11 @@ public abstract class Container{
 	}
 	
 	/* Get the amount of a product in a container
-	 * @exception If product isn't in the container */
+	 * returns -1 if product isn't in the container */
 	public int getAmount(Product product){
 		int index = products.indexOf(product);
 		if (index == -1) {
+			System.out.println("Prouct not in list");
 			return -1;
 		}
 		else {
@@ -70,6 +86,7 @@ public abstract class Container{
 	public void delete(Product product){
 		int index = products.indexOf(product);
 		if (index == -1) {
+			System.out.println("Can't delete product that doesn't exist");
 			return;
 		}
 		else if (amounts.get(index) != 0) {

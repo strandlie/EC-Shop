@@ -2,24 +2,38 @@ package tdt4140.gr1864.app.core.storage;
 
 /* The shop that contains the storage and the shelfs
  * Use this class to manipulate the storage and shelfs */
-public class Store{
+public class Shop{
 	
 	/* Values */
+	private int ID;
 	private String adress;
 	private Storage storage;
 	private Shelfs shelfs;
 	
 	
 	/* Constructor */
-	public Store() {
+	public Shop() {
+		ID = -1;
 		adress = new String();
 		storage = new Storage();
 		shelfs = new Shelfs();
 	}
 	
+	public void setID(int ID) {
+		this.ID = ID;
+	}
+	
+	public int getID() {
+		return this.ID;
+	}
+	
 	/* Set the address */
 	public void setAdress(String adress) {
 		this.adress = adress;
+	}
+	
+	public String getAddress() {
+		return this.adress;
 	}
 	
 	public void addProductToStorage(Product product, int amount) {
