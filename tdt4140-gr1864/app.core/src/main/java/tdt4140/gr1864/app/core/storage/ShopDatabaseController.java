@@ -57,7 +57,6 @@ public class ShopDatabaseController implements DatabaseCRUD{
 		return -1;
 	}
 	
-	
 	@Override
 	public void update(Object object) {
 		Shop shop = this.objectIsShop(object);
@@ -112,6 +111,12 @@ public class ShopDatabaseController implements DatabaseCRUD{
 		
 	}
 		
+	/**
+	 * Checks if the input object is a Shop object
+	 * 
+	 * @param object	The object to be checked for being a Shop
+	 * @return			The input object parsed as a Shop if it is one
+	 */
 	public Shop objectIsShop(Object object) {
 		Shop shop = (Shop) object;
 		if (!(object instanceof Shop)) {
