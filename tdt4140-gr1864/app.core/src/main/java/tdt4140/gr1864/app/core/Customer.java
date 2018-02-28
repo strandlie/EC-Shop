@@ -15,6 +15,17 @@ public class Customer implements UserInterface {
 		this.lastName = lastName;
 		this.shoppingTrips = shoppingTrips;
 	}
+	
+	public Customer(String firstName, String lastName, int customerId) { 
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.customerId = customerId;
+	}
+	
+	public Customer(String firstName, String lastName) { 
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
 
 	public int getUserId() {
 		return customerId;
