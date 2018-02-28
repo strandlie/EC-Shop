@@ -39,7 +39,7 @@ public class ShopTest {
 	@Test
 	public void testSetAddressExpectKingsRoadThree() {
 		String expected = "Kings Road 3";
-		shop.setAdress(expected);
+		shop.setAddress(expected);
 		Assert.assertEquals(expected, shop.getAddress());
 	}
 	
