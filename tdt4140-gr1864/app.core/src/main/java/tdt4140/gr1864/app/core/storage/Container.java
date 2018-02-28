@@ -9,23 +9,14 @@ public abstract class Container{
 	/* Values */
 	private ArrayList<Product> products;
 	private ArrayList<Integer> amounts;
-	private int ID;
 	
 	
 	/* Constructor */
 	public Container() {
-		this.ID = -1;
 		this.products = new ArrayList<Product>();
 		this.amounts = new ArrayList<>();
 	}
-	
-	public void setID(int ID) {
-		this.ID = ID;
-	}
-	
-	public int getID() {
-		return this.ID;
-	}
+
 	
 	/* Adds amount of product, if not already in list it's added to the list
 	 * amount must be larger than zero */

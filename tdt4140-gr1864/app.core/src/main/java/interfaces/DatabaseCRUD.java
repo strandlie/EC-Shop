@@ -10,7 +10,7 @@ public interface DatabaseCRUD {
 	/*
 	 * @param object Persist object to database
 	 */
-	void create(Object object);
+	int create(Object object);
 
 	/*
 	 * @param object Save changes made to persistent object in database

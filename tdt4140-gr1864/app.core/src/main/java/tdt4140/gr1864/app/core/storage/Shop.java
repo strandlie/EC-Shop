@@ -21,6 +21,7 @@ public class Shop{
 	
 	public void setID(int ID) {
 		this.ID = ID;
+		storage.setShopID(ID);
 	}
 	
 	public int getID() {
