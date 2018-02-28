@@ -48,14 +48,13 @@ public class CustomerDatabaseController implements DatabaseCRUD {
         try {
             Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
             PreparedStatement statement = connection
-                    .prepareStatement("SELECT * FROM customer WHERE customer_id= ?",
-                    		ResultSet.TYPE_FORWARD_ONLY, 
-                            ResultSet.CONCUR_READ_ONLY);
+                    .prepareStatement("SELECT * FROM customer WHERE customer_id=?");
             statement.setInt(1, userId);
             ResultSet rs = statement.executeQuery();
             
             // Returned nothing
-            if (rs == null) {
+            if (!rs.next()) {
+            	System.out.println("heieh");
                 return null;
             }
             
