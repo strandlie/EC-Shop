@@ -7,7 +7,7 @@ public class Customer extends AbstractUser {
 	private int customerId;
 	private String firstName;
 	private String lastName;
-	private ArrayList<ShoppingTrip> shoppingTrips;
+	private List<ShoppingTrip> shoppingTrips;
 	
 	public Customer(int customerId, String firstName, String lastName, 
 			ArrayList<ShoppingTrip> shoppingTrips) {
