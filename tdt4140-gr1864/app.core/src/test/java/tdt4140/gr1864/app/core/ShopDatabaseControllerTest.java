@@ -1,7 +1,5 @@
 package tdt4140.gr1864.app.core;
 
-import static org.junit.Assert.*;
-
 import java.io.IOException;
 import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.Files;
