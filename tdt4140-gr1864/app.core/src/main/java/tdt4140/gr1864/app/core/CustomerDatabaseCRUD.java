@@ -45,7 +45,7 @@ public class CustomerDatabaseCRUD implements DatabaseCRUD {
             ResultSet rs = statement.executeQuery();
             
             // Returned nothing
-            if (!rs.next()) {
+            if (rs == null) {
                 return null;
             }
             
