@@ -1,13 +1,10 @@
 package tdt4140.gr1864.app.core;
 
-import java.beans.Statement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import java.util.Calendar;
 
 import interfaces.DatabaseCRUD;
 
@@ -37,10 +34,10 @@ public class ProductDatabaseController implements DatabaseCRUD {
 	 */
 	public int write(Product product, String sql) {
 		try {
-			statement = connection.prepareStatement(sql, statement.RETURN_GENERATED_KEYS);
+			statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 			
 			// Object has been given an ID:
-			if (product.getID() instanceof Integer) {
+			if (product.getID() == null) {
 				statement.setString(1, product.getName());
 				statement.setDouble(2, product.getPrice());
 			} else {
@@ -48,6 +45,9 @@ public class ProductDatabaseController implements DatabaseCRUD {
 				statement.setString(2, product.getName());
 				statement.setDouble(3, product.getPrice());
 			}
+			
+			// Very important to excecute before try
+			statement.executeUpdate();
 			
 			try {
 				// Retrieves all generated keys and returns the ID obtained by java object
@@ -59,14 +59,14 @@ public class ProductDatabaseController implements DatabaseCRUD {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			
-			statement.executeUpdate();
+
 			connection.close();
+			
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return -1;
 	}
 	
@@ -89,17 +89,20 @@ public class ProductDatabaseController implements DatabaseCRUD {
 	public Object retrieve(int id) {
 		try {
 			statement = connection
-					.prepareStatement("SELECT product_id, name, price"
-										+ "WHERE product_id=?");
+					.prepareStatement("SELECT * FROM product"
+										+ " WHERE product_id=?");
+			System.out.println(id);
 			statement.setInt(1, id);
 			ResultSet rs = statement.executeQuery();
 			
-			if (!rs.next()) {
+			if (rs == null) {
 				return null;
 			}
 			
 			// Creates product with (productID from table, name and price)
-			Product product = new Product(rs.getInt(1), rs.getString(2), rs.getDouble(3));
+			Product product = new Product(rs.getInt("product_id"), rs.getString("name"), rs.getDouble("price"));
+			
+
 			connection.close();
 			return product;
 

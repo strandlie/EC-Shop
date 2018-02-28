@@ -79,7 +79,7 @@ foreign key(shopping_trip_id) references bought(shopping_trip_id)
 CREATE TABLE product(
 product_id integer primary key autoincrement,
 name varchar(255) not null,
-price real not null,
+price double not null,
 foreign key(product_id) references on_shelf(product_id),
 foreign key(product_id) references bought(product_id)
 );
