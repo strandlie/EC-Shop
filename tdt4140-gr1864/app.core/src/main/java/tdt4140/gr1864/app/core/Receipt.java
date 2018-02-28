@@ -4,12 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Receipt {
-	
-	/**
-	 * A database controller used for retrieving products.
-	 */
-	private ProductDatabaseController database = new ProductDatabaseController();
-	
 	/**
 	 * The ShoppingTrip object which this Receipt computes the prices for.
 	 */
@@ -52,11 +46,14 @@ public class Receipt {
 			}
 		}
 		
+		ProductDatabaseController database = new ProductDatabaseController();
+		
 		for (Integer code : inventory.keySet()) {
 			Product product = (Product) database.retrieve(code);
 			prices.put(product, product.getPrice() * inventory.get(code));
 		}
 		
+		database.close();
 	}
 	
 	/**

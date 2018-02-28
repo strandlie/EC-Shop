@@ -39,6 +39,8 @@ public class DataLoader {
 		String pathToProducts = "../../src/main/resources/mock-products.json";
 		List<Product> p = loader.loadProducts(pathToProducts, pdc);
 		
+		Receipt receipt = new Receipt(trip);
+		System.out.println(receipt.getTotalPrice());
 	}
 	
 	/**

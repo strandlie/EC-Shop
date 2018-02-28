@@ -24,6 +24,14 @@ public class ProductDatabaseController implements DatabaseCRUD {
 		}
 	}
 	
+	public void close() {
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	public int create(Object object) {
 		Product product = objectIsProduct(object);
@@ -50,10 +58,7 @@ public class ProductDatabaseController implements DatabaseCRUD {
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
-			}
-
-			connection.close();
-			
+			}			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -100,7 +105,6 @@ public class ProductDatabaseController implements DatabaseCRUD {
 			// Creates product with (productID generated from table in sql, name and price)
 			Product product = new Product(rs.getInt("product_id"), rs.getString("name"), rs.getDouble("price"));
 
-			connection.close();
 			return product;
 
 		} catch (SQLException e) {
