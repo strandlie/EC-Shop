@@ -55,7 +55,7 @@ foreign key(shopping_trip_id) references coordinate(shopping_trip_id),
 foreign key(shopping_trip_id) references bought(shopping_trip_id)
 );
 
-CREATE TABLE product(
+CREATE TABLE product (
 product_id integer primary key autoincrement,
 name varchar(255) not null,
 price double not null
