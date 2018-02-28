@@ -13,14 +13,27 @@ public class ShopTest {
 	
 	@Before
 	public void setup() {
-		shop = new Shop("Kings Road 2");
-		shop2 = new Shop("Kings Road 4", 1);
+		shop = new Shop("Kings Road 2", 1020);
+		shop2 = new Shop("Kings Road 4", 1020, 1);
 	}
 	
 	@Test
 	public void testGetAddressExpectKingsRoadTwo() {
 		String expected = "Kings Road 2";
 		Assert.assertEquals(expected, shop.getAddress());
+	}
+	
+	@Test
+	public void testGetZipExpectedThousandTwenty() { 
+		int expected = 1020;
+		Assert.assertEquals(expected, shop.getZip());
+	}
+	
+	@Test
+	public void testSetZipExpectedTousandThirty() {
+		int expected = 1030;
+		shop.setZip(expected);
+		Assert.assertEquals(expected, shop.getZip());
 	}
 	
 	@Test
