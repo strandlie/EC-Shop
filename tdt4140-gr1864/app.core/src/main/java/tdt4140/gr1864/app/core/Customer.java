@@ -1,16 +1,15 @@
 package tdt4140.gr1864.app.core;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Customer extends AbstractUser {
 	private int customerId;
 	private String firstName;
 	private String lastName;
-	private ArrayList<ShoppingTrip> shoppingTrips;
+	private List<ShoppingTrip> shoppingTrips;
 	
 	public Customer(int customerId, String firstName, String lastName, 
-			ArrayList<ShoppingTrip> shoppingTrips) {
+			List<ShoppingTrip> shoppingTrips) {
 		this.customerId = customerId;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -41,11 +40,11 @@ public class Customer extends AbstractUser {
 		this.lastName = lastName;
 	}
 	
-	public ArrayList<ShoppingTrip> getShoppingTrips() {
+	public List<ShoppingTrip> getShoppingTrips() {
 		return shoppingTrips;
 	}
 
-	public void setShoppingTrips(ArrayList<ShoppingTrip> shoppingTrips) {
+	public void setShoppingTrips(List<ShoppingTrip> shoppingTrips) {
 		this.shoppingTrips = shoppingTrips;
 	}
 
