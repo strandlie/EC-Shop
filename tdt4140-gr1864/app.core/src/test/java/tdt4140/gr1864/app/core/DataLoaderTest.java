@@ -19,23 +19,12 @@ public class DataLoaderTest {
 	public void setup() {
 		loader = new DataLoader();
 		pdc = new ProductDatabaseController();
-		pathToShoppingTrip = "../../src/main/resources/test-data.json";
-		pathToProducts = "../../src/main/resources/mock-products.json";
 	}
 
-	@Test
-	public void testReadingFromJsonFileExpectNoException() {
-		loader.loadShoppingTrips(pathToShoppingTrip);
-	}
-	
-	@Test
-	public void testReadingFromJsonFileExpectNoException2() {
-		loader.loadProducts(pathToProducts, pdc);
-	}
 	
 	@Test
 	public void testCoordinateLoadingFromFileExpectFirstCoordFromDataFile() {
-		ShoppingTrip shoppingTrip = loader.loadShoppingTrips(pathToShoppingTrip);
+		ShoppingTrip shoppingTrip = loader.getTrip();
 		List<Coordinate> coords = shoppingTrip.getCoordinates();
 		Coordinate coord = coords.get(0);
 		double expectedX = 8.622905145346992;
@@ -49,7 +38,7 @@ public class DataLoaderTest {
 	
 	@Test
 	public void testGroceryLoadingFromFileExcpectFirstGroceryFromDataFile() {
-		List<Product> products = loader.loadProducts(pathToProducts, pdc);
+		List<Product> products = loader.getProducts();
 		Product prod = products.get(0);
 		String expectedName = "Pork - Back, Long Cut, Boneless";
 		double expectedPrice = 0.55;
@@ -60,15 +49,15 @@ public class DataLoaderTest {
 	
 	@Test
 	public void testActionLoadingFromFileExpectFirstActionFromDataFile() {
-		ShoppingTrip shoppingTrip  = loader.loadShoppingTrips(pathToShoppingTrip);
+		ShoppingTrip shoppingTrip  = loader.getTrip();
 		List<Action> actions = shoppingTrip.getActions();
 		Action action = actions.get(0);
 		long expectedTime = 1519220923919L;
-		long expectedType = 1L;
-		long expectedProduct = 52L;
+		int expectedType = 1;
+		int expectedProduct = 52;
 		
 		Assert.assertEquals(expectedTime, action.getTimeStamp());
 		Assert.assertEquals(expectedType, action.getActionType());
-		Assert.assertEquals(expectedProduct, action.getProductID());
+		Assert.assertEquals(expectedProduct, (int)action.getProduct().getID());
 	}
 }

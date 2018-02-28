@@ -2,6 +2,8 @@ CREATE TABLE customer(
 customer_id integer primary key autoincrement,
 first_name varchar(30) not null,
 last_name varchar(30) not null,
+age integer,
+sex varchar(15),
 foreign key(customer_id) references shopping_trip(customer_id)
 );
 
@@ -23,7 +25,7 @@ primary key(shopping_trip_id, timestamp)
 CREATE TABLE action(
 shopping_trip_id integer,
 timestamp varchar(255),
-actionType integer not null,
+action_type integer not null,
 product_id integer not null,
 primary key(shopping_trip_id, timestamp),
 foreign key (product_id) references product(product_id)

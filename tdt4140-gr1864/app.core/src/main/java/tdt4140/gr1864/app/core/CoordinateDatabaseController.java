@@ -78,7 +78,12 @@ public class CoordinateDatabaseController implements DatabaseCRUD{
 				return null;
 			}
 
-			Coordinate coord = new Coordinate(rs.getDouble(3), rs.getDouble(4), rs.getString(2), rs.getInt(1));
+			ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
+			Coordinate coord = new Coordinate(
+					rs.getDouble("x"), 
+					rs.getDouble("y"), 
+					rs.getString("timestamp"), 
+					stdc.retrieve(rs.getInt("shopping_trip_id")));
 			connection.close();
 			return coord;
 

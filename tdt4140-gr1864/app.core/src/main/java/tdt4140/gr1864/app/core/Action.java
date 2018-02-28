@@ -4,27 +4,27 @@ public class Action {
 	
 	private long timeStamp;
 	private int actionType;
-	private int productID;
+	private Product product;
 	private ShoppingTrip trip;
 	
 	/*
 	 * Constructor for creating Actions in ActionDatabaseController.
 	 * Needs to handle getting correct ShoppingTrip based on it's ID
 	 */
-	public Action(String timeStamp, int actionType, int productID, int shoppingTripID) {
+	public Action(String timeStamp, int actionType, Product product, ShoppingTrip trip) {
 		this.timeStamp = Long.parseLong(timeStamp);
 		this.actionType = actionType;
-		this.productID = productID;
-		
-		// Set trip based on shoppingTripID
+		this.trip = trip;
+		this.product = product;
+	}
+	
+	public Action(String timeStamp, int actionType, Product product) {
+		this.timeStamp = Long.parseLong(timeStamp);
+		this.actionType = actionType;
+		this.product = product;
 		
 	}
 	
-	public Action(String timeStamp, int actionType, int productID) {
-		this.timeStamp = Long.parseLong(timeStamp);
-		this.actionType = actionType;
-		this.productID = productID;
-	}
 	
 	public long getTimeStamp() {
 		return timeStamp;
@@ -34,8 +34,8 @@ public class Action {
 		return actionType;
 	}
 	
-	public int getProductID() {
-		return productID;
+	public Product getProduct() {
+		return product;
 	}
 	
 	public int getShoppingTripID() {

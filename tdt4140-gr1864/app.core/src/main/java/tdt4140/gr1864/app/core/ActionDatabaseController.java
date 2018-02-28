@@ -28,12 +28,12 @@ public class ActionDatabaseController implements DatabaseCRUD {
 	public int create(Object object) {
 		Action action = objectIsAction(object);
 		try {
-			String sql = "INSERT INTO action (timestamp, actionType, product_id, shopping_trip_id=?) "
+			String sql = "INSERT INTO action (timestamp, action_type, product_id, shopping_trip_id=?) "
 										+ "values (?, ?, ?, ?)";
 			statement=connection.prepareStatement(sql);
 			statement.setString(1,  Long.toString(action.getTimeStamp()));
 			statement.setInt(2, action.getActionType());
-			statement.setInt(3, action.getProductID());
+			statement.setInt(3, action.getProduct().getID());
 			statement.setInt(4, action.getShoppingTripID());
 			statement.executeQuery();
 			connection.close();
@@ -51,12 +51,12 @@ public class ActionDatabaseController implements DatabaseCRUD {
 	public void update(Object object) {
 		Action action = this.objectIsAction(object);
 		try {
-			String sql = "UPDATE action SET timestamp=?, actionType=?, product_id=?"
+			String sql = "UPDATE action SET timestamp=?, action_type=?, product_id=?"
 						+ "WHERE shopping_trip_id=? and timestamp=?";		
 			statement=connection.prepareStatement(sql);
 			statement.setString(2, Long.toString(action.getTimeStamp()));
 			statement.setInt(3, action.getActionType());
-			statement.setInt(4, action.getProductID());
+			statement.setInt(4, action.getProduct().getID());
 			statement.setInt(1, action.getShoppingTripID());
 			statement.executeQuery();
 			connection.close();
@@ -70,7 +70,7 @@ public class ActionDatabaseController implements DatabaseCRUD {
 	public Object retrieve(int id) {
 		try {
 			statement = connection
-					.prepareStatement("SELECT shopping_trip_id, timestamp, actionType, product_id, action_id"
+					.prepareStatement("SELECT shopping_trip_id, timestamp, action_type, product_id, action_id"
 										+ "WHERE shopping_trip_id=?");
 			statement.setInt(1, id);
 			ResultSet rs = statement.executeQuery();
@@ -79,7 +79,13 @@ public class ActionDatabaseController implements DatabaseCRUD {
 				return null;
 			}
 
-			Action action = new Action(rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(1));
+			ProductDatabaseController pdc = new ProductDatabaseController();
+			ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
+			Action action = new Action(
+					rs.getString("timestamp"), 
+					rs.getInt("action_type"), 
+					pdc.retrieve(rs.getInt("product_id")),
+					stdc.retrieve(rs.getInt("shopping_trip_id")));
 			connection.close();
 			return action;
 

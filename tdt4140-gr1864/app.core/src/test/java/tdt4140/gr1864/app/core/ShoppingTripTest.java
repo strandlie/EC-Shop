@@ -48,11 +48,11 @@ public class ShoppingTripTest {
 		List<Action> actions = shoppingTrip.getActions();
 		Action action = actions.get(1);
 		long expectedTime = 1519222543919L;
-		long expectedType = 1L;
-		long expectedProduct = 32L;
+		int expectedType = 1;
+		int expectedProduct = 32;
 		
 		Assert.assertEquals(expectedTime, action.getTimeStamp());
 		Assert.assertEquals(expectedType, action.getActionType());
-		Assert.assertEquals(expectedProduct, action.getProductID());
+		Assert.assertEquals(expectedProduct, action.getProduct());
 	}
 }

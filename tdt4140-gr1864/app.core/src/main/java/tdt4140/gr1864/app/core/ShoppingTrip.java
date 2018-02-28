@@ -2,6 +2,8 @@ package tdt4140.gr1864.app.core;
 
 import java.util.List;
 
+import tdt4140.gr1864.app.core.storage.Shop;
+
 public class ShoppingTrip {
 	
 	/* start-time of ShoppingTrip in UNIX-time */
@@ -9,8 +11,8 @@ public class ShoppingTrip {
 	/* end-time of ShoppingTrip in UNIX-time */
 	private long end;
 	
-	private int shopID;
-	private int customerID;
+	private Shop shop;
+	private Customer customer;
 	private int shoppingTripID;
 	
 	/* Coordinates that makes up the trip */
@@ -18,18 +20,24 @@ public class ShoppingTrip {
 	/* Actions performed during trip */
 	private List<Action> actions;
 
-	public ShoppingTrip(List<Coordinate> coordinates, List<Action> actions) {
+	public ShoppingTrip(List<Coordinate> coordinates, List<Action> actions, int shoppingTripID) {
 		this.coordinates = coordinates;
 		this.actions = actions;
+		this.shoppingTripID = shoppingTripID;
 		
 		this.start = findStart(coordinates);
 		this.end = findEnd(coordinates);
 	}
 	
-	public ShoppingTrip(int shoppingTripId, int customerId, int shopId) {
+	public ShoppingTrip(Customer customer, Shop shop) {
+		this.customer = customer;
+		this.shop = shop;
+	}
+	
+	public ShoppingTrip(int shoppingTripId, Customer customer, Shop shop) {
 		this.shoppingTripID = shoppingTripId;
-		this.customerID = customerId;
-		this.shopID = shopId;
+		this.customer = customer;
+		this.shop = shop;
 	}
 	
 	/*
@@ -78,12 +86,12 @@ public class ShoppingTrip {
 		return actions;
 	}
 	
-	public int getShopID() {
-		return shopID;
+	public Shop getShop() {
+		return shop;
 	}
 	
-	public int getCustomerID() {
-		return customerID;
+	public Customer getCustomer() {
+		return customer;
 	}
 
 	public int getShoppingTripID() {

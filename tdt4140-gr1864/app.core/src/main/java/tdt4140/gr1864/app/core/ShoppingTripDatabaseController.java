@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import interfaces.DatabaseCRUD;
+import tdt4140.gr1864.app.core.storage.Shop;
+import tdt4140.gr1864.app.core.storage.ShopDatabaseController;
 
 public class ShoppingTripDatabaseController implements DatabaseCRUD {
 
@@ -26,13 +28,13 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 	/* Cannot be implemented until SHOP and CUSTOMER is implemented */
 	@Override
 	public int create(Object object) {
-		/*
 		ShoppingTrip trip = this.objectIsShoppingTrip(object);
 		try {
-			String sql = "INSERT INTO shopping_trip (customer_id, shop_id) values (?, ?, ?, ?)";
-			connection.prepareStatement(sql);
-			statement.executeQuery();
-			connection.close();
+			String sql = "INSERT INTO shopping_trip (customer_id, shop_id) VALUES (?, ?)";
+			connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+			statement.setInt(1, trip.getCustomer().getUserId());
+			statement.setInt(2, trip.getShop().getShopID());
+			statement.executeUpdate();
 		
 			try {
 				// Retrieves all generated keys and returns the ID obtained by java object
@@ -44,27 +46,34 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-					
+			connection.close();
 					
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		*/
-		
-		
-		
 		return -1;
 	}
 
 	/* Cannot be implemented until SHOP and CUSTOMER is implemented */
 	@Override
 	public void update(Object object) {
-		
+		ShoppingTrip trip = this.objectIsShoppingTrip(object);
+		String sql = "UPDATE shop SET customer_id=?, shop_id=? WHERE shopping_trip_id=?";
+		try {
+			statement = connection.prepareStatement(sql);
+			
+			statement.setInt(1, trip.getCustomer().getUserId());
+			statement.setInt(2, trip.getShop().getShopID());
+			statement.setInt(3, trip.getShoppingTripID());
+			statement.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
-	public Object retrieve(int id) {
+	public ShoppingTrip retrieve(int id) {
 		try {
 			statement = connection
 					.prepareStatement("SELECT shopping_trip_id, customer_id, shop_id"
@@ -75,8 +84,13 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 			if (!rs.next()) {
 				return null;
 			}
-
-			ShoppingTrip trip = new ShoppingTrip(rs.getInt(1), rs.getInt(2), rs.getInt(3));
+			
+			CustomerDatabaseController cdc = new CustomerDatabaseController();
+			ShopDatabaseController sdc = new ShopDatabaseController();
+			ShoppingTrip trip = new ShoppingTrip(
+					rs.getInt("shoppin_trip_id"), 
+					cdc.retrieve(rs.getInt("customer_id")),
+					sdc.retrieve(rs.getInt("shop_id")));
 			connection.close();
 			return trip;
 
@@ -90,10 +104,9 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 	public void delete(int id) {
 		try {
 			statement = connection
-					.prepareStatement("DELETE FROM shopping_trip WHERE shopping_trip_id=?)");
+					.prepareStatement("DELETE FROM shopping_trip WHERE shopping_trip_id=?");
 			statement.setInt(1, id);
-			statement.executeQuery();
-			connection.close();
+			statement.executeUpdate();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
