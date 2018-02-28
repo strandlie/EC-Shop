@@ -13,48 +13,60 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CustomerDatabaseControllerTest {
 	
-	Customer c1;
+	Customer c0;
 	CustomerDatabaseController cdc;
 	
 	@BeforeClass
 	public static void createDatabase() throws IOException {
 		Path path = Paths.get("database.db");
-		
-		if (! Files.exists(path)) {
-			CreateDatabase.main(null);
+		try {
+		    Files.delete(path);
+		} catch (NoSuchFileException x) {
+		    System.err.format("%s: no such" + " file or directory%n", path);
+		} catch (DirectoryNotEmptyException x) {
+		    System.err.format("%s not empty%n", path);
+		} catch (IOException x) {
+		    // File permission problems are caught here.
+		    System.err.println(x);
 		}
+			
+		CreateDatabase.main(null);
 	}
 
 	@Before
 	public void setup() {
-		c1 = new Customer("Ola", "Normann");
+		c0 = new Customer("Ola", "Normann");
 		cdc = new CustomerDatabaseController();
 	}
 	
 	@Test
-	public void testCreateExpectPresistedObject() {
-		Customer c2 = new Customer("Ola", "Normann", cdc.create(c1));
+	public void AtestCreateExpectPresistedObject() {
+		Customer c2 = new Customer("Ola", "Normann", cdc.create(c0));
 		
-		Assert.assertEquals(c1.getFirstName(), c2.getFirstName());
-		Assert.assertEquals(c1.getLastName(), c2.getLastName());
+		
+		Assert.assertEquals(c0.getFirstName(), c2.getFirstName());
+		Assert.assertEquals(c0.getLastName(), c2.getLastName());
 	}
 	
 	@Test
-	public void testRetrieveExpectPresistedObject() {
-		Customer c2 = new Customer("Ola", "Normann", cdc.create(c1));
-		Customer c3 = (Customer) cdc.retrieve(c1.getUserId());
+	public void BtestRetrieveExpectPresistedObject() {
+		Customer c2 = new Customer("Ola", "Normann", cdc.create(c0));
+		Customer c3 = (Customer) cdc.retrieve(c2.getUserId());
 		
 		Assert.assertEquals(c2.getFirstName(), c3.getFirstName());
 		Assert.assertEquals(c2.getLastName(), c3.getLastName());
 	}
 	
 	@Test
-	public void testUpdateExpectedNewlyPresistedObject() {
-		c1 = new Customer(c1.getFirstName(), c1.getLastName(), cdc.create(c1));
+	public void CtestUpdateExpectedNewlyPresistedObject() {
+		Customer c1 = new Customer(c0.getFirstName(), c0.getLastName(), cdc.create(c0));
 		c1 = new Customer("Kari", "Hansen", c1.getUserId());
 		cdc.update(c1);
 		Customer c2 = cdc.retrieve(c1.getUserId());
@@ -64,8 +76,8 @@ public class CustomerDatabaseControllerTest {
 	}
 	
 	@Test
-	public void testDeleteExpectNull() {
-		Customer c2 = new Customer("Ola", "Normann", cdc.create(c1));
+	public void DtestDeleteExpectNull() {
+		Customer c2 = new Customer("Ola", "Normann", cdc.create(c0));
 		cdc.delete(c2.getUserId());
 		
 		Assert.assertEquals(null, cdc.retrieve(c2.getUserId()));
