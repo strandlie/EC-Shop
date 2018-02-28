@@ -5,64 +5,29 @@ package tdt4140.gr1864.app.core.storage;
 public class Shop{
 	
 	/* Values */
-	private int ID;
-	private String adress;
-	private Storage storage;
-	private Shelfs shelfs;
+	private int shopID;
+	private String address;
 	
-	
-	/* Constructor */
-	public Shop() {
-		ID = -1;
-		adress = new String();
-		storage = new Storage();
-		shelfs = new Shelfs();
+	public Shop(String address) {
+		this.address = address;
 	}
 	
-	public void setID(int ID) {
-		this.ID = ID;
-		storage.setShopID(ID);
+	/* Constructor used by DatabseController */
+	public Shop(String address, int shopId) {
+		this.address = address;
+		this.shopID = shopId;
 	}
 	
-	public int getID() {
-		return this.ID;
+	public int getShopID() {
+		return shopID;
 	}
 	
-	/* Set the address */
-	public void setAdress(String adress) {
-		this.adress = adress;
+	public void setAdress(String address) {
+		this.address = address;
 	}
 	
 	public String getAddress() {
-		return this.adress;
-	}
-	
-	public void addProductToStorage(Product product, int amount) {
-			storage.addProducts(product, amount);
-	}
-	
-	public void addProductToShelfs(Product product, int amount) {
-		shelfs.addProducts(product, amount);
-	}
-	
-	public void removeProductFromStorage(Product product, int amount){
-		storage.removeProducts(product, amount);
-	}
-	
-	public void removeProductFromShelfs(Product product, int amount){
-		shelfs.removeProducts(product, amount);
-	}
-	
-	public void deleteProductFromStorage(Product product){
-			storage.delete(product);
-	}
-	
-	public void deleteProductFromShelfs(Product product){
-			shelfs.delete(product);
-	}
-	
-	public int getAmountInStorage(Product product){
-			return storage.getAmount(product);
+		return this.address;
 	}
 	
 	/* Add function for mowing from storage to shelfs? Or just handle that with remove and add */
