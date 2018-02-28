@@ -1,7 +1,7 @@
 package tdt4140.gr1864.app.core;
 
 import java.io.FileReader;
-
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,10 +19,15 @@ import org.json.simple.parser.JSONParser;
 
 public class DataLoader {
 	
-	public static void main(String [] args) {
+	public static void main(String [] args) throws IOException {
+		
+		
+		// Create database
+		CreateDatabase.createNewDatabase();
 		
 		// Runs dataloader for shoppingtrip
 		DataLoader loader = new DataLoader();
+		
 		String path = "../../src/main/resources/test-data.json";
 		ShoppingTrip trip = loader.loadShoppingTrips(path);
 
