@@ -13,11 +13,6 @@ amount int not null,
 primary key(shopping_trip_id, product_id)
 );
 
-CREATE TABLE zip(
-zipcode int primary key,
-city varchar(30) not null
-);
-
 CREATE TABLE coordinate(
 shopping_trip_id int,
 timestamp varchar(255),
@@ -38,7 +33,8 @@ foreign key (product_id) references product(product_id)
 CREATE TABLE on_shelf(
 shop_id int,
 product_id int,
-amount int not null,
+total_amount int not null,
+shelf_amount int not null,
 primary key(shop_id, product_id)
 );
 
@@ -49,20 +45,6 @@ zip int not null,
 foreign key(zip) references zip(zipcode),
 foreign key(shop_id) references on_shelf(shop_id),
 foreign key(shop_id) references storage(shop_id)
-);
-
-CREATE TABLE in_storage(
-storage_id int,
-product_id int,
-amount int not null,
-primary key(storage_id, product_id)
-);
-
-CREATE TABLE storage(
-storage_id int,
-shop_id int,
-primary key(storage_id, shop_id),
-foreign key(storage_id) references in_storage(storage_id)
 );
 
 CREATE TABLE shopping_trip(
