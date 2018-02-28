@@ -1,13 +1,10 @@
 package tdt4140.gr1864.app.core;
 
-import java.beans.Statement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import java.util.Calendar;
 
 import interfaces.DatabaseCRUD;
 
@@ -19,7 +16,7 @@ public class ProductDatabaseController implements DatabaseCRUD {
 	PreparedStatement statement;
 	
 	public ProductDatabaseController() {
-		try {
+		try {	
 			this.connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 		}
 		catch (SQLException e) {
@@ -27,28 +24,23 @@ public class ProductDatabaseController implements DatabaseCRUD {
 		}
 	}
 	
-	/**
-	 * Writes a Product object to the database with productID >= 0 if it has been retrieved 
-	 * from the database before. If the object has not been retrieved at all, the productID will be -1.
-	 * The productID will only be -1 the first time inserting. 
-	 * @param product The product object being inserted into the table
-	 * @param sql SQL code for sql operation
-	 * @param productID The product objects given ID from sql.
-	 */
-	public int write(Product product, String sql) {
+	@Override
+	public int create(Object object) {
+		Product product = objectIsProduct(object);
+		String sql = "INSERT INTO product (name, price)"
+										+ " VALUES (?, ?)";
+		
 		try {
-			statement = connection.prepareStatement(sql, statement.RETURN_GENERATED_KEYS);
+			statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 			
-			// Object has been given an ID:
-			if (product.getID() instanceof Integer) {
-				statement.setString(1, product.getName());
-				statement.setDouble(2, product.getPrice());
-			} else {
-				statement.setInt(1, product.getID());
-				statement.setString(2, product.getName());
-				statement.setDouble(3, product.getPrice());
-			}
-			
+			// When creating first time
+			statement.setString(1, product.getName());
+			statement.setDouble(2, product.getPrice());
+				
+			// Very important to execute before try-catch
+			statement.executeUpdate();
+
+			// Object has been given an ID first time creating and inserting into database
 			try {
 				// Retrieves all generated keys and returns the ID obtained by java object
 				// which is inserted into the database
@@ -59,47 +51,55 @@ public class ProductDatabaseController implements DatabaseCRUD {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			
-			statement.executeUpdate();
+
 			connection.close();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return -1;
-	}
-	
-	
-	@Override
-	public int create(Object object) {
-		Product product = objectIsProduct(object);
-		String sql = "INSERT INTO product (name, price) "
-										+ "VALUES (?, ?)";
-		return this.write(product, sql);
 	}
 
 	@Override
 	public void update(Object object) {
 		Product product = this.objectIsProduct(object);
 		String sql = "UPDATE product SET name=?, price=? WHERE product_id=?";
-		this.write(product, sql);
+		
+		try {
+			statement = connection.prepareStatement(sql);
+			
+			// When creating first time
+			// Object has been given an ID:
+			statement.setString(1, product.getName());
+			statement.setDouble(2, product.getPrice());
+			statement.setInt(3,  product.getID());
+				
+			// Very important to execute before try-catch
+			statement.executeUpdate();
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
-	public Object retrieve(int id) {
+	public Product retrieve(int id) {
 		try {
 			statement = connection
-					.prepareStatement("SELECT product_id, name, price"
-										+ "WHERE product_id=?");
+					.prepareStatement("SELECT product_id, name, price FROM product"
+										+ " WHERE product_id=?");
 			statement.setInt(1, id);
 			ResultSet rs = statement.executeQuery();
 			
+			// Checks if product with id exists
 			if (!rs.next()) {
 				return null;
 			}
 			
-			// Creates product with (productID from table, name and price)
-			Product product = new Product(rs.getInt(1), rs.getString(2), rs.getDouble(3));
+			// Creates product with (productID generated from table in sql, name and price)
+			Product product = new Product(rs.getInt("product_id"), rs.getString("name"), rs.getDouble("price"));
+
 			connection.close();
 			return product;
 
@@ -113,10 +113,9 @@ public class ProductDatabaseController implements DatabaseCRUD {
 	public void delete(int id) {
 		try {
 			statement = connection
-					.prepareStatement("DELETE FROM product WHERE product_id=?)");
+					.prepareStatement("DELETE FROM product WHERE product_id=?");
 			statement.setInt(1, id);
-			statement.executeQuery();
-			connection.close();
+			statement.executeUpdate();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -124,6 +123,11 @@ public class ProductDatabaseController implements DatabaseCRUD {
 		
 	}
 	
+	/**
+	 * Checks if Object object is an instance of Product.
+	 * @param object Usually a Product object
+	 * @return The product object if the object is an instance of product
+	 */
 	public Product objectIsProduct(Object object) {
 		Product product = (Product) object;
 		if (!(object instanceof Product)) {

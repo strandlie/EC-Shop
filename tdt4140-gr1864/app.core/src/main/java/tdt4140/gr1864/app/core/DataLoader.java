@@ -1,7 +1,7 @@
 package tdt4140.gr1864.app.core;
 
 import java.io.FileReader;
-
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,16 +19,25 @@ import org.json.simple.parser.JSONParser;
 
 public class DataLoader {
 	
-	public static void main(String [] args) {
+	public static void main(String[] args) throws IOException {
+		// Deletes existing database if there is one
+		//deleteExistingDatabase();
+		
+		// Creates database
+		CreateDatabase.main(null);
+		
+		// Create productdatabaseintegrator
+		ProductDatabaseController pdc = new ProductDatabaseController();
 		
 		// Runs dataloader for shoppingtrip
 		DataLoader loader = new DataLoader();
+		
 		String path = "../../src/main/resources/test-data.json";
 		ShoppingTrip trip = loader.loadShoppingTrips(path);
 
 		// Runs dataloader for products
 		String pathToProducts = "../../src/main/resources/mock-products.json";
-		List<Product> p = loader.loadProducts(pathToProducts);
+		List<Product> p = loader.loadProducts(pathToProducts, pdc);
 		
 	}
 	
@@ -37,7 +46,7 @@ public class DataLoader {
 	 * @param path Path to .json file
 	 * @return A list of products which are generated from .json file.
 	 */
-	public List<Product> loadProducts(String path) {
+	public List<Product> loadProducts(String path, ProductDatabaseController pdc) {
 		String relativePath = getClass().getClassLoader().getResource(".").getPath();
 		JSONParser parser = new JSONParser();
 		
@@ -48,7 +57,7 @@ public class DataLoader {
 			JSONArray groceries = (JSONArray) obj;
 			
 			// Creates a list with products with groceries JSONArray
-			products = createProducts(groceries);
+			products = createProducts(groceries, pdc);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -62,7 +71,7 @@ public class DataLoader {
 	 * @param productArray JSONArray with generated products 
 	 * @return list of products  
 	 */
-	public List<Product> createProducts(JSONArray productArray) {
+	public List<Product> createProducts(JSONArray productArray, ProductDatabaseController pdc) {
 		List<Product> products = new ArrayList<>();
 		String name;
 		double price;
@@ -77,7 +86,11 @@ public class DataLoader {
 			price = Double.parseDouble((String) jsonGrocery.get("price"));
 			
 			// Creates a new products and adds it to the list
-			Product newProduct = new Product(name, price); 
+			Product newProduct = new Product(name, price);
+			
+			// Adds the newProduct to database
+			pdc.create(newProduct);
+			
 			products.add(newProduct);
 		}
 		
