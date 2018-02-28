@@ -28,10 +28,13 @@ public class ShopDatabaseController implements DatabaseCRUD{
 		}
 	}
 	
-	
-	public int write(Shop shop, String sql) {
+	@Override
+	public int create(Object object) {
+		Shop shop = this.objectIsShop(object);
+		String sql = "INSERT INTO shop(address, zip)"
+				+ " VALUES (?, ?)";
 		try {
-			statement = connection.prepareStatement(sql, statement.RETURN_GENERATED_KEYS);
+			statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 			
 			// Object has been given an ID:
 			statement.setString(1, shop.getAddress());
@@ -43,7 +46,6 @@ public class ShopDatabaseController implements DatabaseCRUD{
 				// which is inserted into the database
 				ResultSet generatedKeys = statement.getGeneratedKeys();
 				if (generatedKeys.next()) {
-					connection.close();
 					return Math.toIntExact(generatedKeys.getLong(1));
 				}
 			} catch (SQLException e) {
@@ -56,31 +58,32 @@ public class ShopDatabaseController implements DatabaseCRUD{
 		}
 		return -1;
 	}
-
-
-	@Override
-	public int create(Object object) {
-		Shop shop = (Shop) object;
-		String sql = "INSERT INTO Shop (address, zip) "
-				+ "VALUES (?, ?)";
-		return this.write(shop, sql);
-	}
 	
 	
 	@Override
 	public void update(Object object) {
-		Shop shop = (Shop) object;
-		String sql = "Update Shop (address, zip) "
-				+ "VALUES (?, ?)";
-		this.write(shop, sql);
+		Shop shop = this.objectIsShop(object);
+		String sql = "UPDATE shop SET address=?, zip=? WHERE shop_id=?";
+		try {
+			statement = connection.prepareStatement(sql);
+			
+			// Object has been given an ID:
+			statement.setString(1, shop.getAddress());
+			statement.setInt(2, shop.getZip());
+			statement.setInt(3, shop.getShopID());
+			statement.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
 	public Shop retrieve(int shopID) {
 		try {
 			statement = connection
-					.prepareStatement("SELECT shop_id, address, zip"
-										+ "WHERE shop_id=?");
+					.prepareStatement("SELECT * FROM shop"
+										+ " WHERE shop_id=?");
 			statement.setInt(1, shopID);
 			ResultSet rs = statement.executeQuery();
 			
@@ -88,7 +91,7 @@ public class ShopDatabaseController implements DatabaseCRUD{
 				return null;
 			}
 			
-			Shop shop = new Shop( rs.getString(2), rs.getInt(3), rs.getInt(1));
+			Shop shop = new Shop(rs.getString("address"), rs.getInt("zip"), rs.getInt("shop_id"));
 			connection.close();
 			return shop;
 
@@ -98,18 +101,26 @@ public class ShopDatabaseController implements DatabaseCRUD{
 		return null;
 	}
 	
-		@Override
-		public void delete(int id) {
-			try {
-				statement = connection.prepareStatement("DELETE FROM shop WHERE shop_id=?)");
-				statement.setInt(1, id);
-				statement.executeQuery();
-				connection.close();
-				
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+	@Override
+	public void delete(int id) {
+		try {
+			statement = connection.prepareStatement("DELETE FROM shop WHERE shop_id=?");
+			statement.setInt(1, id);
+			statement.executeUpdate();
 			
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
+		
+	}
+		
+	public Shop objectIsShop(Object object) {
+		Shop shop = (Shop) object;
+		if (!(object instanceof Shop)) {
+			throw new IllegalArgumentException("Object is not instance of Shop!");
+		} else {
+			return shop;
+		}
+	}
 		
 	}

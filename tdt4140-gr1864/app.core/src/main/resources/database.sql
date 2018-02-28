@@ -2,14 +2,14 @@ CREATE TABLE customer(
 customer_id integer primary key autoincrement,
 first_name varchar(30) not null,
 last_name varchar(30) not null,
-age int not null,
+age integer not null,
 sex varchar(15) not null
 );
 
 CREATE TABLE bought(
-shopping_trip_id int not null,
-product_id int not null,
-amount int not null,
+shopping_trip_id integer not null,
+product_id integer not null,
+amount integer not null,
 primary key(shopping_trip_id, product_id)
 );
 
@@ -24,8 +24,8 @@ primary key(shopping_trip_id, timestamp)
 CREATE TABLE action(
 shopping_trip_id int,
 timestamp varchar(255),
-actionType int not null,
-product_id int not null,
+actionType integer not null,
+product_id integer not null,
 primary key(shopping_trip_id, timestamp),
 foreign key (product_id) references product(product_id)
 );
@@ -33,21 +33,22 @@ foreign key (product_id) references product(product_id)
 CREATE TABLE on_shelf(
 shop_id int,
 product_id int,
-total_amount int not null,
-shelf_amount int not null,
+total_amount integer not null,
+shelf_amount integer not null,
 primary key(shop_id, product_id)
 );
 
 CREATE TABLE shop(
-shop_id int primary key,
+shop_id integer primary key,
+zip integer not null,
 address varchar(30) not null,
-zip int not null,
+foreign key(shop_id) references product(shop_id)
 );
 
 CREATE TABLE shopping_trip(
-shopping_trip_id integer primary key autoincrement,
-customer_id int not null,
-shop_id int not null,
+shopping_trip_id integer  primary key autoincrement,
+customer_id integer not null,
+shop_id integer not null,
 foreign key(customer_id) references customer(customer_id),
 foreign key(shop_id) references shop(shop_id),
 foreign key(shopping_trip_id) references action(shopping_trip_id),
