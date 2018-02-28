@@ -42,9 +42,6 @@ CREATE TABLE shop(
 shop_id int primary key,
 address varchar(30) not null,
 zip int not null,
-foreign key(zip) references zip(zipcode),
-foreign key(shop_id) references on_shelf(shop_id),
-foreign key(shop_id) references storage(shop_id)
 );
 
 CREATE TABLE shopping_trip(
