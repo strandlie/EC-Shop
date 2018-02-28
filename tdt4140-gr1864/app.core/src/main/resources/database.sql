@@ -2,7 +2,7 @@ CREATE TABLE customer(
 customer_id integer primary key autoincrement,
 first_name varchar(30) not null,
 last_name varchar(30) not null,
-age int not null,
+age integer not null,
 sex varchar(15) not null
 );
 
@@ -11,11 +11,6 @@ shopping_trip_id integer not null,
 product_id integer not null,
 amount integer not null,
 primary key(shopping_trip_id, product_id)
-);
-
-CREATE TABLE zip(
-zipcode integer primary key,
-city varchar(30) not null
 );
 
 CREATE TABLE coordinate(
@@ -44,29 +39,13 @@ primary key(shop_id, product_id)
 
 CREATE TABLE shop(
 shop_id integer primary key,
-address varchar(30) not null,
 zip integer not null,
-foreign key(zip) references zip(zipcode),
-foreign key(shop_id) references on_shelf(shop_id),
-foreign key(shop_id) references storage(shop_id)
-);
-
-CREATE TABLE in_storage(
-storage_id integer,
-product_id integer,
-amount integer not null,
-primary key(storage_id, product_id)
-);
-
-CREATE TABLE storage(
-storage_id integer,
-shop_id integer,
-primary key(storage_id, shop_id),
-foreign key(storage_id) references in_storage(storage_id)
+address varchar(30) not null,
+foreign key(shop_id) references product(shop_id)
 );
 
 CREATE TABLE shopping_trip(
-shopping_trip_id integer primary key autoincrement,
+shopping_trip_id integer  primary key autoincrement,
 customer_id integer not null,
 shop_id integer not null,
 foreign key(customer_id) references customer(customer_id),
