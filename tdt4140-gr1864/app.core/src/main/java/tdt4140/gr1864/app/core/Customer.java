@@ -2,7 +2,7 @@ package tdt4140.gr1864.app.core;
 
 import java.util.List;
 
-public class Customer extends AbstractUser {
+public class Customer implements UserInterface {
 	private int customerId;
 	private String firstName;
 	private String lastName;
