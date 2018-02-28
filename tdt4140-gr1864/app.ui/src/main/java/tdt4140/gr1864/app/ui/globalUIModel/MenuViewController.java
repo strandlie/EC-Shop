@@ -26,19 +26,13 @@ import javafx.util.Callback;
  */
 public class MenuViewController  {
 	
-	@FXML
-	private ListView<String> menuListView;
-	
+	private ModeController modeController;
 	private ObservableList<String> items;
 	
 	@FXML
-	private ModeController modeController;
+	private ListView<String> menuListView;
 	
-	
-	public void setModeController(ModeController modeController) {
-		this.modeController = modeController;
-	}
-	
+	@FXML
 	public void initialize() {
 		menuListView.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
 
@@ -47,7 +41,7 @@ public class MenuViewController  {
 				}
 			}
 		);
-		//menuListView.setEditable(false);
+		menuListView.setEditable(false);
 		
 		this.items = menuListView.getItems();
 		
@@ -56,15 +50,15 @@ public class MenuViewController  {
 				public void changed(ObservableValue<? extends String> property, String oldValue, String newValue) {
 					if (newValue == null) {
 						System.out.println("Set default mode");
-						//modeController.setDefaultMode();
+						modeController.setDefaultMode();
 					}
 					else if (! newValue.equals(oldValue)){
-						/* if (modeController.isValidMode(newValue)) {
+						if (modeController.isValidMode(newValue)) {
 						 modeController.modeChanged(newValue);
 						}
 						else {
 							throw new IllegalStateException("Cannot change mode to " + newValue + " from " + oldValue);
-						}*/
+						}
 						System.out.println("New selection");
 						System.out.println("New value: " + newValue);
 					}
@@ -75,13 +69,17 @@ public class MenuViewController  {
 				}
 			}
 		);
-		
-		items.add("Tool1");
-		items.add("Tool2");
 	}
 	
-	private void addMenuItem(String item) {
+	protected void addMenuItem(String item) {
 		items.add(item);
+	}
+	
+	protected void setModeController(ModeController modeController) {
+		if (modeController == null) {
+			throw new IllegalArgumentException("modeController cannot be null");
+		}
+		this.modeController = modeController;
 	}
 	
 	
