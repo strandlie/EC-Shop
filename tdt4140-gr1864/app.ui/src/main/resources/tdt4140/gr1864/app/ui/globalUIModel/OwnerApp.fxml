@@ -8,9 +8,7 @@
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.111">
    <left>
       <VBox prefHeight="400.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <children>
-            <ListView id="menuListView" prefHeight="200.0" prefWidth="200.0" />
-         </children>
+      		<fx:include fx:id="menuListView" source="MenuView.fxml"/>
       </VBox>
    </left>
 </BorderPane>

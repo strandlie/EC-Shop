@@ -1,21 +1,30 @@
 package tdt4140.gr1864.app.ui;
 
+import java.io.File;
+import java.io.IOException;
+
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import tdt4140.gr1864.app.ui.globalUIModel.InteractionViewController;
 import tdt4140.gr1864.app.ui.globalUIModel.MenuViewController;
 import tdt4140.gr1864.app.ui.globalUIModel.ModeController;
 import tdt4140.gr1864.app.ui.globalUIModel.VisualizationViewController;
 
-public class OwnerApp {
+public class OwnerApp extends Application{
 	
-	ModeController modeController;
 	
-	public OwnerApp(ModeController mc, InteractionViewController ivc, VisualizationViewController vvc, MenuViewController mvc) {
-		this.modeController = mc;
+	public void start(Stage primaryStage) throws IOException {
 		
+		Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("./tdt4140/gr1864/app/ui/globalUIModel/OwnerApp.fxml"));
+		primaryStage.setScene(new Scene(root));
+		primaryStage.show();
 	}
-	
 	public static void main(String[] args) {
-		ModeController mc = new ModeController();
+		launch(args);
+		//ModeController mc = new ModeController();
 	}
 
 }

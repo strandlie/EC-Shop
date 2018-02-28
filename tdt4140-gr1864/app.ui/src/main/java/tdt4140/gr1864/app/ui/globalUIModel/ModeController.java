@@ -17,7 +17,11 @@ public class ModeController {
 	/**
 	 * 
 	 */
-	public ModeController() {
+	public ModeController(MenuViewController mvc, VisualizationViewController vvc, InteractionViewController ivc) {
+		this.menuViewController = mvc;
+		this.visualizationViewController = vvc;
+		this.interactionViewController = ivc;
+		
 		this.modes = new HashMap<String, Mode>();
 		this.defaultMode = new Mode("DefaultMode", null);
 		addMode(defaultMode);
