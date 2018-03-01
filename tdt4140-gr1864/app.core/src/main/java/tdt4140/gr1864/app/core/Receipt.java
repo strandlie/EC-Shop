@@ -11,8 +11,10 @@ public class Receipt {
 	
 	/**
 	 * A Map containing the amount of items with specific codes were bought. 
+	 * This could alternatively map Products with Integers, but that requires
+	 * a custom hash code implementation.
 	 */
-	private Map<Product, Integer> inventory = new HashMap<>();
+	private Map<Integer, Integer> inventory = new HashMap<>();
 	
 	/**
 	 * The computed prices for each item.
@@ -34,22 +36,23 @@ public class Receipt {
 	 * Compute the costs for products purchased during this trip.
 	 */
 	private void computePrices() {
-		ProductDatabaseController database = new ProductDatabaseController();
-
 		for (Action action : shoppingTrip.getActions()) {
-			Product product = database.retrieve(action.getProductID());
+			int product = action.getProductID();
 			
 			int previous = inventory.containsKey(product) ? inventory.get(product) : 0;
-			
+
 			if (action.getActionType() == Action.DROP) {
 				inventory.put(product, previous - 1);
 			} else if (action.getActionType() == Action.PICK_UP) {
 				inventory.put(product, previous + 1);
-			}
+			}	
 		}
-				
-		for (Product product : inventory.keySet()) {
-			prices.put(product, product.getPrice() * inventory.get(product));
+		
+		ProductDatabaseController database = new ProductDatabaseController();
+
+		for (Integer code : inventory.keySet()) {
+			Product product = database.retrieve(code);
+			prices.put(product, product.getPrice() * inventory.get(code));
 		}
 		
 		database.close();
@@ -62,7 +65,7 @@ public class Receipt {
 		return shoppingTrip;
 	}
 	
-	public Map<Product, Integer> getInventory() {
+	public Map<Integer, Integer> getInventory() {
 		return inventory;
 	}
 	

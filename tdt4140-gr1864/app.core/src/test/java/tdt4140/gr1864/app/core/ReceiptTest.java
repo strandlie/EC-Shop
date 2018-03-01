@@ -29,7 +29,7 @@ public class ReceiptTest {
 	@Test
 	public void testGetPrices() {
 		boolean allOne = true;
-		
+
 		for (Integer count : receipt.getInventory().values()) {
 			if (count != 1) {
 				allOne = false;
