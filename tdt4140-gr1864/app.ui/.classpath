@@ -32,5 +32,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="libs/no.hal.javafx.fxmlapp.lib_0.0.1.201701160851.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
