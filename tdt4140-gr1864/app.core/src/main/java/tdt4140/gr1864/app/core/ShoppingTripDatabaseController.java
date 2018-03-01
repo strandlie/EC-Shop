@@ -31,7 +31,7 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 		ShoppingTrip trip = this.objectIsShoppingTrip(object);
 		try {
 			String sql = "INSERT INTO shopping_trip (customer_id, shop_id) VALUES (?, ?)";
-			connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+			statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 			statement.setInt(1, trip.getCustomer().getUserId());
 			statement.setInt(2, trip.getShop().getShopID());
 			statement.executeUpdate();
@@ -58,7 +58,7 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 	@Override
 	public void update(Object object) {
 		ShoppingTrip trip = this.objectIsShoppingTrip(object);
-		String sql = "UPDATE shop SET customer_id=?, shop_id=? WHERE shopping_trip_id=?";
+		String sql = "UPDATE shopping_trip SET customer_id=?, shop_id=? WHERE shopping_trip_id=?";
 		try {
 			statement = connection.prepareStatement(sql);
 			
@@ -76,7 +76,7 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 	public ShoppingTrip retrieve(int id) {
 		try {
 			statement = connection
-					.prepareStatement("SELECT shopping_trip_id, customer_id, shop_id"
+					.prepareStatement("SELECT * FROM shopping_trip "
 										+ "WHERE shopping_trip_id=?");
 			statement.setInt(1, id);
 			ResultSet rs = statement.executeQuery();
@@ -88,7 +88,7 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 			CustomerDatabaseController cdc = new CustomerDatabaseController();
 			ShopDatabaseController sdc = new ShopDatabaseController();
 			ShoppingTrip trip = new ShoppingTrip(
-					rs.getInt("shoppin_trip_id"), 
+					rs.getInt("shopping_trip_id"), 
 					cdc.retrieve(rs.getInt("customer_id")),
 					sdc.retrieve(rs.getInt("shop_id")));
 			connection.close();
