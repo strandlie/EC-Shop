@@ -2,6 +2,8 @@ package tdt4140.gr1864.app.core;
 
 import java.util.List;
 
+import tdt4140.gr1864.app.core.storage.Shop;
+
 public class ShoppingTrip {
 	
 	/* start-time of ShoppingTrip in UNIX-time */
@@ -9,8 +11,10 @@ public class ShoppingTrip {
 	/* end-time of ShoppingTrip in UNIX-time */
 	private long end;
 	
-	private int shopID;
-	private int customerID;
+	/* customer and shop trip was made by and at */
+	private Shop shop;
+	private Customer customer;
+
 	private int shoppingTripID;
 	
 	/* Coordinates that makes up the trip */
@@ -18,21 +22,42 @@ public class ShoppingTrip {
 	/* Actions performed during trip */
 	private List<Action> actions;
 
-	public ShoppingTrip(List<Coordinate> coordinates, List<Action> actions) {
+	/**
+	 * @param coordinates		list of coordinates making up the trip
+	 * @param actions			list of actions performed during trip
+	 * @param shoppingTripID	id provided by database
+	 */
+	public ShoppingTrip(List<Coordinate> coordinates, List<Action> actions, int shoppingTripID) {
 		this.coordinates = coordinates;
 		this.actions = actions;
-		
+		this.shoppingTripID = shoppingTripID;
 		this.start = findStart(coordinates);
 		this.end = findEnd(coordinates);
 	}
 	
-	public ShoppingTrip(int shoppingTripId, int customerId, int shopId) {
-		this.shoppingTripID = shoppingTripId;
-		this.customerID = customerId;
-		this.shopID = shopId;
+	/**
+	 * Constructor when missing ID
+	 * @param customer	customer performing trip
+	 * @param shop		shop where trip was made
+	 */
+	public ShoppingTrip(Customer customer, Shop shop) {
+		this.customer = customer;
+		this.shop = shop;
 	}
 	
-	/*
+	/**
+	 * Constructor used by ShoppingTripDatabaseController
+	 * @param shoppingTripId	id provided by database
+	 * @param customer			customer performing trip
+	 * @param shop				shop where trip was made
+	 */
+	public ShoppingTrip(int shoppingTripId, Customer customer, Shop shop) {
+		this.shoppingTripID = shoppingTripId;
+		this.customer = customer;
+		this.shop = shop;
+	}
+	
+	/**
 	 * @param coordinates list of coordinates that makes up the trip
 	 * @return time of first data-point in the list of coordinates
 	 */
@@ -47,7 +72,7 @@ public class ShoppingTrip {
 		return min;
 	}
 	
-	/*
+	/**
 	 * @param coordinates list of coordinates that makes up the trip
 	 * @return time of last data-point in the list of coordinates
 	 */
@@ -78,12 +103,12 @@ public class ShoppingTrip {
 		return actions;
 	}
 	
-	public int getShopID() {
-		return shopID;
+	public Shop getShop() {
+		return shop;
 	}
 	
-	public int getCustomerID() {
-		return customerID;
+	public Customer getCustomer() {
+		return customer;
 	}
 
 	public int getShoppingTripID() {

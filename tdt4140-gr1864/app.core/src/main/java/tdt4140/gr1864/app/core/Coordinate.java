@@ -5,18 +5,29 @@ public class Coordinate {
 	private double x;
 	private double y;
 	private long timeStamp;
+	
+	/* trip the coordinate is a part of */
 	private ShoppingTrip trip;
 	
-	/*
-	 * Constructor for creating Coordinates in CoordinateDatabaseController.
-	 * Needs to handle getting correct ShoppingTrip based on it's ID
+	/**
+	 * Constructor used by CoordinateDatabaseController 
+	 * @param x				x position
+	 * @param y				y position
+	 * @param timeStamp		time of read, parsed to long
+	 * @param trip			trip the coordinate is a part of
 	 */
-	public Coordinate(double x, double y, String timeStamp, int shoppingTripID) {
+	public Coordinate(double x, double y, String timeStamp, ShoppingTrip trip) {
 		this.x = x;
 		this.y = y;
 		this.timeStamp = Long.parseLong(timeStamp);
+		this.trip = trip;
 	}
 	
+	/**
+	 * @param x				x position
+	 * @param y				y position
+	 * @param timeStamp		time of read, parsed to long
+	 */
 	public Coordinate(double x, double y, String timeStamp) {
 		this.x = x;
 		this.y = y;
@@ -35,8 +46,8 @@ public class Coordinate {
 		return timeStamp;
 	}
 	
-	public int getShoppingTripID() {
-		return 0;
+	public ShoppingTrip getShoppingTrip() {
+		return trip;
 	}
 
 }

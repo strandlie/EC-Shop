@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.SQLException;
 import java.util.List;
 
 import org.junit.AfterClass;
@@ -22,6 +21,11 @@ public class DataLoaderTest {
 	String pathToProducts;
 	DataLoader loader;
 	ProductDatabaseController pdc;
+
+	ShoppingTrip trip;
+	List<Coordinate> coords;
+	List<Product> products;
+	List<Action> actions;
 	
 	/*
 	 * Setting up database before running tests
@@ -40,24 +44,15 @@ public class DataLoaderTest {
 	public void setupDataloader() {
 		loader = new DataLoader();
 		pdc = new ProductDatabaseController();
-		pathToShoppingTrip = "../../src/main/resources/test-data.json";
-		pathToProducts = "../../src/main/resources/mock-products.json";
+		coords = loader.getCoordinates();
+		products = loader.getProducts();
+		actions = loader.getActions();
+		trip = loader.getTrip();
 	}
 
-	@Test
-	public void testReadingFromJsonFileExpectNoException() {
-		loader.loadShoppingTrips(pathToShoppingTrip);
-	}
-	
-	@Test
-	public void testReadingFromJsonFileExpectNoException2() {
-		loader.loadProducts(pathToProducts, pdc);
-	}
 	
 	@Test
 	public void testCoordinateLoadingFromFileExpectFirstCoordFromDataFile() {
-		ShoppingTrip shoppingTrip = loader.loadShoppingTrips(pathToShoppingTrip);
-		List<Coordinate> coords = shoppingTrip.getCoordinates();
 		Coordinate coord = coords.get(0);
 		double expectedX = 8.622905145346992;
 		double expectedY = 4.569762307274866;
@@ -70,7 +65,6 @@ public class DataLoaderTest {
 	
 	@Test
 	public void testGroceryLoadingFromFileExcpectFirstGroceryFromDataFile() {
-		List<Product> products = loader.loadProducts(pathToProducts, pdc);
 		Product prod = products.get(0);
 		String expectedName = "Pork - Back, Long Cut, Boneless";
 		double expectedPrice = 0.55;
@@ -81,16 +75,14 @@ public class DataLoaderTest {
 	
 	@Test
 	public void testActionLoadingFromFileExpectFirstActionFromDataFile() {
-		ShoppingTrip shoppingTrip  = loader.loadShoppingTrips(pathToShoppingTrip);
-		List<Action> actions = shoppingTrip.getActions();
 		Action action = actions.get(0);
 		long expectedTime = 1519220923919L;
-		long expectedType = 1L;
-		long expectedProduct = 52L;
+		int expectedType = 1;
+		int expectedProduct = 52;
 		
 		Assert.assertEquals(expectedTime, action.getTimeStamp());
 		Assert.assertEquals(expectedType, action.getActionType());
-		Assert.assertEquals(expectedProduct, action.getProductID());
+		Assert.assertEquals(expectedProduct, (int) action.getProduct().getID());
 	}
 	
 	/*
