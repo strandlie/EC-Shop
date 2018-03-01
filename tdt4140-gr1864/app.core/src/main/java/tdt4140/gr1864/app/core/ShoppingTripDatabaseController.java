@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import interfaces.DatabaseCRUD;
-import tdt4140.gr1864.app.core.storage.Shop;
 import tdt4140.gr1864.app.core.storage.ShopDatabaseController;
 
 public class ShoppingTripDatabaseController implements DatabaseCRUD {
