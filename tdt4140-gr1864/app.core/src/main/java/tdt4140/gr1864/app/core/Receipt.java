@@ -39,8 +39,11 @@ public class Receipt {
 		for (Action action : shoppingTrip.getActions()) {
 			int product = action.getProductID();
 			
+			// Figure out the amount currently in the inventory, 0 if it was not being carried.
 			int previous = inventory.containsKey(product) ? inventory.get(product) : 0;
 
+			// Increase or decrease the amount of the given product in the inventory based
+			// on the action type.
 			if (action.getActionType() == Action.DROP) {
 				inventory.put(product, previous - 1);
 			} else if (action.getActionType() == Action.PICK_UP) {
@@ -50,6 +53,7 @@ public class Receipt {
 		
 		ProductDatabaseController database = new ProductDatabaseController();
 
+		// Compute prices for items using the amount of items computed above.
 		for (Integer code : inventory.keySet()) {
 			Product product = database.retrieve(code);
 			prices.put(product, product.getPrice() * inventory.get(code));
@@ -65,6 +69,9 @@ public class Receipt {
 		return shoppingTrip;
 	}
 	
+	/**
+	 * @return The ID and amount of all products in the inventory.
+	 */
 	public Map<Integer, Integer> getInventory() {
 		return inventory;
 	}
