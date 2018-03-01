@@ -22,22 +22,14 @@ public class CustomerDatabaseControllerTest {
 	
 	Customer c0;
 	CustomerDatabaseController cdc;
-	
+
 	@BeforeClass
 	public static void createDatabase() throws IOException {
 		Path path = Paths.get("database.db");
-		try {
-		    Files.delete(path);
-		} catch (NoSuchFileException x) {
-		    System.err.format("%s: no such" + " file or directory%n", path);
-		} catch (DirectoryNotEmptyException x) {
-		    System.err.format("%s not empty%n", path);
-		} catch (IOException x) {
-		    // File permission problems are caught here.
-		    System.err.println(x);
+		
+		if (! Files.exists(path)) {
+			CreateDatabase.main(null);
 		}
-			
-		CreateDatabase.main(null);
 	}
 
 	@Before
@@ -92,6 +84,7 @@ public class CustomerDatabaseControllerTest {
 		try {
 		    Files.delete(path);
 		} catch (NoSuchFileException x) {
+			System.out.println("product");
 		    System.err.format("%s: no such" + " file or directory%n", path);
 		} catch (DirectoryNotEmptyException x) {
 		    System.err.format("%s not empty%n", path);

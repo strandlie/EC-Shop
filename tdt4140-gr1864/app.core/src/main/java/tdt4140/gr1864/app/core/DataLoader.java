@@ -16,12 +16,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-/* 
- * TODO:
- * 	Add ShoppingTrip to a user
- * 	Add actions to products
- */
-
 public class DataLoader {
 	
 	public static void main(String[] args) throws IOException {
@@ -47,7 +41,6 @@ public class DataLoader {
 		
 		// Deletes existing database
 		deleteExistingDatabase();
-		
 	}
 	
 	/**

@@ -26,8 +26,8 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 	/* Cannot be implemented until SHOP and CUSTOMER is implemented */
 	@Override
 	public int create(Object object) {
-		/*
-		ShoppingTrip trip = this.objectIsShoppingTrip(object);
+		
+		//ShoppingTrip trip = this.objectIsShoppingTrip(object);
 		try {
 			String sql = "INSERT INTO shopping_trip (customer_id, shop_id) values (?, ?, ?, ?)";
 			connection.prepareStatement(sql);
@@ -49,10 +49,6 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		*/
-		
-		
 		
 		return -1;
 	}
