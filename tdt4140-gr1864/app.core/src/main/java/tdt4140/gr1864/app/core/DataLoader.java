@@ -40,7 +40,6 @@ public class DataLoader {
 		List<Product> p = loader.loadProducts(pathToProducts, pdc);
 		
 		Receipt receipt = new Receipt(trip);
-		System.out.println(receipt.getTotalPrice());
 	}
 	
 	/**
