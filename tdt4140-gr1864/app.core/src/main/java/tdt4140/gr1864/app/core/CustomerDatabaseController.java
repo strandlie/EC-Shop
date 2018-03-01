@@ -47,17 +47,15 @@ public class CustomerDatabaseController implements DatabaseCRUD {
     public Customer retrieve(int userId) {
         try {
             Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+            String sql = "SELECT * FROM customer WHERE customer_id = " + userId;
             PreparedStatement statement = connection
-                    .prepareStatement("SELECT * FROM customer WHERE customer_id=?");
-            statement.setInt(1, userId);
-            ResultSet rs = statement.executeQuery();
+                    .prepareStatement(sql);
             
+            ResultSet rs = statement.executeQuery();
             // Returned nothing
             if (!rs.next()) {
-            	System.out.println("heieh");
                 return null;
             }
-            
             Customer user = new Customer(rs.getString("first_name"), rs.getString("last_name"), rs.getInt("customer_id"));
             connection.close();
             return user;
