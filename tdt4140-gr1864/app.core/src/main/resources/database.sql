@@ -36,7 +36,7 @@ foreign key (shopping_trip_id) references shopping_trip(shopping_trip_id)
 CREATE TABLE on_shelf(
 shop_id integer,
 product_id integer,
-amount int not null,
+amount integer not null,
 primary key(shop_id, product_id)
 );
 

@@ -2,8 +2,10 @@ package tdt4140.gr1864.app.core;
 
 import java.util.List;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /* Uses test-data.json for testing */
@@ -19,8 +21,21 @@ public class DataLoaderTest {
 	List<Product> products;
 	List<Action> actions;
 	
+	/*
+	 * Setting up database before running tests
+	 * Checks for occurence of database before creating one
+	 */
+	@BeforeClass
+	public static void setupDatabase() throws IOException {
+		Path path = Paths.get("database.db");
+		
+		if (! Files.exists(path)) {
+			CreateDatabase.main(null);
+		}
+	}
+	
 	@Before
-	public void setup() {
+	public void setupDataloader() {
 		loader = new DataLoader();
 		pdc = new ProductDatabaseController();
 		coords = loader.getCoordinates();
@@ -62,5 +77,23 @@ public class DataLoaderTest {
 		Assert.assertEquals(expectedTime, action.getTimeStamp());
 		Assert.assertEquals(expectedType, action.getActionType());
 		Assert.assertEquals(expectedProduct, (int) action.getProduct().getID());
+	}
+	
+	/*
+	 * Deleting database after running test
+	 */
+	@AfterClass
+	public static void finish() {
+		Path path = Paths.get("database.db");
+		try {
+		    Files.delete(path);
+		} catch (NoSuchFileException x) {
+		    System.err.format("%s: no such" + " file or directory%n", path);
+		} catch (DirectoryNotEmptyException x) {
+		    System.err.format("%s not empty%n", path);
+		} catch (IOException x) {
+		    // File permission problems are caught here.
+		    System.err.println(x);
+		}
 	}
 }
