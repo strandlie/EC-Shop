@@ -13,7 +13,7 @@ primary key(shopping_trip_id, product_id)
 );
 
 CREATE TABLE coordinate(
-shopping_trip_id int,
+shopping_trip_id integer,
 timestamp varchar(255),
 x real not null,
 y real not null,
@@ -32,7 +32,7 @@ foreign key (product_id) references product(product_id)
 CREATE TABLE on_shelf(
 shop_id integer,
 product_id integer,
-amount int not null,
+amount integer not null,
 primary key(shop_id, product_id)
 );
 
