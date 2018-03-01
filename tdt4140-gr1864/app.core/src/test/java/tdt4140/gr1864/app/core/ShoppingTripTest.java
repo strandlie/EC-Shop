@@ -14,8 +14,7 @@ public class ShoppingTripTest {
 	@Before
 	public void setup() {
 		DataLoader loader = new DataLoader();
-		String path = "../../src/main/resources/test-data.json";
-		shoppingTrip = loader.loadShoppingTrips(path);
+		shoppingTrip = loader.getTrip();
 	}
 
 	@Test
@@ -53,6 +52,6 @@ public class ShoppingTripTest {
 		
 		Assert.assertEquals(expectedTime, action.getTimeStamp());
 		Assert.assertEquals(expectedType, action.getActionType());
-		Assert.assertEquals(expectedProduct, action.getProduct());
+		Assert.assertEquals(expectedProduct, (int)action.getProduct().getID());
 	}
 }

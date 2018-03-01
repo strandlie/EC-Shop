@@ -51,7 +51,7 @@ public class DataLoader {
 	
 		// Runs dataloader for products
 		String pathToProducts = "../../src/main/resources/mock-products.json";
-		List<Product> p = this.loadProducts(pathToProducts, pdc);
+		products = this.loadProducts(pathToProducts, pdc);
 	
 		String path = "../../src/main/resources/test-data.json";
 		trip = this.loadShoppingTrips(path);

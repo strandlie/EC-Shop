@@ -102,7 +102,7 @@ public class ProductDatabaseController implements DatabaseCRUD {
 					rs.getInt("product_id"), 
 					rs.getString("name"), 
 					rs.getDouble("price"));
-			connection.close();
+			statement.close();
 			return product;
 
 		} catch (SQLException e) {
