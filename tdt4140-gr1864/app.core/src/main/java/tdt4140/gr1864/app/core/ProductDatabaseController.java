@@ -74,10 +74,7 @@ public class ProductDatabaseController implements DatabaseCRUD {
 			statement.setString(1, product.getName());
 			statement.setDouble(2, product.getPrice());
 			statement.setInt(3,  product.getID());
-				
-			// Very important to execute before try-catch
 			statement.executeUpdate();
-			
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -116,6 +113,7 @@ public class ProductDatabaseController implements DatabaseCRUD {
 					.prepareStatement("DELETE FROM product WHERE product_id=?");
 			statement.setInt(1, id);
 			statement.executeUpdate();
+			connection.close();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

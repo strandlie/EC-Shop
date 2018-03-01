@@ -27,7 +27,8 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 	@Override
 	public int create(Object object) {
 		
-		//ShoppingTrip trip = this.objectIsShoppingTrip(object);
+		/*ShoppingTrip trip = this.objectIsShoppingTrip(object);
+		
 		try {
 			String sql = "INSERT INTO shopping_trip (customer_id, shop_id) values (?, ?, ?, ?)";
 			connection.prepareStatement(sql);
@@ -50,6 +51,7 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 			e.printStackTrace();
 		}
 		
+		*/
 		return -1;
 	}
 
