@@ -2,6 +2,11 @@ package tdt4140.gr1864.app.core;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +26,8 @@ public class DataLoader {
 	
 	public static void main(String[] args) throws IOException {
 		// Deletes existing database if there is one
-		//deleteExistingDatabase();
+		deleteExistingDatabase();
+		
 		
 		// Creates database
 		CreateDatabase.main(null);
@@ -39,7 +45,9 @@ public class DataLoader {
 		String pathToProducts = "../../src/main/resources/mock-products.json";
 		List<Product> p = loader.loadProducts(pathToProducts, pdc);
 		
-		Receipt receipt = new Receipt(trip);
+		System.out.println("after");
+		// Deletes existing database
+		deleteExistingDatabase();
 	}
 	
 	/**
@@ -183,5 +191,22 @@ public class DataLoader {
 			actions.add(action);
 		}
 		return actions;
+	}
+	
+	/*
+	 * Deletes existing database
+	 */
+	public static void deleteExistingDatabase() {
+		Path path = Paths.get("database.db");
+		try {
+		    Files.delete(path);
+		} catch (NoSuchFileException x) {
+		    System.err.format("%s: no such" + " file or directory%n", path);
+		} catch (DirectoryNotEmptyException x) {
+		    System.err.format("%s not empty%n", path);
+		} catch (IOException x) {
+		    // File permission problems are caught here.
+		    System.err.println(x);
+		}
 	}
 }
