@@ -58,11 +58,12 @@ public class ProductDatabaseController implements DatabaseCRUD {
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
-			}			
+			}
+			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		
 		return -1;
 	}
 

@@ -8,19 +8,19 @@ public class Receipt {
 	 * The ShoppingTrip object which this Receipt computes the prices for.
 	 */
 	private ShoppingTrip shoppingTrip;
-	
+
 	/**
-	 * A Map containing the amount of items with specific codes were bought. 
+	 * A Map containing the amount of items with specific codes were bought.
 	 * This could alternatively map Products with Integers, but that requires
 	 * a custom hash code implementation.
 	 */
 	private Map<Integer, Integer> inventory = new HashMap<>();
-	
+
 	/**
 	 * The computed prices for each item.
 	 */
 	private Map<Product, Double> prices = new HashMap<>();
-	
+
 	/**
 	 * Creates a new Receipt object. A Receipt takes a ShoppingTrip and computes the 
 	 * total prices for each Product purchased during the trip. 
@@ -31,7 +31,7 @@ public class Receipt {
 		
 		computePrices();
 	}
-	
+
 	/**
 	 * Compute the costs for products purchased during this trip.
 	 */
@@ -50,7 +50,7 @@ public class Receipt {
 				inventory.put(product, previous + 1);
 			}	
 		}
-		
+
 		ProductDatabaseController database = new ProductDatabaseController();
 
 		// Compute prices for items using the amount of items computed above.
