@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -27,6 +28,12 @@ public class ReceiptTest {
 		if (! Files.exists(path)) {
 			CreateDatabase.main(null);
 		}
+		
+		// Load product data into the database.
+		DataLoader loader = new DataLoader();
+		ProductDatabaseController pdc = new ProductDatabaseController();
+		String pathToProducts = "../../src/main/resources/mock-products.json";
+		List<Product> p = loader.loadProducts(pathToProducts, pdc);
 	}
 	
 	@Before
