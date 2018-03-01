@@ -113,7 +113,6 @@ public class ProductDatabaseController implements DatabaseCRUD {
 					.prepareStatement("DELETE FROM product WHERE product_id=?");
 			statement.setInt(1, id);
 			statement.executeUpdate();
-			connection.close();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
