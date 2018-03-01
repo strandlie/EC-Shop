@@ -36,8 +36,8 @@ public class Coordinate {
 		return timeStamp;
 	}
 	
-	public int getShoppingTripID() {
-		return 0;
+	public ShoppingTrip getShoppingTrip() {
+		return trip;
 	}
 
 }
