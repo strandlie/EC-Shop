@@ -1,6 +1,5 @@
 package tdt4140.gr1864.app.core;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import org.junit.Assert;
@@ -14,18 +13,25 @@ public class DataLoaderTest {
 	String pathToProducts;
 	DataLoader loader;
 	ProductDatabaseController pdc;
+
+	ShoppingTrip trip;
+	List<Coordinate> coords;
+	List<Product> products;
+	List<Action> actions;
 	
 	@Before
 	public void setup() {
 		loader = new DataLoader();
 		pdc = new ProductDatabaseController();
+		coords = loader.getCoordinates();
+		products = loader.getProducts();
+		actions = loader.getActions();
+		trip = loader.getTrip();
 	}
 
 	
 	@Test
 	public void testCoordinateLoadingFromFileExpectFirstCoordFromDataFile() {
-		ShoppingTrip shoppingTrip = loader.getTrip();
-		List<Coordinate> coords = shoppingTrip.getCoordinates();
 		Coordinate coord = coords.get(0);
 		double expectedX = 8.622905145346992;
 		double expectedY = 4.569762307274866;
@@ -38,7 +44,6 @@ public class DataLoaderTest {
 	
 	@Test
 	public void testGroceryLoadingFromFileExcpectFirstGroceryFromDataFile() {
-		List<Product> products = loader.getProducts();
 		Product prod = products.get(0);
 		String expectedName = "Pork - Back, Long Cut, Boneless";
 		double expectedPrice = 0.55;
@@ -49,8 +54,6 @@ public class DataLoaderTest {
 	
 	@Test
 	public void testActionLoadingFromFileExpectFirstActionFromDataFile() {
-		ShoppingTrip shoppingTrip  = loader.getTrip();
-		List<Action> actions = shoppingTrip.getActions();
 		Action action = actions.get(0);
 		long expectedTime = 1519220923919L;
 		int expectedType = 1;
@@ -58,6 +61,6 @@ public class DataLoaderTest {
 		
 		Assert.assertEquals(expectedTime, action.getTimeStamp());
 		Assert.assertEquals(expectedType, action.getActionType());
-		Assert.assertEquals(expectedProduct, (int)action.getProduct().getID());
+		Assert.assertEquals(expectedProduct, (int) action.getProduct().getID());
 	}
 }

@@ -54,7 +54,7 @@ public class DataLoader {
 		List<Product> p = this.loadProducts(pathToProducts, pdc);
 	
 		String path = "../../src/main/resources/test-data.json";
-		ShoppingTrip trip = this.loadShoppingTrips(path);
+		trip = this.loadShoppingTrips(path);
 	}
 	
 	/**
@@ -109,7 +109,6 @@ public class DataLoader {
 			
 			products.add(newProduct);
 		}
-		this.products = products;
 		return products;
 	}
 	
@@ -172,7 +171,6 @@ public class DataLoader {
 	 * @return ShoppingTrip object created from coordinates and actions
 	 */
 	public ShoppingTrip createShoppingTrip(ShoppingTrip trip, List<Coordinate> coordinates, List<Action> actions) {
-		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
 		ShoppingTrip newTrip = new ShoppingTrip(coordinates, actions, trip.getShoppingTripID());
 		this.trip = newTrip;
 		return newTrip;
