@@ -98,12 +98,16 @@ public class ProductDatabaseController implements DatabaseCRUD {
 			}
 			
 			// Creates product with (productID generated from table in sql, name and price)
-			Product product = new Product(rs.getInt("product_id"), rs.getString("name"), rs.getDouble("price"));
-
+			Product product = new Product(
+					rs.getInt("product_id"), 
+					rs.getString("name"), 
+					rs.getDouble("price"));
 			connection.close();
+			System.out.println("asasd");
 			return product;
 
 		} catch (SQLException e) {
+			System.out.println("product fail");
 			e.printStackTrace();
 		}
 		return null;
