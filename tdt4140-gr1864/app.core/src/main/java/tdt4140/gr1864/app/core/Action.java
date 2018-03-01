@@ -38,8 +38,8 @@ public class Action {
 		return product;
 	}
 	
-	public int getShoppingTripID() {
-		return 0;
+	public ShoppingTrip getShoppingTrip() {
+		return trip;
 	}
 
 }
