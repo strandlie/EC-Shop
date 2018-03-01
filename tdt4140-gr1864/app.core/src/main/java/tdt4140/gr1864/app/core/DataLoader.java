@@ -2,9 +2,7 @@ package tdt4140.gr1864.app.core;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -16,31 +14,42 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import tdt4140.gr1864.app.core.storage.Shop;
+import tdt4140.gr1864.app.core.storage.ShopDatabaseController;
+
 public class DataLoader {
 	
-	public static void main(String[] args) throws IOException {
-		// Deletes existing database if there is one
-		deleteExistingDatabase();
-		
-		
-		// Creates database
-		CreateDatabase.main(null);
-		
-		// Create productdatabaseintegrator
-		ProductDatabaseController pdc = new ProductDatabaseController();
-		
-		// Runs dataloader for shoppingtrip
-		DataLoader loader = new DataLoader();
-		
-		String path = "../../src/main/resources/test-data.json";
-		ShoppingTrip trip = loader.loadShoppingTrips(path);
+	/* trip, customer and shop created by this loader */
+	ShoppingTrip trip;
+	Customer customer;
+	Shop shop;
+	
+	/* lists of multiples */
+	List<Product> products;
+	List<Action> actions;
+	List<Coordinate> coordinates;
 
-		// Runs dataloader for products
-		String pathToProducts = "../../src/main/resources/mock-products.json";
-		List<Product> p = loader.loadProducts(pathToProducts, pdc);
+	
+	public static void main(String[] args) throws IOException {
+		DataLoader loader = new DataLoader();
+	}
+	
+	public DataLoader() {
+		// Creates database
+		Path dbPath = Paths.get("database.db");
+		if (! Files.exists(dbPath)) {
+			CreateDatabase.main(null);
+		}
 		
-		// Deletes existing database
-		deleteExistingDatabase();
+		ProductDatabaseController pdc = new ProductDatabaseController();
+	
+		// loads products
+		String pathToProducts = "../../src/main/resources/mock-products.json";
+		products = this.loadProducts(pathToProducts, pdc);
+	
+		// loads trips
+		String pathToTrip = "../../src/main/resources/test-data.json";
+		trip = this.loadShoppingTrips(pathToTrip);
 	}
 	
 	/**
@@ -64,11 +73,11 @@ public class DataLoader {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+		this.products = products;
 		return products;
 	}
 	
-	/*
+	/**
 	 * Creates list of Products
 	 * @param productArray JSONArray with generated products 
 	 * @return list of products  
@@ -95,57 +104,90 @@ public class DataLoader {
 			
 			products.add(newProduct);
 		}
-		
 		return products;
 	}
 	
-	/*
+	/**
+	 * creates customer and writes it to db
+	 * @return customer
+	 */
+	public Customer createCustomer() {
+		Customer c1 = new Customer("Kari", "Normann");
+		CustomerDatabaseController cdc = new CustomerDatabaseController();
+		c1 = new Customer(c1.getFirstName(), c1.getLastName(), cdc.create(c1));
+		this.customer = c1;
+		return c1;
+	}
+	
+	/**
+	 * creates shop and writes it to db
+	 * @return shop
+	 */
+	public Shop createShop() {
+		Shop s1 = new Shop("Kings Road 2", 1020);
+		ShopDatabaseController sdc = new ShopDatabaseController();
+		s1 = new Shop(s1.getAddress(), s1.getZip(), sdc.create(s1));
+		this.shop = s1;
+		return s1;
+	}
+	
+	
+	/**
 	 * Loads JSON-data from path, creates ShoppingTrip object 
 	 * @param path	relative path to JSON-data (relative to this)
+	 * @return shoppingTrip
 	 */
 	public ShoppingTrip loadShoppingTrips(String path) {
 		String relativePath = getClass().getClassLoader().getResource(".").getPath();
 		JSONParser parser = new JSONParser();
 		
-		ShoppingTrip shoppingTrip = null;
+		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
+		
+		Shop s1 = createShop();
+		Customer c1 = createCustomer();
+		ShoppingTrip trip = new ShoppingTrip(c1, s1);
+		trip = new ShoppingTrip(stdc.create(trip), trip.getCustomer(), trip.getShop());
 		
 		try {
 			Object obj = parser.parse(new FileReader(relativePath + path));
-			JSONObject trip = (JSONObject) obj;
+			JSONObject tripObject = (JSONObject) obj;
 			
 			// creating Coordinates
-			JSONArray coordsArray = (JSONArray) trip.get("path");
-			ArrayList<Coordinate> coordinates = (ArrayList<Coordinate>) createCoordinates(coordsArray);
+			JSONArray coordsArray = (JSONArray) tripObject.get("path");
+			ArrayList<Coordinate> coordinates = (ArrayList<Coordinate>) createCoordinates(coordsArray, trip);
 			
 			// creating Actions
-			JSONArray actionsArray = (JSONArray) trip.get("actions");
-			ArrayList<Action> actions = (ArrayList<Action>) createActions(actionsArray);
+			JSONArray actionsArray = (JSONArray) tripObject.get("actions");
+			ArrayList<Action> actions = (ArrayList<Action>) createActions(actionsArray, trip);
 			
 			// create ShoppingTrip
-			shoppingTrip = createShoppingTrip(coordinates, actions);
+			trip = createShoppingTrip(trip, coordinates, actions);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		return shoppingTrip;
+		return trip;
 	}
 	
-	/*
-	 * @param coordinates list of Coordinate objects for ShoppingTrip
-	 * @param actions	  list of Action objects for ShoppingTrip
-	 * @return ShoppingTrip object created from coordinates and actions
+	/**
+	 * @param coordinates 		list of Coordinate objects for ShoppingTrip
+	 * @param actions	  		list of Action objects for ShoppingTrip
+	 * @return ShoppingTrip 	object created from coordinates and actions
 	 */
-	public ShoppingTrip createShoppingTrip(List<Coordinate> coordinates, List<Action> actions) {
-		return new ShoppingTrip(coordinates, actions);
+	public ShoppingTrip createShoppingTrip(ShoppingTrip trip, List<Coordinate> coordinates, List<Action> actions) {
+		ShoppingTrip newTrip = new ShoppingTrip(coordinates, actions, trip.getShoppingTripID());
+		this.trip = newTrip;
+		return newTrip;
 	}
 	
-	/*
+	/**
 	 * Creates list of Coordinates for use in ShoppingTrip-creation
-	 * @param coordsArray JSONArray with generated coordinates 
+	 * @param coordsArray 	JSONArray with generated coordinates 
 	 * @return list of Coordinates for use in ShoppingTrip-creation
 	 */
-	public List<Coordinate> createCoordinates(JSONArray coordsArray) {
+	public List<Coordinate> createCoordinates(JSONArray coordsArray, ShoppingTrip trip) {
 		Coordinate coordinate;
+		CoordinateDatabaseController cdc = new CoordinateDatabaseController();
 		List<Coordinate> coordinates = new ArrayList<Coordinate>();
 		double x, y;
 		String timeStamp;
@@ -156,19 +198,26 @@ public class DataLoader {
 			y = (double) jsonCoord.get("y");
 			timeStamp = Long.toString((long) jsonCoord.get("time"));
 
-			coordinate = new Coordinate(x, y, timeStamp);
+			coordinate = new Coordinate(x, y, timeStamp, trip);
 			coordinates.add(coordinate);
+			
+			// writes coordinate to database
+			cdc.create(coordinate);
+			
 		}
+		this.coordinates = coordinates;
 		return coordinates;
 	}
 
-	/*
+	/**
 	 * Creates list of Actions for use in ShoppingTrip-creation
 	 * @param actionsArray JSONArray with generated actions 
 	 * @return list of Actions for use in ShoppingTrip-creation
 	 */
-	public List<Action> createActions(JSONArray actionsArray) {
+	public List<Action> createActions(JSONArray actionsArray, ShoppingTrip trip) {
 		Action action;
+		ActionDatabaseController adc = new ActionDatabaseController();
+		ProductDatabaseController pdc = new ProductDatabaseController();
 		List<Action> actions = new ArrayList<Action>();
 		int actionType;
 		int productID;
@@ -179,27 +228,35 @@ public class DataLoader {
 			timeStamp = Long.toString((long) jsonAction.get("timestamp"));
 			actionType = toIntExact((long) jsonAction.get("action"));
 			productID = toIntExact((long) jsonAction.get("productID"));
-			
-			action = new Action(timeStamp, actionType, productID);
+			// producted needed for action-creation
+			Product product = pdc.retrieve(productID);
+
+			action = new Action(timeStamp, actionType, product, trip);
 			actions.add(action);
+
+			// write action to database
+			adc.create(action);
 		}
+		this.actions = actions;
 		return actions;
 	}
 	
-	/*
-	 * Deletes existing database
-	 */
-	public static void deleteExistingDatabase() {
-		Path path = Paths.get("database.db");
-		try {
-		    Files.delete(path);
-		} catch (NoSuchFileException x) {
-		    System.err.format("%s: no such" + " file or directory%n", path);
-		} catch (DirectoryNotEmptyException x) {
-		    System.err.format("%s not empty%n", path);
-		} catch (IOException x) {
-		    // File permission problems are caught here.
-		    System.err.println(x);
-		}
+	public ShoppingTrip getTrip() {
+		return trip;
+	}
+	public Customer getCustomer() {
+		return customer;
+	}
+	public Shop getShop() {
+		return shop;
+	}
+	public List<Product> getProducts() {
+		return products;
+	}
+	public List<Action> getActions() {
+		return actions;
+	}
+	public List<Coordinate> getCoordinates() {
+		return coordinates;
 	}
 }

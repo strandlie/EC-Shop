@@ -10,9 +10,7 @@ import interfaces.DatabaseCRUD;
 
 public class ProductDatabaseController implements DatabaseCRUD {
 
-	/* connection to SQLite database */
 	Connection connection;
-	/* SQL statement executed on database */
 	PreparedStatement statement;
 	
 	public ProductDatabaseController() {
@@ -24,6 +22,10 @@ public class ProductDatabaseController implements DatabaseCRUD {
 		}
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see interfaces.DatabaseCRUD#create(java.lang.Object)
+	 */
 	@Override
 	public int create(Object object) {
 		Product product = objectIsProduct(object);
@@ -61,6 +63,10 @@ public class ProductDatabaseController implements DatabaseCRUD {
 		return -1;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see interfaces.DatabaseCRUD#update(java.lang.Object)
+	 */
 	@Override
 	public void update(Object object) {
 		Product product = this.objectIsProduct(object);
@@ -81,6 +87,11 @@ public class ProductDatabaseController implements DatabaseCRUD {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see interfaces.DatabaseCRUD#retrieve(int)
+	 */
+	@Override
 	public Product retrieve(int id) {
 		try {
 			statement = connection
@@ -95,17 +106,24 @@ public class ProductDatabaseController implements DatabaseCRUD {
 			}
 			
 			// Creates product with (productID generated from table in sql, name and price)
-			Product product = new Product(rs.getInt("product_id"), rs.getString("name"), rs.getDouble("price"));
-
-			connection.close();
+			Product product = new Product(
+					rs.getInt("product_id"), 
+					rs.getString("name"), 
+					rs.getDouble("price"));
+			statement.close();
 			return product;
 
 		} catch (SQLException e) {
+			System.out.println("product fail");
 			e.printStackTrace();
 		}
 		return null;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see interfaces.DatabaseCRUD#delete(int)
+	 */
 	@Override
 	public void delete(int id) {
 		try {

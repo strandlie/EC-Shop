@@ -11,7 +11,8 @@ public class ActionTest {
 	
 	@Before
 	public void setup() {
-		action = new Action("1", 1, 2);
+		Product p1 = new Product("Name", 10.0);
+		action = new Action("1", 1, p1);
 	}
 	
 	@Test
@@ -26,6 +27,7 @@ public class ActionTest {
 	
 	@Test
 	public void testGetProductIdExpectedTwo() {
-		Assert.assertEquals(2, action.getProductID());
+		Assert.assertEquals("Name", action.getProduct().getName());
+		Assert.assertEquals(10.0, action.getProduct().getPrice(), 0);
 	}
 }

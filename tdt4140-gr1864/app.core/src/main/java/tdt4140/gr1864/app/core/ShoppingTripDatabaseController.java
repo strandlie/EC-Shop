@@ -7,12 +7,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import interfaces.DatabaseCRUD;
+import tdt4140.gr1864.app.core.storage.Shop;
+import tdt4140.gr1864.app.core.storage.ShopDatabaseController;
 
 public class ShoppingTripDatabaseController implements DatabaseCRUD {
 
-	/* connection to SQLite database */
 	Connection connection;
-	/* SQL statement executed on database */
 	PreparedStatement statement;
 	
 	public ShoppingTripDatabaseController() {
@@ -23,17 +23,23 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 		}
 	}
 
-	/* Cannot be implemented until SHOP and CUSTOMER is implemented */
+	/*
+	 * (non-Javadoc)
+	 * @see interfaces.DatabaseCRUD#create(java.lang.Object)
+	 */
 	@Override
 	public int create(Object object) {
 		
-		/*ShoppingTrip trip = this.objectIsShoppingTrip(object);
-		
+		ShoppingTrip trip = this.objectIsShoppingTrip(object);
+		String sql = "INSERT INTO shopping_trip "
+					+ "(customer_id, shop_id) "
+					+ "VALUES (?, ?)";
+					
 		try {
-			String sql = "INSERT INTO shopping_trip (customer_id, shop_id) values (?, ?, ?, ?)";
-			connection.prepareStatement(sql);
-			statement.executeQuery();
-			connection.close();
+			statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+			statement.setInt(1, trip.getCustomer().getUserId());
+			statement.setInt(2, trip.getShop().getShopID());
+			statement.executeUpdate();
 		
 			try {
 				// Retrieves all generated keys and returns the ID obtained by java object
@@ -45,36 +51,60 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-					
+			connection.close();
 					
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		*/
 		return -1;
 	}
 
-	/* Cannot be implemented until SHOP and CUSTOMER is implemented */
+	/*
+	 * (non-Javadoc)
+	 * @see interfaces.DatabaseCRUD#update(java.lang.Object)
+	 */
 	@Override
 	public void update(Object object) {
-		
+		ShoppingTrip trip = this.objectIsShoppingTrip(object);
+		String sql = "UPDATE shopping_trip "
+					+ "SET customer_id=?, shop_id=? "
+					+ "WHERE shopping_trip_id=?";
+		try {
+			statement = connection.prepareStatement(sql);
+			statement.setInt(1, trip.getCustomer().getUserId());
+			statement.setInt(2, trip.getShop().getShopID());
+			statement.setInt(3, trip.getShoppingTripID());
+			statement.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see interfaces.DatabaseCRUD#retrieve(int)
+	 */
 	@Override
-	public Object retrieve(int id) {
+	public ShoppingTrip retrieve(int id) {
+		String sql = "SELECT * "
+					+ "FROM shopping_trip "
+					+ "WHERE shopping_trip_id=?";
 		try {
-			statement = connection
-					.prepareStatement("SELECT shopping_trip_id, customer_id, shop_id"
-										+ "WHERE shopping_trip_id=?");
+			statement = connection.prepareStatement(sql);
 			statement.setInt(1, id);
 			ResultSet rs = statement.executeQuery();
 			
 			if (!rs.next()) {
 				return null;
 			}
-
-			ShoppingTrip trip = new ShoppingTrip(rs.getInt(1), rs.getInt(2), rs.getInt(3));
+			
+			CustomerDatabaseController cdc = new CustomerDatabaseController();
+			ShopDatabaseController sdc = new ShopDatabaseController();
+			ShoppingTrip trip = new ShoppingTrip(
+					rs.getInt("shopping_trip_id"), 
+					cdc.retrieve(rs.getInt("customer_id")),
+					sdc.retrieve(rs.getInt("shop_id")));
 			connection.close();
 			return trip;
 
@@ -84,20 +114,29 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 		return null;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see interfaces.DatabaseCRUD#delete(int)
+	 */
 	@Override
 	public void delete(int id) {
+		String sql = "DELETE FROM shopping_trip "
+					+ "WHERE shopping_trip_id=?";
 		try {
-			statement = connection
-					.prepareStatement("DELETE FROM shopping_trip WHERE shopping_trip_id=?)");
+			statement = connection.prepareStatement(sql);
 			statement.setInt(1, id);
-			statement.executeQuery();
-			connection.close();
+			statement.executeUpdate();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}		
 	}
 	
+	/**
+	 * Checks if incoming object is ShoppingTrip
+	 * @param object	suspected ShoppingTrip
+	 * @return shoppingTrip
+	 */
 	public ShoppingTrip objectIsShoppingTrip(Object object) {
 		ShoppingTrip trip = (ShoppingTrip) object;
 		if (!(object instanceof ShoppingTrip)) {

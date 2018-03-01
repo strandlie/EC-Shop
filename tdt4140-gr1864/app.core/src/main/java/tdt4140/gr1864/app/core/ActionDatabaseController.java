@@ -10,9 +10,7 @@ import interfaces.DatabaseCRUD;
 
 public class ActionDatabaseController implements DatabaseCRUD {
 	
-	/* connection to SQLite database */
 	Connection connection;
-	/* SQL statement executed on database */
 	PreparedStatement statement;
 	
 	public ActionDatabaseController() {
@@ -24,62 +22,85 @@ public class ActionDatabaseController implements DatabaseCRUD {
 		}
 	}
 	
+	/**
+	 * (non-Javadoc)
+	 * @see interfaces.DatabaseCRUD#create(java.lang.Object)
+	 */
 	@Override
 	public int create(Object object) {
 		Action action = objectIsAction(object);
+		String sql = "INSERT INTO action "
+					+ "(timestamp, action_type, product_id, shopping_trip_id) "
+					+ "values (?, ?, ?, ?)";
 		try {
-			String sql = "INSERT INTO action (timestamp, actionType, product_id, shopping_trip_id=?) "
-										+ "values (?, ?, ?, ?)";
-			statement=connection.prepareStatement(sql);
+			statement = connection.prepareStatement(sql);
 			statement.setString(1,  Long.toString(action.getTimeStamp()));
 			statement.setInt(2, action.getActionType());
-			statement.setInt(3, action.getProductID());
-			statement.setInt(4, action.getShoppingTripID());
-			statement.executeQuery();
-			connection.close();
+			statement.setInt(3, action.getProduct().getID());
+			statement.setInt(4, action.getShoppingTrip().getShoppingTripID());
+			statement.executeUpdate();
+			statement.close();
 			
-			return action.getShoppingTripID();
+			return action.getShoppingTrip().getShoppingTripID();
 
 		} catch (SQLException e) {
+			System.out.println("action fail");
 			e.printStackTrace();
 		}
 		
 		return -1;
 	}
 
+	/**
+	 * (non-Javadoc)
+	 * @see interfaces.DatabaseCRUD#update(java.lang.Object)
+	 */
 	@Override
 	public void update(Object object) {
 		Action action = this.objectIsAction(object);
+		String sql = "UPDATE action "
+					+ "SET action_type=?, product_id=? "
+					+ "WHERE shopping_trip_id=? and timestamp=?";		
 		try {
-			String sql = "UPDATE action SET timestamp=?, actionType=?, product_id=?"
-						+ "WHERE shopping_trip_id=? and timestamp=?";		
-			statement=connection.prepareStatement(sql);
-			statement.setString(2, Long.toString(action.getTimeStamp()));
-			statement.setInt(3, action.getActionType());
-			statement.setInt(4, action.getProductID());
-			statement.setInt(1, action.getShoppingTripID());
-			statement.executeQuery();
-			connection.close();
+			statement = connection.prepareStatement(sql);
+			statement.setInt(1, action.getActionType());
+			statement.setInt(2, action.getProduct().getID());
+			statement.setInt(3, action.getShoppingTrip().getShoppingTripID());
+			statement.setString(4, Long.toString(action.getTimeStamp()));
+			statement.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
-	@Override
-	public Object retrieve(int id) {
+	/**
+	 * Returns action based on shopping_trip_id and timeStamp
+	 * @param shopping_trip_id	id of trip this action is part of
+	 * @param timestamp			time of action
+	 * @return action
+	 */
+	public Action retrieve(int shopping_trip_id, long timestamp) {
+		String sql = "SELECT * "
+					+ "FROM action "
+					+ "WHERE shopping_trip_id=? AND timestamp=?";
 		try {
-			statement = connection
-					.prepareStatement("SELECT shopping_trip_id, timestamp, actionType, product_id, action_id"
-										+ "WHERE shopping_trip_id=?");
-			statement.setInt(1, id);
+			statement = connection.prepareStatement(sql);
+			statement.setInt(1, shopping_trip_id);
+			statement.setString(2, Long.toString(timestamp));
 			ResultSet rs = statement.executeQuery();
 			
 			if (!rs.next()) {
 				return null;
 			}
 
-			Action action = new Action(rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(1));
+			ProductDatabaseController pdc = new ProductDatabaseController();
+			ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
+			Action action = new Action(
+					rs.getString("timestamp"), 
+					rs.getInt("action_type"), 
+					pdc.retrieve(rs.getInt("product_id")),
+					stdc.retrieve(rs.getInt("shopping_trip_id")));
 			connection.close();
 			return action;
 
@@ -89,20 +110,62 @@ public class ActionDatabaseController implements DatabaseCRUD {
 		return null;
 	}
 
+	/* Deprecated since Action has joint primary-key
+	 * Might need functionality of function later
+	 */
+	@Deprecated
+	@Override
+	public Object retrieve(int shopping_trip_id) {
+		String sql = "SELECT * "
+					+ "WHERE shopping_trip_id=?";
+		try {
+			statement = connection.prepareStatement(sql);
+			statement.setInt(1, shopping_trip_id);
+			ResultSet rs = statement.executeQuery();
+			
+			if (!rs.next()) {
+				return null;
+			}
+			return null;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/* Deprecated since Action has joint primary-key */
+	@Deprecated
 	@Override
 	public void delete(int id) {
+		System.err.println("not in use, see delete(int shopping_trip_id, long timestamp)");
+	}
+	
+	/**
+	 * deletes action from database based on shopping_trip_id and timeStamp
+	 * @param shopping_trip_id	id of trip action is a part of
+	 * @param timestamp			time of action
+	 */
+	public void delete(int shopping_trip_id, long timestamp) {
+		String sql = "DELETE FROM action "
+					+ "WHERE shopping_trip_id=? "
+					+ "AND timestamp=?";
 		try {
-			statement = connection
-					.prepareStatement("DELETE FROM action WHERE shopping_trip_id=?)");
-			statement.setInt(1, id);
-			statement.executeQuery();
-			connection.close();
+			statement = connection.prepareStatement(sql);
+			statement.setInt(1, shopping_trip_id);
+			statement.setString(2,  Long.toString(timestamp));
+			statement.executeUpdate();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}	
+		}		
 	}
 	
+	/**
+	 * checks if incoming object is an Action
+	 * @param object suspected action
+	 * @return action
+	 */
 	public Action objectIsAction(Object object) {
 		Action action = (Action) object;
 		if (!(object instanceof Action)) {
@@ -111,5 +174,4 @@ public class ActionDatabaseController implements DatabaseCRUD {
 			return action;
 		}
 	}
-
 }
