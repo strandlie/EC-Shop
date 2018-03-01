@@ -8,6 +8,13 @@ public class Customer implements UserInterface {
 	private String lastName;
 	private List<ShoppingTrip> shoppingTrips;
 	
+	/**
+	 * Constructor used by CustomerDatabaseController
+	 * @param customerId		id provided by database
+	 * @param firstName			name of customer
+	 * @param lastName			name of customer
+	 * @param shoppingTrips 	trips of customer
+	 */
 	public Customer(int customerId, String firstName, String lastName, 
 			List<ShoppingTrip> shoppingTrips) {
 		this.customerId = customerId;
@@ -16,12 +23,21 @@ public class Customer implements UserInterface {
 		this.shoppingTrips = shoppingTrips;
 	}
 	
+	/**
+	 * @param firstName			name of customer
+	 * @param lastName			name of customer
+	 * @param customerId		id provided by database
+	 */
 	public Customer(String firstName, String lastName, int customerId) { 
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.customerId = customerId;
 	}
 	
+	/**
+	 * @param firstName		name of customer
+	 * @param lastName		name of customer
+	 */
 	public Customer(String firstName, String lastName) { 
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -94,7 +110,5 @@ public class Customer implements UserInterface {
 			return false;
 		return true;
 	}
-
-	
 }
 

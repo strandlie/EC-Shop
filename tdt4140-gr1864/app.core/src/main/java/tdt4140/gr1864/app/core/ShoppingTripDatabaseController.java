@@ -23,8 +23,7 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
 	 * @see interfaces.DatabaseCRUD#create(java.lang.Object)
 	 */
 	@Override
@@ -59,8 +58,7 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 		return -1;
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
 	 * @see interfaces.DatabaseCRUD#update(java.lang.Object)
 	 */
 	@Override
@@ -81,8 +79,7 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
 	 * @see interfaces.DatabaseCRUD#retrieve(int)
 	 */
 	@Override
@@ -114,8 +111,7 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
 	 * @see interfaces.DatabaseCRUD#delete(int)
 	 */
 	@Override

@@ -22,7 +22,6 @@ public class CoordinateDatabaseController implements DatabaseCRUD{
 	}
 	
 	/**
-	 * (non-Javadoc)
 	 * @see interfaces.DatabaseCRUD#create(java.lang.Object)
 	 */
 	@Override
@@ -49,7 +48,6 @@ public class CoordinateDatabaseController implements DatabaseCRUD{
 	}
 
 	/**
-	 * (non-Javadoc)
 	 * @see interfaces.DatabaseCRUD#update(java.lang.Object)
 	 */
 	@Override

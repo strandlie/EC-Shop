@@ -23,7 +23,6 @@ public class ActionDatabaseController implements DatabaseCRUD {
 	}
 	
 	/**
-	 * (non-Javadoc)
 	 * @see interfaces.DatabaseCRUD#create(java.lang.Object)
 	 */
 	@Override
@@ -52,7 +51,6 @@ public class ActionDatabaseController implements DatabaseCRUD {
 	}
 
 	/**
-	 * (non-Javadoc)
 	 * @see interfaces.DatabaseCRUD#update(java.lang.Object)
 	 */
 	@Override
@@ -163,7 +161,7 @@ public class ActionDatabaseController implements DatabaseCRUD {
 	
 	/**
 	 * checks if incoming object is an Action
-	 * @param object suspected action
+	 * @param object 	suspected action
 	 * @return action
 	 */
 	public Action objectIsAction(Object object) {

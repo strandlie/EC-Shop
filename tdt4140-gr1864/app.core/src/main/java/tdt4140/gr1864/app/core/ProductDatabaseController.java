@@ -22,24 +22,20 @@ public class ProductDatabaseController implements DatabaseCRUD {
 		}
 	}
 	
-	/*
+	/**
 	 * (non-Javadoc)
 	 * @see interfaces.DatabaseCRUD#create(java.lang.Object)
 	 */
 	@Override
 	public int create(Object object) {
 		Product product = objectIsProduct(object);
-		String sql = "INSERT INTO product (name, price)"
-										+ " VALUES (?, ?)";
-		
+		String sql = "INSERT INTO product "
+					+ "(name, price) "
+					+ "VALUES (?, ?)";
 		try {
 			statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-			
-			// When creating first time
 			statement.setString(1, product.getName());
 			statement.setDouble(2, product.getPrice());
-				
-			// Very important to execute before try-catch
 			statement.executeUpdate();
 
 			// Object has been given an ID first time creating and inserting into database
@@ -63,20 +59,17 @@ public class ProductDatabaseController implements DatabaseCRUD {
 		return -1;
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
 	 * @see interfaces.DatabaseCRUD#update(java.lang.Object)
 	 */
 	@Override
 	public void update(Object object) {
 		Product product = this.objectIsProduct(object);
-		String sql = "UPDATE product SET name=?, price=? WHERE product_id=?";
-		
+		String sql = "UPDATE product "
+					+ "SET name=?, price=? "
+					+ "WHERE product_id=?";
 		try {
 			statement = connection.prepareStatement(sql);
-			
-			// When creating first time
-			// Object has been given an ID:
 			statement.setString(1, product.getName());
 			statement.setDouble(2, product.getPrice());
 			statement.setInt(3,  product.getID());
@@ -87,16 +80,16 @@ public class ProductDatabaseController implements DatabaseCRUD {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
 	 * @see interfaces.DatabaseCRUD#retrieve(int)
 	 */
 	@Override
 	public Product retrieve(int id) {
+		String sql = "SELECT product_id, name, price "
+					+ "FROM product "
+					+ "WHERE product_id=?";
 		try {
-			statement = connection
-					.prepareStatement("SELECT product_id, name, price FROM product"
-										+ " WHERE product_id=?");
+			statement = connection.prepareStatement(sql);
 			statement.setInt(1, id);
 			ResultSet rs = statement.executeQuery();
 			
@@ -114,21 +107,20 @@ public class ProductDatabaseController implements DatabaseCRUD {
 			return product;
 
 		} catch (SQLException e) {
-			System.out.println("product fail");
 			e.printStackTrace();
 		}
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
 	 * @see interfaces.DatabaseCRUD#delete(int)
 	 */
 	@Override
 	public void delete(int id) {
+		String sql = "DELETE FROM product "
+					+ "WHERE product_id=?";
 		try {
-			statement = connection
-					.prepareStatement("DELETE FROM product WHERE product_id=?");
+			statement = connection.prepareStatement(sql);
 			statement.setInt(1, id);
 			statement.executeUpdate();
 			
