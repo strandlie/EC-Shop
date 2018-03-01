@@ -45,7 +45,6 @@ public class DataLoader {
 		String pathToProducts = "../../src/main/resources/mock-products.json";
 		List<Product> p = loader.loadProducts(pathToProducts, pdc);
 		
-		System.out.println("after");
 		// Deletes existing database
 		deleteExistingDatabase();
 		
