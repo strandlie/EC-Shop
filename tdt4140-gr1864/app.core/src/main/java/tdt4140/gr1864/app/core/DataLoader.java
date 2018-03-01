@@ -17,44 +17,39 @@ import org.json.simple.parser.JSONParser;
 import tdt4140.gr1864.app.core.storage.Shop;
 import tdt4140.gr1864.app.core.storage.ShopDatabaseController;
 
-/* 
- * TODO:
- * 	Add ShoppingTrip to a user
- * 	Add actions to products
- */
-
 public class DataLoader {
 	
+	/* trip, customer and shop created by this loader */
 	ShoppingTrip trip;
 	Customer customer;
 	Shop shop;
+	
+	/* lists of multiples */
 	List<Product> products;
 	List<Action> actions;
 	List<Coordinate> coordinates;
 
 	
 	public static void main(String[] args) throws IOException {
-		// Runs dataloader for shoppingtrip
 		DataLoader loader = new DataLoader();
 	}
 	
 	public DataLoader() {
 		// Creates database
 		Path dbPath = Paths.get("database.db");
-		
 		if (! Files.exists(dbPath)) {
 			CreateDatabase.main(null);
 		}
 		
-		// Create productdatabaseintegrator
 		ProductDatabaseController pdc = new ProductDatabaseController();
 	
-		// Runs dataloader for products
+		// loads products
 		String pathToProducts = "../../src/main/resources/mock-products.json";
 		products = this.loadProducts(pathToProducts, pdc);
 	
-		String path = "../../src/main/resources/test-data.json";
-		trip = this.loadShoppingTrips(path);
+		// loads trips
+		String pathToTrip = "../../src/main/resources/test-data.json";
+		trip = this.loadShoppingTrips(pathToTrip);
 	}
 	
 	/**
@@ -82,7 +77,7 @@ public class DataLoader {
 		return products;
 	}
 	
-	/*
+	/**
 	 * Creates list of Products
 	 * @param productArray JSONArray with generated products 
 	 * @return list of products  
@@ -112,6 +107,10 @@ public class DataLoader {
 		return products;
 	}
 	
+	/**
+	 * creates customer and writes it to db
+	 * @return customer
+	 */
 	public Customer createCustomer() {
 		Customer c1 = new Customer("Kari", "Normann");
 		CustomerDatabaseController cdc = new CustomerDatabaseController();
@@ -119,7 +118,11 @@ public class DataLoader {
 		this.customer = c1;
 		return c1;
 	}
-
+	
+	/**
+	 * creates shop and writes it to db
+	 * @return shop
+	 */
 	public Shop createShop() {
 		Shop s1 = new Shop("Kings Road 2", 1020);
 		ShopDatabaseController sdc = new ShopDatabaseController();
@@ -129,9 +132,10 @@ public class DataLoader {
 	}
 	
 	
-	/*
+	/**
 	 * Loads JSON-data from path, creates ShoppingTrip object 
 	 * @param path	relative path to JSON-data (relative to this)
+	 * @return shoppingTrip
 	 */
 	public ShoppingTrip loadShoppingTrips(String path) {
 		String relativePath = getClass().getClassLoader().getResource(".").getPath();
@@ -165,10 +169,10 @@ public class DataLoader {
 		return trip;
 	}
 	
-	/*
-	 * @param coordinates list of Coordinate objects for ShoppingTrip
-	 * @param actions	  list of Action objects for ShoppingTrip
-	 * @return ShoppingTrip object created from coordinates and actions
+	/**
+	 * @param coordinates 		list of Coordinate objects for ShoppingTrip
+	 * @param actions	  		list of Action objects for ShoppingTrip
+	 * @return ShoppingTrip 	object created from coordinates and actions
 	 */
 	public ShoppingTrip createShoppingTrip(ShoppingTrip trip, List<Coordinate> coordinates, List<Action> actions) {
 		ShoppingTrip newTrip = new ShoppingTrip(coordinates, actions, trip.getShoppingTripID());
@@ -176,9 +180,9 @@ public class DataLoader {
 		return newTrip;
 	}
 	
-	/*
+	/**
 	 * Creates list of Coordinates for use in ShoppingTrip-creation
-	 * @param coordsArray JSONArray with generated coordinates 
+	 * @param coordsArray 	JSONArray with generated coordinates 
 	 * @return list of Coordinates for use in ShoppingTrip-creation
 	 */
 	public List<Coordinate> createCoordinates(JSONArray coordsArray, ShoppingTrip trip) {
@@ -205,7 +209,7 @@ public class DataLoader {
 		return coordinates;
 	}
 
-	/*
+	/**
 	 * Creates list of Actions for use in ShoppingTrip-creation
 	 * @param actionsArray JSONArray with generated actions 
 	 * @return list of Actions for use in ShoppingTrip-creation
@@ -224,6 +228,7 @@ public class DataLoader {
 			timeStamp = Long.toString((long) jsonAction.get("timestamp"));
 			actionType = toIntExact((long) jsonAction.get("action"));
 			productID = toIntExact((long) jsonAction.get("productID"));
+			// producted needed for action-creation
 			Product product = pdc.retrieve(productID);
 
 			action = new Action(timeStamp, actionType, product, trip);

@@ -12,9 +12,7 @@ import tdt4140.gr1864.app.core.storage.ShopDatabaseController;
 
 public class ShoppingTripDatabaseController implements DatabaseCRUD {
 
-	/* connection to SQLite database */
 	Connection connection;
-	/* SQL statement executed on database */
 	PreparedStatement statement;
 	
 	public ShoppingTripDatabaseController() {
@@ -25,12 +23,17 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 		}
 	}
 
-	/* Cannot be implemented until SHOP and CUSTOMER is implemented */
+	/*
+	 * (non-Javadoc)
+	 * @see interfaces.DatabaseCRUD#create(java.lang.Object)
+	 */
 	@Override
 	public int create(Object object) {
 		ShoppingTrip trip = this.objectIsShoppingTrip(object);
+		String sql = "INSERT INTO shopping_trip "
+					+ "(customer_id, shop_id) "
+					+ "VALUES (?, ?)";
 		try {
-			String sql = "INSERT INTO shopping_trip (customer_id, shop_id) VALUES (?, ?)";
 			statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 			statement.setInt(1, trip.getCustomer().getUserId());
 			statement.setInt(2, trip.getShop().getShopID());
@@ -54,14 +57,18 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 		return -1;
 	}
 
-	/* Cannot be implemented until SHOP and CUSTOMER is implemented */
+	/*
+	 * (non-Javadoc)
+	 * @see interfaces.DatabaseCRUD#update(java.lang.Object)
+	 */
 	@Override
 	public void update(Object object) {
 		ShoppingTrip trip = this.objectIsShoppingTrip(object);
-		String sql = "UPDATE shopping_trip SET customer_id=?, shop_id=? WHERE shopping_trip_id=?";
+		String sql = "UPDATE shopping_trip "
+					+ "SET customer_id=?, shop_id=? "
+					+ "WHERE shopping_trip_id=?";
 		try {
 			statement = connection.prepareStatement(sql);
-			
 			statement.setInt(1, trip.getCustomer().getUserId());
 			statement.setInt(2, trip.getShop().getShopID());
 			statement.setInt(3, trip.getShoppingTripID());
@@ -72,12 +79,17 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see interfaces.DatabaseCRUD#retrieve(int)
+	 */
 	@Override
 	public ShoppingTrip retrieve(int id) {
+		String sql = "SELECT * "
+					+ "FROM shopping_trip "
+					+ "WHERE shopping_trip_id=?";
 		try {
-			statement = connection
-					.prepareStatement("SELECT * FROM shopping_trip "
-										+ "WHERE shopping_trip_id=?");
+			statement = connection.prepareStatement(sql);
 			statement.setInt(1, id);
 			ResultSet rs = statement.executeQuery();
 			
@@ -100,11 +112,16 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 		return null;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see interfaces.DatabaseCRUD#delete(int)
+	 */
 	@Override
 	public void delete(int id) {
+		String sql = "DELETE FROM shopping_trip "
+					+ "WHERE shopping_trip_id=?";
 		try {
-			statement = connection
-					.prepareStatement("DELETE FROM shopping_trip WHERE shopping_trip_id=?");
+			statement = connection.prepareStatement(sql);
 			statement.setInt(1, id);
 			statement.executeUpdate();
 			
@@ -113,6 +130,11 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 		}		
 	}
 	
+	/**
+	 * Checks if incoming object is ShoppingTrip
+	 * @param object	suspected ShoppingTrip
+	 * @return shoppingTrip
+	 */
 	public ShoppingTrip objectIsShoppingTrip(Object object) {
 		ShoppingTrip trip = (ShoppingTrip) object;
 		if (!(object instanceof ShoppingTrip)) {

@@ -10,9 +10,7 @@ import interfaces.DatabaseCRUD;
 
 public class ActionDatabaseController implements DatabaseCRUD {
 	
-	/* connection to SQLite database */
 	Connection connection;
-	/* SQL statement executed on database */
 	PreparedStatement statement;
 	
 	public ActionDatabaseController() {
@@ -24,12 +22,17 @@ public class ActionDatabaseController implements DatabaseCRUD {
 		}
 	}
 	
+	/**
+	 * (non-Javadoc)
+	 * @see interfaces.DatabaseCRUD#create(java.lang.Object)
+	 */
 	@Override
 	public int create(Object object) {
 		Action action = objectIsAction(object);
+		String sql = "INSERT INTO action "
+					+ "(timestamp, action_type, product_id, shopping_trip_id) "
+					+ "values (?, ?, ?, ?)";
 		try {
-			String sql = "INSERT INTO action (timestamp, action_type, product_id, shopping_trip_id) "
-										+ "values (?, ?, ?, ?)";
 			statement = connection.prepareStatement(sql);
 			statement.setString(1,  Long.toString(action.getTimeStamp()));
 			statement.setInt(2, action.getActionType());
@@ -47,13 +50,18 @@ public class ActionDatabaseController implements DatabaseCRUD {
 		return -1;
 	}
 
+	/**
+	 * (non-Javadoc)
+	 * @see interfaces.DatabaseCRUD#update(java.lang.Object)
+	 */
 	@Override
 	public void update(Object object) {
 		Action action = this.objectIsAction(object);
+		String sql = "UPDATE action "
+					+ "SET action_type=?, product_id=? "
+					+ "WHERE shopping_trip_id=? and timestamp=?";		
 		try {
-			String sql = "UPDATE action SET action_type=?, product_id=? "
-						+ "WHERE shopping_trip_id=? and timestamp=?";		
-			statement=connection.prepareStatement(sql);
+			statement = connection.prepareStatement(sql);
 			statement.setInt(1, action.getActionType());
 			statement.setInt(2, action.getProduct().getID());
 			statement.setInt(3, action.getShoppingTrip().getShoppingTripID());
@@ -65,11 +73,18 @@ public class ActionDatabaseController implements DatabaseCRUD {
 		}
 	}
 
+	/**
+	 * Returns action based on shopping_trip_id and timeStamp
+	 * @param shopping_trip_id	id of trip this action is part of
+	 * @param timestamp			time of action
+	 * @return action
+	 */
 	public Action retrieve(int shopping_trip_id, long timestamp) {
+		String sql = "SELECT * "
+					+ "FROM action "
+					+ "WHERE shopping_trip_id=? AND timestamp=?";
 		try {
-			statement = connection
-					.prepareStatement("SELECT * FROM action "
-										+ "WHERE shopping_trip_id=? AND timestamp=?");
+			statement = connection.prepareStatement(sql);
 			statement.setInt(1, shopping_trip_id);
 			statement.setString(2, Long.toString(timestamp));
 			ResultSet rs = statement.executeQuery();
@@ -94,32 +109,22 @@ public class ActionDatabaseController implements DatabaseCRUD {
 		return null;
 	}
 
-	/*
-	 * TODO: Should return a LIST of Actions...
+	/* Deprecated since Action has joint primary-key
+	 * Might need functionality of function later
 	 */
 	@Deprecated
 	@Override
 	public Object retrieve(int shopping_trip_id) {
+		String sql = "SELECT * "
+					+ "WHERE shopping_trip_id=?";
 		try {
-			statement = connection
-					.prepareStatement("SELECT shopping_trip_id, timestamp, action_type, product_id, action_id "
-										+ "WHERE shopping_trip_id=?");
+			statement = connection.prepareStatement(sql);
 			statement.setInt(1, shopping_trip_id);
 			ResultSet rs = statement.executeQuery();
 			
 			if (!rs.next()) {
 				return null;
 			}
-
-			ProductDatabaseController pdc = new ProductDatabaseController();
-			ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
-			Action action = new Action(
-					rs.getString("timestamp"), 
-					rs.getInt("action_type"), 
-					pdc.retrieve(rs.getInt("product_id")),
-					stdc.retrieve(rs.getInt("shopping_trip_id")));
-			connection.close();
-			/* not implemented yet */
 			return null;
 
 		} catch (SQLException e) {
@@ -128,17 +133,24 @@ public class ActionDatabaseController implements DatabaseCRUD {
 		return null;
 	}
 
+	/* Deprecated since Action has joint primary-key */
 	@Deprecated
 	@Override
 	public void delete(int id) {
 		System.err.println("not in use, see delete(int shopping_trip_id, long timestamp)");
 	}
 	
+	/**
+	 * deletes action from database based on shopping_trip_id and timeStamp
+	 * @param shopping_trip_id	id of trip action is a part of
+	 * @param timestamp			time of action
+	 */
 	public void delete(int shopping_trip_id, long timestamp) {
+		String sql = "DELETE FROM action "
+					+ "WHERE shopping_trip_id=? "
+					+ "AND timestamp=?";
 		try {
-			statement = connection
-					.prepareStatement("DELETE FROM action WHERE shopping_trip_id=? "
-							+ "AND timestamp=?");
+			statement = connection.prepareStatement(sql);
 			statement.setInt(1, shopping_trip_id);
 			statement.setString(2,  Long.toString(timestamp));
 			statement.executeUpdate();
@@ -148,6 +160,11 @@ public class ActionDatabaseController implements DatabaseCRUD {
 		}		
 	}
 	
+	/**
+	 * checks if incoming object is an Action
+	 * @param object suspected action
+	 * @return action
+	 */
 	public Action objectIsAction(Object object) {
 		Action action = (Action) object;
 		if (!(object instanceof Action)) {
@@ -156,5 +173,4 @@ public class ActionDatabaseController implements DatabaseCRUD {
 			return action;
 		}
 	}
-
 }
