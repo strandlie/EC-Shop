@@ -8,7 +8,9 @@ import java.sql.SQLException;
 
 import interfaces.DatabaseCRUD;
 
-
+/**
+ * The database controller that connects the shop object to the DB
+ */
 public class ShopDatabaseController implements DatabaseCRUD{
 	
 	/* connection to SQLite database */

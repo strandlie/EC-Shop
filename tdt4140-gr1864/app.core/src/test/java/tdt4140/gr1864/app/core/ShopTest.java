@@ -53,7 +53,7 @@ public class ShopTest {
 	public void testAddAndGetProductInStorage() {
 		int productID = 5;
 		int amount = 23;
-		shop.addAmountToStorage(productID, amount);
+		shop.setAmountInStorage(productID, amount);
 		Assert.assertEquals(23, shop.getAmountInStorage(productID));
 	}
 	
@@ -61,7 +61,7 @@ public class ShopTest {
 	public void testAddAndGetProductInShelfs() {
 		int productID = 5;
 		int amount = 23;
-		shop.addAmountToShelfs(productID, amount);
+		shop.setAmountInShelfs(productID, amount);
 		Assert.assertEquals(23, shop.getAmountInShelfs(productID));
 	}
 }

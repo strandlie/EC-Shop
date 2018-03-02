@@ -3,8 +3,14 @@ package tdt4140.gr1864.app.core.storage;
 import java.util.ArrayList;
 import java.util.List;
 
-/* The shop that contains the storage and the shelfs
- * Use this class to manipulate the storage and shelfs */
+/**
+ * The java object Shop that corresponds to the shop table in DB
+ * 
+ * The shop also keeps track of the amount of different products that are in storage and on the shelfs.
+ * This is done through a list within a list, where inner list represents productID, amount in storage and on shelfs.
+ * 
+ * @author stian
+ */
 public class Shop{
 	
 	/* Values */
@@ -53,7 +59,7 @@ public class Shop{
 	
 	
 	/**
-	 * Adds an amount of a product to the shop storage
+	 * Sets the amount of a product in the shop storage
 	 * 
 	 * Checks that amount is larger than zero
 	 * If productID isn't in the list, it's added
@@ -61,12 +67,12 @@ public class Shop{
 	 * @param productID		ID of product to be added
 	 * @param amount		Amount of product to add
 	 */
-	public void addAmountToStorage(int productID, int amount) {
+	public void setAmountInStorage(int productID, int amount) {
 		if (amount > 0) {
 			for (int i=0; i < amountsOfProducts.size(); i++) {
 				/* Product allready in list */
 				if (productID == amountsOfProducts.get(i).get(0)) {
-					amountsOfProducts.get(i).set(1, amountsOfProducts.get(i).get(1) + amount);
+					amountsOfProducts.get(i).set(1, amount);
 					return;
 				}
 			}
@@ -82,11 +88,11 @@ public class Shop{
 	}
 	
 	/* Same as above, but adds to shop shelfs instead of storage */
-	public void addAmountToShelfs(int productID, int amount) {
+	public void setAmountInShelfs(int productID, int amount) {
 		if (amount > 0) {
 			for (int i=0; i < amountsOfProducts.size(); i++) {
 				if (productID == amountsOfProducts.get(i).get(0)) {
-					amountsOfProducts.get(i).set(2, amountsOfProducts.get(i).get(2) + amount);
+					amountsOfProducts.get(i).set(2, amount);
 				}
 			}
 			ArrayList<Integer> newList = new ArrayList<Integer>();
