@@ -23,6 +23,12 @@ public class ReceiptTest {
 
 	@BeforeClass
 	public static void setup() throws IOException {
+		Path path = Paths.get("database.db");
+		
+		if (!Files.exists(path)) {
+			CreateDatabase.main(null);
+		}
+
 		DataLoader loader = new DataLoader();
 		shoppingTrip = loader.getTrip();
 		receipt = new Receipt(shoppingTrip);
