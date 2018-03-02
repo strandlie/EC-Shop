@@ -1,7 +1,6 @@
 package tdt4140.gr1864.app.core;
 
 import java.io.FileReader;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,10 +28,6 @@ public class DataLoader {
 	List<Action> actions;
 	List<Coordinate> coordinates;
 
-	
-	public static void main(String[] args) throws IOException {
-		DataLoader loader = new DataLoader();
-	}
 	
 	public DataLoader() {
 		// Creates database
@@ -145,7 +140,7 @@ public class DataLoader {
 		
 		Shop s1 = createShop();
 		Customer c1 = createCustomer();
-		ShoppingTrip trip = new ShoppingTrip(c1, s1);
+		trip = new ShoppingTrip(c1, s1);
 		trip = new ShoppingTrip(stdc.create(trip), trip.getCustomer(), trip.getShop());
 		
 		try {
@@ -154,14 +149,15 @@ public class DataLoader {
 			
 			// creating Coordinates
 			JSONArray coordsArray = (JSONArray) tripObject.get("path");
-			ArrayList<Coordinate> coordinates = (ArrayList<Coordinate>) createCoordinates(coordsArray, trip);
+			coordinates = (ArrayList<Coordinate>) createCoordinates(coordsArray, trip);
 			
 			// creating Actions
 			JSONArray actionsArray = (JSONArray) tripObject.get("actions");
-			ArrayList<Action> actions = (ArrayList<Action>) createActions(actionsArray, trip);
+			actions = (ArrayList<Action>) createActions(actionsArray, trip);
 			
-			// create ShoppingTrip
+			// adds Coordinate and Action to ShoppingTrip
 			trip = createShoppingTrip(trip, coordinates, actions);
+			
 		}
 		catch (Exception e) {
 			e.printStackTrace();
