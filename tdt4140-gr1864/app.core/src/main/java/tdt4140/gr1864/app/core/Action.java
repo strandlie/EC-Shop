@@ -3,8 +3,12 @@ package tdt4140.gr1864.app.core;
 public class Action {
 	
 	private long timeStamp;
+	/* type of action 1/0 */
 	private int actionType;
-	private int productID;
+	
+	/* product action was made upon */
+	private Product product;
+	/* trip the action is a part of */
 	private ShoppingTrip trip;
 	
 	/**
@@ -20,21 +24,31 @@ public class Action {
 	/*
 	 * Constructor for creating Actions in ActionDatabaseController.
 	 * Needs to handle getting correct ShoppingTrip based on it's ID
+	 * Constructor used by DatabaseController
+	 * @param timeStamp 	time of action, parsed to long
+	 * @param actionType	type of action, 1/0
+	 * @param product		product action was made upon
+	 * @param trip			trip the action is a part of
 	 */
-	public Action(String timeStamp, int actionType, int productID, int shoppingTripID) {
+	public Action(String timeStamp, int actionType, Product product, ShoppingTrip trip) {
 		this.timeStamp = Long.parseLong(timeStamp);
 		this.actionType = actionType;
-		this.productID = productID;
-		
-		// Set trip based on shoppingTripID
+		this.trip = trip;
+		this.product = product;
+	}
+	
+	/**
+	 * @param timeStamp		time of action, parsed to long
+	 * @param actionType	type of action, 1/0
+	 * @param product		product action was made upon
+	 */
+	public Action(String timeStamp, int actionType, Product product) {
+		this.timeStamp = Long.parseLong(timeStamp);
+		this.actionType = actionType;
+		this.product = product;
 		
 	}
 	
-	public Action(String timeStamp, int actionType, int productID) {
-		this.timeStamp = Long.parseLong(timeStamp);
-		this.actionType = actionType;
-		this.productID = productID;
-	}
 	
 	public long getTimeStamp() {
 		return timeStamp;
@@ -44,12 +58,12 @@ public class Action {
 		return actionType;
 	}
 	
-	public int getProductID() {
-		return productID;
+	public Product getProduct() {
+		return product;
 	}
 	
-	public int getShoppingTripID() {
-		return 0;
+	public ShoppingTrip getShoppingTrip() {
+		return trip;
 	}
 
 }

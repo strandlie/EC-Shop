@@ -52,7 +52,7 @@ public class ReceiptTest {
 	}
 	
 	@Test
-	public void testGetPrices() {
+	public void testGetInventory() {
 		boolean allOne = true;
 
 		for (Integer count : receipt.getInventory().values()) {

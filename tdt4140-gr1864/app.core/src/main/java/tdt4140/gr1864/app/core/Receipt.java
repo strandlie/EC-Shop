@@ -37,7 +37,8 @@ public class Receipt {
 	 */
 	private void computePrices() {
 		for (Action action : shoppingTrip.getActions()) {
-			int product = action.getProductID();
+			System.out.println(action.getProduct());
+			int product = action.getProduct().getID();
 			
 			// Figure out the amount currently in the inventory, 0 if it was not being carried.
 			int previous = inventory.containsKey(product) ? inventory.get(product) : 0;
