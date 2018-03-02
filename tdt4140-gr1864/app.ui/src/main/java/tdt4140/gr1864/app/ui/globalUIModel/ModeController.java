@@ -1,11 +1,17 @@
 package tdt4140.gr1864.app.ui.globalUIModel; 
 
+import java.util.ArrayList;
 import java.util.Collection; 
-import java.util.HashMap; 
-import tdt4140.gr1864.app.ui.Mode.Mode;
+import java.util.HashMap;
+import java.util.List;
 
+import tdt4140.gr1864.app.ui.Mode.Mode;
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.ProductAggregate;
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationElement;
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
 import javafx.scene.layout.VBox;
 
 public class ModeController {
@@ -14,16 +20,16 @@ public class ModeController {
 	private Mode defaultMode;
 	private Mode currentMode;
 	
+	
+	
 	@FXML
 	private MenuViewController menuViewController;
+	
+	// Attributes relating to the visualizationViewcontroller:
 	@FXML
 	private VisualizationViewController visualizationViewController;
 	
 	private InteractionViewController interactionViewController;
-	
-	/**
-	 * 
-	 */
 	
 	@FXML
 	public void initialize() {
@@ -35,7 +41,18 @@ public class ModeController {
 		
 		this.menuViewController.setModeController(this);
 		
-		addMode(new Mode("Most Picked-Up Product", null));
+		TableColumn<String, String> productNameCol = new TableColumn("Product Name");
+		
+		List<TableColumn<String, String>> columns = new ArrayList<TableColumn<String, String>>();
+		columns.add(new TableColumn<String, String>("Product Name"));
+		columns.add(new TableColumn<String, String>("Times picked up"));
+		columns.add(new TableColumn<String, String>("Times put down"));
+		columns.add(new TableColumn<String, String>("Times bought"));
+		
+		VisualizationElement table = new VisualizationTable("Most Picked-Up Product", columns);
+		Mode mostPickedUp = new Mode("Most Picked Up", table);
+		
+		addMode(mostPickedUp);
 		addMode(new Mode("Stock", null));
 	}
 	
@@ -78,6 +95,11 @@ public class ModeController {
 			throw new IllegalStateException("modeChanged should not be called when there is no corresponding mode in modes");
 		}
 		this.currentMode = mode;
+		
+		ArrayList<ProductAggregate> list = new ArrayList<ProductAggregate>();
+		list.add(new ProductAggregate("Bolle", "3", "2", "1"));
+		list.add(new ProductAggregate("Sjokolade", "4","3","2"));
+		list.add(new ProductAggregate("Bille", "1", "0", "0"));
 		
 	}
 	
