@@ -23,7 +23,6 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 	} 
 
 	/**
-	 * (non-Javadoc)
 	 * @see interfaces.DatabaseCRUD#create(java.lang.Object)
 	 */
 	@Override
@@ -49,13 +48,12 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 			connection.close();
 		} 
 		catch (SQLException e) {
-			System.err.println(e.getMessage());
+			e.printStackTrace();
 		}
 		return -1;
 	}
     
-    /*
-     * (non-Javadoc)
+    /**
      * @see interfaces.DatabaseCRUD#retrieve(int)
      */
     @Override
@@ -80,14 +78,12 @@ public class CustomerDatabaseController implements DatabaseCRUD {
       
         } 
         catch (SQLException e) {
-        		System.err.println(e.getMessage());
+        	e.printStackTrace();
         }
-        
 		return null;
     }
     
     /**
-     * (non-Javadoc)
      * @see interfaces.DatabaseCRUD#update(java.lang.Object)
      */
     @Override
@@ -104,12 +100,11 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 			statement.executeUpdate();
 		} 
 		catch (SQLException e) {
-				System.err.println(e.getMessage());
+			e.printStackTrace();
 		}
 	}
     
     /**
-     * (non-Javadoc)
      * @see interfaces.DatabaseCRUD#delete(int)
      */
     @Override
@@ -122,7 +117,7 @@ public class CustomerDatabaseController implements DatabaseCRUD {
             statement.executeUpdate();
         } 
         catch (SQLException e) {
-        		System.err.println(e.getMessage());
+        	e.printStackTrace();
         }
     }
     
@@ -132,11 +127,11 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 	 * @return The customer object if the object is an instance of customer
 	 */
 	public Customer objectIsCustomer(Object object) {
-		Customer product = (Customer) object;
+		Customer customer = (Customer) object;
 		if (!(object instanceof Customer)) {
 			throw new IllegalArgumentException("Object is not instance of Customer");
 		} else {
-			return product;
+			return customer;
 		}
 	}
 }

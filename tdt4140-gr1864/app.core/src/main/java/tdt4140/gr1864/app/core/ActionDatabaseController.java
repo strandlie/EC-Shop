@@ -43,7 +43,6 @@ public class ActionDatabaseController implements DatabaseCRUD {
 			return action.getShoppingTrip().getShoppingTripID();
 
 		} catch (SQLException e) {
-			System.out.println("action fail");
 			e.printStackTrace();
 		}
 		
