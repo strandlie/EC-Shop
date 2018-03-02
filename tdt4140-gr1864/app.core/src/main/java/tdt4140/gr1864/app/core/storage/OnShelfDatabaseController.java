@@ -151,7 +151,7 @@ public class OnShelfDatabaseController implements DatabaseCRUD{
 	 * @param shopID		The shop where the products are stored
 	 * @param productID		The product that's stored
 	 */
-	public void delte(int shopID, int productID) {
+	public void delete(int shopID, int productID) {
 		try {
 			statement = connection.prepareStatement("DELETE FROM on_shelf WHERE shop_id=? AND product_id=?");
 			statement.setInt(1, shopID);
