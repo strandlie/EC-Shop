@@ -17,32 +17,14 @@ import org.junit.Test;
 
 public class ReceiptTest {
 	
-	Receipt receipt;
+	private static Receipt receipt;
 	
-	ShoppingTrip shoppingTrip;
+	private static ShoppingTrip shoppingTrip;
 
 	@BeforeClass
-	public static void createDatabase() throws IOException {
-		Path path = Paths.get("database.db");
-		
-		if (! Files.exists(path)) {
-			CreateDatabase.main(null);
-		}
-		
-		// Load product data into the database.
+	public static void setup() throws IOException {
 		DataLoader loader = new DataLoader();
-		ProductDatabaseController pdc = new ProductDatabaseController();
-		String pathToProducts = "../../src/main/resources/mock-products.json";
-		List<Product> p = loader.loadProducts(pathToProducts, pdc);
-	}
-	
-	@Before
-	public void setup() {
-		// Load the test shopping trip data.
-		DataLoader loader = new DataLoader();
-		String path = "../../src/main/resources/test-data.json";
-		shoppingTrip = loader.loadShoppingTrips(path);
-		
+		shoppingTrip = loader.getTrip();
 		receipt = new Receipt(shoppingTrip);
 	}
 	
