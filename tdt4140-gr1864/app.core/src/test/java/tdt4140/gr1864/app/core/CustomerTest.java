@@ -99,32 +99,4 @@ public class CustomerTest {
 		a.setLastName("Knudsen");
 		assertEquals(a.getLastName(), "Knudsen");
 	}
-
-	/**
-	 * Test method for {@link tdt4140.gr1864.app.core.Customer#getShoppingTrips()}.
-	 */
-	@Test
-	public void testGetShoppingTrips() {
-		ShoppingTrip trip = new ShoppingTrip(1, 27, 54);
-		ArrayList<ShoppingTrip> list = new ArrayList<>();
-		list.add(trip);
-		
-		Customer a = new Customer(1, "Roger", "Nilsen", list);
-		assertEquals(a.getShoppingTrips().get(0), trip);
-	}
-
-	/**
-	 * Test method for {@link tdt4140.gr1864.app.core.Customer#setShoppingTrips(java.util.ArrayList)}.
-	 */
-	@Test
-	public void testSetShoppingTrips() {
-		ShoppingTrip trip = new ShoppingTrip(1, 27, 54);
-		ArrayList<ShoppingTrip> list = new ArrayList<>();
-		list.add(trip);
-		
-		Customer a = new Customer(1, "Roger", "Nilsen", new ArrayList<>());
-		a.setShoppingTrips(list);
-		assertEquals(a.getShoppingTrips().get(0), trip);
-	}
-
 }
