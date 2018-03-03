@@ -48,4 +48,20 @@ public class ShopTest {
 		int expected = 1;
 		Assert.assertEquals(expected, shop2.getShopID());
 	}
+	
+	@Test
+	public void testAddAndGetProductInStorage() {
+		int productID = 5;
+		int amount = 23;
+		shop.setAmountInStorage(productID, amount);
+		Assert.assertEquals(23, shop.getAmountInStorage(productID));
+	}
+	
+	@Test
+	public void testAddAndGetProductInShelfs() {
+		int productID = 5;
+		int amount = 23;
+		shop.setAmountInShelfs(productID, amount);
+		Assert.assertEquals(23, shop.getAmountInShelfs(productID));
+	}
 }

@@ -8,6 +8,9 @@ import java.sql.SQLException;
 
 import interfaces.DatabaseCRUD;
 
+/**
+ * The database controller that connects the shop object to the DB
+ */
 public class ShopDatabaseController implements DatabaseCRUD{
 	
 	/* connection to SQLite database */
@@ -55,7 +58,6 @@ public class ShopDatabaseController implements DatabaseCRUD{
 		}
 		return -1;
 	}
-	
 	
 	@Override
 	public void update(Object object) {
@@ -111,6 +113,12 @@ public class ShopDatabaseController implements DatabaseCRUD{
 		
 	}
 		
+	/**
+	 * Checks if the input object is a Shop object
+	 * 
+	 * @param object	The object to be checked for being a Shop
+	 * @return			The input object parsed as a Shop if it is one
+	 */
 	public Shop objectIsShop(Object object) {
 		Shop shop = (Shop) object;
 		if (!(object instanceof Shop)) {
