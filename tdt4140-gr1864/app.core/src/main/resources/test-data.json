@@ -540,5 +540,13 @@
     "timestamp" : 1519234603919,
     "action" : 1,
     "productID" : 6
-  } ]
+  }, {
+    "timestamp" : 1519234603920,
+    "action" : 1,
+    "productID" : 6
+  }, {
+    "timestamp" : 1519234603921,
+    "action" : 0,
+    "productID" : 6
+  } ], 
 }

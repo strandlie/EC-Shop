@@ -22,6 +22,14 @@ public class ProductDatabaseController implements DatabaseCRUD {
 		}
 	}
 	
+	public void close() {
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * (non-Javadoc)
 	 * @see interfaces.DatabaseCRUD#create(java.lang.Object)
@@ -49,13 +57,11 @@ public class ProductDatabaseController implements DatabaseCRUD {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-
 			connection.close();
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		
 		return -1;
 	}
 

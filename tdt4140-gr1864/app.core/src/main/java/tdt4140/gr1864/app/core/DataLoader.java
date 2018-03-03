@@ -40,6 +40,7 @@ public class DataLoader {
 	
 		// loads products
 		String pathToProducts = "../../src/main/resources/mock-products.json";
+
 		products = this.loadProducts(pathToProducts, pdc);
 	
 		// loads trips

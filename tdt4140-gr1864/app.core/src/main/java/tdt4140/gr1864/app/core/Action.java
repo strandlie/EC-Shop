@@ -12,6 +12,18 @@ public class Action {
 	private ShoppingTrip trip;
 	
 	/**
+	 * The code for PICK_UP actions.
+	 */
+	public static int PICK_UP = 1;
+
+	/**
+	 * The code for DROP actions.
+	 */
+	public static int DROP = 0;
+
+	/*
+	 * Constructor for creating Actions in ActionDatabaseController.
+	 * Needs to handle getting correct ShoppingTrip based on it's ID
 	 * Constructor used by DatabaseController
 	 * @param timeStamp 	time of action, parsed to long
 	 * @param actionType	type of action, 1/0
