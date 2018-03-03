@@ -45,7 +45,7 @@ public class Shop{
 		return shopID;
 	}
 	
-	public void setAdress(String address) {
+	public void setAddress(String address) {
 		this.address = address;
 	}
 	

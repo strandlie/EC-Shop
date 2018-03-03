@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tdt4140.gr1864.app.ui.globalUIModel.ModeController">
+   <left>
+      <fx:include fx:id="menuView" source="MenuView.fxml" />
+   </left>
+   
+   <center>
+      <SplitPane dividerPositions="0.8" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
+        <items>
+   	 		<fx:include fx:id="visualizationView" source="VisualizationView.fxml" />
+   	 		<fx:include fx:id="interactionView" source="InteractionView.fxml" />
+        </items>
+      </SplitPane>
+   </center>
+   
+</BorderPane>

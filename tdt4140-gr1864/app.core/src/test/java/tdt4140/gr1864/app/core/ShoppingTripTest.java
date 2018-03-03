@@ -14,8 +14,7 @@ public class ShoppingTripTest {
 	@Before
 	public void setup() {
 		DataLoader loader = new DataLoader();
-		String path = "../../src/main/resources/test-data.json";
-		shoppingTrip = loader.loadShoppingTrips(path);
+		shoppingTrip = loader.getTrip();
 	}
 
 	@Test
@@ -48,11 +47,11 @@ public class ShoppingTripTest {
 		List<Action> actions = shoppingTrip.getActions();
 		Action action = actions.get(1);
 		long expectedTime = 1519222543919L;
-		long expectedType = 1L;
-		long expectedProduct = 32L;
+		int expectedType = 1;
+		int expectedProduct = 32;
 		
 		Assert.assertEquals(expectedTime, action.getTimeStamp());
 		Assert.assertEquals(expectedType, action.getActionType());
-		Assert.assertEquals(expectedProduct, action.getProductID());
+		Assert.assertEquals(expectedProduct, (int)action.getProduct().getID());
 	}
 }
