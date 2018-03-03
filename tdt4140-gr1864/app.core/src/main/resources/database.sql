@@ -31,11 +31,13 @@ foreign key (product_id) references product(product_id)
 );
 
 CREATE TABLE on_shelf(
-shop_id integer,
-product_id integer,
+shop_id integer not null,
+product_id integer not null,
 amount_on_shelfs integer not null,
 amount_in_storage integer not null,
-primary key(shop_id, product_id)
+primary key(shop_id, product_id),
+foreign key (shop_id) references shop(shop_id),
+foreign key (product_id) references product(product_id)
 );
 
 CREATE TABLE shop(

@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import interfaces.DatabaseCRUD;
+import tdt4140.gr1864.app.core.Product;
 
 
 /**
@@ -60,9 +61,8 @@ public class OnShelfDatabaseController implements DatabaseCRUD{
 			statement.setInt(2, product.getID());
 			statement.setInt(3, shop.getAmountInShelfs(product.getID()));
 			statement.setInt(4, shop.getAmountInStorage(product.getID()));
-			statement.executeUpdate();
 			
-			connection.close();
+			statement.executeUpdate();
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -89,6 +89,8 @@ public class OnShelfDatabaseController implements DatabaseCRUD{
 			
 			statement.setInt(1, shop.getAmountInShelfs(product.getID()));
 			statement.setInt(2, shop.getAmountInStorage(product.getID()));
+			statement.setInt(3, shop.getShopID());
+			statement.setInt(4, product.getID());
 			
 			statement.executeUpdate();
 			
@@ -118,16 +120,22 @@ public class OnShelfDatabaseController implements DatabaseCRUD{
 					prepareStatement("SELECT amount_on_shelfs, amount_in_storage FROM on_shelf"
 			+ " WHERE shop_id=? AND product_id=?");
 			
+			
+			
 			statement.setInt(1, shop.getShopID());
 			statement.setInt(2, product.getID());
+			statement.setInt(3, shop.getShopID());
+			statement.setInt(4, product.getID());
 			
 			ResultSet rs = statement.executeQuery();
+			
+			//System.out.println(rs);
 			
 			if (!rs.next()) {
 				return null;
 			}
 			
-			//Update and return the shop object
+			//Update the shop object and return it
 			shop.setAmountInShelfs(product.getID(), rs.getInt("amount_on_shelfs"));
 			shop.setAmountInStorage(product.getID(), rs.getInt("amount_in_storage"));
 			return shop;

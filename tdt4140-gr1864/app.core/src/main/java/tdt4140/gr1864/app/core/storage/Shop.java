@@ -22,12 +22,14 @@ public class Shop{
 	 * 0 = ProductID
 	 * 1 = Storage
 	 * 2 = OnShelfs */
-	List<ArrayList<Integer>> amountsOfProducts = new ArrayList<ArrayList<Integer>>();
+	List<ArrayList<Integer>> amountsOfProducts;
 	
 
 	public Shop(String address, int zip) {
 		this.address = address;
 		this.zip = zip;
+		
+		this.amountsOfProducts = new ArrayList<ArrayList<Integer>>();
 	}
 	
 	/* Constructor used by DatabaseController */
@@ -35,6 +37,8 @@ public class Shop{
 		this.address = address;
 		this.zip = zip;
 		this.shopID = shopId;
+		
+		this.amountsOfProducts = new ArrayList<ArrayList<Integer>>();
 	}
 	
 	public int getShopID() {
@@ -83,13 +87,13 @@ public class Shop{
 			newList.add(0);
 			amountsOfProducts.add(newList);
 		} else {
-			System.out.println("Can't add less than 1 product to storage");
+			System.out.println("Can't set amount in storage to be less than zero");
 		}
 	}
 	
 	/* Same as above, but adds to shop shelfs instead of storage */
 	public void setAmountInShelfs(int productID, int amount) {
-		if (amount > 0) {
+		if (amount >= 0) {
 			for (int i=0; i < amountsOfProducts.size(); i++) {
 				if (productID == amountsOfProducts.get(i).get(0)) {
 					amountsOfProducts.get(i).set(2, amount);
@@ -101,7 +105,7 @@ public class Shop{
 			newList.add(amount);
 			amountsOfProducts.add(newList);
 		} else {
-			System.out.println("Can't add less than 1 product to storage");
+			System.out.println("Can't set amount in shelfs to be less than zero");
 		}
 	}
 	
