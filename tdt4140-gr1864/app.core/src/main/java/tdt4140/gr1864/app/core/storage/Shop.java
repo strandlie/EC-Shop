@@ -1,7 +1,12 @@
 package tdt4140.gr1864.app.core.storage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+
+import tdt4140.gr1864.app.core.Receipt;
 
 /**
  * The java object Shop that corresponds to the shop table in DB
@@ -134,5 +139,31 @@ public class Shop{
 		}
 		System.out.println("ProductID not registered in storage");
 		return -1;
+	}
+	
+	public void updateAmountInShelfsFromReceipt(Receipt receipt) {
+		
+		Map<Integer, Integer> inventory = receipt.getInventory();
+		Iterator it = inventory.entrySet().iterator();
+		
+		while (it.hasNext()) {
+			
+			Map.Entry pair = (Map.Entry)it.next();
+			int productID = (int)pair.getKey();
+			int amount = (int)pair.getValue();
+			int currentAmount = getAmountInShelfs(productID);
+			
+			if (currentAmount == -1) {
+				setAmountInShelfs(productID, amount);
+			}
+			else {
+				setAmountInShelfs(productID, currentAmount + amount);
+			}
+			
+			OnShelfDatabaseController osdc = new OnShelfDatabaseController();
+			//osdc.update(shop, productID);
+			
+			it.remove(); // avoids a ConcurrentModificationException
+		}
 	}
 }

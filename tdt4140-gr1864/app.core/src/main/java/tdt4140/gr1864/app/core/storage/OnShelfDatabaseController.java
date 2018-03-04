@@ -47,9 +47,9 @@ public class OnShelfDatabaseController implements DatabaseCRUD{
 	 * Inputs are objects to secure the right id is used in the right place and to simplify the code
 	 * 
 	 * @param shop				Shop object
-	 * @param product			Product object
+	 * @param productID			ID of product
 	 */
-	public void create(Shop shop, Product product) {
+	public void create(Shop shop, int productID) {
 		String sql = "INSERT INTO on_shelf "
 				+ "(shop_id, product_id, amount_on_shelfs, amount_in_storage) "
 				+ "VALUES (?, ?, ?, ?)";
@@ -58,9 +58,9 @@ public class OnShelfDatabaseController implements DatabaseCRUD{
 			statement = connection.prepareStatement(sql);
 			
 			statement.setInt(1, shop.getShopID());
-			statement.setInt(2, product.getID());
-			statement.setInt(3, shop.getAmountInShelfs(product.getID()));
-			statement.setInt(4, shop.getAmountInStorage(product.getID()));
+			statement.setInt(2, productID);
+			statement.setInt(3, shop.getAmountInShelfs(productID));
+			statement.setInt(4, shop.getAmountInStorage(productID));
 			
 			statement.executeUpdate();
 			statement.close();
@@ -82,17 +82,17 @@ public class OnShelfDatabaseController implements DatabaseCRUD{
 	 * Updates the amounts of a product stored in DB
 	 * 
 	 * @param shop		The shop where the products are stored
-	 * @param product	The product that's stored
+	 * @param productID	ID of the product that's stored
 	 */
-	public void update(Shop shop, Product product) {
+	public void update(Shop shop, int productID) {
 		String sql = "UPDATE on_shelf SET amount_on_shelfs=?, amount_in_storage=? WHERE shop_id=? AND product_id=?";
 		try {
 			statement = connection.prepareStatement(sql);
 			
-			statement.setInt(1, shop.getAmountInShelfs(product.getID()));
-			statement.setInt(2, shop.getAmountInStorage(product.getID()));
+			statement.setInt(1, shop.getAmountInShelfs(productID));
+			statement.setInt(2, shop.getAmountInStorage(productID));
 			statement.setInt(3, shop.getShopID());
-			statement.setInt(4, product.getID());
+			statement.setInt(4, productID);
 			
 			statement.executeUpdate();
 			
@@ -117,11 +117,11 @@ public class OnShelfDatabaseController implements DatabaseCRUD{
 	 * Retrieves the saved amounts from the DB and updates the shop object
 	 * 
 	 * @param shop		The shop where the products are stored
-	 * @param product	The products that are stored
+	 * @param productID	ID of the products that are stored
 	 * 
 	 * @return shop 	The updated shop object
 	 */
-	public Shop retrieve(Shop shop, Product product) {
+	public Shop retrieve(Shop shop, int productID) {
 		try {
 			
 			statement = connection.
@@ -129,7 +129,7 @@ public class OnShelfDatabaseController implements DatabaseCRUD{
 			+ " WHERE shop_id=? AND product_id=?");
 			
 			statement.setInt(1, shop.getShopID());
-			statement.setInt(2, product.getID());
+			statement.setInt(2, productID);
 			
 			ResultSet rs = statement.executeQuery();
 			
@@ -139,8 +139,8 @@ public class OnShelfDatabaseController implements DatabaseCRUD{
 			}
 			
 			//Update the shop object and return it
-			shop.setAmountInShelfs(product.getID(), rs.getInt("amount_on_shelfs"));
-			shop.setAmountInStorage(product.getID(), rs.getInt("amount_in_storage"));
+			shop.setAmountInShelfs(productID, rs.getInt("amount_on_shelfs"));
+			shop.setAmountInStorage(productID, rs.getInt("amount_in_storage"));
 			
 			statement.close();
 			return shop;
