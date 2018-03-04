@@ -26,8 +26,7 @@ public class OnShelfDatabaseController implements DatabaseCRUD{
 	public OnShelfDatabaseController() {
 		try {
 			this.connection = DriverManager.getConnection("jdbc:sqlite:database.db");
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
@@ -51,8 +50,9 @@ public class OnShelfDatabaseController implements DatabaseCRUD{
 	 * @param product			Product object
 	 */
 	public void create(Shop shop, Product product) {
-		String sql = "INSERT INTO on_shelf(shop_id, product_id, amount_on_shelfs, amount_in_storage)"
-				+ " VALUES (?, ?, ?, ?)";
+		String sql = "INSERT INTO on_shelf "
+				+ "(shop_id, product_id, amount_on_shelfs, amount_in_storage) "
+				+ "VALUES (?, ?, ?, ?)";
 		
 		try {
 			statement = connection.prepareStatement(sql);
@@ -63,15 +63,10 @@ public class OnShelfDatabaseController implements DatabaseCRUD{
 			statement.setInt(4, shop.getAmountInStorage(product.getID()));
 			
 			statement.executeUpdate();
+			statement.close();
+			
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
-		}
-		try {
-			System.out.println(connection.isClosed());
-			connection.close();
-			System.out.println(connection.isClosed());
-		} catch(SQLException e) {
 			e.printStackTrace();
 		}
 	}
@@ -104,6 +99,11 @@ public class OnShelfDatabaseController implements DatabaseCRUD{
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		try {
+			statement.close();
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	
@@ -123,31 +123,35 @@ public class OnShelfDatabaseController implements DatabaseCRUD{
 	 */
 	public Shop retrieve(Shop shop, Product product) {
 		try {
+			
 			statement = connection.
 					prepareStatement("SELECT amount_on_shelfs, amount_in_storage FROM on_shelf"
 			+ " WHERE shop_id=? AND product_id=?");
 			
-			
-			
 			statement.setInt(1, shop.getShopID());
 			statement.setInt(2, product.getID());
-			statement.setInt(3, shop.getShopID());
-			statement.setInt(4, product.getID());
 			
 			ResultSet rs = statement.executeQuery();
 			
-			//System.out.println(rs);
-			
 			if (!rs.next()) {
+				statement.close();
 				return null;
 			}
 			
 			//Update the shop object and return it
 			shop.setAmountInShelfs(product.getID(), rs.getInt("amount_on_shelfs"));
 			shop.setAmountInStorage(product.getID(), rs.getInt("amount_in_storage"));
+			
+			statement.close();
 			return shop;
 			
 		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		try {
+			statement.close();
+			connection.close();
+		} catch(SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -175,6 +179,12 @@ public class OnShelfDatabaseController implements DatabaseCRUD{
 			statement.executeUpdate();
 			
 		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		try {
+			statement.close();
+			connection.close();
+		} catch(SQLException e) {
 			e.printStackTrace();
 		}
 	}
