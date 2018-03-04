@@ -100,23 +100,10 @@ public class ShopTest {
 		osdc.create(shop, p2.getID());
 		
 		shop.updateAmountInShelfsFromReceipt(receipt);
-		Shop retrievedShop = osdc.retrieve(shop, p1.getID());
-		Shop retrievedShop2 = osdc.retrieve(retrievedShop, p2.getID());
-		
-		
-		Assert.assertEquals(55,retrievedShop2.getAmountInShelfs(p1.getID()));
-		Assert.assertEquals(20,retrievedShop2.getAmountInShelfs(p2.getID()));
-	}
-	
-	@Test
-	public void ZtestRefreshExcpectSuccess() {
-		
-		shop.setAmountInShelfs(p1.getID(), 60);
-		shop.setAmountInShelfs(p2.getID(), 30);
-		
 		shop.refreshShop();
 		
 		
-		Assert.assertTrue(true);
+		Assert.assertEquals(55, shop.getAmountInShelfs(p1.getID()));
+		Assert.assertEquals(20, shop.getAmountInShelfs(p2.getID()));
 	}
 }
