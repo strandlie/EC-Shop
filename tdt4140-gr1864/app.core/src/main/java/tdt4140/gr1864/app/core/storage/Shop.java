@@ -77,7 +77,7 @@ public class Shop{
 	 * @param amount		Amount of product to add
 	 */
 	public void setAmountInStorage(int productID, int amount) {
-		if (amount > 0) {
+		if (amount >= 0) {
 			for (int i=0; i < amountsOfProducts.size(); i++) {
 				/* Product allready in list */
 				if (productID == amountsOfProducts.get(i).get(0)) {
@@ -141,6 +141,14 @@ public class Shop{
 		return -1;
 	}
 	
+	/**
+	 * Updates the amounts of a product on the shelfs in the shop object from the inventory
+	 * in a receipt from a shoppingTrip
+	 * 
+	 * The products are assumed to be in the DB
+	 * 
+	 * @param receipt	A receipt from a shopping trip
+	 */
 	public void updateAmountInShelfsFromReceipt(Receipt receipt) {
 		
 		Map<Integer, Integer> inventory = receipt.getInventory();
@@ -153,15 +161,10 @@ public class Shop{
 			int amount = (int)pair.getValue();
 			int currentAmount = getAmountInShelfs(productID);
 			
-			if (currentAmount == -1) {
-				setAmountInShelfs(productID, amount);
-			}
-			else {
-				setAmountInShelfs(productID, currentAmount + amount);
-			}
+			setAmountInShelfs(productID, currentAmount - amount);
 			
 			OnShelfDatabaseController osdc = new OnShelfDatabaseController();
-			//osdc.update(shop, productID);
+			osdc.update(this, productID);
 			
 			it.remove(); // avoids a ConcurrentModificationException
 		}
