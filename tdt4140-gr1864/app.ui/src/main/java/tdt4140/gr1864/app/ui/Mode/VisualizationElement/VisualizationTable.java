@@ -42,6 +42,7 @@ public class VisualizationTable extends VisualizationElement {
 	 */
 	private ObservableList<Aggregate> data;
 
+
 	/**
 	 * Constructor creating the lists
 	 * @param name String the name of the Table
@@ -111,6 +112,7 @@ public class VisualizationTable extends VisualizationElement {
 		TableColumn<Aggregate, String> tempColumn = new TableColumn<Aggregate, String>(columnName);
 		tempColumn.setCellValueFactory(new PropertyValueFactory(columnID));
 		columns.add(tempColumn);
+
 		
 	}
 }

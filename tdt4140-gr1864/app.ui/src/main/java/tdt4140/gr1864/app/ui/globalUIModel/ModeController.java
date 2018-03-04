@@ -1,7 +1,7 @@
 package tdt4140.gr1864.app.ui.globalUIModel; 
 
-import java.util.HashMap;
-
+import java.util.Collection; 
+import java.util.HashMap; 
 import tdt4140.gr1864.app.ui.Mode.Mode;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Aggregate;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;

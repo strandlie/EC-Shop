@@ -2,11 +2,13 @@ package tdt4140.gr1864.app.ui.globalUIModel;
 
 import java.util.ArrayList;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Aggregate;
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
 
 /**
  * The controller in charge of the VisualizationElement, the largest part of the app, which shows tables 
@@ -33,6 +35,7 @@ public class VisualizationViewController {
 		
 		visualizationView.setEditable(false);
 	}
+	
 	
 	/**
 	 * Creates the columns and fills in the ColumnNames

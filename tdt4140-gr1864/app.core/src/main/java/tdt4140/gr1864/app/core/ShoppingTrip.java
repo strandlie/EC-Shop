@@ -2,43 +2,116 @@ package tdt4140.gr1864.app.core;
 
 import java.util.List;
 
-/*
- * TODO:
- * 		- Finalize structure
- * 		- Import and transform JSON-data
- * 		- Implement DatabaseCRUD-framework
- */
+import tdt4140.gr1864.app.core.storage.Shop;
 
 public class ShoppingTrip {
+	
+	/* start-time of ShoppingTrip in UNIX-time */
+	private long start;
+	/* end-time of ShoppingTrip in UNIX-time */
+	private long end;
+	
+	/* customer and shop trip was made by and at */
+	private Shop shop;
+	private Customer customer;
 
-	private int id;
-	private int start;
-	private int stop;
-	private List<Double> trip;
+	private int shoppingTripID;
 	
-	public ShoppingTrip(int id, int start, int stop) {
-	/*
-	 * This needs to take in JSON-data from the data-generator and transform
-	 * into into this object-structure.. 
-	 * 
-	 * It is currently ONLY supposed to used for testing Customer-object. IDs
-	 * are not guaranteed to be unique - don't expect this to actually work, it
-	 * is just a template for Customer-object to work.
+	/* Coordinates that makes up the trip */
+	private List<Coordinate> coordinates;
+	/* Actions performed during trip */
+	private List<Action> actions;
+
+	/**
+	 * @param coordinates		list of coordinates making up the trip
+	 * @param actions			list of actions performed during trip
+	 * @param shoppingTripID	id provided by database
 	 */
-		this.id = id;
-		this.start = start;
-		this.stop = stop;
+	public ShoppingTrip(List<Coordinate> coordinates, List<Action> actions, int shoppingTripID) {
+		this.coordinates = coordinates;
+		this.actions = actions;
+		this.shoppingTripID = shoppingTripID;
+		this.start = findStart(coordinates);
+		this.end = findEnd(coordinates);
 	}
 	
-	public int getId() {
-		return id;
+	/**
+	 * Constructor when missing ID
+	 * @param customer	customer performing trip
+	 * @param shop		shop where trip was made
+	 */
+	public ShoppingTrip(Customer customer, Shop shop) {
+		this.customer = customer;
+		this.shop = shop;
 	}
 	
-	public int getStart() {
+	/**
+	 * Constructor used by ShoppingTripDatabaseController
+	 * @param shoppingTripId	id provided by database
+	 * @param customer			customer performing trip
+	 * @param shop				shop where trip was made
+	 */
+	public ShoppingTrip(int shoppingTripId, Customer customer, Shop shop) {
+		this.shoppingTripID = shoppingTripId;
+		this.customer = customer;
+		this.shop = shop;
+	}
+	
+	/**
+	 * @param coordinates list of coordinates that makes up the trip
+	 * @return time of first data-point in the list of coordinates
+	 */
+	private long findStart(List<Coordinate> coordinates) {
+		long min = coordinates.get(0).getTimeStamp();
+
+		for (Coordinate coord : coordinates) {
+			if (coord.getTimeStamp() < min) {
+				min = coord.getTimeStamp();
+			}
+		}
+		return min;
+	}
+	
+	/**
+	 * @param coordinates list of coordinates that makes up the trip
+	 * @return time of last data-point in the list of coordinates
+	 */
+	private long findEnd(List<Coordinate> coordinates) {
+		long max = coordinates.get(0).getTimeStamp();
+		
+		for (Coordinate coord : coordinates) {
+			if (coord.getTimeStamp() > max) {
+				max = coord.getTimeStamp();
+			}
+		}
+		return max;
+	}
+
+	public long getStart() {
 		return start;
 	}
 	
-	public int getStop() {
-		return stop;
+	public long getEnd() {
+		return end;
+	}
+	
+	public List<Coordinate> getCoordinates() {
+		return coordinates;
+	}
+	
+	public List<Action> getActions() {
+		return actions;
+	}
+	
+	public Shop getShop() {
+		return shop;
+	}
+	
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public int getShoppingTripID() {
+		return shoppingTripID;
 	}
 }
