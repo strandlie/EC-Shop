@@ -45,22 +45,22 @@ public class OnShelfDatabaseControllerTest {
 		shop.setAmountInStorage(product.getID(), 93);
 	}
 	
-	/*
+	
 	@Test
 	public void testCreateAndRetrieveExcpectSuccess() {
-		osdc.create(shop, product);
+		System.out.println(shop.getShopID());
+		System.out.println(product.getID());
+		osdc.create(shop, product); //ERROR statement.close()?
 		Shop retrievedShop = osdc.retrieve(shop, product);
-		
-		System.out.println(retrievedShop);
 		
 		Assert.assertEquals(7, retrievedShop.getAmountInShelfs(product.getID()));
 		Assert.assertEquals(93, retrievedShop.getAmountInStorage(product.getID()));
 		Assert.assertEquals(16, retrievedShop.getShopID());
 	}
 	
+	/*
 	@Test
 	public void testUpdateExcpectSuccess() {
-		osdc.create(shop, product);
 		shop.setAmountInShelfs(product.getID(), 10);
 		shop.setAmountInStorage(product.getID(), 90);
 		osdc.update(shop, product);
@@ -71,7 +71,7 @@ public class OnShelfDatabaseControllerTest {
 		Assert.assertEquals(16, retrievedShop.getShopID());
 	}
 	
-	
+	/*
 	@Test
 	public void testDeleteExcpectNull() {
 		osdc.create(shop, product);
@@ -81,6 +81,7 @@ public class OnShelfDatabaseControllerTest {
 		Assert.assertEquals(null, retrievedShop);
 	}
 	*/
+	
 	
 	//Delete the DB
 	@AfterClass

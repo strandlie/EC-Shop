@@ -67,6 +67,13 @@ public class OnShelfDatabaseController implements DatabaseCRUD{
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
+		try {
+			System.out.println(connection.isClosed());
+			connection.close();
+			System.out.println(connection.isClosed());
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	
