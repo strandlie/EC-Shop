@@ -169,4 +169,25 @@ public class Shop{
 			it.remove(); // avoids a ConcurrentModificationException
 		}
 	}
+	
+	/**
+	 * Updates the amounts of products in the shop object according to the DB, if
+	 * their ID's are in the list
+	 * 
+	 * @return		The updated Shop object
+	 */
+	public Shop refreshShop() {
+		
+		Shop temp = this;
+		Shop temp2;
+		
+		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
+		
+		for (int i = 0; i < amountsOfProducts.size(); i++) {
+			temp2 = osdc.retrieve(temp, amountsOfProducts.get(i).get(0));
+			temp = temp2;
+			System.out.println(amountsOfProducts);
+		}
+		return temp;
+	}
 }

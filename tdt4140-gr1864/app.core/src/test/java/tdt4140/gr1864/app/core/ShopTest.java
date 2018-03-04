@@ -27,6 +27,15 @@ public class ShopTest {
 	public void setup() {
 		shop = new Shop("Kings Road 2", 1020);
 		shop2 = new Shop("Kings Road 4", 1020, 1);
+		
+		p1 = new Product(1, "p1", 1);
+		p2 = new Product(2, "p2", 2);
+		
+		inventory = new HashMap<>();
+		inventory.put(p1.getID(), 5);
+		inventory.put(p2.getID(), 10);
+		
+		receipt = new Receipt(inventory);
 	}
 	
 	@Test
@@ -82,14 +91,6 @@ public class ShopTest {
 	
 	@Test
 	public void testUpdateFromReceiptExpectSuccess() {
-		p1 = new Product(1, "p1", 1);
-		p2 = new Product(2, "p2", 2);
-		
-		inventory = new HashMap<>();
-		inventory.put(p1.getID(), 5);
-		inventory.put(p2.getID(), 10);
-		
-		receipt = new Receipt(inventory);
 		
 		shop.setAmountInShelfs(p1.getID(), 60);
 		shop.setAmountInShelfs(p2.getID(), 30);
@@ -105,5 +106,17 @@ public class ShopTest {
 		
 		Assert.assertEquals(55,retrievedShop2.getAmountInShelfs(p1.getID()));
 		Assert.assertEquals(20,retrievedShop2.getAmountInShelfs(p2.getID()));
+	}
+	
+	@Test
+	public void ZtestRefreshExcpectSuccess() {
+		
+		shop.setAmountInShelfs(p1.getID(), 60);
+		shop.setAmountInShelfs(p2.getID(), 30);
+		
+		shop.refreshShop();
+		
+		
+		Assert.assertTrue(true);
 	}
 }
