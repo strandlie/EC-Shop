@@ -48,7 +48,11 @@ public class MenuViewController  {
 		menuListView.getSelectionModel().selectedItemProperty().addListener(
 			new ChangeListener<String>() {
 				public void changed(ObservableValue<? extends String> property, String oldValue, String newValue) {
-					if (! newValue.equals(oldValue)){
+					if (newValue == null) {
+						System.out.println("Set default mode");
+						modeController.setDefaultMode();
+					}
+					else if (! newValue.equals(oldValue)){
 						if (modeController.isValidMode(newValue)) {
 						 modeController.modeChanged(newValue);
 						}
