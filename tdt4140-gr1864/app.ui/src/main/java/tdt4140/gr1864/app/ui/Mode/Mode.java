@@ -19,7 +19,7 @@ import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
 public class Mode {
 	
 	/**
-	 * The string that is shown in the Mode-menu
+	 * The string that is shown in the Mode-menu that the user can select from
 	 */
 	private String name;
 	

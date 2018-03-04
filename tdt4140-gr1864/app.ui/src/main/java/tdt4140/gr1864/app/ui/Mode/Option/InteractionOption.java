@@ -1,6 +1,9 @@
 package tdt4140.gr1864.app.ui.Mode.Option;
 
 public abstract class InteractionOption {
+	/**
+	 * Not yet used. Exists for future. 
+	 */
 	
 	/**
 	 * The name of this InteractionOption. Will be displayed in the UI

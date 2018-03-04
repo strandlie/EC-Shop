@@ -20,7 +20,7 @@ import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Aggregate;
 public class VisualizationViewController {
 	
 	/**
-	 * The reference to the actual TableView
+	 * The reference to the actual TableView shown to the user
 	 */
 	@FXML
 	private TableView<Aggregate> visualizationView;

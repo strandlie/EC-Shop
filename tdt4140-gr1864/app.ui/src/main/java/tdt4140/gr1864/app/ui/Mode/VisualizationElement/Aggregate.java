@@ -7,6 +7,8 @@ import javafx.beans.property.StringProperty;
 /**
  * The class that makes up the content in the cells of a table. Because of the JavaFX-implmentation this 
  * needs to have all the variables and corresponding methods for all possible columns in any table. 
+ * 
+ * In furture versions this model needs updating. It doesnt allow modes with same number of columns
  * @author Håkon Strandlie
  *
  */

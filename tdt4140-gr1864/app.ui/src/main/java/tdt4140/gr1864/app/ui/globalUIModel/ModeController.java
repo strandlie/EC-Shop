@@ -15,24 +15,24 @@ import javafx.fxml.FXML;
  */
 public class ModeController {
 	/**
-	 * Different modes saved with their names as key
+	 * Different modes saved with their names as key. Only valid Modes exist here. 
 	 */
 	private HashMap<String, Mode> modes;
 	
 	/**
-	 * The current mode for easy getting
+	 * The current mode for easy getting and comparing.
 	 */
 	private Mode currentMode;
 	
 	
 	/**
-	 * The controller responsible for the menu
+	 * The controller responsible for showing the menu to the user
 	 */
 	@FXML
 	private MenuViewController menuViewController;
 	
 	/**
-	 * The controller responsible for the visualizationView
+	 * The controller responsible for showing the visualizationView to the user
 	 */
 	@FXML
 	private VisualizationViewController visualizationViewController;
