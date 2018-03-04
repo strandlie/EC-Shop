@@ -3,21 +3,13 @@
  */
 package tdt4140.gr1864.app.ui.globalUIModel;
 
-import java.io.IOException;
-import java.util.List;
 
-import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.cell.TextFieldListCell;
-import javafx.stage.Stage;
 import javafx.util.Callback;
 
 /**

@@ -2,7 +2,6 @@ package tdt4140.gr1864.app.ui.Mode.VisualizationElement;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javafx.collections.FXCollections;
@@ -112,7 +111,5 @@ public class VisualizationTable extends VisualizationElement {
 		TableColumn<Aggregate, String> tempColumn = new TableColumn<Aggregate, String>(columnName);
 		tempColumn.setCellValueFactory(new PropertyValueFactory(columnID));
 		columns.add(tempColumn);
-
-		
 	}
 }
