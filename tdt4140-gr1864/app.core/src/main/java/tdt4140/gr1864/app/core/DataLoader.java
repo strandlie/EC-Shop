@@ -141,8 +141,10 @@ public class DataLoader {
 		
 		Shop s1 = createShop();
 		Customer c1 = createCustomer();
-		trip = new ShoppingTrip(c1, s1);
-		trip = new ShoppingTrip(stdc.create(trip), trip.getCustomer(), trip.getShop());
+
+		// We set the charged flag to true to prevent spamming the Stripe API.		
+		trip = new ShoppingTrip(c1, s1, true);
+		trip = new ShoppingTrip(stdc.create(trip), trip.getCustomer(), trip.getShop(), true);
 		
 		try {
 			Object obj = parser.parse(new FileReader(relativePath + path));
@@ -172,7 +174,8 @@ public class DataLoader {
 	 * @return ShoppingTrip 	object created from coordinates and actions
 	 */
 	public ShoppingTrip createShoppingTrip(ShoppingTrip trip, List<Coordinate> coordinates, List<Action> actions) {
-		ShoppingTrip newTrip = new ShoppingTrip(coordinates, actions, trip.getShoppingTripID());
+		// We set the Charged flag to true to prevent spamming the Stripe API with charges.
+		ShoppingTrip newTrip = new ShoppingTrip(coordinates, actions, trip.getShoppingTripID(), true);
 		this.trip = newTrip;
 		return newTrip;
 	}
