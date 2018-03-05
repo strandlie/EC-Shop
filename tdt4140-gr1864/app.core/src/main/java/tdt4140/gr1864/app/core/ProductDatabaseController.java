@@ -11,24 +11,6 @@ import interfaces.DatabaseCRUD;
 public class ProductDatabaseController implements DatabaseCRUD {
 
 	PreparedStatement statement;
-		
-	public ProductDatabaseController() {
-		try {	
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void close() {
-		try {
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
-			connection.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
 	
 	/**
 	 * @see interfaces.DatabaseCRUD#create(java.lang.Object)

@@ -12,15 +12,6 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 
 	PreparedStatement statement;
 	
-	public CustomerDatabaseController() {
-		try {	
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-	} 
-
 	/**
 	 * @see interfaces.DatabaseCRUD#create(java.lang.Object)
 	 */
@@ -47,7 +38,7 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			statement.close();
+			connection.close();
 		} 
 		catch (SQLException e) {
 			e.printStackTrace();

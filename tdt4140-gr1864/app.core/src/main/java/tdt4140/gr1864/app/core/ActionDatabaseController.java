@@ -11,16 +11,7 @@ import interfaces.DatabaseCRUD;
 public class ActionDatabaseController implements DatabaseCRUD {
 	
 	PreparedStatement statement;
-	
-	public ActionDatabaseController() {
-		try {
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
+
 	/**
 	 * @see interfaces.DatabaseCRUD#create(java.lang.Object)
 	 */

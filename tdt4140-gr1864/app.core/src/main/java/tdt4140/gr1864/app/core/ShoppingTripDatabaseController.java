@@ -13,14 +13,6 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 
 	PreparedStatement statement;
 	
-	public ShoppingTripDatabaseController() {
-		try {
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
 	/**
 	 * @see interfaces.DatabaseCRUD#create(java.lang.Object)
 	 */

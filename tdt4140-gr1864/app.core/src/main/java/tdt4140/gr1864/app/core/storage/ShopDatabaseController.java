@@ -13,16 +13,6 @@ public class ShopDatabaseController implements DatabaseCRUD{
 	/* SQL statement executed on database */
 	PreparedStatement statement;
 	
-	
-	public ShopDatabaseController() {
-		try {
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	@Override
 	public int create(Object object) {
 		Shop shop = this.objectIsShop(object);

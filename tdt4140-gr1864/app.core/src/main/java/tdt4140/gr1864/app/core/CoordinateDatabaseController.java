@@ -11,15 +11,7 @@ import interfaces.DatabaseCRUD;
 public class CoordinateDatabaseController implements DatabaseCRUD{
 	
 	PreparedStatement statement;
-	
-	public CoordinateDatabaseController() {
-		try {
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
+
 	/**
 	 * @see interfaces.DatabaseCRUD#create(java.lang.Object)
 	 */
