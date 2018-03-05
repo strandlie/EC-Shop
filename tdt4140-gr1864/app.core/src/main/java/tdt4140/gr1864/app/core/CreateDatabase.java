@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -26,15 +27,17 @@ public class CreateDatabase {
                 //DatabaseMetaData meta = conn.getMetaData();
                 
                 String[] sqlArr = sql.toString().split("(;\\n)");
-                Statement stmt = conn.createStatement();
+                //Statement stmt = conn.createStatement();
                 for (String s : sqlArr) {
                 		s += ";";
-                		stmt.execute(s);
+                		PreparedStatement stmt = conn.prepareStatement(s);	//This boiii
+                		stmt.execute();
+                		stmt.clearParameters();
                 }
             }
  
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
  

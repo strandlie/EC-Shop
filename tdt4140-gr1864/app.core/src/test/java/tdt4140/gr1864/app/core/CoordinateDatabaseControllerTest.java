@@ -36,11 +36,8 @@ public class CoordinateDatabaseControllerTest {
 
 	@BeforeClass
 	public static void createDatabase() throws IOException {
-		Path path = Paths.get("database.db");
-		
-		if (! Files.exists(path)) {
-			CreateDatabase.main(null);
-		}
+		DatabaseViper viper = new DatabaseViper();
+		viper.vipe();
 	}
 	
 	@Before
@@ -126,23 +123,4 @@ public class CoordinateDatabaseControllerTest {
 		Assert.assertEquals(c1.getTimeStamp(), c2.getTimeStamp());
 		Assert.assertEquals(c1.getShoppingTrip().getShoppingTripID(), c2.getShoppingTrip().getShoppingTripID());
 	}
-	
-	/*
-	 * Deleting database after running test
-	 */
-	@AfterClass
-	public static void finish() {
-		Path path = Paths.get("database.db");
-		try {
-		    Files.delete(path);
-		} catch (NoSuchFileException x) {
-		    System.err.format("%s: no such" + " file or directory%n", path);
-		} catch (DirectoryNotEmptyException x) {
-		    System.err.format("%s not empty%n", path);
-		} catch (IOException x) {
-		    // File permission problems are caught here.
-		    System.err.println(x);
-		}
-	}
-
 }

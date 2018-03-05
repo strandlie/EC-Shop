@@ -25,11 +25,8 @@ public class CustomerDatabaseControllerTest {
 
 	@BeforeClass
 	public static void createDatabase() throws IOException {
-		Path path = Paths.get("database.db");
-		
-		if (! Files.exists(path)) {
-			CreateDatabase.main(null);
-		}
+		DatabaseViper viper = new DatabaseViper();
+		viper.vipe();
 	}
 
 	@Before
@@ -73,24 +70,5 @@ public class CustomerDatabaseControllerTest {
 		cdc.delete(c2.getUserId());
 		
 		Assert.assertEquals(null, cdc.retrieve(c2.getUserId()));
-	}
-	
-	/*
-	 * Deleting database after running test
-	 */
-	@AfterClass
-	public static void finish() {
-		Path path = Paths.get("database.db");
-		try {
-		    Files.delete(path);
-		} catch (NoSuchFileException x) {
-			System.out.println("product");
-		    System.err.format("%s: no such" + " file or directory%n", path);
-		} catch (DirectoryNotEmptyException x) {
-		    System.err.format("%s not empty%n", path);
-		} catch (IOException x) {
-		    // File permission problems are caught here.
-		    System.err.println(x);
-		}
 	}
 }
