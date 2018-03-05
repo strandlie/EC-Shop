@@ -22,9 +22,8 @@ public class Shop{
 	private String address;
 	private int zip;
 	
-	Map<Integer, Integer> shelfs;
-	Map<Integer, Integer> storage;
-
+	private Map<Integer, Integer> shelfs;
+	private Map<Integer, Integer> storage;
 	
 	public Shop(String address, int zip) {
 		this.address = address;
@@ -64,7 +63,14 @@ public class Shop{
 		this.zip = zip;
 	}
 	
-
+	public Map<Integer, Integer> getShelfs() {
+		return shelfs;
+	}
+	
+	public Map<Integer, Integer> getStorage() {
+		return storage;
+	}
+	
 	/**
 	 * Sets the amount of a product in storage to the desired amount
 	 * 
