@@ -12,8 +12,7 @@ public class CreateDatabase {
     public static void createNewDatabase() throws IOException {
     		
         String url = "jdbc:sqlite:database.db";
-    	
-        BufferedReader in = new BufferedReader(new FileReader("src/main/resources/database.sql"));
+        BufferedReader in = new BufferedReader(new FileReader("../app.core/src/main/resources/database.sql"));
         String str;
         StringBuffer sql = new StringBuffer();
         while ((str = in.readLine()) != null) {

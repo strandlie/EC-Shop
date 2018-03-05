@@ -39,12 +39,12 @@ public class DataLoader {
 		ProductDatabaseController pdc = new ProductDatabaseController();
 	
 		// loads products
-		String pathToProducts = "../../src/main/resources/mock-products.json";
+		String pathToProducts = "../../../app.core/src/main/resources/mock-products.json";
 
 		products = this.loadProducts(pathToProducts, pdc);
 	
 		// loads trips
-		String pathToTrip = "../../src/main/resources/test-data.json";
+		String pathToTrip = "../../../app.core/src/main/resources/test-data.json";
 		trip = this.loadShoppingTrips(pathToTrip);
 	}
 	
