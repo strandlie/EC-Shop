@@ -13,6 +13,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import tdt4140.gr1864.app.core.storage.OnShelfDatabaseController;
 import tdt4140.gr1864.app.core.storage.Shop;
 import tdt4140.gr1864.app.core.storage.ShopDatabaseController;
 
@@ -46,6 +47,9 @@ public class DataLoader {
 		// loads trips
 		String pathToTrip = "../../src/main/resources/test-data.json";
 		trip = this.loadShoppingTrips(pathToTrip);
+		
+		// Adds amounts of products to shelfs and storage of DB and updates DB
+		addProductsInShelfsInDB();
 	}
 	
 	/**
@@ -239,6 +243,21 @@ public class DataLoader {
 		}
 		this.actions = actions;
 		return actions;
+	}
+	
+	/**
+	 * A function that adds products to the shelfs and storage of the shop, also updates the DB
+	 */
+	public void addProductsInShelfsInDB() {
+		int amountInStorage = 90;
+		int amountOnShelfs = 20;
+		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
+		for(int i = 0; i < products.size();i++) {
+			int productID = products.get(i).getID();
+			shop.setAmountInShelfs(productID, amountOnShelfs);
+			shop.setAmountInStorage(productID, amountInStorage);
+			osdc.create(shop, productID);
+		}
 	}
 	
 	public ShoppingTrip getTrip() {
