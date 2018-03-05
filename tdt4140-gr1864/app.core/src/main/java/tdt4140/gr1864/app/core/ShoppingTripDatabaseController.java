@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import interfaces.DatabaseCRUD;
 import tdt4140.gr1864.app.core.storage.ShopDatabaseController;
@@ -77,6 +79,37 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 		}
 	}
 
+	/**
+	 * Retrieves all ShoppingTrips in database as a List<> 
+	 * @return List<ShoppingTrip> trips of all ShoppingTrips in database
+	 */
+	public List<ShoppingTrip> retrieveAll() {
+		String sql = "SELECT * "
+					+ "FROM shopping_trip";
+		try {
+			statement = connection.prepareStatement(sql);
+			ResultSet rs = statement.executeQuery();
+			
+			CustomerDatabaseController cdc = new CustomerDatabaseController();
+			ShopDatabaseController sdc = new ShopDatabaseController();
+			ShoppingTrip trip;
+			List<ShoppingTrip> trips = new ArrayList<>();
+
+			while (rs.next()) {
+				trip = new ShoppingTrip(
+						rs.getInt("shopping_trip_id"), 
+						cdc.retrieve(rs.getInt("customer_id")),
+						sdc.retrieve(rs.getInt("shop_id")));
+				trips.add(trip);
+			}
+			connection.close();
+			return trips;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	/**
 	 * @see interfaces.DatabaseCRUD#retrieve(int)
 	 */
