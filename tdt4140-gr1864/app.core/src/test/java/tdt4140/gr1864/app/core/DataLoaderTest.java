@@ -87,14 +87,12 @@ public class DataLoaderTest {
 		Assert.assertEquals(expectedType, action.getActionType());
 		Assert.assertEquals(expectedProduct, (int) action.getProduct().getID());
 	}
-	/*
+	
 	@Test
 	public void testProductsOnSHelf(){
 		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
 		int productID = products.get(0).getID();
-		System.out.println(productID);
 		Shop shop = loader.getShop();
-		System.out.println(shop.getShopID());
 		Shop testShop = new Shop("lol", 101, shop.getShopID());
 		Shop retrievedShop = osdc.retrieve(testShop, productID);
 		
