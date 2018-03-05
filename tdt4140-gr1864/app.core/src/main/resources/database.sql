@@ -34,10 +34,13 @@ foreign key (shopping_trip_id) references shopping_trip(shopping_trip_id)
 );
 
 CREATE TABLE on_shelf(
-shop_id integer,
-product_id integer,
-amount integer not null,
-primary key(shop_id, product_id)
+shop_id integer not null,
+product_id integer no null,
+amount_on_shelfs integer not null,
+amount_in_storage integer not null,
+primary key(shop_id, product_id),
+foreign key (shop_id) references shop(shop_id),
+foreign key (product_id) references product(product_id)
 );
 
 CREATE TABLE shop(
@@ -48,9 +51,10 @@ foreign key(shop_id) references product(shop_id)
 );
 
 CREATE TABLE shopping_trip(
-shopping_trip_id integer  primary key autoincrement,
+shopping_trip_id integer primary key autoincrement,
 customer_id integer not null,
 shop_id integer not null,
+charged bit not null,
 foreign key(customer_id) references customer(customer_id),
 foreign key(shop_id) references shop(shop_id),
 foreign key(shopping_trip_id) references action(shopping_trip_id),

@@ -31,13 +31,14 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 	public int create(Object object) {
 		ShoppingTrip trip = this.objectIsShoppingTrip(object);
 		String sql = "INSERT INTO shopping_trip "
-					+ "(customer_id, shop_id) "
-					+ "VALUES (?, ?)";
+					+ "(customer_id, shop_id, charged) "
+					+ "VALUES (?, ?, ?)";
 					
 		try {
 			statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 			statement.setInt(1, trip.getCustomer().getUserId());
 			statement.setInt(2, trip.getShop().getShopID());
+			statement.setBoolean(3, trip.getCharged());
 			statement.executeUpdate();
 		
 			try {
@@ -65,13 +66,14 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 	public void update(Object object) {
 		ShoppingTrip trip = this.objectIsShoppingTrip(object);
 		String sql = "UPDATE shopping_trip "
-					+ "SET customer_id=?, shop_id=? "
+					+ "SET customer_id=?, shop_id=?, charged=? "
 					+ "WHERE shopping_trip_id=?";
 		try {
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, trip.getCustomer().getUserId());
 			statement.setInt(2, trip.getShop().getShopID());
-			statement.setInt(3, trip.getShoppingTripID());
+			statement.setBoolean(3, trip.getCharged());
+			statement.setInt(4, trip.getShoppingTripID());
 			statement.executeUpdate();
 			
 		} catch (SQLException e) {
@@ -79,37 +81,6 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 		}
 	}
 
-	/**
-	 * Retrieves all ShoppingTrips in database as a List<> 
-	 * @return List<ShoppingTrip> trips of all ShoppingTrips in database
-	 */
-	public List<ShoppingTrip> retrieveAll() {
-		String sql = "SELECT * "
-					+ "FROM shopping_trip";
-		try {
-			statement = connection.prepareStatement(sql);
-			ResultSet rs = statement.executeQuery();
-			
-			CustomerDatabaseController cdc = new CustomerDatabaseController();
-			ShopDatabaseController sdc = new ShopDatabaseController();
-			ShoppingTrip trip;
-			List<ShoppingTrip> trips = new ArrayList<>();
-
-			while (rs.next()) {
-				trip = new ShoppingTrip(
-						rs.getInt("shopping_trip_id"), 
-						cdc.retrieve(rs.getInt("customer_id")),
-						sdc.retrieve(rs.getInt("shop_id")));
-				trips.add(trip);
-			}
-			connection.close();
-			return trips;
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
 	/**
 	 * @see interfaces.DatabaseCRUD#retrieve(int)
 	 */
@@ -132,8 +103,10 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 			ShoppingTrip trip = new ShoppingTrip(
 					rs.getInt("shopping_trip_id"), 
 					cdc.retrieve(rs.getInt("customer_id")),
-					sdc.retrieve(rs.getInt("shop_id")));
-			statement.close();
+					sdc.retrieve(rs.getInt("shop_id")),
+					true);
+			// TODO: This is not ideal. Closes the connection, even if the ShoppingTripDatabaseController is used more
+			connection.close();
 			return trip;
 
 		} catch (SQLException e) {

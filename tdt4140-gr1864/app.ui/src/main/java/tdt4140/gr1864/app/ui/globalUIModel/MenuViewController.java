@@ -61,8 +61,6 @@ public class MenuViewController  {
 						else {
 							throw new IllegalStateException("Cannot change mode to " + newValue + " from " + oldValue);
 						}
-						System.out.println("New selection");
-						System.out.println("New value: " + newValue);
 					}
 					else {
 						System.out.println("Nothing was done");

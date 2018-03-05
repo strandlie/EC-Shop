@@ -13,13 +13,40 @@ import tdt4140.gr1864.app.core.storage.Shop;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Aggregate;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
 
+/**
+ * This is the class that loades a table with data from a list of Trips. 
+ * The visualizationTable that is an argument in both constructors is the
+ * model-layer-representation of the table shown to the user in the GUI
+ * @author hstrandlie
+ *
+ */
 public class TableLoader {
+	/*
+	 * The number of PickUps computed
+	 */
 	private Map<String, Integer> pickUps;
+	/*
+	 * The number of PutDowns computed
+	 */
 	private Map<String, Integer> putDowns;
+	/*
+	 * The number of purchases computed
+	 */
 	private Map<String, Integer> purchases;
+	/*
+	 * The number of a product in Stock
+	 */
 	private Map<String, Integer> stock;
 	
+	/**
+	 * The constructor for the MostPickedUpMode
+	 * @param trips A list of shopping trips to load the table from
+	 * @param table A model-layer representation of a table shown to the user. Any changes made to this will reflect to the user immidiately
+	 */
 	public TableLoader(List<ShoppingTrip> trips, VisualizationTable table) {
+		if (trips == null || table == null) {
+			return;
+		}
 		this.pickUps = new HashMap<String, Integer>();
 		this.putDowns = new HashMap<String, Integer>();
 		this.purchases = new HashMap<String, Integer>();
@@ -56,8 +83,17 @@ public class TableLoader {
 			table.addData(new Aggregate(productName, pickups, putdowns, purchases));
 		}
 	}
-	
+	/**
+	 * The constructor for the StockMode
+	 * @param productIDsOnShelf The Map of the productIDs with corresponding count on shelf
+	 * @param productIDsInStorage The Map of the productIDs with corresponding count in storage
+	 * @param table A model-layer representation of a table shown to the user. Any changes made to this will reflect to the user immidiately
+	 */
 	public TableLoader(Map<Integer, Integer> productIDsOnShelf, Map<Integer, Integer> productIDsInStorage, VisualizationTable table) {
+		if (productIDsOnShelf == null || productIDsInStorage == null || table == null) {
+			return;
+		}
+		this.stock = new HashMap<String, Integer>();
 		ProductDatabaseController pdc = new ProductDatabaseController();
 		ArrayList<Integer> seen = new ArrayList<>();
 		for (Integer productID : productIDsOnShelf.keySet()) {
@@ -81,6 +117,14 @@ public class TableLoader {
 			table.addData(new Aggregate(productName, totalStock));
 		}
 		
+	}
+	
+	/**
+	 * A simple method used by the tableLoader test
+	 * @return Map<String, Integer> The stock of this tableLoader
+	 */
+	public Map<String, Integer> getStock() {
+		return this.stock;
 	}
 	
 	

@@ -11,6 +11,7 @@ import tdt4140.gr1864.app.core.DataLoader;
 import tdt4140.gr1864.app.core.ProductDatabaseController;
 import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.ShoppingTripDatabaseController;
+import tdt4140.gr1864.app.core.storage.OnShelfDatabaseController;
 import tdt4140.gr1864.app.core.storage.Shop;
 import tdt4140.gr1864.app.core.storage.ShopDatabaseController;
 import tdt4140.gr1864.app.ui.TableLoader;
@@ -87,7 +88,7 @@ public class ModeController {
 		stockTable.addColumn("numberInStock");
 		Mode stock = new Mode("Stock", stockTable);
 		
-		DataLoader dataLoader = new DataLoader();
+		new DataLoader();
 		
 		// Get data from shoppin trip and add to TableView
 		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
@@ -98,15 +99,22 @@ public class ModeController {
 		ArrayList<ShoppingTrip> shoppingTripList = new ArrayList<>();
 		shoppingTripList.add(trip);
 		
-		TableLoader tl = new TableLoader(shoppingTripList, mostPickedUpTable);
+		new TableLoader(shoppingTripList, mostPickedUpTable);
 		
 		// Get data from Shop and add to StockMode
 		ShopDatabaseController sdc = new ShopDatabaseController();
+		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
+		ProductDatabaseController pdc = new ProductDatabaseController();
 		Shop shop = sdc.retrieve(1);
-		//Map<Integer, Integer> productIDsOnShelf = shop.getShelfs();
-		//Map<Integer, Integer> productIDsInStorage = shop.getStorage();
+		for (int i = 1; i < 65; i++) {
+			osdc.retrieve(shop, i);
+		}
 		
-		//TableLoader t2 = new TableLoader(productIDsOnShelf, productIDsInStorage, stockTable);
+		
+		Map<Integer, Integer> productIDsOnShelf = shop.getShelfs();
+		Map<Integer, Integer> productIDsInStorage = shop.getStorage();
+		
+		new TableLoader(productIDsOnShelf, productIDsInStorage, stockTable);
 		
 		addMode(mostPickedUp);
 		addMode(stock);

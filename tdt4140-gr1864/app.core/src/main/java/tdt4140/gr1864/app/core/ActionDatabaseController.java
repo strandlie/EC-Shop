@@ -136,6 +136,7 @@ public class ActionDatabaseController implements DatabaseCRUD {
 						stdc.retrieve(rs.getInt("shopping_trip_id")));
 				 actions.add(action);
 			}
+			
 			connection.close();
 			return actions;
 

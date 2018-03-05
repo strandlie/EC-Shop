@@ -48,7 +48,7 @@ public class ShoppingTripDatabaseControllerTest {
 		c2 = new Customer("Kari", "Hansen");
 		c2 = new Customer(c2.getFirstName(), c2.getLastName(), cdc.create(c2));
 
-		t1 = new ShoppingTrip(c1, s1);
+		t1 = new ShoppingTrip(c1, s1, true);
 		List<ShoppingTrip> trips = new ArrayList<ShoppingTrip>();
 		trips.add(t1);
 		c1.setShoppingTrips(trips);		
@@ -56,8 +56,7 @@ public class ShoppingTripDatabaseControllerTest {
 
 	@Test
 	public void testCreateExpectPresistedObject() {
-		t2 = new ShoppingTrip(stdc.create(t1), t1.getCustomer(), t1.getShop());
-		
+		t2 = new ShoppingTrip(stdc.create(t1), t1.getCustomer(), t1.getShop(), true);
 		Assert.assertEquals(t1.getCustomer().getUserId(), t2.getCustomer().getUserId());
 		Assert.assertEquals(t1.getShop().getShopID(), t2.getShop().getShopID());
 		
@@ -65,7 +64,7 @@ public class ShoppingTripDatabaseControllerTest {
 	
 	@Test
 	public void testRetrieveExpectPersistedObject() {
-		t2 = new ShoppingTrip(stdc.create(t1), t1.getCustomer(), t1.getShop());
+		t2 = new ShoppingTrip(stdc.create(t1), t1.getCustomer(), t1.getShop(), true);
 		t3 = (ShoppingTrip) stdc.retrieve(t2.getShoppingTripID());
 		
 		Assert.assertEquals(t2.getCustomer().getUserId(), t3.getCustomer().getUserId());
@@ -75,8 +74,8 @@ public class ShoppingTripDatabaseControllerTest {
 	
 	@Test
 	public void testDeleteExpectNull() {
-		ShoppingTrip t3 = new ShoppingTrip(c1, s1);
-		t3 = new ShoppingTrip(stdc.create(t3), t3.getCustomer(), t3.getShop());
+		ShoppingTrip t3 = new ShoppingTrip(c1, s1, true);
+		t3 = new ShoppingTrip(stdc.create(t3), t3.getCustomer(), t3.getShop(), true);
 		stdc.delete(t3.getShoppingTripID());
 		
 		Assert.assertEquals(null, stdc.retrieve(t3.getShoppingTripID()));
@@ -84,50 +83,14 @@ public class ShoppingTripDatabaseControllerTest {
 	
 	@Test
 	public void testUpdateExpectNewlyPresistedObject() {
-		t1 = new ShoppingTrip(stdc.create(t1), c1, s1);
-		t1 = new ShoppingTrip(t1.getShoppingTripID(), c2, s1);
+		t1 = new ShoppingTrip(stdc.create(t1), c1, s1, true);
+		t1 = new ShoppingTrip(t1.getShoppingTripID(), c2, s1, true);
 		stdc.update(t1);
 		t2 = stdc.retrieve(t1.getShoppingTripID());
 		
 		Assert.assertEquals(c2.getUserId(), t2.getCustomer().getUserId());;
 	}
 	
-	@Test
-	public void testRetrieveAllExectAllPersistedObjects() throws IOException {
-		// wipe database 
-		finish();
-		createDatabase();
-		// need new controllers for new database
-		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
-		CustomerDatabaseController cdc = new CustomerDatabaseController();
-		ShopDatabaseController sdc = new ShopDatabaseController();
-		
-		// need to add setup() here for new database..
-		s1 = new Shop("Kings Road 2", 10);
-		s1 = new Shop(s1.getAddress(),s1.getZip(), sdc.create(s1));
-
-		c1 = new Customer("Ola", "Normann");
-		c1 = new Customer(c1.getFirstName(), c1.getLastName(), cdc.create(c1));
-		
-		c2 = new Customer("Kari", "Hansen");
-		c2 = new Customer(c2.getFirstName(), c2.getLastName(), cdc.create(c2));
-
-		t1 = new ShoppingTrip(c1, s1);
-		List<ShoppingTrip> customertrips = new ArrayList<ShoppingTrip>();
-		customertrips.add(t1);
-		c1.setShoppingTrips(customertrips);	
-		
-		// actual test
-		t1 = new ShoppingTrip(stdc.create(t1), t1.getCustomer(), t1.getShop());
-		t2 = new ShoppingTrip(c2, s1);
-		t2 = new ShoppingTrip(stdc.create(t2), t2.getCustomer(), t2.getShop());
-		List<ShoppingTrip> trips = stdc.retrieveAll();
-		
-		Assert.assertEquals(trips.get(1).getShoppingTripID(), t2.getShoppingTripID());
-		Assert.assertEquals(trips.get(1).getCustomer().getUserId(), t2.getCustomer().getUserId());
-		Assert.assertEquals(trips.get(0).getShoppingTripID(), t1.getShoppingTripID());
-		Assert.assertEquals(trips.get(0).getCustomer().getUserId(), t1.getCustomer().getUserId());
-	}	
 	
 	/*
 	 * Deleting database after running test
