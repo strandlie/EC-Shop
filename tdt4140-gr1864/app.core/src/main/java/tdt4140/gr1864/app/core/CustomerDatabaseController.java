@@ -73,7 +73,7 @@ public class CustomerDatabaseController implements DatabaseCRUD {
             		rs.getString("first_name"), 
             		rs.getString("last_name"), 
             		rs.getInt("customer_id"));
-            connection.close();
+            statement.close();
             return user;
       
         } 

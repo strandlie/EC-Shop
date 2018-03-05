@@ -1,3 +1,4 @@
+
 package tdt4140.gr1864.app.core;
 
 import java.io.IOException;
@@ -90,6 +91,43 @@ public class ShoppingTripDatabaseControllerTest {
 		
 		Assert.assertEquals(c2.getUserId(), t2.getCustomer().getUserId());;
 	}
+	
+	@Test
+	public void testRetrieveAllExectAllPersistedObjects() throws IOException {
+		// wipe database 
+		finish();
+		createDatabase();
+		// need new controllers for new database
+		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
+		CustomerDatabaseController cdc = new CustomerDatabaseController();
+		ShopDatabaseController sdc = new ShopDatabaseController();
+		
+		// need to add setup() here for new database..
+		s1 = new Shop("Kings Road 2", 10);
+		s1 = new Shop(s1.getAddress(),s1.getZip(), sdc.create(s1));
+
+		c1 = new Customer("Ola", "Normann");
+		c1 = new Customer(c1.getFirstName(), c1.getLastName(), cdc.create(c1));
+		
+		c2 = new Customer("Kari", "Hansen");
+		c2 = new Customer(c2.getFirstName(), c2.getLastName(), cdc.create(c2));
+
+		t1 = new ShoppingTrip(c1, s1);
+		List<ShoppingTrip> customertrips = new ArrayList<ShoppingTrip>();
+		customertrips.add(t1);
+		c1.setShoppingTrips(customertrips);	
+		
+		// actual test
+		t1 = new ShoppingTrip(stdc.create(t1), t1.getCustomer(), t1.getShop());
+		t2 = new ShoppingTrip(c2, s1);
+		t2 = new ShoppingTrip(stdc.create(t2), t2.getCustomer(), t2.getShop());
+		List<ShoppingTrip> trips = stdc.retrieveAll();
+		
+		Assert.assertEquals(trips.get(1).getShoppingTripID(), t2.getShoppingTripID());
+		Assert.assertEquals(trips.get(1).getCustomer().getUserId(), t2.getCustomer().getUserId());
+		Assert.assertEquals(trips.get(0).getShoppingTripID(), t1.getShoppingTripID());
+		Assert.assertEquals(trips.get(0).getCustomer().getUserId(), t1.getCustomer().getUserId());
+	}	
 	
 	/*
 	 * Deleting database after running test
