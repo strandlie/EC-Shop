@@ -49,7 +49,7 @@ public class DataLoader {
 		trip = this.loadShoppingTrips(pathToTrip);
 		
 		// Adds amounts of products to shelfs and storage of DB and updates DB
-		addProductsInShelfsInDB();
+		addProductsInShelfsInDB(products);
 	}
 	
 	/**
@@ -100,9 +100,10 @@ public class DataLoader {
 			Product newProduct = new Product(name, price);
 			
 			// Adds the newProduct to database
-			pdc.create(newProduct);
+			int productID = pdc.create(newProduct);
+			Product tempProduct = new Product(productID, name, price);
 			
-			products.add(newProduct);
+			products.add(tempProduct);
 		}
 		return products;
 	}
@@ -248,15 +249,15 @@ public class DataLoader {
 	/**
 	 * A function that adds products to the shelfs and storage of the shop, also updates the DB
 	 */
-	public void addProductsInShelfsInDB() {
+	public void addProductsInShelfsInDB(List<Product> products) {
 		int amountInStorage = 90;
 		int amountOnShelfs = 20;
 		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
-		for(int i = 0; i < products.size();i++) {
-			int productID = products.get(i).getID();
-			shop.setAmountInShelfs(productID, amountOnShelfs);
-			shop.setAmountInStorage(productID, amountInStorage);
-			osdc.create(shop, productID);
+		for(Product p : products) {
+			int productID = p.getID();
+			this.shop.setAmountInShelfs(productID, amountOnShelfs);
+			this.shop.setAmountInStorage(productID, amountInStorage);
+			osdc.create(this.shop, productID);
 		}
 	}
 	
