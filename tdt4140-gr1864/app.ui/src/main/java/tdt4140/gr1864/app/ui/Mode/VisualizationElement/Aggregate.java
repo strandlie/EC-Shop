@@ -25,6 +25,11 @@ public class Aggregate {
 	// The variables for stockMode
 	private StringProperty numberInStock;
 	
+	/**
+	 * The size of this Aggregate
+	 */
+	private int size;
+	
 	
 	/**
 	 * The constructor for the mostPickedUpMode
@@ -38,6 +43,8 @@ public class Aggregate {
 		setNumberOfPickUp(numberOfPickUp);
 		setNumberOfPutDown(numberOfPutDown);
 		setNumberOfPurchases(numberOfPurchases);
+		
+		this.size = 4;
 	}
 	
 	/**
@@ -48,6 +55,17 @@ public class Aggregate {
 	public Aggregate(String productName, String numberInStock) {
 		setProductName(productName);
 		setNumberInStock(numberInStock);
+		
+		this.size = 2;
+	}
+	
+	/**
+	 * Gets the number of columns in this Aggregate
+	 * @return
+	 */
+	public int getSize() {
+		return this.size;
+		
 	}
 	
 	// Common propertyMethods
@@ -144,7 +162,7 @@ public class Aggregate {
 	}
 	
 	public String getNumberInStock() {
-		return numberOfPurchasesProperty().getValue();
+		return numberInStockProperty().getValue();
 	}
 
 }

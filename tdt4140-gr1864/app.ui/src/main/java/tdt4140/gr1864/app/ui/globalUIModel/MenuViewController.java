@@ -93,8 +93,5 @@ public class MenuViewController  {
 		}
 		this.modeController = modeController;
 	}
-	
-	
-				
 
 }

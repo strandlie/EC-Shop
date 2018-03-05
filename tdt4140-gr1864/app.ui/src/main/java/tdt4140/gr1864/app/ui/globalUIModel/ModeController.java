@@ -2,6 +2,7 @@ package tdt4140.gr1864.app.ui.globalUIModel;
 
 import java.util.HashMap; 
 import tdt4140.gr1864.app.ui.Mode.Mode;
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Aggregate;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
 import javafx.fxml.FXML;
 
@@ -58,11 +59,9 @@ public class ModeController {
 		
 		
 		VisualizationTable mostPickedUpTable = new VisualizationTable("Most Picked-Up Product");
-		/*
 		mostPickedUpTable.addData(new Aggregate("Bolle", "3", "2", "1"));
 		mostPickedUpTable.addData(new Aggregate("Sjokolade", "4","3","2"));
 		mostPickedUpTable.addData(new Aggregate("Bille", "1", "0", "0"));
-		*/
 		mostPickedUpTable.addColumn("productName");
 		mostPickedUpTable.addColumn("numberOfPickUp");
 		mostPickedUpTable.addColumn("numberOfPutDown");
@@ -70,10 +69,8 @@ public class ModeController {
 		Mode mostPickedUp = new Mode("Most Picked Up", mostPickedUpTable);
 		
 		VisualizationTable stockTable = new VisualizationTable("Stock");
-		/*
 		stockTable.addData(new Aggregate("Bolle", "5"));
 		stockTable.addData(new Aggregate("Sjokolade", "20"));
-		*/
 		stockTable.addColumn("productName");
 		stockTable.addColumn("numberInStock");
 		Mode stock = new Mode("Stock", stockTable);

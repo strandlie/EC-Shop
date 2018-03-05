@@ -48,7 +48,7 @@ public class VisualizationViewController {
 	 * @param data ObservableList The list from the VisualizationTable from the model of the table. If the 
 	 * 							  VisualizationTable is changed the table changes for the user
 	 */
-	public void setData(ObservableList<? extends Aggregate> data) {
-		this.visualizationView.setItems((ObservableList<Aggregate>) data);
+	public void setData(ObservableList<Aggregate> data) {
+		this.visualizationView.setItems(data);
 	}
 }

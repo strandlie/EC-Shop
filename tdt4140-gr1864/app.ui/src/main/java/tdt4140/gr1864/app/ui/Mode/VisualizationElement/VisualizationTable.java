@@ -112,4 +112,27 @@ public class VisualizationTable extends VisualizationElement {
 		tempColumn.setCellValueFactory(new PropertyValueFactory(columnID));
 		columns.add(tempColumn);
 	}
+	
+	/**
+	 * Gets the size of this table, e.g. the numberOfColumns
+	 * @return int The number of Column
+	 */
+	public int getSize() {
+		return this.columns.size();
+	}	
+	
+	
+	/**
+	 * Tests if this table has a column with the name
+	 * @param name String the name shown to the user
+	 * @return boolean true if has the column name
+	 */
+	public boolean hasColumn(String name) {
+		for (TableColumn<Aggregate, String> column : columns) {
+			if (column.getText().equals(name)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
