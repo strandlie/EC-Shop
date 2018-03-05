@@ -43,12 +43,13 @@ public class ShopDatabaseController implements DatabaseCRUD{
 				// which is inserted into the database
 				ResultSet generatedKeys = statement.getGeneratedKeys();
 				if (generatedKeys.next()) {
+					statement.close();
 					return Math.toIntExact(generatedKeys.getLong(1));
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			connection.close();
+			statement.close();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -69,6 +70,7 @@ public class ShopDatabaseController implements DatabaseCRUD{
 			statement.setInt(2, shop.getZip());
 			statement.setInt(3, shop.getShopID());
 			statement.executeUpdate();
+			statement.close();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -89,7 +91,7 @@ public class ShopDatabaseController implements DatabaseCRUD{
 			}
 			
 			Shop shop = new Shop(rs.getString("address"), rs.getInt("zip"), rs.getInt("shop_id"));
-			connection.close();
+			statement.close();
 			return shop;
 
 		} catch (SQLException e) {
@@ -104,6 +106,7 @@ public class ShopDatabaseController implements DatabaseCRUD{
 			statement = connection.prepareStatement("DELETE FROM shop WHERE shop_id=?");
 			statement.setInt(1, id);
 			statement.executeUpdate();
+			statement.close();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -119,5 +122,4 @@ public class ShopDatabaseController implements DatabaseCRUD{
 			return shop;
 		}
 	}
-		
-	}
+}

@@ -43,12 +43,13 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 				// which is inserted into the database
 				ResultSet generatedKeys = statement.getGeneratedKeys();
 				if (generatedKeys.next()) {
+					statement.close();
 					return Math.toIntExact(generatedKeys.getLong(1));
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			connection.close();
+			statement.close();
 					
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -71,6 +72,7 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 			statement.setInt(2, trip.getShop().getShopID());
 			statement.setInt(3, trip.getShoppingTripID());
 			statement.executeUpdate();
+			statement.close();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -100,7 +102,7 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 					rs.getInt("shopping_trip_id"), 
 					cdc.retrieve(rs.getInt("customer_id")),
 					sdc.retrieve(rs.getInt("shop_id")));
-			connection.close();
+			statement.close();
 			return trip;
 
 		} catch (SQLException e) {
@@ -120,6 +122,7 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, id);
 			statement.executeUpdate();
+			statement.close();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -40,12 +40,13 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 				// which is inserted into the database
 				ResultSet generatedKeys = statement.getGeneratedKeys();
 				if (generatedKeys.next()) {
+					statement.close();
 					return Math.toIntExact(generatedKeys.getLong(1));
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			connection.close();
+			statement.close();
 		} 
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -73,7 +74,7 @@ public class CustomerDatabaseController implements DatabaseCRUD {
             		rs.getString("first_name"), 
             		rs.getString("last_name"), 
             		rs.getInt("customer_id"));
-            connection.close();
+            statement.close();
             return user;
       
         } 
@@ -98,6 +99,7 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 			statement.setString(2, customer.getLastName());
 			statement.setInt(3, customer.getUserId());
 			statement.executeUpdate();
+			statement.close();
 		} 
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -115,6 +117,7 @@ public class CustomerDatabaseController implements DatabaseCRUD {
             statement = connection.prepareStatement(sql);
             statement.setInt(1, customerId);
             statement.executeUpdate();
+            statement.close();
         } 
         catch (SQLException e) {
         	e.printStackTrace();

@@ -52,12 +52,13 @@ public class ProductDatabaseController implements DatabaseCRUD {
 				// which is inserted into the database
 				ResultSet generatedKeys = statement.getGeneratedKeys();
 				if (generatedKeys.next()) {
+					statement.close();
 					return Math.toIntExact(generatedKeys.getLong(1));
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			connection.close();
+			statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -80,6 +81,7 @@ public class ProductDatabaseController implements DatabaseCRUD {
 			statement.setDouble(2, product.getPrice());
 			statement.setInt(3,  product.getID());
 			statement.executeUpdate();
+			statement.close();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -129,6 +131,7 @@ public class ProductDatabaseController implements DatabaseCRUD {
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, id);
 			statement.executeUpdate();
+			statement.close();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

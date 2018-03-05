@@ -37,6 +37,7 @@ public class CoordinateDatabaseController implements DatabaseCRUD{
 			statement.setDouble(3, coord.getX());
 			statement.setDouble(4, coord.getY());
 			statement.executeUpdate();
+			statement.close();
 			
 			return coord.getShoppingTrip().getShoppingTripID();
 			
@@ -63,6 +64,7 @@ public class CoordinateDatabaseController implements DatabaseCRUD{
 			statement.setInt(3,  coord.getShoppingTrip().getShoppingTripID());
 			statement.setString(4, Long.toString(coord.getTimeStamp()));
 			statement.executeUpdate();
+			statement.close();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -95,7 +97,7 @@ public class CoordinateDatabaseController implements DatabaseCRUD{
 					rs.getDouble("y"), 
 					rs.getString("timestamp"), 
 					stdc.retrieve(rs.getInt("shopping_trip_id")));
-			connection.close();
+			statement.close();
 			return coord;
 
 		} catch (SQLException e) {
@@ -121,7 +123,7 @@ public class CoordinateDatabaseController implements DatabaseCRUD{
 				return null;
 			}
 
-			connection.close();
+			statement.close();
 			/* not yet implemented */
 			return null;
 
@@ -151,6 +153,7 @@ public class CoordinateDatabaseController implements DatabaseCRUD{
 			statement.setInt(1, shopping_trip_id);
 			statement.setString(2,  Long.toString(timestamp));
 			statement.executeUpdate();
+			statement.close();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

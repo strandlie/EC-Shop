@@ -65,6 +65,7 @@ public class ActionDatabaseController implements DatabaseCRUD {
 			statement.setInt(3, action.getShoppingTrip().getShoppingTripID());
 			statement.setString(4, Long.toString(action.getTimeStamp()));
 			statement.executeUpdate();
+			statement.close();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -98,7 +99,7 @@ public class ActionDatabaseController implements DatabaseCRUD {
 					rs.getInt("action_type"), 
 					pdc.retrieve(rs.getInt("product_id")),
 					stdc.retrieve(rs.getInt("shopping_trip_id")));
-			connection.close();
+			statement.close();
 			return action;
 
 		} catch (SQLException e) {
@@ -152,6 +153,7 @@ public class ActionDatabaseController implements DatabaseCRUD {
 			statement.setInt(1, shopping_trip_id);
 			statement.setString(2,  Long.toString(timestamp));
 			statement.executeUpdate();
+			statement.close();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
