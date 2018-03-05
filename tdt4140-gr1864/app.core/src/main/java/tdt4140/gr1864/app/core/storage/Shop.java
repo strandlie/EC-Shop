@@ -1,9 +1,7 @@
 package tdt4140.gr1864.app.core.storage;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import tdt4140.gr1864.app.core.Receipt;
@@ -12,8 +10,8 @@ import tdt4140.gr1864.app.core.Receipt;
  * The java object Shop that corresponds to the shop table in DB
  * 
  * The shop also keeps track of the amount of different products that are in storage and on the shelfs.
- * This is done through a list within a list, where inner list represents productID, amount in storage and on shelfs.
- * 
+ * This is done with two hashmaps between productIDs and the amounts
+ *  
  * @author stian
  */
 public class Shop{
@@ -65,36 +63,42 @@ public class Shop{
 		this.zip = zip;
 	}
 	
-	
+	/**
+	 * Sets the amount of a product in storage to the desired amount
+	 * 
+	 * @param productID		ID of the product
+	 * @param amount		The amount of the product to be set
+	 */
 	public void setAmountInStorage(int productID, int amount) {
-		this.storage.put(productID,  amount);
+			this.storage.put(productID,  amount);
 	}
 	
+	/* Same as above, but for amount in shelfs */
 	public void setAmountInShelfs(int productID, int amount) {
-		this.shelfs.put(productID, amount);
+			this.shelfs.put(productID,  amount);
 	}
 	
 	/**
 	 * Retrieves the amount of a product in the shop storage, returns -1 if not found
 	 * 
 	 * @param productID		ID of product to retrieve amount of
-	 * @return				The amount of the product, or -1 if not found
+	 * @return				The amount of the product, or 0 if not found
 	 */
 	public int getAmountInStorage(int productID) {
 		Integer temp = this.storage.get(productID);
 		if (null == temp) {
-			return 0;
+			return -1;
 		}
 		else {
 			return temp;
 		}
 	}
 	
-	/* Same as above, but gets amount in storage shelfs */
+	/* Same as above, but gets amount in shelfs */
 	public int getAmountInShelfs(int productID) {
 		Integer temp = this.shelfs.get(productID);
 		if (null == temp) {
-			return 0;
+			return -1;
 		}
 		else {
 			return temp;

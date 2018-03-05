@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import interfaces.DatabaseCRUD;
-import tdt4140.gr1864.app.core.Product;
 
 
 /**
@@ -38,7 +37,7 @@ public class OnShelfDatabaseController implements DatabaseCRUD{
 	@Deprecated
 	@Override
 	public int create(Object object) {
-		throw new UnsupportedOperationException("create(Object object) method from DatabaseCRUD is no longer in use");
+		throw new UnsupportedOperationException("create(Object object) method from DatabaseCRUD is no longer in use for OnShelf DBctrl");
 	}
 	
 	/**
@@ -75,7 +74,7 @@ public class OnShelfDatabaseController implements DatabaseCRUD{
 	@Deprecated
 	@Override
 	public void update(Object object) {
-		throw new UnsupportedOperationException("update(Object object) method from DatabaseCRUD is no longer in use");
+		throw new UnsupportedOperationException("update(Object object) method from DatabaseCRUD is no longer in use for OnShelf DBctrl");
 	}
 	
 	/**
@@ -110,7 +109,7 @@ public class OnShelfDatabaseController implements DatabaseCRUD{
 	@Deprecated
 	@Override
 	public Object retrieve(int id){
-		throw new UnsupportedOperationException("retrieve(int id) method from DatabaseCRUD is no longer in use");
+		throw new UnsupportedOperationException("retrieve(int id) method from DatabaseCRUD is no longer in use for OnShelf DBctrl");
 	}
 
 	/**
@@ -150,7 +149,6 @@ public class OnShelfDatabaseController implements DatabaseCRUD{
 		}
 		try {
 			statement.close();
-			connection.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
@@ -161,7 +159,7 @@ public class OnShelfDatabaseController implements DatabaseCRUD{
 	@Deprecated
 	@Override
 	public void delete(int id) {
-		throw new UnsupportedOperationException("delete(int id) method from DatabaseCRUD is no longer in use");
+		throw new UnsupportedOperationException("delete(int id) method from DatabaseCRUD is no longer in use for OnShelf DBctrl");
 	}
 	
 	/**
@@ -183,7 +181,6 @@ public class OnShelfDatabaseController implements DatabaseCRUD{
 		}
 		try {
 			statement.close();
-			connection.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
