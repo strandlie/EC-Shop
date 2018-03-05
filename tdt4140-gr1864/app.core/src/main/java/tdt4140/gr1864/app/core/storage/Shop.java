@@ -3,6 +3,7 @@ package tdt4140.gr1864.app.core.storage;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import tdt4140.gr1864.app.core.Receipt;
 
@@ -116,11 +117,11 @@ public class Shop{
 	public void updateAmountInShelfsFromReceipt(Receipt receipt) {
 		
 		Map<Integer, Integer> inventory = receipt.getInventory();
-		Iterator it = inventory.entrySet().iterator();
+		Iterator<Entry<Integer, Integer>> it = inventory.entrySet().iterator();
 		
 		while (it.hasNext()) {
 			
-			Map.Entry pair = (Map.Entry)it.next();
+			Entry<Integer, Integer> pair = it.next();
 			int productID = (int)pair.getKey();
 			int amount = (int)pair.getValue();
 			int currentAmount = getAmountInShelfs(productID);
@@ -147,11 +148,11 @@ public class Shop{
 		
 		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
 		
-		Iterator it = shelfs.entrySet().iterator();
+		Iterator<Entry<Integer, Integer>> it = shelfs.entrySet().iterator();
 		
 		while (it.hasNext()) {
 			
-			Map.Entry pair = (Map.Entry)it.next();
+			Entry<Integer, Integer> pair = it.next();
 			int productID = (int)pair.getKey();
 			
 			temp2 = osdc.retrieve(temp, productID);
