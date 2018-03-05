@@ -13,6 +13,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import tdt4140.gr1864.app.core.storage.OnShelfDatabaseController;
 import tdt4140.gr1864.app.core.storage.Shop;
 import tdt4140.gr1864.app.core.storage.ShopDatabaseController;
 
@@ -46,6 +47,9 @@ public class DataLoader {
 		// loads trips
 		String pathToTrip = "../../src/main/resources/test-data.json";
 		trip = this.loadShoppingTrips(pathToTrip);
+		
+		// Adds amounts of products to shelfs and storage of DB and updates DB
+		addProductsInShelfsInDB(products);
 	}
 	
 	/**
@@ -96,9 +100,10 @@ public class DataLoader {
 			Product newProduct = new Product(name, price);
 			
 			// Adds the newProduct to database
-			pdc.create(newProduct);
+			int productID = pdc.create(newProduct);
+			Product tempProduct = new Product(productID, name, price);
 			
-			products.add(newProduct);
+			products.add(tempProduct);
 		}
 		return products;
 	}
@@ -239,6 +244,21 @@ public class DataLoader {
 		}
 		this.actions = actions;
 		return actions;
+	}
+	
+	/**
+	 * A function that adds products to the shelfs and storage of the shop, also updates the DB
+	 */
+	public void addProductsInShelfsInDB(List<Product> products) {
+		int amountInStorage = 90;
+		int amountOnShelfs = 20;
+		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
+		for(Product p : products) {
+			int productID = p.getID();
+			this.shop.setAmountInShelfs(productID, amountOnShelfs);
+			this.shop.setAmountInStorage(productID, amountInStorage);
+			osdc.create(this.shop, productID);
+		}
 	}
 	
 	public ShoppingTrip getTrip() {
