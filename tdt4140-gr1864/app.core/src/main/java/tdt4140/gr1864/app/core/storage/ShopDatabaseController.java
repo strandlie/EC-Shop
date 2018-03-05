@@ -51,7 +51,7 @@ public class ShopDatabaseController implements DatabaseCRUD{
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			connection.close();
+			//connection.close();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -91,7 +91,7 @@ public class ShopDatabaseController implements DatabaseCRUD{
 			}
 			
 			Shop shop = new Shop(rs.getString("address"), rs.getInt("zip"), rs.getInt("shop_id"));
-			connection.close();
+			//connection.close();
 			return shop;
 
 		} catch (SQLException e) {
