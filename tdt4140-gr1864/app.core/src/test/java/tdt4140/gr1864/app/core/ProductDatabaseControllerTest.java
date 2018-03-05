@@ -81,6 +81,7 @@ public class ProductDatabaseControllerTest {
 		Path path = Paths.get("database.db");
 		try {
 		    Files.delete(path);
+		    System.out.println("DB deleted");
 		} catch (NoSuchFileException x) {
 		    System.err.format("%s: no such" + " file or directory%n", path);
 		} catch (DirectoryNotEmptyException x) {

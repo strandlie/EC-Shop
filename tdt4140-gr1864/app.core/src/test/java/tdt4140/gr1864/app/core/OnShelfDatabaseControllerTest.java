@@ -81,7 +81,7 @@ public class OnShelfDatabaseControllerTest {
 		System.out.println("------------------------------Test3");
 		osdc.delete(shop.getShopID(), product.getID());
 		Shop retrievedShop = osdc.retrieve(shop, product.getID());
-		
+		System.out.println("------------------------------Test3 retrieved");
 		Assert.assertEquals(null, retrievedShop);
 	}
 	
@@ -100,6 +100,7 @@ public class OnShelfDatabaseControllerTest {
 		} catch (IOException x) {
 		    // File permission problems are caught here.
 		    System.err.println(x);
+		    System.out.println("Sama");
 		}
 	}
 
