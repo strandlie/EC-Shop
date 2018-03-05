@@ -124,6 +124,27 @@ public class ActionDatabaseControllerTest {
 		Assert.assertEquals(a1.getShoppingTrip().getShoppingTripID(), a2.getShoppingTrip().getShoppingTripID());
 	}
 	
+	@Test
+	public void testRetrieveOnShoppingTripIdExpectAllActionsForThatTrip() {
+		a1 = new Action(
+				Long.toString(a1.getTimeStamp()),
+				a1.getActionType(), 
+				a1.getProduct(),
+				stdc.retrieve(adc.create(a1))
+			);
+		a2 = new Action("2", 1, p1, t1);
+		a2 = new Action(
+				Long.toString(a2.getTimeStamp()),
+				a2.getActionType(),
+				a2.getProduct(),
+				stdc.retrieve(adc.create(a2))
+			);
+		List<Action> actions = adc.retrieve(t1.getShoppingTripID());
+		
+		Assert.assertEquals(actions.get(0).getTimeStamp(), a1.getTimeStamp());
+		Assert.assertEquals(actions.get(1).getTimeStamp(), a2.getTimeStamp());
+	}
+	
 	/*
 	 * Deleting database after running test
 	 */

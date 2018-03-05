@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import interfaces.DatabaseCRUD;
 
@@ -107,23 +109,35 @@ public class ActionDatabaseController implements DatabaseCRUD {
 		return null;
 	}
 
-	/* Deprecated since Action has joint primary-key
-	 * Might need functionality of function later
+	/**
+	 * Returns all Actions based on shopping_trip_id
+	 * @param shopping_trip_id
+	 * @return List<Action> of all actions with shopping_trip_id
 	 */
-	@Deprecated
 	@Override
-	public Object retrieve(int shopping_trip_id) {
-		String sql = "SELECT * "
+	public List<Action> retrieve(int shopping_trip_id) {
+		String sql = "SELECT * FROM action "
 					+ "WHERE shopping_trip_id=?";
 		try {
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, shopping_trip_id);
 			ResultSet rs = statement.executeQuery();
-			
-			if (!rs.next()) {
-				return null;
+
+			ProductDatabaseController pdc = new ProductDatabaseController();
+			ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
+			Action action;
+			List<Action> actions = new ArrayList<>();
+
+			while (rs.next()) {
+				 action = new Action(
+						rs.getString("timestamp"), 
+						rs.getInt("action_type"), 
+						pdc.retrieve(rs.getInt("product_id")),
+						stdc.retrieve(rs.getInt("shopping_trip_id")));
+				 actions.add(action);
 			}
-			return null;
+			connection.close();
+			return actions;
 
 		} catch (SQLException e) {
 			e.printStackTrace();

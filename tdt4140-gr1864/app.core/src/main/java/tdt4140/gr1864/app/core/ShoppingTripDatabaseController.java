@@ -133,7 +133,7 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 					rs.getInt("shopping_trip_id"), 
 					cdc.retrieve(rs.getInt("customer_id")),
 					sdc.retrieve(rs.getInt("shop_id")));
-			connection.close();
+			statement.close();
 			return trip;
 
 		} catch (SQLException e) {
