@@ -14,6 +14,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import tdt4140.gr1864.app.core.storage.OnShelfDatabaseController;
+import tdt4140.gr1864.app.core.storage.Shop;
+
 /* Uses test-data.json for testing */
 public class DataLoaderTest {
 	
@@ -83,6 +86,18 @@ public class DataLoaderTest {
 		Assert.assertEquals(expectedTime, action.getTimeStamp());
 		Assert.assertEquals(expectedType, action.getActionType());
 		Assert.assertEquals(expectedProduct, (int) action.getProduct().getID());
+	}
+	
+	@Test
+	public void testProductsOnSHelf(){
+		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
+		int productID = products.get(0).getID();
+		Shop shop = loader.getShop();
+		Shop testShop = new Shop("lol", 101, shop.getShopID());
+		Shop retrievedShop = osdc.retrieve(testShop, productID);
+		
+		Assert.assertEquals(shop.getAmountInShelfs(productID), retrievedShop.getAmountInShelfs(productID));
+		
 	}
 	
 	/*

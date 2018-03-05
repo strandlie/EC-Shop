@@ -89,4 +89,14 @@ public class Receipt {
 	public double getTotalPrice() {
 		return prices.values().stream().mapToDouble(Double::valueOf).sum();
 	}
+	
+	
+	/**
+	 * A constructor to ease the testing of Shop.updateAmountInShelfsFromReceipt
+	 * 
+	 * @param inventory		The desired inventory
+	 */
+	public Receipt(Map<Integer, Integer> inventory) {
+		this.inventory = inventory;
+	}
 }
