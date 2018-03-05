@@ -1,11 +1,18 @@
 package tdt4140.gr1864.app.ui.globalUIModel; 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import tdt4140.gr1864.app.core.ActionDatabaseController;
+import tdt4140.gr1864.app.core.Action;
 import tdt4140.gr1864.app.core.DataLoader;
+import tdt4140.gr1864.app.core.ProductDatabaseController;
 import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.ShoppingTripDatabaseController;
+import tdt4140.gr1864.app.core.storage.Shop;
+import tdt4140.gr1864.app.core.storage.ShopDatabaseController;
 import tdt4140.gr1864.app.ui.TableLoader;
 import tdt4140.gr1864.app.ui.Mode.Mode;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Aggregate;
@@ -65,11 +72,6 @@ public class ModeController {
 		
 		
 		VisualizationTable mostPickedUpTable = new VisualizationTable("Most Picked-Up Product");
-		/*
-		mostPickedUpTable.addData(new Aggregate("Bolle", "3", "2", "1"));
-		mostPickedUpTable.addData(new Aggregate("Sjokolade", "4","3","2"));
-		mostPickedUpTable.addData(new Aggregate("Bille", "1", "0", "0"));
-		*/
 		mostPickedUpTable.addColumn("productName");
 		mostPickedUpTable.addColumn("numberOfPickUp");
 		mostPickedUpTable.addColumn("numberOfPutDown");
@@ -86,11 +88,25 @@ public class ModeController {
 		Mode stock = new Mode("Stock", stockTable);
 		
 		DataLoader dataLoader = new DataLoader();
+		
+		// Get data from shoppin trip and add to TableView
 		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
+		ActionDatabaseController adc = new ActionDatabaseController();
+		
 		ShoppingTrip trip = stdc.retrieve(1);
+		trip.setActions(adc.retrieve(1));
+		ArrayList<ShoppingTrip> shoppingTripList = new ArrayList<>();
+		shoppingTripList.add(trip);
 		
-		TableLoader tl = new TableLoader(null, mostPickedUpTable);
+		TableLoader tl = new TableLoader(shoppingTripList, mostPickedUpTable);
 		
+		// Get data from Shop and add to StockMode
+		ShopDatabaseController sdc = new ShopDatabaseController();
+		Shop shop = sdc.retrieve(1);
+		//Map<Integer, Integer> productIDsOnShelf = shop.getShelfs();
+		//Map<Integer, Integer> productIDsInStorage = shop.getStorage();
+		
+		//TableLoader t2 = new TableLoader(productIDsOnShelf, productIDsInStorage, stockTable);
 		
 		addMode(mostPickedUp);
 		addMode(stock);
