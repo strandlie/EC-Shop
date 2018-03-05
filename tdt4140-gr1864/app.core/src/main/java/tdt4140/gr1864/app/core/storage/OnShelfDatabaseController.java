@@ -14,22 +14,9 @@ import interfaces.DatabaseCRUD;
  * 
  * @author stian
  */
-public class OnShelfDatabaseController implements DatabaseCRUD{
+public class OnShelfDatabaseController implements DatabaseCRUD {
 	
-	/* connection to SQLite database */
-	Connection connection;
-	/* SQL statement executed on database */
 	PreparedStatement statement;
-	
-	
-	public OnShelfDatabaseController() {
-		try {
-			this.connection = DriverManager.getConnection("jdbc:sqlite:database.db");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	
 	/**
 	 * The DatabaseCRUD interface was not compatible with table for on_shelf, so its four methods have been deprecated and replaced
@@ -50,26 +37,22 @@ public class OnShelfDatabaseController implements DatabaseCRUD{
 	 */
 	public void create(Shop shop, int productID) {
 		String sql = "INSERT INTO on_shelf "
-				+ "(shop_id, product_id, amount_on_shelfs, amount_in_storage) "
-				+ "VALUES (?, ?, ?, ?)";
-		
+					+ "(shop_id, product_id, amount_on_shelfs, amount_in_storage) "
+					+ "VALUES (?, ?, ?, ?)";
 		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 			statement = connection.prepareStatement(sql);
-			
 			statement.setInt(1, shop.getShopID());
 			statement.setInt(2, productID);
 			statement.setInt(3, shop.getAmountInShelfs(productID));
 			statement.setInt(4, shop.getAmountInStorage(productID));
-			
 			statement.executeUpdate();
-			statement.close();
-			
+			connection.close();
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	
 	
 	@Deprecated
 	@Override
@@ -84,27 +67,23 @@ public class OnShelfDatabaseController implements DatabaseCRUD{
 	 * @param productID	ID of the product that's stored
 	 */
 	public void update(Shop shop, int productID) {
-		String sql = "UPDATE on_shelf SET amount_on_shelfs=?, amount_in_storage=? WHERE shop_id=? AND product_id=?";
+		String sql = "UPDATE on_shelf "
+					+ "SET amount_on_shelfs=?, amount_in_storage=? "
+					+ "WHERE shop_id=? AND product_id=?";
 		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 			statement = connection.prepareStatement(sql);
-			
 			statement.setInt(1, shop.getAmountInShelfs(productID));
 			statement.setInt(2, shop.getAmountInStorage(productID));
 			statement.setInt(3, shop.getShopID());
 			statement.setInt(4, productID);
-			
 			statement.executeUpdate();
+			connection.close();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		try {
-			statement.close();
-		} catch(SQLException e) {
-			e.printStackTrace();
-		}
 	}
-	
 	
 	@Deprecated
 	@Override
@@ -121,19 +100,19 @@ public class OnShelfDatabaseController implements DatabaseCRUD{
 	 * @return shop 	The updated shop object
 	 */
 	public Shop retrieve(Shop shop, int productID) {
+		String sql = "SELECT amount_on_shelfs, amount_in_storage "
+					+ "FROM on_shelf "
+					+ "WHERE shop_id=? AND product_id=?";
 		try {
-			
-			statement = connection.
-					prepareStatement("SELECT amount_on_shelfs, amount_in_storage FROM on_shelf"
-			+ " WHERE shop_id=? AND product_id=?");
-			
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+			statement = connection.prepareStatement(sql);
 			statement.setInt(1, shop.getShopID());
 			statement.setInt(2, productID);
 			
 			ResultSet rs = statement.executeQuery();
 			
 			if (!rs.next()) {
-				statement.close();
+				connection.close();
 				return null;
 			}
 			
@@ -141,19 +120,14 @@ public class OnShelfDatabaseController implements DatabaseCRUD{
 			shop.setAmountInShelfs(productID, rs.getInt("amount_on_shelfs"));
 			shop.setAmountInStorage(productID, rs.getInt("amount_in_storage"));
 			
-			statement.close();
+			connection.close();
 			return shop;
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		try {
-			statement.close();
-		} catch(SQLException e) {
-			e.printStackTrace();
-		}
 		return null;
-		}
+	}
 		
 	
 	@Deprecated
@@ -169,21 +143,18 @@ public class OnShelfDatabaseController implements DatabaseCRUD{
 	 * @param productID		The product that's stored
 	 */
 	public void delete(int shopID, int productID) {
+		String sql = "DELETE FROM on_shelf "
+					+ "WHERE shop_id=? AND product_id=?";
 		try {
-			statement = connection.prepareStatement("DELETE FROM on_shelf WHERE shop_id=? AND product_id=?");
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+			statement = connection.prepareStatement(sql);
 			statement.setInt(1, shopID);
 			statement.setInt(2, productID);
-			
 			statement.executeUpdate();
+			connection.close();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		try {
-			statement.close();
-		} catch(SQLException e) {
-			e.printStackTrace();
-		}
 	}
-	
 }
