@@ -22,27 +22,48 @@ public class ShoppingTrip {
 	/* Actions performed during trip */
 	private List<Action> actions;
 
+	private boolean charged;
+	
 	/**
+	 * Normal constructor with charged paramater.
 	 * @param coordinates		list of coordinates making up the trip
 	 * @param actions			list of actions performed during trip
 	 * @param shoppingTripID	id provided by database
+	 * @param charged			true if the card has been charged for this trip
 	 */
-	public ShoppingTrip(List<Coordinate> coordinates, List<Action> actions, int shoppingTripID) {
+	public ShoppingTrip(List<Coordinate> coordinates, List<Action> actions, int shoppingTripID, boolean charged) {
 		this.coordinates = coordinates;
 		this.actions = actions;
 		this.shoppingTripID = shoppingTripID;
 		this.start = findStart(coordinates);
 		this.end = findEnd(coordinates);
+		this.charged = charged;
+		
+		if (!this.charged) {
+			charge();
+			this.charged = true;
+		}
 	}
 	
 	/**
-	 * Constructor when missing ID
+	 * Normal constructor without charged parameter.
+	 * @param coordinates		list of coordinates making up the trip
+	 * @param actions			list of actions performed during trip
+	 * @param shoppingTripID	id provided by database
+	 */
+	public ShoppingTrip(List<Coordinate> coordinates, List<Action> actions, int shoppingTripID) {
+		this(coordinates, actions, shoppingTripID, false);
+	}
+	
+	/**
+	 * Constructor when missing ID.
 	 * @param customer	customer performing trip
 	 * @param shop		shop where trip was made
 	 */
-	public ShoppingTrip(Customer customer, Shop shop) {
+	public ShoppingTrip(Customer customer, Shop shop, boolean charged) {
 		this.customer = customer;
 		this.shop = shop;
+		this.charged = charged;
 	}
 	
 	/**
@@ -51,10 +72,24 @@ public class ShoppingTrip {
 	 * @param customer			customer performing trip
 	 * @param shop				shop where trip was made
 	 */
-	public ShoppingTrip(int shoppingTripId, Customer customer, Shop shop) {
+	public ShoppingTrip(int shoppingTripId, Customer customer, Shop shop, boolean charged) {
 		this.shoppingTripID = shoppingTripId;
 		this.customer = customer;
 		this.shop = shop;
+		this.charged = charged;
+	}
+	
+	private void charge() {
+		Receipt receipt = new Receipt(this);
+		// We currently use test card data. This is because security is a concern, and we
+		// want to handle that by letting the card be provided by the user instead of storing it.
+		// Therefore this needs to stay until the data streaming API is implemented.
+		StripeShoppingTrip stripe = new StripeShoppingTrip("4242424242424242", 3, 2019, "314");
+		stripe.charge((int) (receipt.getTotalPrice() * 100));
+	}
+	
+	public boolean getCharged() {
+		return charged;
 	}
 	
 	/**

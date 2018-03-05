@@ -51,9 +51,10 @@ foreign key(shop_id) references product(shop_id)
 );
 
 CREATE TABLE shopping_trip(
-shopping_trip_id integer  primary key autoincrement,
+shopping_trip_id integer primary key autoincrement,
 customer_id integer not null,
 shop_id integer not null,
+charged bit not null,
 foreign key(customer_id) references customer(customer_id),
 foreign key(shop_id) references shop(shop_id),
 foreign key(shopping_trip_id) references action(shopping_trip_id),

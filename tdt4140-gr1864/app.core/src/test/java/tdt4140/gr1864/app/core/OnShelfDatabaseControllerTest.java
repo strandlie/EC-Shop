@@ -13,8 +13,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import tdt4140.gr1864.app.core.storage.Shop;
-import tdt4140.gr1864.app.core.Product;
+import tdt4140.gr1864.app.core.storage.Shop; import tdt4140.gr1864.app.core.Product;
 import tdt4140.gr1864.app.core.storage.OnShelfDatabaseController;
 
 public class OnShelfDatabaseControllerTest {
@@ -53,7 +52,6 @@ public class OnShelfDatabaseControllerTest {
 	
 	@Test
 	public void testCreateAndRetrieveExcpectSuccess() {
-		System.out.println("------------------------------Test1");
 		osdc.create(shop, product.getID());
 		Shop retrievedShop = osdc.retrieve(shop, product.getID());
 
@@ -64,7 +62,6 @@ public class OnShelfDatabaseControllerTest {
 	
 	@Test
 	public void testUpdateExcpectSuccess() {
-		System.out.println("------------------------------Test2");
 		osdc.create(shop2, product2.getID());
 		shop2.setAmountInShelfs(product2.getID(), 10);
 		shop2.setAmountInStorage(product2.getID(), 90);
@@ -78,10 +75,8 @@ public class OnShelfDatabaseControllerTest {
 	
 	@Test
 	public void testDeleteExcpectNull() {
-		System.out.println("------------------------------Test3");
 		osdc.delete(shop.getShopID(), product.getID());
 		Shop retrievedShop = osdc.retrieve(shop, product.getID());
-		System.out.println("------------------------------Test3 retrieved");
 		Assert.assertEquals(null, retrievedShop);
 	}
 	
@@ -100,7 +95,6 @@ public class OnShelfDatabaseControllerTest {
 		} catch (IOException x) {
 		    // File permission problems are caught here.
 		    System.err.println(x);
-		    System.out.println("Sama");
 		}
 	}
 

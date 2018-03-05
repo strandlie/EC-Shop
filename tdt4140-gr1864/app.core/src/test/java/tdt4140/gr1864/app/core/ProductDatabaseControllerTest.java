@@ -81,12 +81,14 @@ public class ProductDatabaseControllerTest {
 		Path path = Paths.get("database.db");
 		try {
 		    Files.delete(path);
-		    System.out.println("DB deleted");
-		} catch (NoSuchFileException x) {
+		}
+		catch (NoSuchFileException x) {
 		    System.err.format("%s: no such" + " file or directory%n", path);
-		} catch (DirectoryNotEmptyException x) {
+		}
+		catch (DirectoryNotEmptyException x) {
 		    System.err.format("%s not empty%n", path);
-		} catch (IOException x) {
+		}
+		catch (IOException x) {
 		    // File permission problems are caught here.
 		    System.err.println(x);
 		}
