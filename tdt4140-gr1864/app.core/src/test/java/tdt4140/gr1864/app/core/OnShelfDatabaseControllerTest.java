@@ -53,6 +53,7 @@ public class OnShelfDatabaseControllerTest {
 	
 	@Test
 	public void testCreateAndRetrieveExcpectSuccess() {
+		System.out.println("------------------------------Test1");
 		osdc.create(shop, product.getID());
 		Shop retrievedShop = osdc.retrieve(shop, product.getID());
 
@@ -63,6 +64,7 @@ public class OnShelfDatabaseControllerTest {
 	
 	@Test
 	public void testUpdateExcpectSuccess() {
+		System.out.println("------------------------------Test2");
 		osdc.create(shop2, product2.getID());
 		shop2.setAmountInShelfs(product2.getID(), 10);
 		shop2.setAmountInStorage(product2.getID(), 90);
@@ -76,6 +78,7 @@ public class OnShelfDatabaseControllerTest {
 	
 	@Test
 	public void testDeleteExcpectNull() {
+		System.out.println("------------------------------Test3");
 		osdc.delete(shop.getShopID(), product.getID());
 		Shop retrievedShop = osdc.retrieve(shop, product.getID());
 		
