@@ -24,8 +24,8 @@ public class Shop{
 	
 	Map<Integer, Integer> shelfs;
 	Map<Integer, Integer> storage;
-	
 
+	
 	public Shop(String address, int zip) {
 		this.address = address;
 		this.zip = zip;
@@ -34,7 +34,7 @@ public class Shop{
 		this.storage = new HashMap<>();
 	}
 	
-	/* Constructor used by DatabaseController */
+	/* Constructor used by DatabseController */
 	public Shop(String address, int zip, int shopId) {
 		this.address = address;
 		this.zip = zip;
@@ -64,6 +64,7 @@ public class Shop{
 		this.zip = zip;
 	}
 	
+
 	/**
 	 * Sets the amount of a product in storage to the desired amount
 	 * 
