@@ -110,10 +110,10 @@ public class CoordinateDatabaseController implements DatabaseCRUD{
 	@Deprecated
 	@Override
 	public Object retrieve(int id) {
+		String sql = "SELECT shopping_trip_id, timestamp, x, y "
+					+ "WHERE shopping_trip_id=?";
 		try {
-			statement = connection
-					.prepareStatement("SELECT shopping_trip_id, timestamp, x, y"
-										+ "WHERE shopping_trip_id=?");
+			statement = connection.prepareStatement(sql);
 			statement.setInt(1, id);
 			ResultSet rs = statement.executeQuery();
 			
@@ -121,12 +121,6 @@ public class CoordinateDatabaseController implements DatabaseCRUD{
 				return null;
 			}
 
-			ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
-			Coordinate coord = new Coordinate(
-					rs.getDouble("x"), 
-					rs.getDouble("y"), 
-					rs.getString("timestamp"), 
-					stdc.retrieve(rs.getInt("shopping_trip_id")));
 			connection.close();
 			/* not yet implemented */
 			return null;
@@ -150,10 +144,10 @@ public class CoordinateDatabaseController implements DatabaseCRUD{
 	 * @param timestamp			time of read
 	 */
 	public void delete(int shopping_trip_id, long timestamp) {
+		String sql = "DELETE FROM coordinate "
+					+ "WHERE shopping_trip_id=? AND timestamp=?";
 		try {
-			statement = connection
-					.prepareStatement("DELETE FROM coordinate "
-							+ "WHERE shopping_trip_id=? AND timestamp=?");
+			statement = connection.prepareStatement(sql);
 			statement.setInt(1, shopping_trip_id);
 			statement.setString(2,  Long.toString(timestamp));
 			statement.executeUpdate();

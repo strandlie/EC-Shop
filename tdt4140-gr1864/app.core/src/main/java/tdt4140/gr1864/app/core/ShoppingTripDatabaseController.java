@@ -27,7 +27,6 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 	 */
 	@Override
 	public int create(Object object) {
-		
 		ShoppingTrip trip = this.objectIsShoppingTrip(object);
 		String sql = "INSERT INTO shopping_trip "
 					+ "(customer_id, shop_id, charged) "
