@@ -23,7 +23,6 @@ public class CreateDatabase {
  
         try (Connection conn = DriverManager.getConnection(url)) {
             if (conn != null) {
-                //DatabaseMetaData meta = conn.getMetaData();
                 
                 String[] sqlArr = sql.toString().split("(;\\n)");
                 Statement stmt = conn.createStatement();
@@ -34,7 +33,7 @@ public class CreateDatabase {
             }
  
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        	System.out.println(e.getMessage());
         }
     }
  

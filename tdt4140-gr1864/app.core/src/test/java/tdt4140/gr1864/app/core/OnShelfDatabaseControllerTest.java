@@ -1,13 +1,7 @@
 package tdt4140.gr1864.app.core;
 
 import java.io.IOException;
-import java.nio.file.DirectoryNotEmptyException;
-import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -25,11 +19,8 @@ public class OnShelfDatabaseControllerTest {
 	//Set up a DB for use in the tests
 	@BeforeClass
 	public static void createDatabase() throws IOException {
-		Path path = Paths.get("database.db");
-		
-		if (! Files.exists(path)) {
-			CreateDatabase.main(null);
-		}
+		DatabaseWiper viper = new DatabaseWiper();
+		viper.wipe();
 	}
 
 	
@@ -80,22 +71,4 @@ public class OnShelfDatabaseControllerTest {
 		Assert.assertEquals(null, retrievedShop);
 	}
 	
-	
-	//Delete the DB
-	@AfterClass
-	public static void finish() {
-		Path path = Paths.get("database.db");
-		try {
-		    Files.delete(path);
-		    System.out.println("DB deleted");
-		} catch (NoSuchFileException x) {
-		    System.err.format("%s: no such" + " file or directory%n", path);
-		} catch (DirectoryNotEmptyException x) {
-		    System.err.format("%s not empty%n", path);
-		} catch (IOException x) {
-		    // File permission problems are caught here.
-		    System.err.println(x);
-		}
-	}
-
 }
