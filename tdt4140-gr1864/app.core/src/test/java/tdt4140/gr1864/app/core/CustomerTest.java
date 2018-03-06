@@ -19,7 +19,7 @@ public class CustomerTest {
 	 */
 	@Test
 	public void testCustomer() {
-		Customer a = new Customer(1, "Roger", "Nilsen", new ArrayList());
+		Customer a = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
 		assertNotEquals(a, null);
 	}
 	
@@ -28,8 +28,8 @@ public class CustomerTest {
 	 */
 	@Test
 	public void testHashCode() {
-		Customer a = new Customer(1, "Roger", "Nilsen", new ArrayList());
-		Customer b = new Customer(1, "Roger", "Nilsen", new ArrayList());
+		Customer a = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
+		Customer b = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
 		assertEquals(a.hashCode(), b.hashCode());
 	}
 
@@ -38,8 +38,8 @@ public class CustomerTest {
 	 */
 	@Test
 	public void testEqualsObject() {
-		Customer a = new Customer(1, "Roger", "Nilsen", new ArrayList());
-		Customer b = new Customer(1, "Roger", "Nilsen", new ArrayList());
+		Customer a = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
+		Customer b = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
 		assertEquals(a, b);
 	}
 
@@ -48,7 +48,7 @@ public class CustomerTest {
 	 */
 	@Test
 	public void testGetUserId() {
-		Customer a = new Customer(1, "Roger", "Nilsen", new ArrayList());
+		Customer a = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
 		assertEquals(a.getUserId(), 1);
 	}
 
@@ -57,7 +57,7 @@ public class CustomerTest {
 	 */
 	@Test
 	public void testSetUserId() {
-		Customer a = new Customer(1, "Roger", "Nilsen", new ArrayList());
+		Customer a = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
 		a.setUserId(2);
 		assertEquals(a.getUserId(), 2);
 	}
@@ -67,7 +67,7 @@ public class CustomerTest {
 	 */
 	@Test
 	public void testGetFirstName() {
-		Customer a = new Customer(1, "Roger", "Nilsen", new ArrayList());
+		Customer a = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
 		assertEquals(a.getFirstName(), "Roger");
 	}
 
@@ -76,7 +76,7 @@ public class CustomerTest {
 	 */
 	@Test
 	public void testSetFirstName() {
-		Customer a = new Customer(1, "Roger", "Nilsen", new ArrayList());
+		Customer a = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
 		a.setFirstName("Benny");
 		assertEquals(a.getFirstName(), "Benny");
 	}
@@ -86,7 +86,7 @@ public class CustomerTest {
 	 */
 	@Test
 	public void testGetLastName() {
-		Customer a = new Customer(1, "Roger", "Nilsen", new ArrayList());
+		Customer a = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
 		assertEquals(a.getLastName(), "Nilsen");
 	}
 
@@ -95,7 +95,7 @@ public class CustomerTest {
 	 */
 	@Test
 	public void testSetLastName() {
-		Customer a = new Customer(1, "Roger", "Nilsen", new ArrayList());
+		Customer a = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
 		a.setLastName("Knudsen");
 		assertEquals(a.getLastName(), "Knudsen");
 	}

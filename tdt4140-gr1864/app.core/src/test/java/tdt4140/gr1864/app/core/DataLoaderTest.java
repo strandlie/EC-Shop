@@ -1,18 +1,16 @@
 package tdt4140.gr1864.app.core;
 
 import java.io.IOException;
-import java.nio.file.DirectoryNotEmptyException;
-import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
 import java.util.List;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import tdt4140.gr1864.app.core.storage.Shop;
+import tdt4140.gr1864.app.core.storage.OnShelfDatabaseController;;
 
 /* Uses test-data.json for testing */
 public class DataLoaderTest {
@@ -81,4 +79,17 @@ public class DataLoaderTest {
 		Assert.assertEquals(expectedType, action.getActionType());
 		Assert.assertEquals(expectedProduct, (int) action.getProduct().getID());
 	}
+	
+	@Test
+	public void testProductsOnSHelf(){
+		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
+		int productID = products.get(0).getID();
+		Shop shop = loader.getShop();
+		Shop testShop = new Shop("lol", 101, shop.getShopID());
+		Shop retrievedShop = osdc.retrieve(testShop, productID);
+		
+		Assert.assertEquals(shop.getAmountInShelfs(productID), retrievedShop.getAmountInShelfs(productID));
+		
+	}
+
 }
