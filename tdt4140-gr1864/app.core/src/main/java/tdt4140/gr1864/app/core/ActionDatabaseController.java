@@ -10,18 +10,8 @@ import interfaces.DatabaseCRUD;
 
 public class ActionDatabaseController implements DatabaseCRUD {
 	
-	Connection connection;
 	PreparedStatement statement;
-	
-	public ActionDatabaseController() {
-		try {
-			this.connection = DriverManager.getConnection("jdbc:sqlite:database.db");
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
+
 	/**
 	 * @see interfaces.DatabaseCRUD#create(java.lang.Object)
 	 */
@@ -32,13 +22,14 @@ public class ActionDatabaseController implements DatabaseCRUD {
 					+ "(timestamp, action_type, product_id, shopping_trip_id) "
 					+ "values (?, ?, ?, ?)";
 		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 			statement = connection.prepareStatement(sql);
 			statement.setString(1,  Long.toString(action.getTimeStamp()));
 			statement.setInt(2, action.getActionType());
 			statement.setInt(3, action.getProduct().getID());
 			statement.setInt(4, action.getShoppingTrip().getShoppingTripID());
 			statement.executeUpdate();
-			statement.close();
+			connection.close();
 			
 			return action.getShoppingTrip().getShoppingTripID();
 
@@ -59,12 +50,14 @@ public class ActionDatabaseController implements DatabaseCRUD {
 					+ "SET action_type=?, product_id=? "
 					+ "WHERE shopping_trip_id=? and timestamp=?";		
 		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, action.getActionType());
 			statement.setInt(2, action.getProduct().getID());
 			statement.setInt(3, action.getShoppingTrip().getShoppingTripID());
 			statement.setString(4, Long.toString(action.getTimeStamp()));
 			statement.executeUpdate();
+			connection.close();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -82,12 +75,14 @@ public class ActionDatabaseController implements DatabaseCRUD {
 					+ "FROM action "
 					+ "WHERE shopping_trip_id=? AND timestamp=?";
 		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, shopping_trip_id);
 			statement.setString(2, Long.toString(timestamp));
 			ResultSet rs = statement.executeQuery();
 			
 			if (!rs.next()) {
+				connection.close();
 				return null;
 			}
 
@@ -116,13 +111,16 @@ public class ActionDatabaseController implements DatabaseCRUD {
 		String sql = "SELECT * "
 					+ "WHERE shopping_trip_id=?";
 		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, shopping_trip_id);
 			ResultSet rs = statement.executeQuery();
 			
 			if (!rs.next()) {
+				connection.close();
 				return null;
 			}
+			connection.close();
 			return null;
 
 		} catch (SQLException e) {
@@ -148,10 +146,12 @@ public class ActionDatabaseController implements DatabaseCRUD {
 					+ "WHERE shopping_trip_id=? "
 					+ "AND timestamp=?";
 		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, shopping_trip_id);
 			statement.setString(2,  Long.toString(timestamp));
 			statement.executeUpdate();
+			connection.close();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -58,8 +58,6 @@ public class Receipt {
 			Product product = database.retrieve(code);
 			prices.put(product, product.getPrice() * inventory.get(code));
 		}
-		
-		database.close();
 	}
 	
 	/**

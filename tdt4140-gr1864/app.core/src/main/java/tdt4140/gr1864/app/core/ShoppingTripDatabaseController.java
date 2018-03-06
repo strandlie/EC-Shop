@@ -11,17 +11,8 @@ import tdt4140.gr1864.app.core.storage.ShopDatabaseController;
 
 public class ShoppingTripDatabaseController implements DatabaseCRUD {
 
-	Connection connection;
 	PreparedStatement statement;
 	
-	public ShoppingTripDatabaseController() {
-		try {
-			this.connection = DriverManager.getConnection("jdbc:sqlite:database.db");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
 	/**
 	 * @see interfaces.DatabaseCRUD#create(java.lang.Object)
 	 */
@@ -33,6 +24,7 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 					+ "VALUES (?, ?, ?)";
 					
 		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 			statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 			statement.setInt(1, trip.getCustomer().getUserId());
 			statement.setInt(2, trip.getShop().getShopID());
@@ -44,7 +36,9 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 				// which is inserted into the database
 				ResultSet generatedKeys = statement.getGeneratedKeys();
 				if (generatedKeys.next()) {
-					return Math.toIntExact(generatedKeys.getLong(1));
+					int i = Math.toIntExact(generatedKeys.getLong(1));
+					connection.close();
+					return i;
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -67,12 +61,14 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 					+ "SET customer_id=?, shop_id=?, charged=? "
 					+ "WHERE shopping_trip_id=?";
 		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, trip.getCustomer().getUserId());
 			statement.setInt(2, trip.getShop().getShopID());
 			statement.setBoolean(3, trip.getCharged());
 			statement.setInt(4, trip.getShoppingTripID());
 			statement.executeUpdate();
+			connection.close();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -88,11 +84,13 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 					+ "FROM shopping_trip "
 					+ "WHERE shopping_trip_id=?";
 		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, id);
 			ResultSet rs = statement.executeQuery();
 			
 			if (!rs.next()) {
+				connection.close();
 				return null;
 			}
 			
@@ -120,9 +118,11 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 		String sql = "DELETE FROM shopping_trip "
 					+ "WHERE shopping_trip_id=?";
 		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, id);
 			statement.executeUpdate();
+			connection.close();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

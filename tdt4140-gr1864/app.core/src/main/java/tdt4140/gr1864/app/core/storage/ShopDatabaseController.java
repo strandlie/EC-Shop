@@ -10,20 +10,8 @@ import interfaces.DatabaseCRUD;
 
 public class ShopDatabaseController implements DatabaseCRUD{
 	
-	/* connection to SQLite database */
-	Connection connection;
 	/* SQL statement executed on database */
 	PreparedStatement statement;
-	
-	
-	public ShopDatabaseController() {
-		try {
-			this.connection = DriverManager.getConnection("jdbc:sqlite:database.db");
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
 	
 	@Override
 	public int create(Object object) {
@@ -31,6 +19,7 @@ public class ShopDatabaseController implements DatabaseCRUD{
 		String sql = "INSERT INTO shop(address, zip)"
 				+ " VALUES (?, ?)";
 		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 			statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 			
 			// Object has been given an ID:
@@ -43,8 +32,11 @@ public class ShopDatabaseController implements DatabaseCRUD{
 				// which is inserted into the database
 				ResultSet generatedKeys = statement.getGeneratedKeys();
 				if (generatedKeys.next()) {
-					return Math.toIntExact(generatedKeys.getLong(1));
+					int i = Math.toIntExact(generatedKeys.getLong(1));
+					connection.close();
+					return i;
 				}
+				connection.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -63,6 +55,7 @@ public class ShopDatabaseController implements DatabaseCRUD{
 		Shop shop = this.objectIsShop(object);
 		String sql = "UPDATE shop SET address=?, zip=? WHERE shop_id=?";
 		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 			statement = connection.prepareStatement(sql);
 			
 			// Object has been given an ID:
@@ -70,6 +63,7 @@ public class ShopDatabaseController implements DatabaseCRUD{
 			statement.setInt(2, shop.getZip());
 			statement.setInt(3, shop.getShopID());
 			statement.executeUpdate();
+			connection.close();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -79,6 +73,7 @@ public class ShopDatabaseController implements DatabaseCRUD{
 	@Override
 	public Shop retrieve(int shopID) {
 		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 			statement = connection
 					.prepareStatement("SELECT * FROM shop"
 										+ " WHERE shop_id=?");
@@ -103,9 +98,11 @@ public class ShopDatabaseController implements DatabaseCRUD{
 	@Override
 	public void delete(int id) {
 		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 			statement = connection.prepareStatement("DELETE FROM shop WHERE shop_id=?");
 			statement.setInt(1, id);
 			statement.executeUpdate();
+			connection.close();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -121,5 +118,4 @@ public class ShopDatabaseController implements DatabaseCRUD{
 			return shop;
 		}
 	}
-		
-	}
+}
