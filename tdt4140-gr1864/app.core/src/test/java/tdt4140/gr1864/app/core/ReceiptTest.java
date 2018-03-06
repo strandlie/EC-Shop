@@ -23,8 +23,8 @@ public class ReceiptTest {
 
 	@BeforeClass
 	public static void setup() throws IOException {
-		DatabaseViper viper = new DatabaseViper();
-		viper.vipe();
+		DatabaseWiper viper = new DatabaseWiper();
+		viper.wipe();
 
 		DataLoader loader = new DataLoader();
 		shoppingTrip = loader.getTrip();

@@ -11,15 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * DatabaseViper sletter alle tabeller i databasen (hvis den finnes) og kaller så CreateDatabase
+ * DatabaseWiper deletes all tables in databse if they exist
  * 
  * @author stian
  *
  */
-public class DatabaseViper {
+public class DatabaseWiper {
 	private List<String> tables;
 	
-	public DatabaseViper() {
+	public DatabaseWiper() {
 		this.tables = new ArrayList<>();
 		
 		this.tables.add("customer");
@@ -32,11 +32,11 @@ public class DatabaseViper {
 		this.tables.add("product");
 	}
 	
-	public void vipe() {
+	public void wipe() {
 		Path path = Paths.get("database.db");
 		
 		if (Files.exists(path)) {
-			for(int i = 0; i<tables.size();i++) {
+			for (int i = 0; i<tables.size();i++) {
 				String sql = "DROP TABLE IF EXISTS " + tables.get(i);
 				try {
 					Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
@@ -44,7 +44,7 @@ public class DatabaseViper {
 					statement.execute();
 					statement.close();
 					connection.close();
-				}catch(SQLException e) {
+				} catch(SQLException e) {
 					e.printStackTrace();
 				}
 			}

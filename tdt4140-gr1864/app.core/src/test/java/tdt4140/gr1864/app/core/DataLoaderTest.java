@@ -33,8 +33,8 @@ public class DataLoaderTest {
 	 */
 	@BeforeClass
 	public static void setupDatabase() throws IOException {
-		DatabaseViper viper = new DatabaseViper();
-		viper.vipe();
+		DatabaseWiper viper = new DatabaseWiper();
+		viper.wipe();
 	}
 	
 	@Before

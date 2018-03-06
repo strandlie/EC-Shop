@@ -29,8 +29,8 @@ public class ShoppingTripDatabaseControllerTest {
 
 	@BeforeClass
 	public static void createDatabase() throws IOException {
-		DatabaseViper viper = new DatabaseViper();
-		viper.vipe();
+		DatabaseWiper viper = new DatabaseWiper();
+		viper.wipe();
 	}
 	
 	@Before

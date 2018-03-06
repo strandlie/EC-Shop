@@ -24,20 +24,17 @@ public class CreateDatabase {
  
         try (Connection conn = DriverManager.getConnection(url)) {
             if (conn != null) {
-                //DatabaseMetaData meta = conn.getMetaData();
                 
                 String[] sqlArr = sql.toString().split("(;\\n)");
-                //Statement stmt = conn.createStatement();
+                Statement stmt = conn.createStatement();
                 for (String s : sqlArr) {
                 		s += ";";
-                		PreparedStatement stmt = conn.prepareStatement(s);	//This boiii
-                		stmt.execute();
-                		stmt.clearParameters();
+                		stmt.execute(s);
                 }
             }
  
         } catch (SQLException e) {
-            e.printStackTrace();
+        	System.out.println(e.getMessage());
         }
     }
  
