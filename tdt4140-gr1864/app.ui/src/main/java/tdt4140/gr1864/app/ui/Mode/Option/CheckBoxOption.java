@@ -1,5 +1,12 @@
 package tdt4140.gr1864.app.ui.Mode.Option;
 
+/**
+ * 
+ * @author Håkon Strandlie
+ * Not yet used in the app. Exists for future. 
+ *
+ */
+
 public class CheckBoxOption extends InteractionOption {
 
 	/**

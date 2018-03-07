@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import interfaces.DatabaseCRUD;
 
@@ -101,6 +103,41 @@ public class ActionDatabaseController implements DatabaseCRUD {
 		}
 		return null;
 	}
+	
+	/**
+	 * Gets all the actions for a shopping trip with a given ID
+	 * @param shopping_trip_id int the shopping trip ID
+	 * @return List<Action> The list of all the actions for this shoppingTrip, or null if none
+	 */
+	public List<Action> retrieveAll(int shopping_trip_id) {
+		String sql = "SELECT * "
+					+ "FROM action "
+					+ "WHERE shopping_trip_id=?";
+		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+			statement = connection.prepareStatement(sql);
+			statement.setInt(1, shopping_trip_id);
+			ResultSet rs = statement.executeQuery();
+			
+			ProductDatabaseController pdc = new ProductDatabaseController();
+			ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
+			List<Action> actions = new ArrayList<>();
+			while (rs.next()) {
+				Action action = new Action(
+						rs.getString("timestamp"), 
+						rs.getInt("action_type"), 
+						pdc.retrieve(rs.getInt("product_id")),
+						stdc.retrieve(rs.getInt("shopping_trip_id")));
+				actions.add(action);
+			}
+			connection.close();
+			return actions;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	/* Deprecated since Action has joint primary-key
 	 * Might need functionality of function later
@@ -109,6 +146,7 @@ public class ActionDatabaseController implements DatabaseCRUD {
 	@Override
 	public Object retrieve(int shopping_trip_id) {
 		String sql = "SELECT * "
+					+ "FROM action "
 					+ "WHERE shopping_trip_id=?";
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");

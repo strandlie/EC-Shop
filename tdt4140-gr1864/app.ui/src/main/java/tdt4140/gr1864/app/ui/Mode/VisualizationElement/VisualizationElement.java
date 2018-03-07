@@ -5,6 +5,9 @@ import java.util.List;
 import tdt4140.gr1864.app.ui.Mode.Option.InteractionOption;
 
 public abstract class VisualizationElement {
+	/**
+	 * Originally thought as a superclass of all the visualizationElements. This proved a wrong assumption, and it is not used now. 
+	 */
 	
 	private String name;
 	private boolean isActive;

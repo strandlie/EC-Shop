@@ -121,6 +121,22 @@ public class ShoppingTrip {
 		}
 		return max;
 	}
+	
+	/**
+	 * Sets actions after a ShoppingTrip is created
+	 * @param actions the list of actions
+	 */
+	public void setActions(List<Action> actions) {
+		this.actions = actions;
+	}
+	
+	/**
+	 * Sets coordinates after ShoppingTrip is created
+	 * @param coordinates The list of coordinates
+	 */
+	private void setCoordinates(List<Coordinate> coordinates) {
+		this.coordinates = coordinates;
+	}
 
 	public long getStart() {
 		return start;

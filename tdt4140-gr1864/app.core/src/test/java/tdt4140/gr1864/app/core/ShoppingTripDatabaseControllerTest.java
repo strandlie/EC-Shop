@@ -1,3 +1,4 @@
+
 package tdt4140.gr1864.app.core;
 
 import java.io.IOException;
@@ -80,4 +81,5 @@ public class ShoppingTripDatabaseControllerTest {
 		
 		Assert.assertEquals(c2.getUserId(), t2.getCustomer().getUserId());;
 	}
+
 }

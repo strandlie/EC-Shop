@@ -6,6 +6,13 @@ import java.util.List;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleStringProperty;
 
+
+/**
+ * 
+ * @author Håkon Strandlie
+ * Not yet used. Exists for future
+ *
+ */
 public class ComboBoxOption extends InteractionOption {
 
 	/**

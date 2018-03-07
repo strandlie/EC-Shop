@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import interfaces.DatabaseCRUD;
 import tdt4140.gr1864.app.core.storage.ShopDatabaseController;
@@ -101,6 +103,7 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 					cdc.retrieve(rs.getInt("customer_id")),
 					sdc.retrieve(rs.getInt("shop_id")),
 					true);
+			// TODO: This is not ideal. Closes the connection, even if the ShoppingTripDatabaseController is used more
 			connection.close();
 			return trip;
 
