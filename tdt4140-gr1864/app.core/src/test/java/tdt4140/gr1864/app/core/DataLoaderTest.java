@@ -1,21 +1,16 @@
 package tdt4140.gr1864.app.core;
 
 import java.io.IOException;
-import java.nio.file.DirectoryNotEmptyException;
-import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
 import java.util.List;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import tdt4140.gr1864.app.core.storage.OnShelfDatabaseController;
 import tdt4140.gr1864.app.core.storage.Shop;
+import tdt4140.gr1864.app.core.storage.OnShelfDatabaseController;;
 
 /* Uses test-data.json for testing */
 public class DataLoaderTest {
@@ -36,11 +31,8 @@ public class DataLoaderTest {
 	 */
 	@BeforeClass
 	public static void setupDatabase() throws IOException {
-		Path path = Paths.get("database.db");
-		
-		if (! Files.exists(path)) {
-			CreateDatabase.main(null);
-		}
+		DatabaseWiper viper = new DatabaseWiper();
+		viper.wipe();
 	}
 	
 	@Before
@@ -99,22 +91,5 @@ public class DataLoaderTest {
 		Assert.assertEquals(shop.getAmountInShelfs(productID), retrievedShop.getAmountInShelfs(productID));
 		
 	}
-	
-	/*
-	 * Deleting database after running test
-	 */
-	@AfterClass
-	public static void finish() {
-		Path path = Paths.get("database.db");
-		try {
-		    Files.delete(path);
-		} catch (NoSuchFileException x) {
-		    System.err.format("%s: no such" + " file or directory%n", path);
-		} catch (DirectoryNotEmptyException x) {
-		    System.err.format("%s not empty%n", path);
-		} catch (IOException x) {
-		    // File permission problems are caught here.
-		    System.err.println(x);
-		}
-	}
+
 }

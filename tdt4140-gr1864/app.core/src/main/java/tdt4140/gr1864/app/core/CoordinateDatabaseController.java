@@ -10,17 +10,8 @@ import interfaces.DatabaseCRUD;
 
 public class CoordinateDatabaseController implements DatabaseCRUD{
 	
-	Connection connection;
 	PreparedStatement statement;
-	
-	public CoordinateDatabaseController() {
-		try {
-			this.connection = DriverManager.getConnection("jdbc:sqlite:database.db");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
+
 	/**
 	 * @see interfaces.DatabaseCRUD#create(java.lang.Object)
 	 */
@@ -31,12 +22,14 @@ public class CoordinateDatabaseController implements DatabaseCRUD{
 					+ "(shopping_trip_id, timestamp, x, y) "
 					+ "VALUES (?, ?, ?, ?)";
 		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, coord.getShoppingTrip().getShoppingTripID());
 			statement.setString(2,  Long.toString(coord.getTimeStamp()));
 			statement.setDouble(3, coord.getX());
 			statement.setDouble(4, coord.getY());
 			statement.executeUpdate();
+			connection.close();
 			
 			return coord.getShoppingTrip().getShoppingTripID();
 			
@@ -57,12 +50,14 @@ public class CoordinateDatabaseController implements DatabaseCRUD{
 					+ "SET x=?, y=? "
 					+ "WHERE shopping_trip_id=? and timestamp=?";
 		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 			statement = connection.prepareStatement(sql);
 			statement.setDouble(1,  coord.getX());
 			statement.setDouble(2, coord.getY());
 			statement.setInt(3,  coord.getShoppingTrip().getShoppingTripID());
 			statement.setString(4, Long.toString(coord.getTimeStamp()));
 			statement.executeUpdate();
+			connection.close();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -80,12 +75,14 @@ public class CoordinateDatabaseController implements DatabaseCRUD{
 					+ "FROM coordinate "
 					+ "WHERE shopping_trip_id=? AND timestamp=?";
 		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, shopping_trip_id);
 			statement.setString(2, Long.toString(timestamp));
 			ResultSet rs = statement.executeQuery();
 			
 			if (!rs.next()) {
+				connection.close();
 				return null;
 			}
 
@@ -113,11 +110,13 @@ public class CoordinateDatabaseController implements DatabaseCRUD{
 		String sql = "SELECT shopping_trip_id, timestamp, x, y "
 					+ "WHERE shopping_trip_id=?";
 		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, id);
 			ResultSet rs = statement.executeQuery();
 			
 			if (!rs.next()) {
+				connection.close();
 				return null;
 			}
 
@@ -147,10 +146,12 @@ public class CoordinateDatabaseController implements DatabaseCRUD{
 		String sql = "DELETE FROM coordinate "
 					+ "WHERE shopping_trip_id=? AND timestamp=?";
 		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, shopping_trip_id);
 			statement.setString(2,  Long.toString(timestamp));
 			statement.executeUpdate();
+			connection.close();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

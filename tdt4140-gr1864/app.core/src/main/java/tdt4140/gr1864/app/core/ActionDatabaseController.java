@@ -12,18 +12,8 @@ import interfaces.DatabaseCRUD;
 
 public class ActionDatabaseController implements DatabaseCRUD {
 	
-	Connection connection;
 	PreparedStatement statement;
-	
-	public ActionDatabaseController() {
-		try {
-			this.connection = DriverManager.getConnection("jdbc:sqlite:database.db");
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
+
 	/**
 	 * @see interfaces.DatabaseCRUD#create(java.lang.Object)
 	 */
@@ -34,13 +24,14 @@ public class ActionDatabaseController implements DatabaseCRUD {
 					+ "(timestamp, action_type, product_id, shopping_trip_id) "
 					+ "values (?, ?, ?, ?)";
 		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 			statement = connection.prepareStatement(sql);
 			statement.setString(1,  Long.toString(action.getTimeStamp()));
 			statement.setInt(2, action.getActionType());
 			statement.setInt(3, action.getProduct().getID());
 			statement.setInt(4, action.getShoppingTrip().getShoppingTripID());
 			statement.executeUpdate();
-			statement.close();
+			connection.close();
 			
 			return action.getShoppingTrip().getShoppingTripID();
 
@@ -61,12 +52,14 @@ public class ActionDatabaseController implements DatabaseCRUD {
 					+ "SET action_type=?, product_id=? "
 					+ "WHERE shopping_trip_id=? and timestamp=?";		
 		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, action.getActionType());
 			statement.setInt(2, action.getProduct().getID());
 			statement.setInt(3, action.getShoppingTrip().getShoppingTripID());
 			statement.setString(4, Long.toString(action.getTimeStamp()));
 			statement.executeUpdate();
+			connection.close();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -84,12 +77,14 @@ public class ActionDatabaseController implements DatabaseCRUD {
 					+ "FROM action "
 					+ "WHERE shopping_trip_id=? AND timestamp=?";
 		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, shopping_trip_id);
 			statement.setString(2, Long.toString(timestamp));
 			ResultSet rs = statement.executeQuery();
 			
 			if (!rs.next()) {
+				connection.close();
 				return null;
 			}
 
@@ -108,37 +103,63 @@ public class ActionDatabaseController implements DatabaseCRUD {
 		}
 		return null;
 	}
-
+	
 	/**
-	 * Returns all Actions based on shopping_trip_id
-	 * @param shopping_trip_id
-	 * @return List<Action> of all actions with shopping_trip_id
+	 * Gets all the actions for a shopping trip with a given ID
+	 * @param shopping_trip_id int the shopping trip ID
+	 * @return List<Action> The list of all the actions for this shoppingTrip, or null if none
 	 */
-	@Override
-	public List<Action> retrieve(int shopping_trip_id) {
-		String sql = "SELECT * FROM action "
+	public List<Action> retrieveAll(int shopping_trip_id) {
+		String sql = "SELECT * "
+					+ "FROM action "
 					+ "WHERE shopping_trip_id=?";
 		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, shopping_trip_id);
 			ResultSet rs = statement.executeQuery();
-
+			
 			ProductDatabaseController pdc = new ProductDatabaseController();
 			ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
-			Action action;
 			List<Action> actions = new ArrayList<>();
-
 			while (rs.next()) {
-				 action = new Action(
+				Action action = new Action(
 						rs.getString("timestamp"), 
 						rs.getInt("action_type"), 
 						pdc.retrieve(rs.getInt("product_id")),
 						stdc.retrieve(rs.getInt("shopping_trip_id")));
-				 actions.add(action);
+				actions.add(action);
 			}
-			
 			connection.close();
 			return actions;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/* Deprecated since Action has joint primary-key
+	 * Might need functionality of function later
+	 */
+	@Deprecated
+	@Override
+	public Object retrieve(int shopping_trip_id) {
+		String sql = "SELECT * "
+					+ "FROM action "
+					+ "WHERE shopping_trip_id=?";
+		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+			statement = connection.prepareStatement(sql);
+			statement.setInt(1, shopping_trip_id);
+			ResultSet rs = statement.executeQuery();
+			
+			if (!rs.next()) {
+				connection.close();
+				return null;
+			}
+			connection.close();
+			return null;
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -163,10 +184,12 @@ public class ActionDatabaseController implements DatabaseCRUD {
 					+ "WHERE shopping_trip_id=? "
 					+ "AND timestamp=?";
 		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, shopping_trip_id);
 			statement.setString(2,  Long.toString(timestamp));
 			statement.executeUpdate();
+			connection.close();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

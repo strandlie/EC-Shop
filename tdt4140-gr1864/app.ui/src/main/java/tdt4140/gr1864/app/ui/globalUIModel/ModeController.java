@@ -95,7 +95,7 @@ public class ModeController {
 		ActionDatabaseController adc = new ActionDatabaseController();
 		
 		ShoppingTrip trip = stdc.retrieve(1);
-		trip.setActions(adc.retrieve(1));
+		trip.setActions(adc.retrieveAll(1));
 		ArrayList<ShoppingTrip> shoppingTripList = new ArrayList<>();
 		shoppingTripList.add(trip);
 		

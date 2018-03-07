@@ -10,28 +10,9 @@ import interfaces.DatabaseCRUD;
 
 public class ProductDatabaseController implements DatabaseCRUD {
 
-	Connection connection;
 	PreparedStatement statement;
 	
-	public ProductDatabaseController() {
-		try {	
-			this.connection = DriverManager.getConnection("jdbc:sqlite:database.db");
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void close() {
-		try {
-			connection.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	/**
-	 * (non-Javadoc)
 	 * @see interfaces.DatabaseCRUD#create(java.lang.Object)
 	 */
 	@Override
@@ -41,6 +22,7 @@ public class ProductDatabaseController implements DatabaseCRUD {
 					+ "(name, price) "
 					+ "VALUES (?, ?)";
 		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 			statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 			statement.setString(1, product.getName());
 			statement.setDouble(2, product.getPrice());
@@ -52,7 +34,9 @@ public class ProductDatabaseController implements DatabaseCRUD {
 				// which is inserted into the database
 				ResultSet generatedKeys = statement.getGeneratedKeys();
 				if (generatedKeys.next()) {
-					return Math.toIntExact(generatedKeys.getLong(1));
+					int i = Math.toIntExact(generatedKeys.getLong(1));
+					connection.close();
+					return i;
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -75,11 +59,13 @@ public class ProductDatabaseController implements DatabaseCRUD {
 					+ "SET name=?, price=? "
 					+ "WHERE product_id=?";
 		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 			statement = connection.prepareStatement(sql);
 			statement.setString(1, product.getName());
 			statement.setDouble(2, product.getPrice());
 			statement.setInt(3,  product.getID());
 			statement.executeUpdate();
+			connection.close();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -95,12 +81,14 @@ public class ProductDatabaseController implements DatabaseCRUD {
 					+ "FROM product "
 					+ "WHERE product_id=?";
 		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, id);
 			ResultSet rs = statement.executeQuery();
 			
 			// Checks if product with id exists
 			if (!rs.next()) {
+				connection.close();
 				return null;
 			}
 			
@@ -109,7 +97,7 @@ public class ProductDatabaseController implements DatabaseCRUD {
 					rs.getInt("product_id"), 
 					rs.getString("name"), 
 					rs.getDouble("price"));
-			statement.close();
+			connection.close();
 			return product;
 
 		} catch (SQLException e) {
@@ -126,14 +114,15 @@ public class ProductDatabaseController implements DatabaseCRUD {
 		String sql = "DELETE FROM product "
 					+ "WHERE product_id=?";
 		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, id);
 			statement.executeUpdate();
+			connection.close();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
 	}
 	
 	/**
