@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.VBox?>
+
+
+<VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.111" fx:controller="tdt4140.gr1864.app.ui.globalUIModel.MenuViewController">
+   <children>
+      <ListView fx:id="menuListView" prefHeight="400.0" prefWidth="200.0" />
+   </children>
+</VBox>
