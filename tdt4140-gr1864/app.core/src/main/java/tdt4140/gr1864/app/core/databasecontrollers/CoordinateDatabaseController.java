@@ -1,4 +1,4 @@
-package tdt4140.gr1864.app.core;
+package tdt4140.gr1864.app.core.databasecontrollers;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,14 +6,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import interfaces.DatabaseCRUD;
+import tdt4140.gr1864.app.core.Coordinate;
+import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
 
 public class CoordinateDatabaseController implements DatabaseCRUD{
 	
 	PreparedStatement statement;
 
 	/**
-	 * @see interfaces.DatabaseCRUD#create(java.lang.Object)
+	 * @see tdt4140.gr1864.app.core.interfaces.DatabaseCRUD#create(java.lang.Object)
 	 */
 	@Override
 	public int create(Object object) {
@@ -41,7 +42,7 @@ public class CoordinateDatabaseController implements DatabaseCRUD{
 	}
 
 	/**
-	 * @see interfaces.DatabaseCRUD#update(java.lang.Object)
+	 * @see tdt4140.gr1864.app.core.interfaces.DatabaseCRUD#update(java.lang.Object)
 	 */
 	@Override
 	public void update(Object object) {

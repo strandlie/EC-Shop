@@ -1,11 +1,11 @@
-package tdt4140.gr1864.app.core.storage;
+package tdt4140.gr1864.app.core;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import tdt4140.gr1864.app.core.Receipt;
+import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
 
 /**
  * The java object Shop that corresponds to the shop table in DB

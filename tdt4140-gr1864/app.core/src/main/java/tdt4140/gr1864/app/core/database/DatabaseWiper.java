@@ -1,4 +1,4 @@
-package tdt4140.gr1864.app.core;
+package tdt4140.gr1864.app.core.database;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
