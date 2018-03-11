@@ -7,14 +7,16 @@
   <classpathentry kind="output" path="target/classes"/>
   <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
   <classpathentry kind="src" path="/tdt4140-gr1864.app.core"/>
-  <classpathentry kind="var" path="M2_REPO/com/fasterxml/jackson/core/jackson-core/2.9.3/jackson-core-2.9.3.jar" sourcepath="M2_REPO/com/fasterxml/jackson/core/jackson-core/2.9.3/jackson-core-2.9.3-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/com/fasterxml/jackson/core/jackson-databind/2.9.3/jackson-databind-2.9.3.jar" sourcepath="M2_REPO/com/fasterxml/jackson/core/jackson-databind/2.9.3/jackson-databind-2.9.3-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/com/fasterxml/jackson/core/jackson-annotations/2.9.3/jackson-annotations-2.9.3.jar" sourcepath="M2_REPO/com/fasterxml/jackson/core/jackson-annotations/2.9.3/jackson-annotations-2.9.3-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar" sourcepath="M2_REPO/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/junit/junit/4.12/junit-4.12.jar" sourcepath="M2_REPO/junit/junit/4.12/junit-4.12-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar" sourcepath="M2_REPO/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/xerial/sqlite-jdbc/3.21.0.1/sqlite-jdbc-3.21.0.1.jar" sourcepath="M2_REPO/org/xerial/sqlite-jdbc/3.21.0.1/sqlite-jdbc-3.21.0.1-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/testfx/testfx-core/4.0.10-alpha/testfx-core-4.0.10-alpha.jar" sourcepath="M2_REPO/org/testfx/testfx-core/4.0.10-alpha/testfx-core-4.0.10-alpha-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/testfx/testfx-internal-java8/4.0.10-alpha/testfx-internal-java8-4.0.10-alpha.jar" sourcepath="M2_REPO/org/testfx/testfx-internal-java8/4.0.10-alpha/testfx-internal-java8-4.0.10-alpha-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/testfx/testfx-junit/4.0.10-alpha/testfx-junit-4.0.10-alpha.jar" sourcepath="M2_REPO/org/testfx/testfx-junit/4.0.10-alpha/testfx-junit-4.0.10-alpha-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/fasterxml/jackson/core/jackson-core/2.9.3/jackson-core-2.9.3.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/fasterxml/jackson/core/jackson-databind/2.9.3/jackson-databind-2.9.3.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/fasterxml/jackson/core/jackson-annotations/2.9.3/jackson-annotations-2.9.3.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar"/>
+  <classpathentry kind="var" path="M2_REPO/junit/junit/4.12/junit-4.12.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/xerial/sqlite-jdbc/3.21.0.1/sqlite-jdbc-3.21.0.1.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/stripe/stripe-java/5.33.2/stripe-java-5.33.2.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/google/code/gson/gson/2.8.2/gson-2.8.2.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/testfx/testfx-core/4.0.10-alpha/testfx-core-4.0.10-alpha.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/testfx/testfx-internal-java8/4.0.10-alpha/testfx-internal-java8-4.0.10-alpha.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/testfx/testfx-junit/4.0.10-alpha/testfx-junit-4.0.10-alpha.jar"/>
 </classpath>
