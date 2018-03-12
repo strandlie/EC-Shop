@@ -27,7 +27,7 @@ public class ShoppingTripTest {
 	
 	@Test
 	public void testGetEndExpectedLastTimeFromTestDataFile() {
-		long expectedTime = 1519239823919L;
+		long expectedTime = 1520893926132L;
 		Assert.assertEquals(expectedTime, shoppingTrip.getEnd());
 	}
 	
@@ -35,9 +35,9 @@ public class ShoppingTripTest {
 	public void testCoordinateListContainsCorrectCoordinatesExpectedSameAsTestDataFile() {
 		List<Coordinate> coords = shoppingTrip.getCoordinates();
 		Coordinate coord = coords.get(1);
-		double expectedX = 8.12313777180195;
-		double expectedY = 4.330388562062142;
-		long expectedTime = 1520861376132L;
+		double expectedX = 7.12325463182378;
+		double expectedY = 4.9002427944221205;
+		long expectedTime = 1520861586132L;
 
 		Assert.assertEquals(expectedX, coord.getX(), 0);
 		Assert.assertEquals(expectedY, coord.getY(), 0);
@@ -48,9 +48,9 @@ public class ShoppingTripTest {
 	public void testActionListContainsCorrectActionsExpectedSameAsTestDataFile() {
 		List<Action> actions = shoppingTrip.getActions();
 		Action action = actions.get(1);
-		long expectedTime = 1520865366132L;
+		long expectedTime = 1520868726132L;
 		int expectedType = 1;
-		int expectedProduct = 44;
+		int expectedProduct = 18;
 		
 		Assert.assertEquals(expectedTime, action.getTimeStamp());
 		Assert.assertEquals(expectedType, action.getActionType());
