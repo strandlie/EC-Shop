@@ -107,7 +107,7 @@ public class ModeController {
 		ArrayList<ShoppingTrip> shoppingTripList = new ArrayList<>();
 		shoppingTripList.add(trip);
 		
-		HeatMap map = new HeatMap();
+		HeatMap map = new HeatMap(180, 100);
 		
 		List<Point> points = new ArrayList<>();
 		
