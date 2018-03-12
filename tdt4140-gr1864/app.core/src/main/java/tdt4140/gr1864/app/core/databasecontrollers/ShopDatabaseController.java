@@ -1,4 +1,4 @@
-package tdt4140.gr1864.app.core.storage;
+package tdt4140.gr1864.app.core.databasecontrollers;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,7 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import interfaces.DatabaseCRUD;
+import tdt4140.gr1864.app.core.Shop;
+import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
 
 public class ShopDatabaseController implements DatabaseCRUD{
 	

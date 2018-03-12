@@ -7,9 +7,9 @@ import java.util.Map;
 
 import tdt4140.gr1864.app.core.Action;
 import tdt4140.gr1864.app.core.Product;
-import tdt4140.gr1864.app.core.ProductDatabaseController;
+import tdt4140.gr1864.app.core.Shop;
 import tdt4140.gr1864.app.core.ShoppingTrip;
-import tdt4140.gr1864.app.core.storage.Shop;
+import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Aggregate;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
 

@@ -1,4 +1,4 @@
-package tdt4140.gr1864.app.core;
+package tdt4140.gr1864.app.core.database;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

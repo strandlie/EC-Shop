@@ -1,4 +1,4 @@
-package tdt4140.gr1864.app.core;
+package tdt4140.gr1864.app.core.databasecontrollers;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,14 +8,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import interfaces.DatabaseCRUD;
+import tdt4140.gr1864.app.core.Action;
+import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
 
 public class ActionDatabaseController implements DatabaseCRUD {
 	
 	PreparedStatement statement;
 
 	/**
-	 * @see interfaces.DatabaseCRUD#create(java.lang.Object)
+	 * @see tdt4140.gr1864.app.core.interfaces.DatabaseCRUD#create(java.lang.Object)
 	 */
 	@Override
 	public int create(Object object) {
@@ -43,7 +44,7 @@ public class ActionDatabaseController implements DatabaseCRUD {
 	}
 
 	/**
-	 * @see interfaces.DatabaseCRUD#update(java.lang.Object)
+	 * @see tdt4140.gr1864.app.core.interfaces.DatabaseCRUD#update(java.lang.Object)
 	 */
 	@Override
 	public void update(Object object) {

@@ -10,8 +10,12 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import tdt4140.gr1864.app.core.storage.Shop;
-import tdt4140.gr1864.app.core.storage.ShopDatabaseController;
+import tdt4140.gr1864.app.core.database.DatabaseWiper;
+import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
+import tdt4140.gr1864.app.core.databasecontrollers.CustomerDatabaseController;
+import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
+import tdt4140.gr1864.app.core.databasecontrollers.ShopDatabaseController;
+import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
 
 public class ActionDatabaseControllerTest {
 	

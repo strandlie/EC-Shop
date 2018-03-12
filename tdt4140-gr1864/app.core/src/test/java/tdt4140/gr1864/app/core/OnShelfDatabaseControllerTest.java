@@ -7,8 +7,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import tdt4140.gr1864.app.core.storage.Shop; import tdt4140.gr1864.app.core.Product;
-import tdt4140.gr1864.app.core.storage.OnShelfDatabaseController;
+import tdt4140.gr1864.app.core.Product;
+import tdt4140.gr1864.app.core.database.DatabaseWiper;
+import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
 
 public class OnShelfDatabaseControllerTest {
 	Shop shop, shop2;

@@ -5,6 +5,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import tdt4140.gr1864.app.core.database.DataLoader;
+
 import org.junit.Assert;
 
 public class ShoppingTripTest {
