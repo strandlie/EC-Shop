@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import interfaces.DatabaseCRUD;
 
@@ -101,6 +103,43 @@ public class CoordinateDatabaseController implements DatabaseCRUD{
 		return null;
 	}
 
+	/**
+	 * 
+	 * @param id The ID of the shopping trip to retrieve the coordinates for.
+	 * @return A list of coordinates for the given shopping trip.
+	 * @throws SQLException
+	 */
+	public List<Coordinate> retrieveAll(int id) throws SQLException {
+		String query = "SELECT * FROM coordinate WHERE shopping_trip_id=?";
+		
+		Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+		
+		PreparedStatement statement = connection.prepareStatement(query);
+		
+		statement.setInt(1, id);
+		
+		ResultSet rs = statement.executeQuery();
+
+		// Used to find the ID of the shopping trip this coordinate is connected to.
+		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();	
+		
+		List<Coordinate> coordinates= new ArrayList<>();
+		
+		while (rs.next()) {
+			Coordinate coordinate = new Coordinate(
+				rs.getDouble("x"), 
+				rs.getDouble("y"), 
+				rs.getString("timeStamp"),
+				stdc.retrieve(rs.getInt("shopping_trip_id")));
+			
+			coordinates.add(coordinate);
+		}
+		
+		connection.close();
+		
+		return coordinates;
+	}
+	
 	/* Deprecated since Coordinate has joint primary-key
 	 * Might need functionality of function later
 	 */
