@@ -1,11 +1,16 @@
 package tdt4140.gr1864.app.ui.globalUIModel; 
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import eu.hansolo.fx.charts.heatmap.HeatMap;
+import eu.hansolo.fx.charts.tools.Point;
 import tdt4140.gr1864.app.core.ActionDatabaseController;
+import tdt4140.gr1864.app.core.Coordinate;
+import tdt4140.gr1864.app.core.CoordinateDatabaseController;
 import tdt4140.gr1864.app.core.Action;
 import tdt4140.gr1864.app.core.DataLoader;
 import tdt4140.gr1864.app.core.ProductDatabaseController;
@@ -60,9 +65,10 @@ public class ModeController {
 	/**
 	 * Is called automatically by JavaFX after the scene is set up and the @FXML-variables are connected
 	 * Is used here to set up the different modes and set the initial mode
+	 * @throws SQLException 
 	 */
 	@FXML
-	public void initialize() {
+	public void initialize() throws SQLException {
 		this.modes = new HashMap<String, Mode>();
 		
 		/**
@@ -93,11 +99,26 @@ public class ModeController {
 		// Get data from shoppin trip and add to TableView
 		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
 		ActionDatabaseController adc = new ActionDatabaseController();
-		
+		CoordinateDatabaseController cdc = new CoordinateDatabaseController();
+	
 		ShoppingTrip trip = stdc.retrieve(1);
 		trip.setActions(adc.retrieveAll(1));
+		trip.setCoordinates(cdc.retrieveAll(1));
 		ArrayList<ShoppingTrip> shoppingTripList = new ArrayList<>();
 		shoppingTripList.add(trip);
+		
+		HeatMap map = new HeatMap();
+		
+		List<Point> points = new ArrayList<>();
+		
+		for (ShoppingTrip shoppingTrip : shoppingTripList) {
+			for (Coordinate coordinate : shoppingTrip.getCoordinates()) {
+				points.add(new Point(coordinate.getX(), coordinate.getY()));
+			}
+		}
+		
+		map.addSpots(points);
+		map.saveAsPng("map");
 		
 		new TableLoader(shoppingTripList, mostPickedUpTable);
 		
