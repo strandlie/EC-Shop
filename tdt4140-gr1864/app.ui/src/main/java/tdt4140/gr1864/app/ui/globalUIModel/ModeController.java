@@ -90,7 +90,7 @@ public class ModeController {
 		
 		new DataLoader();
 		
-		// Get data from shoppin trip and add to TableView
+		// Get data from shopping trip and add to TableView
 		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
 		ActionDatabaseController adc = new ActionDatabaseController();
 		
@@ -110,14 +110,22 @@ public class ModeController {
 			osdc.retrieve(shop, i);
 		}
 		
-		
 		Map<Integer, Integer> productIDsOnShelf = shop.getShelfs();
 		Map<Integer, Integer> productIDsInStorage = shop.getStorage();
 		
 		new TableLoader(productIDsOnShelf, productIDsInStorage, stockTable);
 		
+		// OnShelves
+		VisualizationTable onShelvesTable = new VisualizationTable("Shelves");
+		onShelvesTable.addColumn("ProductName");
+		onShelvesTable.addColumn("Amount");
+		Mode Shelves = new Mode("Shelves", onShelvesTable);
+		
+		new TableLoader(productIDsOnShelf, onShelvesTable);
+		
 		addMode(mostPickedUp);
 		addMode(stock);
+		addMode(Shelves);
 		
 		setMode(mostPickedUp);
 	}

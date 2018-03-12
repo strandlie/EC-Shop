@@ -37,6 +37,10 @@ public class TableLoader {
 	 * The number of a product in Stock
 	 */
 	private Map<String, Integer> stock;
+	/*
+	 * The number of a product in shelves
+	 */
+	private Map<String, Integer> shelves;
 	
 	/**
 	 * The constructor for the MostPickedUpMode
@@ -116,7 +120,29 @@ public class TableLoader {
 			String totalStock = this.stock.get(productName).toString();
 			table.addData(new Aggregate(productName, totalStock));
 		}
-		
+	}
+	
+	/**
+	 * The constructor for the onShelfMode
+	 * 
+	 * @param productIDsOnShelf		A map of productIDs and amount on shelves
+	 * @param table					The visualization table for onShelfMode
+	 */
+	public TableLoader(Map<Integer, Integer> productIDsOnShelf, VisualizationTable table) {
+		if (productIDsOnShelf == null || table == null) {
+			return;
+		}
+		this.shelves = new HashMap<String, Integer>();
+		ProductDatabaseController pdc = new ProductDatabaseController();
+		for (Integer productID : productIDsOnShelf.keySet()) {
+			Product product = pdc.retrieve(productID);
+			int numberOnShelf = productIDsOnShelf.containsKey(productID) ? productIDsOnShelf.get(productID) : 0;
+			this.shelves.put(product.getName(), numberOnShelf);
+		}
+		for (String productName : this.shelves.keySet()) {
+			String amount = this.shelves.get(productName).toString();
+			table.addData(new Aggregate(productName, amount));
+		}
 	}
 	
 	/**
