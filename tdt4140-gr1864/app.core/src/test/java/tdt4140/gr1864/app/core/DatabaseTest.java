@@ -10,6 +10,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.junit.runners.MethodSorters;
+
+import tdt4140.gr1864.app.core.database.DatabaseWiper;
+
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;

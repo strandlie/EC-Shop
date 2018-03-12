@@ -2,6 +2,8 @@ package tdt4140.gr1864.app.core;
 
 import java.util.List;
 
+import tdt4140.gr1864.app.core.interfaces.UserInterface;
+
 public class Customer implements UserInterface {
 	private int customerId;
 	private String firstName;

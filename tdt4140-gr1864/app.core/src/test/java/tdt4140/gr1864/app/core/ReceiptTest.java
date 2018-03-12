@@ -6,6 +6,9 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import tdt4140.gr1864.app.core.database.DataLoader;
+import tdt4140.gr1864.app.core.database.DatabaseWiper;
+
 
 public class ReceiptTest {
 	

@@ -3,6 +3,8 @@ package tdt4140.gr1864.app.core;
 import java.util.HashMap;
 import java.util.Map;
 
+import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
+
 public class Receipt {
 	/**
 	 * The ShoppingTrip object which this Receipt computes the prices for.

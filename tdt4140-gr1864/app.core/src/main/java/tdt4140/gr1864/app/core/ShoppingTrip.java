@@ -2,8 +2,6 @@ package tdt4140.gr1864.app.core;
 
 import java.util.List;
 
-import tdt4140.gr1864.app.core.storage.Shop;
-
 public class ShoppingTrip {
 	
 	/* start-time of ShoppingTrip in UNIX-time */

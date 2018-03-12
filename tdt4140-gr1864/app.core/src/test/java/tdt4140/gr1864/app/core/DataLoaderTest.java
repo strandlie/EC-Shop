@@ -9,8 +9,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import tdt4140.gr1864.app.core.storage.Shop;
-import tdt4140.gr1864.app.core.storage.OnShelfDatabaseController;;
+import tdt4140.gr1864.app.core.database.DataLoader;
+import tdt4140.gr1864.app.core.database.DatabaseWiper;
+import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
+import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;;
 
 /* Uses test-data.json for testing */
 public class DataLoaderTest {
