@@ -1,8 +1,12 @@
 package tdt4140.gr1864.app.core.dataMocker;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -11,9 +15,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+
 
 public class DataMocker {
 	/**
@@ -168,7 +179,39 @@ public class DataMocker {
 		return time;
 	}
 	
-	public static void main(String[] args) throws JsonProcessingException {
+	/**
+	 * Post data.json to web-server once it is generated
+	 * @throws IOException 
+	 */
+	private static void postData(String path) throws IOException {
+		InputStream is = new FileInputStream(path);
+		BufferedReader buf = new BufferedReader(new InputStreamReader(is));
+				
+		String line = buf.readLine();
+		StringBuilder sb = new StringBuilder();
+				
+		while(line != null) {
+		   sb.append(line).append("\n");
+		   line = buf.readLine();
+		}
+				
+		String json = sb.toString();
+		DefaultHttpClient httpclient = new DefaultHttpClient();
+		HttpPost httpPost = new HttpPost("http://localhost:8080/api");
+		httpPost.addHeader("content-type", "application/json");
+		httpPost.setEntity(new StringEntity(json));
+		HttpResponse response2 = httpclient.execute(httpPost);
+
+		try {
+		    System.out.println(response2.getStatusLine());
+		    HttpEntity entity2 = response2.getEntity();
+		    EntityUtils.consume(entity2);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void main(String[] args) throws IOException {
 		Rectangle home = new Rectangle(new Coordinate(0, 0), new Coordinate(10, 10));
 	
 		List<Rack> zones = new ArrayList<>();
@@ -207,14 +250,16 @@ public class DataMocker {
 		Trip trip = mocker.generateRandomPath(5, 2, ThreadLocalRandom.current().nextInt(0, 60));		
 		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 		String json = ow.writeValueAsString(trip);
+		String path = "./src/main/resources/data.json";
 		
         try {
-            FileWriter fw = new FileWriter("./src/main/resources/data.json");
+            FileWriter fw = new FileWriter(path);
             BufferedWriter bw = new BufferedWriter(fw);
             bw.write(json);
             bw.close();
         } catch (IOException error) {
         	error.printStackTrace();
         }
+        postData(path);
 	}
 }

@@ -8,7 +8,7 @@
 
   <servlet>
     <servlet-name>DataFetcher</servlet-name>
-    <servlet-class>org.web.server.HelloServlet</servlet-class>
+    <servlet-class>org.web.server.ShoppingTripServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>DataFetcher</servlet-name>
