@@ -30,6 +30,8 @@ public class VisualizationTable extends VisualizationElement {
 		allowedColumnNames.put("numberOfPutDown", "Number Of Put Down");
 		allowedColumnNames.put("numberOfPurchases", "Number Of Purchases");
 		allowedColumnNames.put("numberInStock", "In Stock");
+		//OnShelves
+		allowedColumnNames.put("numberOnShelves", "Number on shelves");
 	}
 	
 	/**
