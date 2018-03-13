@@ -118,7 +118,7 @@ public class TableLoader {
 		
 		for (String productName : this.stock.keySet()) {
 			String totalStock = this.stock.get(productName).toString();
-			table.addData(new Aggregate(productName, totalStock));
+			table.addData(new Aggregate(productName, totalStock, "stock"));
 		}
 	}
 	
@@ -141,7 +141,7 @@ public class TableLoader {
 		}
 		for (String productName : this.shelves.keySet()) {
 			String amount = this.shelves.get(productName).toString();
-			table.addData(new Aggregate(productName, amount));
+			table.addData(new Aggregate(productName, amount, "onShelves"));
 		}
 	}
 	

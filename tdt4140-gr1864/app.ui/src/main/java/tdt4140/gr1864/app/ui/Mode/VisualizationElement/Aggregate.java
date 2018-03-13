@@ -25,6 +25,9 @@ public class Aggregate {
 	// The variables for stockMode
 	private StringProperty numberInStock;
 	
+	// The variables for onShelvesMode
+	private StringProperty numberOnShelves;
+	
 	/**
 	 * The size of this Aggregate
 	 */
@@ -48,13 +51,25 @@ public class Aggregate {
 	}
 	
 	/**
-	 * The constructor for stockMode
+	 * The constructor for modes with two columns
 	 * @param productName
 	 * @param numberInStock
+	 * @param type 				the mode type
 	 */
-	public Aggregate(String productName, String numberInStock) {
-		setProductName(productName);
-		setNumberInStock(numberInStock);
+	public Aggregate(String productName, String numberInStock, String type) {
+		switch (type) {
+		
+		case "stock":
+			setProductName(productName);
+			setNumberInStock(numberInStock);
+			break;
+			
+		case "onShelves":
+			setProductName(productName);
+			setNumberInStock(numberInStock);
+			break;
+		}
+		
 		
 		this.size = 2;
 	}
@@ -163,6 +178,23 @@ public class Aggregate {
 	
 	public String getNumberInStock() {
 		return numberInStockProperty().getValue();
+	}
+	
+	// Property methods for onShelves
+	
+	public StringProperty numberOnShelvesProperty() {
+		if (numberOnShelves == null) {
+			numberOnShelves = new SimpleStringProperty(this, "numberOnShelves");
+		}
+		return numberOnShelves;
+	}
+	
+	public void setNUmberOnShelves(String number) {
+		this.numberOnShelvesProperty().setValue(number);
+	}
+	
+	public String getNumberOnShelves() {
+		return numberOnShelvesProperty().getValue();
 	}
 
 }

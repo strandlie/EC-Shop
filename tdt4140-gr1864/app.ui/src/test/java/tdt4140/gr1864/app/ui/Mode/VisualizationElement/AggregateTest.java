@@ -12,7 +12,7 @@ public class AggregateTest {
 	@Before
 	public void setup() {
 		this.aggregate4 = new Aggregate("Bolle", "1", "2", "1");
-		this.aggregate2 = new Aggregate("Bille", "200");
+		this.aggregate2 = new Aggregate("Bille", "200", "Stock");
 		
 	}
 	

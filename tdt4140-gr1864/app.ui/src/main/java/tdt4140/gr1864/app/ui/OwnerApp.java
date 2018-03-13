@@ -17,9 +17,6 @@ public class OwnerApp extends Application{
 		Parent root = fxmlLoader.load(getClass().getClassLoader().getResource("./tdt4140/gr1864/app/ui/globalUIModel/OwnerApp.fxml"));
 		primaryStage.setScene(new Scene(root));
 		primaryStage.show();
-		
-		
-		
 	}
 	public static void main(String[] args) {
 		launch(args);
