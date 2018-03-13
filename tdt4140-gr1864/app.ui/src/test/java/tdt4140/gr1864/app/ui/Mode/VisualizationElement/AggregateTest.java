@@ -9,11 +9,14 @@ public class AggregateTest {
 	Aggregate aggregate4;
 	Aggregate aggregate2;
 	
+	Aggregate aggregate1;
+	
 	@Before
 	public void setup() {
 		this.aggregate4 = new Aggregate("Bolle", "1", "2", "1");
-		this.aggregate2 = new Aggregate("Bille", "200", "Stock");
+		this.aggregate2 = new Aggregate("Bille", "200", "stock");
 		
+		this.aggregate1 = new Aggregate("Banan", "60", "onShelves");
 	}
 	
 	@Test
@@ -54,5 +57,8 @@ public class AggregateTest {
 		Assert.assertNull(this.aggregate4.getNumberInStock());
 	}
 	
-	
+	@Test
+	public void testAggregateHasExpectedNumberOnSHelves() {
+		Assert.assertEquals("60", aggregate1.getNumberOnShelves());
+	}
 }

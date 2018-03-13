@@ -8,7 +8,8 @@ import javafx.beans.property.StringProperty;
  * The class that makes up the content in the cells of a table. Because of the JavaFX-implmentation this 
  * needs to have all the variables and corresponding methods for all possible columns in any table. 
  * 
- * In furture versions this model needs updating. It doesnt allow modes with same number of columns
+ * Aggregates with two values now take a keyword in the constructor to set the right values.
+ * 
  * @author Håkon Strandlie
  *
  */
@@ -56,17 +57,17 @@ public class Aggregate {
 	 * @param numberInStock
 	 * @param type 				the mode type
 	 */
-	public Aggregate(String productName, String numberInStock, String type) {
+	public Aggregate(String productName, String amount, String type) {
 		switch (type) {
 		
 		case "stock":
 			setProductName(productName);
-			setNumberInStock(numberInStock);
+			setNumberInStock(amount);
 			break;
 			
 		case "onShelves":
 			setProductName(productName);
-			setNumberInStock(numberInStock);
+			setNUmberOnShelves(amount);
 			break;
 		}
 		

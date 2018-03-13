@@ -119,13 +119,13 @@ public class ModeController {
 		VisualizationTable onShelvesTable = new VisualizationTable("Shelves");
 		onShelvesTable.addColumn("productName");
 		onShelvesTable.addColumn("numberOnShelves");
-		Mode Shelves = new Mode("Shelves", onShelvesTable);
+		Mode shelves = new Mode("shelves", onShelvesTable);
 		
 		new TableLoader(productIDsOnShelf, onShelvesTable);
 		
 		addMode(mostPickedUp);
 		addMode(stock);
-		addMode(Shelves);
+		addMode(shelves);
 		
 		setMode(mostPickedUp);
 	}
