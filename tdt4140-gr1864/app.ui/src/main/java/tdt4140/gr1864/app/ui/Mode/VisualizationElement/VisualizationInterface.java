@@ -1,5 +1,9 @@
 package tdt4140.gr1864.app.ui.Mode.VisualizationElement;
 
+import java.util.ArrayList;
+
+import javafx.collections.ObservableList;
+
 /**
  * 
  * @author anders
@@ -14,6 +18,10 @@ public interface VisualizationInterface {
 	boolean isActive();
 	
 	void setActive(boolean isActive);
+	
+	void setData(ArrayList<Aggregate> data);
+	
+	ObservableList<Aggregate> getData();
 	
 	/*
 	 * TODO: Add more methods

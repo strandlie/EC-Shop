@@ -26,6 +26,7 @@ public abstract class VisualizationElement implements VisualizationInterface {
 		this.isActive = isActive;
 	}
 
+	@Override
 	public String getName() {
 		if (! name.equals(null)) {
 			return name;
@@ -33,10 +34,12 @@ public abstract class VisualizationElement implements VisualizationInterface {
 		return null;
 	}
 	
+	@Override
 	public boolean isActive() {
 		return this.isActive;
 	}
 	
+	@Override
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
 	}
