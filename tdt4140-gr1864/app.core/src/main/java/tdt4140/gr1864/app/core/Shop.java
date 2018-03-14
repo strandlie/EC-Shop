@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
+import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
 import tdt4140.gr1864.app.core.interfaces.IShoppingTripListener;
 
 /**
@@ -109,6 +110,7 @@ public class Shop implements IShoppingTripListener{
 	public void shoppingTripAdded(ShoppingTrip trip) {
 		Receipt receipt = new Receipt(trip);
 		updateAmountInShelfsFromReceipt(receipt);
+		System.out.println("Listener in shoppingtrip constructor run");
 	}
 	
 	/* Same as above, but gets amount in shelfs */
@@ -136,41 +138,29 @@ public class Shop implements IShoppingTripListener{
 		
 		for (Integer id : inventory.keySet()) {
 			
+			OnShelfDatabaseController osdbc = new OnShelfDatabaseController();
 			int amount = inventory.get(id);
-			int currentAmount = getAmountInShelfs(id);
+			int currentAmount = osdbc.retrieve(this, id).getAmountInShelfs(id);
 			
 			setAmountInShelfs(id, currentAmount - amount);
 			
-			OnShelfDatabaseController osdc = new OnShelfDatabaseController();
-			osdc.update(this, id);
+			//OnShelfDatabaseController osdc = new OnShelfDatabaseController();
+			osdbc.update(this, id);
 		}
 		System.out.println("Shop updated from receipt");
 	}
 	
 	/**
-	 * Updates the amounts of products in the shop object according to the DB, if
-	 * their ID's are in the list
+	 * Updates the amounts of products in the shop object according to the DB,
+	 * used to get new shop objects up to date. Currently have to assume fixed
+	 * amount of products, if not productDBctrl could support this
 	 * 
 	 * @return		The updated Shop object
 	 */
-	/*
-	public Shop refreshShop() {
-		
-		Shop temp = this;
-		Shop temp2;
-		
-		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
-		
-		for (Integer id : shelfs.keySet()) {
-			temp2 = osdc.retrieve(temp, id);
-			temp = temp2;
-		}
-		return temp;
-	}*/
-	
 	public Shop refreshShop() {
 		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
-		for (int i = 1; i < 65; i++) {
+		int numberOfProducts = 65;
+		for (int i = 1; i < numberOfProducts; i++) {
 			osdc.retrieve(this, i);
 		}
 		return this;

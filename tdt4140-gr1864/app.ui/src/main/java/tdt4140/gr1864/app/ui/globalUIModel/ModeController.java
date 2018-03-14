@@ -19,6 +19,7 @@ import tdt4140.gr1864.app.ui.TableLoader;
 import tdt4140.gr1864.app.ui.Mode.Mode;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Aggregate;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 
 /**
@@ -115,9 +116,6 @@ public class ModeController {
 		
 		shop.refreshShop();
 		
-		System.out.println(shop.getShelfs());
-		System.out.println(shop.getStorage());
-		
 		Map<Integer, Integer> productIDsOnShelf = shop.getShelfs();
 		Map<Integer, Integer> productIDsInStorage = shop.getStorage();
 		
@@ -201,20 +199,32 @@ public class ModeController {
 		if (mode == null) {
 			throw new IllegalStateException("modeChanged should not be called when there is no corresponding mode in modes");
 		}
-		this.currentMode = mode;
-		setMode(this.currentMode);
-		// Move dataloading to change of mode  now onshelves is empty : (
-		/*
+		
+		
 		switch(mode.getName()) {
 		case "Shelves":
-			VisualizationTable table = mode.getVisualizationElement();
-			table.wipeTable();
-			ShopDatabaseController sdbc = new ShopDatabaseController();
-			Shop shop = sdbc.retrieve(1);
+			// Changing the list in this box impacts GUI
+			ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
+			ActionDatabaseController adc = new ActionDatabaseController();
+			
+			ShoppingTrip trip = stdc.retrieve(1);
+			trip.setActions(adc.retrieveAll(1));
+			
+			ShopDatabaseController sdc = new ShopDatabaseController();
+			Shop shop = sdc.retrieve(1);
 			shop.refreshShop();
-			Map <Integer, Integer> onShelvesProductIDs = shop.getShelfs();
-			new TableLoader(onShelvesProductIDs, table);
-		}*/
+			//shop.updateAmountInShelfsFromReceipt(new Receipt(trip));
+			
+			Map<Integer, Integer> productIDsOnShelf = shop.getShelfs();
+			VisualizationTable onShelvesTable = mode.getVisualizationElement();
+			onShelvesTable.wipeTable();
+			
+			new TableLoader(productIDsOnShelf, onShelvesTable);
+			}
+		
+		this.currentMode = mode;
+		setMode(this.currentMode);
+		
 	}
 	
 

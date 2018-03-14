@@ -44,4 +44,9 @@ public class Mode {
 	public VisualizationTable getVisualizationElement() {
 		return this.visualizationElement;
 	}
+	
+	// Allow tables to be updated
+	public void setTable(VisualizationTable table) {
+		this.visualizationElement = table;
+	}
 }	

@@ -47,10 +47,6 @@ public class ShoppingTrip {
 			charge();
 			this.charged = true;
 		}
-		// Listener
-		for (IShoppingTripListener listener : listeners) {
-			listener.shoppingTripAdded(this);
-		}
 	}
 	
 	/**
@@ -85,6 +81,10 @@ public class ShoppingTrip {
 		this.customer = customer;
 		this.shop = shop;
 		this.charged = charged;
+		// Listener
+			for (IShoppingTripListener listener : listeners) {
+				listener.shoppingTripAdded(this);
+			}
 	}
 	
 	private void charge() {
