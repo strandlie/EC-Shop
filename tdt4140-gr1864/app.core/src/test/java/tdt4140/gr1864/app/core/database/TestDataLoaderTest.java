@@ -1,4 +1,4 @@
-package tdt4140.gr1864.app.core;
+package tdt4140.gr1864.app.core.database;
 
 import java.io.IOException;
 
@@ -9,17 +9,22 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import tdt4140.gr1864.app.core.database.DataLoader;
+import tdt4140.gr1864.app.core.database.TestDataLoader;
+import tdt4140.gr1864.app.core.Action;
+import tdt4140.gr1864.app.core.Coordinate;
+import tdt4140.gr1864.app.core.Product;
+import tdt4140.gr1864.app.core.Shop;
+import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.database.DatabaseWiper;
 import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;;
 
 /* Uses test-data.json for testing */
-public class DataLoaderTest {
+public class TestDataLoaderTest {
 	
 	String pathToShoppingTrip;
 	String pathToProducts;
-	DataLoader loader;
+	TestDataLoader loader;
 	ProductDatabaseController pdc;
 
 	ShoppingTrip trip;
@@ -39,7 +44,7 @@ public class DataLoaderTest {
 	
 	@Before
 	public void setupDataloader() {
-		loader = new DataLoader();
+		loader = new TestDataLoader();
 		pdc = new ProductDatabaseController();
 		coords = loader.getCoordinates();
 		products = loader.getProducts();
