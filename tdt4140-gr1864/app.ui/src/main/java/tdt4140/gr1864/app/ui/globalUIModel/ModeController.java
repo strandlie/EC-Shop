@@ -119,7 +119,7 @@ public class ModeController {
 		VisualizationTable onShelvesTable = new VisualizationTable("Shelves");
 		onShelvesTable.addColumn("productName");
 		onShelvesTable.addColumn("numberOnShelves");
-		Mode shelves = new Mode("shelves", onShelvesTable);
+		Mode shelves = new Mode("Shelves", onShelvesTable);
 		
 		new TableLoader(productIDsOnShelf, onShelvesTable);
 		
