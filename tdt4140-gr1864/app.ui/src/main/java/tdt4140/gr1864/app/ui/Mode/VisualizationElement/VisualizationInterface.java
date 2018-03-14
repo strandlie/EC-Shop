@@ -1,10 +1,6 @@
 package tdt4140.gr1864.app.ui.Mode.VisualizationElement;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import javafx.collections.ObservableList;
-
 /**
  * 
  * @author anders
@@ -22,7 +18,7 @@ public interface VisualizationInterface {
 	
 	void setData(List<Aggregate> data);
 	
-	ObservableList<Aggregate> getData();
+	List<Aggregate> getData();
 	
 	/*
 	 * TODO: Add more methods
