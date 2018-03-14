@@ -214,13 +214,6 @@ public class ModeController {
 			
 			// Load the data table with the new values
 			new TableLoader(productIDsOnShelf, onShelvesTable);
-			
-			// Test if listener is listening by adding the shopping trip again
-			ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
-			ActionDatabaseController adc = new ActionDatabaseController();
-			
-			ShoppingTrip trip = stdc.retrieve(1);
-			trip.setActions(adc.retrieveAll(1));
 		}
 			
 		else if (mode.getName() == "Stock") {
