@@ -25,6 +25,8 @@ import org.apache.http.util.EntityUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
+import tdt4140.gr1864.app.core.database.DataLoader;
+
 
 public class DataMocker {
 	/**
@@ -260,6 +262,7 @@ public class DataMocker {
         } catch (IOException error) {
         	error.printStackTrace();
         }
+        DataLoader.main(null);
         postData(path);
 	}
 }

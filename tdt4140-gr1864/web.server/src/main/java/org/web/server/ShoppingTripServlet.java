@@ -39,7 +39,7 @@ public class ShoppingTripServlet extends HttpServlet {
 					jb += line;
     		} catch (Exception e) { /*report an error*/ }
 
-    		new DataLoader(jb);
+    		DataLoader.loadShoppingTrip(jb);
     	} catch (Exception e) {
     		e.printStackTrace();
     	}

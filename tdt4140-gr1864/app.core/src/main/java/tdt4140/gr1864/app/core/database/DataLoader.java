@@ -198,7 +198,7 @@ public class DataLoader {
 	 * This function is for the API
 	 * @param json	String with json-data of a ShoppingTrip
 	 */
-	private static void loadShoppingTrip(String json) {
+	public static void loadShoppingTrip(String json) {
 
 		JSONParser parser = new JSONParser();
 		
