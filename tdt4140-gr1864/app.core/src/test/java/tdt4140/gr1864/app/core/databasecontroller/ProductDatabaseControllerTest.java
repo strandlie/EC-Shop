@@ -1,4 +1,4 @@
-package tdt4140.gr1864.app.core;
+package tdt4140.gr1864.app.core.databasecontroller;
 
 import java.io.IOException;
 
@@ -6,6 +6,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import tdt4140.gr1864.app.core.Product;
+import tdt4140.gr1864.app.core.database.DatabaseWiper;
+import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
 
 
 public class ProductDatabaseControllerTest {

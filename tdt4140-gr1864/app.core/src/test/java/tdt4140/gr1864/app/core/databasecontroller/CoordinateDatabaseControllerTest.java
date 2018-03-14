@@ -1,4 +1,4 @@
-package tdt4140.gr1864.app.core;
+package tdt4140.gr1864.app.core.databasecontroller;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,8 +9,17 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import tdt4140.gr1864.app.core.storage.Shop;
-import tdt4140.gr1864.app.core.storage.ShopDatabaseController;
+import tdt4140.gr1864.app.core.Coordinate;
+import tdt4140.gr1864.app.core.Customer;
+import tdt4140.gr1864.app.core.Product;
+import tdt4140.gr1864.app.core.Shop;
+import tdt4140.gr1864.app.core.ShoppingTrip;
+import tdt4140.gr1864.app.core.database.DatabaseWiper;
+import tdt4140.gr1864.app.core.databasecontrollers.CoordinateDatabaseController;
+import tdt4140.gr1864.app.core.databasecontrollers.CustomerDatabaseController;
+import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
+import tdt4140.gr1864.app.core.databasecontrollers.ShopDatabaseController;
+import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
 
 public class CoordinateDatabaseControllerTest {
 	

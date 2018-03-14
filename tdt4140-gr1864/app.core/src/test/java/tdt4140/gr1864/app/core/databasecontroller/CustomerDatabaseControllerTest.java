@@ -1,4 +1,4 @@
-package tdt4140.gr1864.app.core;
+package tdt4140.gr1864.app.core.databasecontroller;
 
 import java.io.IOException;
 
@@ -8,6 +8,10 @@ import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+
+import tdt4140.gr1864.app.core.Customer;
+import tdt4140.gr1864.app.core.database.DatabaseWiper;
+import tdt4140.gr1864.app.core.databasecontrollers.CustomerDatabaseController;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CustomerDatabaseControllerTest {
