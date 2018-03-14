@@ -30,14 +30,12 @@ public class ShoppingTripServlet extends HttpServlet {
     
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	try {
-    		String jb = null;
-    		String line = null;
+    		String line = "";
     		BufferedReader reader = null;
-    		try {
-    			reader = request.getReader();
-				while ((line = reader.readLine()) != null)
-					jb += line;
-    		} catch (Exception e) { /*report an error*/ }
+			String jb = "";
+			reader = request.getReader();
+			while ((line = reader.readLine()) != null)
+				jb += line;
 
     		DataLoader.loadShoppingTrip(jb);
     	} catch (Exception e) {
