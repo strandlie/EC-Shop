@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
+import tdt4140.gr1864.app.core.interfaces.IShoppingTripListener;
 
 /**
  * The java object Shop that corresponds to the shop table in DB
@@ -15,7 +16,7 @@ import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
  *  
  * @author stian
  */
-public class Shop{
+public class Shop implements IShoppingTripListener{
 	
 	/* Values */
 	private int shopID;
@@ -41,6 +42,9 @@ public class Shop{
 		
 		this.shelfs = new HashMap<>();
 		this.storage = new HashMap<>();
+		
+		//listener
+		ShoppingTrip.addListener(this);
 	}
 	
 	public int getShopID() {
@@ -102,6 +106,11 @@ public class Shop{
 		}
 	}
 	
+	public void shoppingTripAdded(ShoppingTrip trip) {
+		Receipt receipt = new Receipt(trip);
+		updateAmountInShelfsFromReceipt(receipt);
+	}
+	
 	/* Same as above, but gets amount in shelfs */
 	public int getAmountInShelfs(int productID) {
 		Integer temp = this.shelfs.get(productID);
@@ -124,22 +133,18 @@ public class Shop{
 	public void updateAmountInShelfsFromReceipt(Receipt receipt) {
 		
 		Map<Integer, Integer> inventory = receipt.getInventory();
-		Iterator<Entry<Integer, Integer>> it = inventory.entrySet().iterator();
 		
-		while (it.hasNext()) {
+		for (Integer id : inventory.keySet()) {
 			
-			Entry<Integer, Integer> pair = it.next();
-			int productID = (int)pair.getKey();
-			int amount = (int)pair.getValue();
-			int currentAmount = getAmountInShelfs(productID);
+			int amount = inventory.get(id);
+			int currentAmount = getAmountInShelfs(id);
 			
-			setAmountInShelfs(productID, currentAmount - amount);
+			setAmountInShelfs(id, currentAmount - amount);
 			
 			OnShelfDatabaseController osdc = new OnShelfDatabaseController();
-			osdc.update(this, productID);
-			
-			it.remove(); // avoids a ConcurrentModificationException
+			osdc.update(this, id);
 		}
+		System.out.println("Shop updated from receipt");
 	}
 	
 	/**
@@ -148,6 +153,7 @@ public class Shop{
 	 * 
 	 * @return		The updated Shop object
 	 */
+	/*
 	public Shop refreshShop() {
 		
 		Shop temp = this;
@@ -155,17 +161,19 @@ public class Shop{
 		
 		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
 		
-		Iterator<Entry<Integer, Integer>> it = shelfs.entrySet().iterator();
-		
-		while (it.hasNext()) {
-			
-			Entry<Integer, Integer> pair = it.next();
-			int productID = (int)pair.getKey();
-			
-			temp2 = osdc.retrieve(temp, productID);
+		for (Integer id : shelfs.keySet()) {
+			temp2 = osdc.retrieve(temp, id);
 			temp = temp2;
-		
 		}
 		return temp;
+	}*/
+	
+	public void refreshShop() {
+		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
+		for (Integer id : shelfs.keySet()) {
+			osdc.retrieve(this, id);
+		}
 	}
+	
+	
 }

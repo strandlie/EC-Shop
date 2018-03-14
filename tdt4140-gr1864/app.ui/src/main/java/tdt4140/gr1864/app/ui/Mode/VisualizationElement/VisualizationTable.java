@@ -137,4 +137,8 @@ public class VisualizationTable extends VisualizationElement {
 		}
 		return false;
 	}
+	
+	public void wipeTable() {
+		this.data.clear();
+	}
 }

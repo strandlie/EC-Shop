@@ -1,6 +1,10 @@
 package tdt4140.gr1864.app.core;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+
+import tdt4140.gr1864.app.core.interfaces.IShoppingTripListener;
 
 public class ShoppingTrip {
 	
@@ -22,6 +26,8 @@ public class ShoppingTrip {
 
 	private boolean charged;
 	
+	private static Collection<IShoppingTripListener> listeners = new ArrayList<>();
+	
 	/**
 	 * Normal constructor with charged paramater.
 	 * @param coordinates		list of coordinates making up the trip
@@ -40,6 +46,10 @@ public class ShoppingTrip {
 		if (!this.charged) {
 			charge();
 			this.charged = true;
+		}
+		// Listener
+		for (IShoppingTripListener listener : listeners) {
+			listener.shoppingTripAdded(this);
 		}
 	}
 	
@@ -162,5 +172,15 @@ public class ShoppingTrip {
 
 	public int getShoppingTripID() {
 		return shoppingTripID;
+	}
+	
+	// Listeners
+	
+	public static void addListener(IShoppingTripListener listener) {
+		listeners.add(listener);
+	}
+	
+	public static void removeListener(IShoppingTripListener listener) {
+		listeners.remove(listener);
 	}
 }

@@ -8,6 +8,7 @@ import java.util.Map;
 import tdt4140.gr1864.app.core.Action;
 import tdt4140.gr1864.app.core.Shop;
 import tdt4140.gr1864.app.core.ShoppingTrip;
+import tdt4140.gr1864.app.core.Receipt;
 import tdt4140.gr1864.app.core.database.DataLoader;
 import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
@@ -106,9 +107,14 @@ public class ModeController {
 		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
 		ProductDatabaseController pdc = new ProductDatabaseController();
 		Shop shop = sdc.retrieve(1);
+
 		for (int i = 1; i < 65; i++) {
 			osdc.retrieve(shop, i);
 		}
+		
+		//shop.refreshShop();
+		
+		System.out.println(shop.getShelfs());
 		
 		Map<Integer, Integer> productIDsOnShelf = shop.getShelfs();
 		Map<Integer, Integer> productIDsInStorage = shop.getStorage();
@@ -195,6 +201,18 @@ public class ModeController {
 		}
 		this.currentMode = mode;
 		setMode(this.currentMode);
+		// Move dataloading to change of mode  now onshelves is empty : (
+		/*
+		switch(mode.getName()) {
+		case "Shelves":
+			VisualizationTable table = mode.getVisualizationElement();
+			table.wipeTable();
+			ShopDatabaseController sdbc = new ShopDatabaseController();
+			Shop shop = sdbc.retrieve(1);
+			shop.refreshShop();
+			Map <Integer, Integer> onShelvesProductIDs = shop.getShelfs();
+			new TableLoader(onShelvesProductIDs, table);
+		}*/
 	}
 	
 

@@ -153,6 +153,4 @@ public class TableLoader {
 		return this.stock;
 	}
 	
-	
-
 }

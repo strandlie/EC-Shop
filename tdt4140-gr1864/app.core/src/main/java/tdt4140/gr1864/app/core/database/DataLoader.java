@@ -43,11 +43,8 @@ public class DataLoader {
 
 	
 	public DataLoader() {
-		// Creates database
-		Path dbPath = Paths.get("database.db");
-		if (! Files.exists(dbPath)) {
-			CreateDatabase.main(null);
-		}
+		DatabaseWiper wiper = new DatabaseWiper();
+		wiper.wipe();
 		
 		ProductDatabaseController pdc = new ProductDatabaseController();
 	
@@ -55,13 +52,15 @@ public class DataLoader {
 		String pathToProducts = "../../../app.core/src/main/resources/mock-products.json";
 
 		products = this.loadProducts(pathToProducts, pdc);
-	
-		// loads trips
-		String pathToTrip = "../../../app.core/src/main/resources/test-data.json";
-		trip = this.loadShoppingTrips(pathToTrip);
+		
+		Shop s1 = createShop();
 		
 		// Adds amounts of products to shelfs and storage of DB and updates DB
 		addProductsInShelfsInDB(products);
+	
+		// loads trips
+		String pathToTrip = "../../../app.core/src/main/resources/test-data.json";
+		trip = this.loadShoppingTrips(pathToTrip, s1);
 	}
 	
 	/**
@@ -161,7 +160,7 @@ public class DataLoader {
 	 * @param path	relative path to JSON-data (relative to this)
 	 * @return shoppingTrip
 	 */
-	public ShoppingTrip loadShoppingTrips(String path) {
+	public ShoppingTrip loadShoppingTrips(String path, Shop s1) {
 		
 		String relativePath;
 		//Finds path by getting URL and converting to URI and then to path 
@@ -178,7 +177,7 @@ public class DataLoader {
 		
 		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
 		
-		Shop s1 = createShop();
+		//Shop s1 = createShop();
 		Customer c1 = createCustomer();
 
 		// We set the charged flag to true to prevent spamming the Stripe API.		
