@@ -13,7 +13,7 @@ public interface VisualizationInterface {
 	
 	boolean isActive();
 	
-	void setActive();
+	void setActive(boolean isActive);
 	
 	/*
 	 * TODO: Add more methods
