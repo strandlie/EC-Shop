@@ -35,7 +35,7 @@ public class Shop implements IShoppingTripListener{
 		this.storage = new HashMap<>();
 	}
 	
-	/* Constructor used by DatabseController */
+	/* Constructor used by DatabaseController */
 	public Shop(String address, int zip, int shopId) {
 		this.address = address;
 		this.zip = zip;
@@ -107,12 +107,6 @@ public class Shop implements IShoppingTripListener{
 		}
 	}
 	
-	public void shoppingTripAdded(ShoppingTrip trip) {
-		Receipt receipt = new Receipt(trip);
-		updateAmountInShelfsFromReceipt(receipt);
-		System.out.println("Listener in shoppingtrip constructor run");
-	}
-	
 	/* Same as above, but gets amount in shelfs */
 	public int getAmountInShelfs(int productID) {
 		Integer temp = this.shelfs.get(productID);
@@ -122,6 +116,18 @@ public class Shop implements IShoppingTripListener{
 		else {
 			return temp;
 		}
+	}
+	
+	/**
+	 * Listener for a new registered shopping trip, updates the amounts of
+	 * products on shelves in DB
+	 * 
+	 * @param trip	The newly added shopping trip
+	 */
+	public void shoppingTripAdded(ShoppingTrip trip) {
+		Receipt receipt = new Receipt(trip);
+		updateAmountInShelfsFromReceipt(receipt);
+		System.out.println("Listener in shoppingtrip constructor run");
 	}
 	
 	/**

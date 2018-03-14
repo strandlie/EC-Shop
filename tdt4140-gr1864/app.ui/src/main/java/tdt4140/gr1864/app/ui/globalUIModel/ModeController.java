@@ -201,25 +201,42 @@ public class ModeController {
 		}
 		
 		
-		switch(mode.getName()) {
-		case "Shelves":
-			// Changing the list in this box impacts GUI
+		if (mode.getName() == "Shelves") {
+			// Retrieve the shop from DB and extract products on shelves from said shop
+			ShopDatabaseController sdc = new ShopDatabaseController();
+			Shop shop = sdc.retrieve(1);
+			shop.refreshShop();
+			Map<Integer, Integer> productIDsOnShelf = shop.getShelfs();
+			
+			// Wipe the data table in mode
+			VisualizationTable onShelvesTable = mode.getVisualizationElement();
+			onShelvesTable.wipeTable();
+			
+			// Load the data table with the new values
+			new TableLoader(productIDsOnShelf, onShelvesTable);
+			
+			// Test if listener is listening by adding the shopping trip again
 			ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
 			ActionDatabaseController adc = new ActionDatabaseController();
 			
 			ShoppingTrip trip = stdc.retrieve(1);
 			trip.setActions(adc.retrieveAll(1));
+		}
 			
+		else if (mode.getName() == "Stock") {
+			// Retrieve the shop from DB and extract products on shelves and in storage from said shop
 			ShopDatabaseController sdc = new ShopDatabaseController();
 			Shop shop = sdc.retrieve(1);
 			shop.refreshShop();
-			//shop.updateAmountInShelfsFromReceipt(new Receipt(trip));
-			
 			Map<Integer, Integer> productIDsOnShelf = shop.getShelfs();
-			VisualizationTable onShelvesTable = mode.getVisualizationElement();
-			onShelvesTable.wipeTable();
+			Map<Integer, Integer> productIDsInStorage = shop.getStorage();
 			
-			new TableLoader(productIDsOnShelf, onShelvesTable);
+			// Wipe the data table in mode
+			VisualizationTable stockTable = mode.getVisualizationElement();
+			stockTable.wipeTable();
+			
+			// Load the data table with the new values
+			new TableLoader(productIDsOnShelf, productIDsInStorage, stockTable);
 			}
 		
 		this.currentMode = mode;
