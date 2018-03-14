@@ -107,14 +107,16 @@ public class ModeController {
 		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
 		ProductDatabaseController pdc = new ProductDatabaseController();
 		Shop shop = sdc.retrieve(1);
-
+		/*
 		for (int i = 1; i < 65; i++) {
 			osdc.retrieve(shop, i);
 		}
+		*/
 		
-		//shop.refreshShop();
+		shop.refreshShop();
 		
 		System.out.println(shop.getShelfs());
+		System.out.println(shop.getStorage());
 		
 		Map<Integer, Integer> productIDsOnShelf = shop.getShelfs();
 		Map<Integer, Integer> productIDsInStorage = shop.getStorage();

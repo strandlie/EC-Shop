@@ -102,7 +102,7 @@ public class TableLoader {
 		ArrayList<Integer> seen = new ArrayList<>();
 		for (Integer productID : productIDsOnShelf.keySet()) {
 			Product product = pdc.retrieve(productID);
-			int numberOnShelf = productIDsOnShelf.containsKey(productID) ? productIDsInStorage.get(productID) : 0;
+			int numberOnShelf = productIDsOnShelf.containsKey(productID) ? productIDsOnShelf.get(productID) : 0;
 			int numberInStorage = productIDsInStorage.containsKey(productID) ? productIDsInStorage.get(productID) : 0;
 			int sum = numberOnShelf + numberInStorage;
 			this.stock.put(product.getName(), sum);

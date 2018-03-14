@@ -168,12 +168,11 @@ public class Shop implements IShoppingTripListener{
 		return temp;
 	}*/
 	
-	public void refreshShop() {
+	public Shop refreshShop() {
 		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
-		for (Integer id : shelfs.keySet()) {
-			osdc.retrieve(this, id);
+		for (int i = 1; i < 65; i++) {
+			osdc.retrieve(this, i);
 		}
+		return this;
 	}
-	
-	
 }
