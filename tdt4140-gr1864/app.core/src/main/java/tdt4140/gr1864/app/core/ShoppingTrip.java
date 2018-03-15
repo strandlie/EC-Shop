@@ -1,10 +1,7 @@
 package tdt4140.gr1864.app.core;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import tdt4140.gr1864.app.core.interfaces.IShoppingTripListener;
 
 public class ShoppingTrip {
 	

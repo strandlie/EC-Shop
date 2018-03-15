@@ -7,7 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import static java.lang.Math.toIntExact;
@@ -30,7 +29,7 @@ import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShopDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
-import tdt4140.gr1864.app.core.interfaces.IShoppingTripListener;
+
 
 public class TestDataLoader {
 	
@@ -43,9 +42,6 @@ public class TestDataLoader {
 	List<Product> products;
 	List<Action> actions;
 	List<Coordinate> coordinates;
-	
-	// Listeners for when a new trip is registered, currently just one
-	private static Collection<IShoppingTripListener> listeners = new ArrayList<>();
 		
 	
 	public TestDataLoader() {
@@ -74,23 +70,9 @@ public class TestDataLoader {
 		String pathToTrip = "../../../app.core/src/main/resources/test-data.json";
 		trip = this.loadShoppingTrips(pathToTrip);
 		
-		
-		// Listener, as this constructor is run when a NEW trip is added to DB, not just accessed.
-		/*
-		for (IShoppingTripListener listener : listeners) {
-			listener.shoppingTripAdded(trip);
-		}*/
-		
-			/* 
-			 * OK, hope Torjus gets this, ran out of time, couldn't get listener to work, but they need to
-			 * run the update below. Listener in constructor works bad, they're either called all the time,
-			 * or called without actions. Solution could be to put listener in the dataloader that handles
-			 * new trips.
-			 */
-		
-		
+		/* Update shop from trip, this was supposed to be a listener, but proved unnecessarily
+		 * complicated */
 		this.shop.updateAmountInShelfsFromReceipt(new Receipt(trip));
-		System.out.println("TestDataLoader finished");
 	}
 	
 	/**
@@ -341,16 +323,5 @@ public class TestDataLoader {
 	}
 	public List<Coordinate> getCoordinates() {
 		return coordinates;
-	}
-	
-	
-	// Listeners
-	
-	public static void addListener(IShoppingTripListener listener) {
-		listeners.add(listener);
-	}
-	
-	public static void removeListener(IShoppingTripListener listener) {
-		listeners.remove(listener);
 	}
 }

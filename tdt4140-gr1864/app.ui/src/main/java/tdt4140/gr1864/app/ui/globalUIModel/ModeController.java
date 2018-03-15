@@ -2,25 +2,17 @@ package tdt4140.gr1864.app.ui.globalUIModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import tdt4140.gr1864.app.core.Action;
 import tdt4140.gr1864.app.core.Shop;
 import tdt4140.gr1864.app.core.ShoppingTrip;
-import tdt4140.gr1864.app.core.Receipt;
-import tdt4140.gr1864.app.core.database.DataLoader;
 import tdt4140.gr1864.app.core.database.TestDataLoader;
 import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
-import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
-import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShopDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
 import tdt4140.gr1864.app.ui.TableLoader;
 import tdt4140.gr1864.app.ui.Mode.Mode;
-import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Aggregate;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 
 /**
@@ -88,7 +80,6 @@ public class ModeController {
 		stockTable.addColumn("numberInStock");
 		Mode stock = new Mode("Stock", stockTable);
 		
-		System.out.println("Run TestDataLoader");
 		new TestDataLoader();
 		
 		// Get data from shopping trip and add to TableView
