@@ -26,6 +26,7 @@ public class ShoppingTrip {
 
 	private boolean charged;
 	
+	// Listeners for when a new trip is registered, currently just one
 	private static Collection<IShoppingTripListener> listeners = new ArrayList<>();
 	
 	/**
@@ -48,7 +49,7 @@ public class ShoppingTrip {
 			this.charged = true;
 		}
 		
-		// Listener
+		// Listener, as this constructor is run when a NEW trip is added to DB, not just accessed.
 		for (IShoppingTripListener listener : listeners) {
 			listener.shoppingTripAdded(this);
 		}

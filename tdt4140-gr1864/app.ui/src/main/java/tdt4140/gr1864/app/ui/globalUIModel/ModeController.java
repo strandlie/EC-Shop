@@ -24,7 +24,7 @@ import javafx.fxml.FXML;
 
 /**
  * Initializes the different modes, and handles the switching between them. Also hands of responsibility
- * to the sub-controllerclasses
+ * to the sub-controllerclasses. Also runs the dataloader
  * @author Håkon Strandlie
  *
  */
@@ -82,10 +82,7 @@ public class ModeController {
 		Mode mostPickedUp = new Mode("Most Picked Up", mostPickedUpTable);
 		
 		VisualizationTable stockTable = new VisualizationTable("Stock");
-		/*
-		stockTable.addData(new Aggregate("Bolle", "5"));
-		stockTable.addData(new Aggregate("Sjokolade", "20"));
-		*/
+
 		stockTable.addColumn("productName");
 		stockTable.addColumn("numberInStock");
 		Mode stock = new Mode("Stock", stockTable);
@@ -100,20 +97,11 @@ public class ModeController {
 		trip.setActions(adc.retrieveAll(1));
 		ArrayList<ShoppingTrip> shoppingTripList = new ArrayList<>();
 		shoppingTripList.add(trip);
-		
 		new TableLoader(shoppingTripList, mostPickedUpTable);
 		
 		// Get data from Shop and add to StockMode
 		ShopDatabaseController sdc = new ShopDatabaseController();
-		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
-		ProductDatabaseController pdc = new ProductDatabaseController();
 		Shop shop = sdc.retrieve(1);
-		/*
-		for (int i = 1; i < 65; i++) {
-			osdc.retrieve(shop, i);
-		}
-		*/
-		
 		shop.refreshShop();
 		
 		Map<Integer, Integer> productIDsOnShelf = shop.getShelfs();
@@ -129,6 +117,7 @@ public class ModeController {
 		
 		new TableLoader(productIDsOnShelf, onShelvesTable);
 		
+		//Add modes and set default
 		addMode(mostPickedUp);
 		addMode(stock);
 		addMode(shelves);
@@ -192,6 +181,8 @@ public class ModeController {
 	
 	/**
 	 * The method called by the menuViewController when the user selects a new item in the menu list
+	 * It also wipes the data tables of the modes and re-loads them from DB.
+	 * 
 	 * @param newMode String The String of the ListItem in the menu selected by the user
 	 */
 	public void modeChanged(String newMode) {
@@ -200,6 +191,7 @@ public class ModeController {
 			throw new IllegalStateException("modeChanged should not be called when there is no corresponding mode in modes");
 		}
 		
+		// Wipe and re-load tables
 		if (mode.getName() == "Shelves") {
 			// Retrieve the shop from DB and extract products on shelves from said shop
 			ShopDatabaseController sdc = new ShopDatabaseController();

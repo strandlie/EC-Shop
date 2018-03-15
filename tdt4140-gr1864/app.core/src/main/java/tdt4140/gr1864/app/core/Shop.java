@@ -1,12 +1,9 @@
 package tdt4140.gr1864.app.core;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
-import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
 import tdt4140.gr1864.app.core.interfaces.IShoppingTripListener;
 
 /**
@@ -127,7 +124,6 @@ public class Shop implements IShoppingTripListener{
 	public void shoppingTripAdded(ShoppingTrip trip) {
 		Receipt receipt = new Receipt(trip);
 		updateAmountInShelfsFromReceipt(receipt);
-		System.out.println("Listener in shoppingtrip constructor run");
 	}
 	
 	/**
