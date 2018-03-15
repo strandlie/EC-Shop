@@ -200,7 +200,6 @@ public class ModeController {
 			throw new IllegalStateException("modeChanged should not be called when there is no corresponding mode in modes");
 		}
 		
-		
 		if (mode.getName() == "Shelves") {
 			// Retrieve the shop from DB and extract products on shelves from said shop
 			ShopDatabaseController sdc = new ShopDatabaseController();
@@ -231,6 +230,30 @@ public class ModeController {
 			// Load the data table with the new values
 			new TableLoader(productIDsOnShelf, productIDsInStorage, stockTable);
 			}
+		
+		else if (mode.getName() == "Most Picked Up") {
+			// Retrieve the shopping trips from DB and put in a list
+			ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
+			ActionDatabaseController adc = new ActionDatabaseController();
+			ArrayList<ShoppingTrip> shoppingTripList = new ArrayList<>();
+			int iterator = 1;
+			while(true) {
+				ShoppingTrip trip = stdc.retrieve(iterator);
+				if (trip == null) {
+					break;
+				}
+				trip.setActions(adc.retrieveAll(iterator));
+				shoppingTripList.add(trip);
+				iterator++;
+			}
+			
+			// Wipe the data table in mode
+			VisualizationTable mostPickedUpTable = mode.getVisualizationElement();
+			mostPickedUpTable.wipeTable();
+			
+			// Load the data table with new values
+			new TableLoader(shoppingTripList, mostPickedUpTable);
+		}
 		
 		this.currentMode = mode;
 		setMode(this.currentMode);
