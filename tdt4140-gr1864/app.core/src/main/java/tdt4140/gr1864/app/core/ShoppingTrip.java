@@ -26,9 +26,6 @@ public class ShoppingTrip {
 
 	private boolean charged;
 	
-	// Listeners for when a new trip is registered, currently just one
-	private static Collection<IShoppingTripListener> listeners = new ArrayList<>();
-	
 	/**
 	 * Normal constructor with charged paramater.
 	 * @param coordinates		list of coordinates making up the trip
@@ -47,11 +44,6 @@ public class ShoppingTrip {
 		if (!this.charged) {
 			charge();
 			this.charged = true;
-		}
-		
-		// Listener, as this constructor is run when a NEW trip is added to DB, not just accessed.
-		for (IShoppingTripListener listener : listeners) {
-			listener.shoppingTripAdded(this);
 		}
 	}
 	
@@ -174,15 +166,5 @@ public class ShoppingTrip {
 
 	public int getShoppingTripID() {
 		return shoppingTripID;
-	}
-	
-	// Listeners
-	
-	public static void addListener(IShoppingTripListener listener) {
-		listeners.add(listener);
-	}
-	
-	public static void removeListener(IShoppingTripListener listener) {
-		listeners.remove(listener);
 	}
 }

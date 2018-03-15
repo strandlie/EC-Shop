@@ -10,6 +10,7 @@ import tdt4140.gr1864.app.core.Shop;
 import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.Receipt;
 import tdt4140.gr1864.app.core.database.DataLoader;
+import tdt4140.gr1864.app.core.database.TestDataLoader;
 import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
@@ -87,7 +88,8 @@ public class ModeController {
 		stockTable.addColumn("numberInStock");
 		Mode stock = new Mode("Stock", stockTable);
 		
-		new DataLoader();
+		System.out.println("Run TestDataLoader");
+		new TestDataLoader();
 		
 		// Get data from shopping trip and add to TableView
 		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();

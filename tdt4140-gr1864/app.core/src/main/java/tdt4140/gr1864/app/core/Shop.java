@@ -3,6 +3,7 @@ package tdt4140.gr1864.app.core;
 import java.util.HashMap;
 import java.util.Map;
 
+import tdt4140.gr1864.app.core.database.TestDataLoader;
 import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
 import tdt4140.gr1864.app.core.interfaces.IShoppingTripListener;
 
@@ -42,7 +43,7 @@ public class Shop implements IShoppingTripListener{
 		this.storage = new HashMap<>();
 		
 		//listener
-		ShoppingTrip.addListener(this);
+		TestDataLoader.addListener(this);
 	}
 	
 	public int getShopID() {
@@ -123,7 +124,9 @@ public class Shop implements IShoppingTripListener{
 	 */
 	public void shoppingTripAdded(ShoppingTrip trip) {
 		Receipt receipt = new Receipt(trip);
+		Shop shop = trip.getShop();
 		updateAmountInShelfsFromReceipt(receipt);
+		System.out.println("Listener in shop.java triggered and finished");
 	}
 	
 	/**
@@ -135,18 +138,15 @@ public class Shop implements IShoppingTripListener{
 	 * @param receipt	A receipt from a shopping trip
 	 */
 	public void updateAmountInShelfsFromReceipt(Receipt receipt) {
-		
 		Map<Integer, Integer> inventory = receipt.getInventory();
-		
+		OnShelfDatabaseController osdbc = new OnShelfDatabaseController();
 		for (Integer id : inventory.keySet()) {
 			
-			OnShelfDatabaseController osdbc = new OnShelfDatabaseController();
 			int amount = inventory.get(id);
 			int currentAmount = osdbc.retrieve(this, id).getAmountInShelfs(id);
 			
 			setAmountInShelfs(id, currentAmount - amount);
 			
-			//OnShelfDatabaseController osdc = new OnShelfDatabaseController();
 			osdbc.update(this, id);
 		}
 		System.out.println("Shop updated from receipt");

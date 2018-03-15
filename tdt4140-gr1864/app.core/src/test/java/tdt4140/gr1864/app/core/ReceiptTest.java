@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import tdt4140.gr1864.app.core.database.DataLoader;
+import tdt4140.gr1864.app.core.database.TestDataLoader;
 import tdt4140.gr1864.app.core.database.DatabaseWiper;
 
 
@@ -21,7 +21,7 @@ public class ReceiptTest {
 		DatabaseWiper viper = new DatabaseWiper();
 		viper.wipe();
 
-		DataLoader loader = new DataLoader();
+		TestDataLoader loader = new TestDataLoader();
 		shoppingTrip = loader.getTrip();
 		receipt = new Receipt(shoppingTrip);
 	}
