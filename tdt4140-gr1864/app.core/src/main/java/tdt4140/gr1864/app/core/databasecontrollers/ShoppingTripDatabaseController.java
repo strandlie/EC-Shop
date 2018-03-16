@@ -95,6 +95,37 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 			e.printStackTrace();
 		}
 	}
+	
+	public List<ShoppingTrip> getTripsForCustomer(int customerID) {
+		String sql = "SELECT * "
+				   + "FROM shopping_trip "
+				   + "WHERE customer_id=?";
+		try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
+			statement = connection.prepareStatement(sql);
+			statement.setInt(1, customerID);
+			ResultSet rs = statement.executeQuery();
+			
+			CustomerDatabaseController cdc = new CustomerDatabaseController();
+			ShopDatabaseController sdc = new ShopDatabaseController();
+			ShoppingTrip trip;
+			List<ShoppingTrip> trips = new ArrayList<>();
+			while (rs.next()) {
+				trip = new ShoppingTrip(
+					rs.getInt("shopping_trip_id"), 
+					cdc.retrieve(rs.getInt("customer_id")),
+					sdc.retrieve(rs.getInt("shop_id")),
+					true);	
+				trips.add(trip);
+			}
+			connection.close();
+			return trips;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	/**
 	 * @see tdt4140.gr1864.app.core.interfaces.DatabaseCRUD#retrieve(int)
@@ -122,7 +153,6 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 					cdc.retrieve(rs.getInt("customer_id")),
 					sdc.retrieve(rs.getInt("shop_id")),
 					true);
-			// TODO: This is not ideal. Closes the connection, even if the ShoppingTripDatabaseController is used more
 			connection.close();
 			return trip;
 

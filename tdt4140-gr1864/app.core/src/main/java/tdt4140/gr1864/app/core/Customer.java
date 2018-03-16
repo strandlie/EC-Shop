@@ -5,13 +5,18 @@ import java.util.List;
 import tdt4140.gr1864.app.core.interfaces.UserInterface;
 
 public class Customer implements UserInterface {
+
 	private int customerId;
+
 	private String firstName;
 	private String lastName;
+	/* has a default value for Customers without demographic data */
+	private String address = null;
+	private int zip = 0;
+
 	private List<ShoppingTrip> shoppingTrips;
 	
 	/**
-	 * Constructor used by CustomerDatabaseController
 	 * @param customerId		id provided by database
 	 * @param firstName			name of customer
 	 * @param lastName			name of customer
@@ -25,6 +30,23 @@ public class Customer implements UserInterface {
 		this.shoppingTrips = shoppingTrips;
 	}
 	
+	/**
+	 * Constructor used by CustomerDatabaseController when there is an address
+	 * @param customerId		id provided by database
+	 * @param firstName			name of customer
+	 * @param lastName			name of customer
+	 * @param shoppingTrips 	trips of customer
+	 */
+	public Customer(String firstName, String lastName, int customerId,
+			 List<ShoppingTrip> shoppingTrips, String address, int zip) {
+		this.customerId = customerId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.address = address;
+		this.zip = zip;
+		this.shoppingTrips = shoppingTrips;
+	}
+
 	/**
 	 * @param firstName			name of customer
 	 * @param lastName			name of customer
@@ -75,6 +97,22 @@ public class Customer implements UserInterface {
 
 	public void setShoppingTrips(List<ShoppingTrip> shoppingTrips) {
 		this.shoppingTrips = shoppingTrips;
+	}
+	
+	public int getZip() {
+		return zip;
+	}
+	
+	public void setZip(int zip) {
+		this.zip = zip;
+	}
+	
+	public String getAddress() {
+		return address;
+	}
+	
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	@Override

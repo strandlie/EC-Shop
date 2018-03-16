@@ -8,8 +8,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import tdt4140.gr1864.app.core.Customer;
+import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
 
 public class CustomerDatabaseController implements DatabaseCRUD {
@@ -38,12 +40,15 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 	@Override
     public int create(Object object) {
     	Customer customer = objectIsCustomer(object);
-		String sql = "INSERT INTO customer (first_name, last_name) values (?, ?)";
+		String sql = "INSERT INTO customer (first_name, last_name, address, zip) "
+					+ "values (?, ?, ?, ?)";
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 			statement.setString(1, customer.getFirstName());
 			statement.setString(2, customer.getLastName());
+			statement.setString(3, customer.getAddress());
+			statement.setInt(4, customer.getUserId());
 			statement.executeUpdate();
 				
 			try {
@@ -84,10 +89,16 @@ public class CustomerDatabaseController implements DatabaseCRUD {
             	connection.close();
                 return null;
             }
+            
+            ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
+            List<ShoppingTrip> trips = stdc.getTripsForCustomer(rs.getInt("customer_id"));
             Customer user = new Customer(
             		rs.getString("first_name"), 
             		rs.getString("last_name"), 
-            		rs.getInt("customer_id"));
+            		rs.getInt("customer_id"),
+            		trips,
+            		rs.getString("address"),
+            		rs.getInt("zip"));
             statement.close();
             return user;
       
@@ -105,14 +116,16 @@ public class CustomerDatabaseController implements DatabaseCRUD {
     public void update(Object object) {
     	Customer customer = objectIsCustomer(object);
     	String sql = "UPDATE customer "
-    				+ "SET first_name=?, last_name=? "
+    				+ "SET first_name=?, last_name=?, address=?, zip=? "
     				+ "WHERE customer_id=?";
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql);
 			statement.setString(1, customer.getFirstName());
 			statement.setString(2, customer.getLastName());
-			statement.setInt(3, customer.getUserId());
+			statement.setString(3, customer.getAddress());
+			statement.setInt(4, customer.getZip());
+			statement.setInt(5, customer.getUserId());
 			statement.executeUpdate();
 			connection.close();
 		} 
