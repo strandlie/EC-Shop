@@ -45,15 +45,8 @@ public class TestDataLoader {
 		
 	
 	public TestDataLoader() {
-		// Creates database
-		Path dbPath = Paths.get("database.db");
-		if (! Files.exists(dbPath)) {
-			CreateDatabase.main(null);
-		} else {
-			// Wipe database
-			DatabaseWiper wiper = new DatabaseWiper();
-			wiper.wipe();
-		}
+		// clean database
+		cleanDatabase();
 		
 		ProductDatabaseController pdc = new ProductDatabaseController();
 	
@@ -75,6 +68,32 @@ public class TestDataLoader {
 		this.shop.updateAmountInShelfsFromReceipt(new Receipt(trip));
 	}
 	
+	/**
+	 * Creates database if doesn't exist and wipes if does
+	 */
+	private static void cleanDatabase() {
+		String path = "../../../app.core/src/main/resources/database.db";
+		String relativePath;
+		//Finds path by getting URL and converting to URI and then to path 
+		try {
+			URI rerelativeURI = TestDataLoader.class.getClassLoader().getResource(".").toURI();
+			relativePath = Paths.get(rerelativeURI).toFile().toString() + "/";
+			
+		} catch (URISyntaxException e1) {
+			//If fail to convert to URI use URL path instead
+			relativePath = TestDataLoader.class.getClass().getClassLoader().getResource(".").getPath();
+		} 
+		path = relativePath + path;
+		Path dbPath = Paths.get(path);
+
+		if (! Files.exists(dbPath)) {
+			CreateDatabase.main(null);
+		} else {
+			DatabaseWiper wiper = new DatabaseWiper();
+			wiper.wipe();
+		}
+	}
+
 	/**
 	 * Loads mock-products file and creates Product objects with corresponding name and price
 	 * @param path Path to .json file

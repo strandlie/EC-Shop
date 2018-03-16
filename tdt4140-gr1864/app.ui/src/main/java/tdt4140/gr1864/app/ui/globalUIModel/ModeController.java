@@ -199,6 +199,15 @@ public class ModeController {
 			
 			// Load the data table with the new values
 			new TableLoader(productIDsOnShelf, onShelvesTable);
+			
+			
+			/*
+			 * Test by adding another shopping trip to the system.
+			 */
+			
+			TestDataLoader loader = new TestDataLoader();
+			ShoppingTrip shoppingTrip = loader.getTrip();
+			shop.updateAmountInShelfsFromReceipt(new Receipt(shoppingTrip));
 		}
 			
 		else if (mode.getName() == "Stock") {
