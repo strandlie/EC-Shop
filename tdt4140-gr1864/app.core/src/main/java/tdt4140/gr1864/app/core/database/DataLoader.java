@@ -296,9 +296,6 @@ public class DataLoader {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		/* Update shop from trip, this was supposed to be a listener, but proved unnecessarily
-		 * complicated */
-		s1.updateAmountInShelfsFromReceipt(new Receipt(trip));
 		return trip;
 	}
 
