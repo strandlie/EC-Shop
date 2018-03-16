@@ -7,6 +7,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -215,7 +218,6 @@ public class DataMocker {
 	
 	public static void main(String[] args) throws IOException {
 		Rectangle home = new Rectangle(new Coordinate(0, 0), new Coordinate(10, 10));
-	
 		List<Rack> zones = new ArrayList<>();
 		Collection<Product> products = new ArrayList<>();
 
@@ -252,8 +254,19 @@ public class DataMocker {
 		Trip trip = mocker.generateRandomPath(5, 2, ThreadLocalRandom.current().nextInt(0, 60));		
 		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 		String json = ow.writeValueAsString(trip);
-		String path = "./src/main/resources/data.json";
+		String path = "../../../app.core/src/main/resources/data.json";
+		String relativePath;
+		//Finds path by getting URL and converting to URI and then to path 
+		try {
+			URI rerelativeURI = DataMocker.class.getClassLoader().getResource(".").toURI();
+			relativePath = Paths.get(rerelativeURI).toFile().toString() + "/";
+			
+		} catch (URISyntaxException e1) {
+			//If fail to convert to URI use URL path instead
+			relativePath = DataMocker.class.getClassLoader().getResource(".").getPath();
+		} 
 		
+		path = relativePath + path;
         try {
             FileWriter fw = new FileWriter(path);
             BufferedWriter bw = new BufferedWriter(fw);
@@ -262,7 +275,6 @@ public class DataMocker {
         } catch (IOException error) {
         	error.printStackTrace();
         }
-        DataLoader.main(null);
         postData(path);
 	}
 }

@@ -17,7 +17,6 @@ public class ShoppingTripServlet extends HttpServlet {
 	
 	@Override
 	public void init() throws ServletException {
-		CreateDatabase.main(null);
 		super.init();
 	}
 
