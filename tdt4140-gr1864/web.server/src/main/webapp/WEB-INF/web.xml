@@ -10,9 +10,17 @@
     <servlet-name>DataFetcher</servlet-name>
     <servlet-class>org.web.server.ShoppingTripServlet</servlet-class>
   </servlet>
+    <servlet>
+    <servlet-name>UserFetcher</servlet-name>
+    <servlet-class>org.web.server.UserServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
     <servlet-name>DataFetcher</servlet-name>
     <url-pattern>/api/*</url-pattern>
+  </servlet-mapping>
+  <<servlet-mapping>
+    <servlet-name>UserFetcher</servlet-name>
+    <url-pattern>/api/v1/user</url-pattern>
   </servlet-mapping>
 
 </web-app>
