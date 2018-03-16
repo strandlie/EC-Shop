@@ -1,5 +1,8 @@
 package tdt4140.gr1864.app.core.databasecontrollers;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -14,6 +17,22 @@ import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
 public class ShoppingTripDatabaseController implements DatabaseCRUD {
 
 	PreparedStatement statement;
+	String dbPath;
+	
+	public ShoppingTripDatabaseController() {
+		String path = "../../../app.core/src/main/resources/database.db";
+		String relativePath;
+		//Finds path by getting URL and converting to URI and then to path 
+		try {
+			URI rerelativeURI = this.getClass().getClassLoader().getResource(".").toURI();
+			relativePath = Paths.get(rerelativeURI).toFile().toString() + "/";
+			
+		} catch (URISyntaxException e1) {
+			//If fail to convert to URI use URL path instead
+			relativePath = this.getClass().getClassLoader().getResource(".").getPath();
+		} 
+		dbPath = relativePath + path;
+	}
 	
 	/**
 	 * @see tdt4140.gr1864.app.core.interfaces.DatabaseCRUD#create(java.lang.Object)
@@ -26,7 +45,7 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 					+ "VALUES (?, ?, ?)";
 					
 		try {
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 			statement.setInt(1, trip.getCustomer().getUserId());
 			statement.setInt(2, trip.getShop().getShopID());
@@ -63,7 +82,7 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 					+ "SET customer_id=?, shop_id=?, charged=? "
 					+ "WHERE shopping_trip_id=?";
 		try {
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, trip.getCustomer().getUserId());
 			statement.setInt(2, trip.getShop().getShopID());
@@ -86,7 +105,7 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 					+ "FROM shopping_trip "
 					+ "WHERE shopping_trip_id=?";
 		try {
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, id);
 			ResultSet rs = statement.executeQuery();
@@ -121,7 +140,7 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 		String sql = "DELETE FROM shopping_trip "
 					+ "WHERE shopping_trip_id=?";
 		try {
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, id);
 			statement.executeUpdate();
