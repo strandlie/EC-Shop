@@ -20,6 +20,7 @@ import tdt4140.gr1864.app.core.Action;
 import tdt4140.gr1864.app.core.Coordinate;
 import tdt4140.gr1864.app.core.Customer;
 import tdt4140.gr1864.app.core.Product;
+import tdt4140.gr1864.app.core.Receipt;
 import tdt4140.gr1864.app.core.Shop;
 import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
@@ -280,6 +281,9 @@ public class DataLoader {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+		/* Update shop from trip, this was supposed to be a listener, but proved unnecessarily
+		 * complicated */
+		s1.updateAmountInShelfsFromReceipt(new Receipt(trip));
 		return trip;
 	}
 
