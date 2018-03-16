@@ -69,7 +69,20 @@ public class DataLoader {
 	 * Creates database if doesn't exist and wipes if does
 	 */
 	private static void cleanDatabase() {
-		Path dbPath = Paths.get("database.db");
+		String path = "../../../app.core/src/main/resources/database.db";
+		String relativePath;
+		//Finds path by getting URL and converting to URI and then to path 
+		try {
+			URI rerelativeURI = TestDataLoader.class.getClassLoader().getResource(".").toURI();
+			relativePath = Paths.get(rerelativeURI).toFile().toString() + "/";
+			
+		} catch (URISyntaxException e1) {
+			//If fail to convert to URI use URL path instead
+			relativePath = TestDataLoader.class.getClass().getClassLoader().getResource(".").getPath();
+		} 
+		path = relativePath + path;
+		Path dbPath = Paths.get(path);
+
 		if (! Files.exists(dbPath)) {
 			CreateDatabase.main(null);
 		} else {
@@ -198,19 +211,20 @@ public class DataLoader {
 	 * This function is for the API
 	 * @param json	String with json-data of a ShoppingTrip
 	 */
-	private static void loadShoppingTrip(String json) {
+	public static void loadShoppingTrip(String json) {
 
 		JSONParser parser = new JSONParser();
 		
 		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
 		ShoppingTrip trip = null;
 		Customer customer;
+		Shop shop = createShop();
 
 		try {
 			JSONObject tripObject = (JSONObject) parser.parse(json);
 			
 			// get Customer
-			customer = (Customer) getCustomer((int) tripObject.get("customerID"));
+			customer = (Customer) getCustomer(toIntExact((long) tripObject.get("customerID")));
 			
 			// create ShoppingTrip
 			trip = new ShoppingTrip(customer, shop, true);
@@ -218,6 +232,7 @@ public class DataLoader {
 
 			// creating Coordinates
 			JSONArray coordsArray = (JSONArray) tripObject.get("path");
+			System.out.println(trip.getShoppingTripID());
 			coordinates = (ArrayList<Coordinate>) createCoordinates(coordsArray, trip);
 			
 			// creating Actions

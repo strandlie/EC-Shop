@@ -3,6 +3,7 @@ package tdt4140.gr1864.app.core;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import tdt4140.gr1864.app.core.database.TestDataLoader;
@@ -11,11 +12,12 @@ import org.junit.Assert;
 
 public class ShoppingTripTest {
 	
-	ShoppingTrip shoppingTrip;
+	static ShoppingTrip shoppingTrip;
+	static TestDataLoader loader;
 	
-	@Before
-	public void setup() {
-		TestDataLoader loader = new TestDataLoader();
+	@BeforeClass
+	public static void setup() {
+		loader = new TestDataLoader();
 		shoppingTrip = loader.getTrip();
 	}
 

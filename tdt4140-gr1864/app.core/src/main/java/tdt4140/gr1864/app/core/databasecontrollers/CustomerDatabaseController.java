@@ -1,5 +1,8 @@
 package tdt4140.gr1864.app.core.databasecontrollers;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -12,6 +15,22 @@ import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
 public class CustomerDatabaseController implements DatabaseCRUD {
 
 	PreparedStatement statement;
+	String dbPath;
+	
+	public CustomerDatabaseController() {
+		String path = "../../../app.core/src/main/resources/database.db";
+		String relativePath;
+		//Finds path by getting URL and converting to URI and then to path 
+		try {
+			URI rerelativeURI = this.getClass().getClassLoader().getResource(".").toURI();
+			relativePath = Paths.get(rerelativeURI).toFile().toString() + "/";
+			
+		} catch (URISyntaxException e1) {
+			//If fail to convert to URI use URL path instead
+			relativePath = this.getClass().getClassLoader().getResource(".").getPath();
+		} 
+		dbPath = relativePath + path;
+	}
 	
 	/**
 	 * @see tdt4140.gr1864.app.core.interfaces.DatabaseCRUD#create(java.lang.Object)
@@ -21,7 +40,7 @@ public class CustomerDatabaseController implements DatabaseCRUD {
     	Customer customer = objectIsCustomer(object);
 		String sql = "INSERT INTO customer (first_name, last_name) values (?, ?)";
 		try {
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 			statement.setString(1, customer.getFirstName());
 			statement.setString(2, customer.getLastName());
@@ -56,7 +75,7 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 					+ "FROM customer "
 					+ "WHERE customer_id = " + userId;
         try {
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
             statement = connection.prepareStatement(sql);
             ResultSet rs = statement.executeQuery();
 
@@ -89,7 +108,7 @@ public class CustomerDatabaseController implements DatabaseCRUD {
     				+ "SET first_name=?, last_name=? "
     				+ "WHERE customer_id=?";
 		try {
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql);
 			statement.setString(1, customer.getFirstName());
 			statement.setString(2, customer.getLastName());
@@ -110,7 +129,7 @@ public class CustomerDatabaseController implements DatabaseCRUD {
     	String sql = "DELETE FROM customer "
     				+ "WHERE customer_id=?";
         try {
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
             statement = connection.prepareStatement(sql);
             statement.setInt(1, customerId);
             statement.executeUpdate();

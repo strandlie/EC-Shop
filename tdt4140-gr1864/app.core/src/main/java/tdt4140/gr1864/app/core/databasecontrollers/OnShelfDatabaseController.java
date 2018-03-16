@@ -1,5 +1,8 @@
 package tdt4140.gr1864.app.core.databasecontrollers;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -18,6 +21,22 @@ import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
 public class OnShelfDatabaseController implements DatabaseCRUD {
 	
 	PreparedStatement statement;
+	String dbPath;
+	
+	public OnShelfDatabaseController() {
+		String path = "../../../app.core/src/main/resources/database.db";
+		String relativePath;
+		//Finds path by getting URL and converting to URI and then to path 
+		try {
+			URI rerelativeURI = this.getClass().getClassLoader().getResource(".").toURI();
+			relativePath = Paths.get(rerelativeURI).toFile().toString() + "/";
+			
+		} catch (URISyntaxException e1) {
+			//If fail to convert to URI use URL path instead
+			relativePath = this.getClass().getClassLoader().getResource(".").getPath();
+		} 
+		dbPath = relativePath + path;
+	}
 	
 	/**
 	 * The DatabaseCRUD interface was not compatible with table for on_shelf, so its four methods have been deprecated and replaced
@@ -41,7 +60,7 @@ public class OnShelfDatabaseController implements DatabaseCRUD {
 					+ "(shop_id, product_id, amount_on_shelfs, amount_in_storage) "
 					+ "VALUES (?, ?, ?, ?)";
 		try {
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, shop.getShopID());
 			statement.setInt(2, productID);
@@ -72,7 +91,7 @@ public class OnShelfDatabaseController implements DatabaseCRUD {
 					+ "SET amount_on_shelfs=?, amount_in_storage=? "
 					+ "WHERE shop_id=? AND product_id=?";
 		try {
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, shop.getAmountInShelfs(productID));
 			statement.setInt(2, shop.getAmountInStorage(productID));
@@ -105,7 +124,7 @@ public class OnShelfDatabaseController implements DatabaseCRUD {
 					+ "FROM on_shelf "
 					+ "WHERE shop_id=? AND product_id=?";
 		try {
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, shop.getShopID());
 			statement.setInt(2, productID);
@@ -147,7 +166,7 @@ public class OnShelfDatabaseController implements DatabaseCRUD {
 		String sql = "DELETE FROM on_shelf "
 					+ "WHERE shop_id=? AND product_id=?";
 		try {
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, shopID);
 			statement.setInt(2, productID);
