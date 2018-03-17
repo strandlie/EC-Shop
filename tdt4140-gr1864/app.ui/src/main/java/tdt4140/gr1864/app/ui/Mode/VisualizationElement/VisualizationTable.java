@@ -12,7 +12,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class VisualizationTable extends VisualizationElement {
 	/**
 	 * 
-	 * @author Håkon Strandlie
+	 * @author Hakon Strandlie
 	 * The model-class of the Visualization Table. Has proved to not serve the function originally thought, and wil probably deprecate in the future. 
 	 */
 	
