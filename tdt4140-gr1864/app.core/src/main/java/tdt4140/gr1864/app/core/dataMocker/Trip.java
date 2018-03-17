@@ -31,7 +31,7 @@ public class Trip {
 	public Trip(List<Position> path, List<Action> actions) {
 		this.path = path;
 		this.actions = actions;
-		this.customerID = ThreadLocalRandom.current().nextInt(0,10);
+		this.customerID = ThreadLocalRandom.current().nextInt(1, 11);
 	}
 
 	/**
@@ -46,6 +46,10 @@ public class Trip {
 	 */
 	public List<Action> getActions() {
 		return actions;
+	}
+	
+	public long getDuration() {
+		return path.get(path.size() - 1).getTime().getTime() - path.get(0).getTime().getTime();
 	}
 	
 	/**
