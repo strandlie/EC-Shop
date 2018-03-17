@@ -14,7 +14,7 @@ import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Aggregate;
  * 
  * In good, agile spirit this class is now tailored for the TableView. Later it will probably have to be
  * made abstract and extended for the different types of visualiztions 
- * @author Håkon Strandlie
+ * @author Hakon Strandlie
  *
  */
 public class VisualizationViewController {

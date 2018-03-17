@@ -2,7 +2,7 @@ package tdt4140.gr1864.app.ui.Mode.Option;
 
 /**
  * 
- * @author Håkon Strandlie
+ * @author Hakon Strandlie
  * Not yet used in the app. Exists for future. 
  *
  */

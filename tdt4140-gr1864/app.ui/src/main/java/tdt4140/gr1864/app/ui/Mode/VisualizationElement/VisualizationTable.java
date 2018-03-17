@@ -2,6 +2,7 @@ package tdt4140.gr1864.app.ui.Mode.VisualizationElement;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javafx.collections.FXCollections;
@@ -134,5 +135,11 @@ public class VisualizationTable extends VisualizationElement {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public void setData(List<Aggregate> data) {
+		// TODO Auto-generated method stub
+		
 	}
 }
