@@ -90,13 +90,10 @@ public class CustomerDatabaseController implements DatabaseCRUD {
                 return null;
             }
             
-            ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
-            List<ShoppingTrip> trips = stdc.getTripsForCustomer(rs.getInt("customer_id"));
             Customer user = new Customer(
             		rs.getString("first_name"), 
             		rs.getString("last_name"), 
             		rs.getInt("customer_id"),
-            		trips,
             		rs.getString("address"),
             		rs.getInt("zip"));
             statement.close();

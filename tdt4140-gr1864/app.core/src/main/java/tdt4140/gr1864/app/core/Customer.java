@@ -38,13 +38,12 @@ public class Customer implements UserInterface {
 	 * @param shoppingTrips 	trips of customer
 	 */
 	public Customer(String firstName, String lastName, int customerId,
-			 List<ShoppingTrip> shoppingTrips, String address, int zip) {
+			 String address, int zip) {
 		this.customerId = customerId;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.address = address;
 		this.zip = zip;
-		this.shoppingTrips = shoppingTrips;
 	}
 
 	/**
