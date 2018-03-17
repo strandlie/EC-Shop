@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.sun.tools.internal.ws.wsdl.document.soap.SOAPUse;
 import tdt4140.gr1864.app.core.*;
 import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Aggregate;
