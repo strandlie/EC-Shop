@@ -74,10 +74,16 @@ public class Aggregate {
 	 * @param address
 	 * @param zip
 	 */
-	public Aggregate(int customerId, String firstName, String lastName, String address, int zip) {
+	public Aggregate(String customerId, String firstName, String lastName, String address, String zip) {
+		setCustomerId(customerId);
+	    setFirstName(firstName);
+	    setLastName(lastName);
+	    setAddress(address);
+	    setZipCode(zip);
 
+	    this.size = 5;
 	}
-	
+
 	/**
 	 * Gets the number of columns in this Aggregate
 	 * @return
@@ -255,7 +261,7 @@ public class Aggregate {
 		this.zipCodeProperty().setValue(zipCode);
 	}
 
-	public String getZipcode() {
+	public String getZipCode() {
 		return this.zipCodeProperty().getValue();
 	}
 }

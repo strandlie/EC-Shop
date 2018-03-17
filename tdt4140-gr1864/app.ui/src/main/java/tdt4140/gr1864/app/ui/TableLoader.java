@@ -5,10 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import tdt4140.gr1864.app.core.Action;
-import tdt4140.gr1864.app.core.Product;
-import tdt4140.gr1864.app.core.Shop;
-import tdt4140.gr1864.app.core.ShoppingTrip;
+import com.sun.tools.internal.ws.wsdl.document.soap.SOAPUse;
+import tdt4140.gr1864.app.core.*;
 import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Aggregate;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
@@ -39,9 +37,10 @@ public class TableLoader {
 	private Map<String, Integer> stock;
 	
 	/**
-	 * The constructor for the MostPickedUpMode
+	 * The constructor for CustomerList
 	 * @param trips A list of shopping trips to load the table from
 	 * @param table A model-layer representation of a table shown to the user. Any changes made to this will reflect to the user immidiately
+	 * @param inputZero Dummy parameter to "skille" between the different tableLoders with the same erassure
 	 */
 	public TableLoader(List<ShoppingTrip> trips, VisualizationTable table) {
 		if (trips == null || table == null) {
@@ -118,7 +117,23 @@ public class TableLoader {
 		}
 		
 	}
-	
+
+	/**
+	 *
+	 * @param customers
+	 * @param table
+	 * @param inputZero to differentiate the differetn tableloaders, no real function
+	 */
+	public TableLoader(List<Customer> customers, VisualizationTable table, boolean inputZero) {
+		if (customers == null || table == null) {
+			return;
+		}
+
+		for (Customer customer: customers) {
+			table.addData(new Aggregate(Integer.toString(customer.getUserId()), customer.getFirstName(), customer.getLastName(), customer.getAddress(), Integer.toString(customer.getZip())));
+		}
+	}
+
 	/**
 	 * A simple method used by the tableLoader test
 	 * @return Map<String, Integer> The stock of this tableLoader

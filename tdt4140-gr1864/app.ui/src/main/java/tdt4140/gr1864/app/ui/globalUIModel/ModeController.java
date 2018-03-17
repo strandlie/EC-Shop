@@ -6,14 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 import tdt4140.gr1864.app.core.Action;
+import tdt4140.gr1864.app.core.Customer;
 import tdt4140.gr1864.app.core.Shop;
 import tdt4140.gr1864.app.core.ShoppingTrip;
-import tdt4140.gr1864.app.core.database.TestDataLoader;
-import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
-import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
-import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
-import tdt4140.gr1864.app.core.databasecontrollers.ShopDatabaseController;
-import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
+import tdt4140.gr1864.app.core.database.DataLoader;
+import tdt4140.gr1864.app.core.databasecontrollers.*;
 import tdt4140.gr1864.app.ui.TableLoader;
 import tdt4140.gr1864.app.ui.Mode.Mode;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Aggregate;
@@ -23,7 +20,7 @@ import javafx.fxml.FXML;
 /**
  * Initializes the different modes, and handles the switching between them. Also hands of responsibility
  * to the sub-controllerclasses
- * @author Hakon Strandlie
+ * @author Hakon StrandliE
  *
  */
 public class ModeController {
@@ -88,12 +85,12 @@ public class ModeController {
 		stockTable.addColumn("numberInStock");
 		Mode stock = new Mode("Stock", stockTable);
 		
-		new TestDataLoader();
+		DataLoader.main(null);
 
 		VisualizationTable demographicsTable = new VisualizationTable("Demographics");
 		demographicsTable.addColumn("customerId");
-		demographicsTable.addColumn("firstname");
-		demographicsTable.addColumn("lastname");
+		demographicsTable.addColumn("firstName");
+		demographicsTable.addColumn("lastName");
 		demographicsTable.addColumn("address");
 		demographicsTable.addColumn("zip");
 		Mode demographicsMode = new Mode("Demographics", demographicsTable);
@@ -118,13 +115,18 @@ public class ModeController {
 		for (int i = 1; i < 65; i++) {
 			osdc.retrieve(shop, i);
 		}
-		
-		
+
 		Map<Integer, Integer> productIDsOnShelf = shop.getShelfs();
 		Map<Integer, Integer> productIDsInStorage = shop.getStorage();
 		
 		new TableLoader(productIDsOnShelf, productIDsInStorage, stockTable);
-		
+
+		// get data from demographics and add to DemographicsMode
+		CustomerDatabaseController cdc = new CustomerDatabaseController();
+		List<Customer> customers = cdc.retrieveAll();
+		new TableLoader(customers, demographicsTable, true);
+
+		//Adding modes
 		addMode(mostPickedUp);
 		addMode(stock);
 		addMode(demographicsMode);
