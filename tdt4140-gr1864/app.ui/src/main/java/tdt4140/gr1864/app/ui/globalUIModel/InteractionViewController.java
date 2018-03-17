@@ -4,7 +4,7 @@
 package tdt4140.gr1864.app.ui.globalUIModel;
 
 /**
- * @author Håkon Strandlie
+ * @author Hakon Strandlie
  * Not yet implemented. Exists so that future Visualizations with options can be created, such as graphs and diagrams. 
  *
  */

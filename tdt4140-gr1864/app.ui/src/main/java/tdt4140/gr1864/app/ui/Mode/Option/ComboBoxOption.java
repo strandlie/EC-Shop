@@ -9,7 +9,7 @@ import javafx.beans.property.SimpleStringProperty;
 
 /**
  * 
- * @author Håkon Strandlie
+ * @author Hakon Strandlie
  * Not yet used. Exists for future
  *
  */

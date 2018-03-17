@@ -13,7 +13,7 @@ import javafx.scene.control.ListView;
 import javafx.util.Callback;
 
 /**
- * @author Håkon Strandlie
+ * @author Hakon Strandlie
  * The Controller for the menu View. Also contains a reference to the ModeController to be able to let it know when the user selects a different menuItem
  *
  */
