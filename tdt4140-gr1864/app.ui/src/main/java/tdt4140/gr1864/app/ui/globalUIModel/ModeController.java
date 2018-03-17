@@ -89,7 +89,16 @@ public class ModeController {
 		Mode stock = new Mode("Stock", stockTable);
 		
 		new TestDataLoader();
-		
+
+		VisualizationTable demographicsTable = new VisualizationTable("Demographics");
+		demographicsTable.addColumn("customerId");
+		demographicsTable.addColumn("firstname");
+		demographicsTable.addColumn("lastname");
+		demographicsTable.addColumn("address");
+		demographicsTable.addColumn("zip");
+		Mode demographicsMode = new Mode("Demographics", demographicsTable);
+
+
 		// Get data from shoppin trip and add to TableView
 		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
 		ActionDatabaseController adc = new ActionDatabaseController();
@@ -118,6 +127,7 @@ public class ModeController {
 		
 		addMode(mostPickedUp);
 		addMode(stock);
+		addMode(demographicsMode);
 		
 		setMode(mostPickedUp);
 	}
