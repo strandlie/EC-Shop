@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import tdt4140.gr1864.app.core.Customer;
@@ -104,6 +105,37 @@ public class CustomerDatabaseController implements DatabaseCRUD {
         	e.printStackTrace();
         }
 		return null;
+    }
+    
+    /**
+     * Returns all Customers in the database
+     * @return ArrayList of Customers
+     */
+    public List<Customer> retrieveAll() {
+    	String sql = "SELECT * FROM customer";
+    	try {
+    		Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
+    		statement = connection.prepareStatement(sql);
+    		ResultSet rs = statement.executeQuery();
+
+    		List<Customer> customers = new ArrayList<>();
+    		Customer customer;
+    		while (rs.next()) {
+    			customer = new Customer(
+					rs.getString("first_name"), 
+					rs.getString("last_name"), 
+					rs.getInt("customer_id"),
+					rs.getString("address"),
+					rs.getInt("zip"));
+    			customers.add(customer);
+    		}
+    		connection.close();
+    		return customers;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}    	
+    	return null;
     }
     
     /**
