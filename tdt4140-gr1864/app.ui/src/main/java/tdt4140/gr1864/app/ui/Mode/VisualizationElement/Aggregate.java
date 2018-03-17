@@ -24,6 +24,13 @@ public class Aggregate {
 	
 	// The variables for stockMode
 	private StringProperty numberInStock;
+
+	// Variables for visualizationMode
+	private StringProperty customerId;
+	private StringProperty firstName;
+	private StringProperty lastName;
+	private StringProperty address;
+	private StringProperty zipCode;
 	
 	/**
 	 * The size of this Aggregate
@@ -57,6 +64,18 @@ public class Aggregate {
 		setNumberInStock(numberInStock);
 		
 		this.size = 2;
+	}
+
+	/**
+	 * The constructor for visualizationMode
+ 	 * @param customerId
+	 * @param firstName
+	 * @param lastName
+	 * @param address
+	 * @param zip
+	 */
+	public Aggregate(int customerId, String firstName, String lastName, String address, int zip) {
+
 	}
 	
 	/**
@@ -165,4 +184,78 @@ public class Aggregate {
 		return numberInStockProperty().getValue();
 	}
 
+	public StringProperty customerIdProperty() {
+		if (customerId == null) {
+			customerId = new SimpleStringProperty(this, "customerId");
+		}
+		return customerId;
+	}
+
+	public void setCustomerId(String customerId) {
+		this.customerIdProperty().setValue(customerId);
+	}
+
+	public String getCustomerId() {
+		return customerIdProperty().getValue();
+	}
+
+	public StringProperty firstNameProperty() {
+		if (firstName == null) {
+			firstName = new SimpleStringProperty(this, "firstName");
+		}
+		return firstName;
+	}
+
+	public void setFirstName(String name) {
+		this.firstNameProperty().setValue(name);
+	}
+
+	public String getFirstName() {
+		return this.firstNameProperty().getValue();
+	}
+
+	public StringProperty lastNameProperty() {
+		if (lastName == null) {
+			lastName = new SimpleStringProperty(this, "lastName");
+		}
+		return lastName;
+	}
+
+	public void setLastName(String name) {
+		this.lastNameProperty().setValue(name);
+	}
+
+	public String getLastName() {
+		return this.lastNameProperty().getValue();
+	}
+
+	public StringProperty addressProperty() {
+		if (address == null) {
+			address = new SimpleStringProperty(this, "address");
+		}
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.addressProperty().setValue(address);
+	}
+
+	public String getAddress() {
+		return this.addressProperty().getValue();
+	}
+
+	public StringProperty zipCodeProperty() {
+		if (zipCode == null) {
+			zipCode = new SimpleStringProperty(this, "zipCode");
+		}
+		return zipCode;
+	}
+
+	public void setZipCode(String zipCode) {
+		this.zipCodeProperty().setValue(zipCode);
+	}
+
+	public String getZipcode() {
+		return this.zipCodeProperty().getValue();
+	}
 }
