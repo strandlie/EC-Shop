@@ -110,11 +110,12 @@ public class DataLoader {
 			// get Zip
 			zip = toIntExact((long) customerObject.get("zip"));
 			
+			CustomerDatabaseController cdc = new CustomerDatabaseController();
+			List<Customer> customers = cdc.retrieveAll();
 			customers.remove(customer);
 			customer.setAddress(address);
 			customer.setZip(zip);
 			
-			CustomerDatabaseController cdc = new CustomerDatabaseController();
 			cdc.update(customer);
 			customers.add(customer);
 
