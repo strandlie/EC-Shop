@@ -23,7 +23,7 @@ import javafx.fxml.FXML;
 /**
  * Initializes the different modes, and handles the switching between them. Also hands of responsibility
  * to the sub-controllerclasses
- * @author Håkon Strandlie
+ * @author Hakon Strandlie
  *
  */
 public class ModeController {

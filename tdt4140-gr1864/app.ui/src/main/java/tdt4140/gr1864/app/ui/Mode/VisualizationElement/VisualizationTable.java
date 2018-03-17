@@ -2,6 +2,7 @@ package tdt4140.gr1864.app.ui.Mode.VisualizationElement;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javafx.collections.FXCollections;
@@ -12,7 +13,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class VisualizationTable extends VisualizationElement {
 	/**
 	 * 
-	 * @author Håkon Strandlie
+	 * @author Hakon Strandlie
 	 * The model-class of the Visualization Table. Has proved to not serve the function originally thought, and wil probably deprecate in the future. 
 	 */
 	
@@ -134,5 +135,11 @@ public class VisualizationTable extends VisualizationElement {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public void setData(List<Aggregate> data) {
+		// TODO Auto-generated method stub
+		
 	}
 }
