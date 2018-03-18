@@ -29,16 +29,6 @@ public class DataMocker implements Runnable {
 	private static String API_URL = "http://localhost:8080/api";
 	
 	/**
-	 * The number of customers which will be sent to the shop.
-	 */
-	private static int NUMBER_OF_CUSTOMERS = 5;
-	
-	/**
-	 * The maximum delay from the thread start until a customer enters the shop.
-	 */
-	private static int MAX_CUSTOMER_DELAY = 30 * 1000;
-	
-	/**
 	 * A Rectangle containing the start and end of all paths. Typically the cashier desks.
 	 */
 	private Rectangle home;
@@ -198,7 +188,7 @@ public class DataMocker implements Runnable {
 	 * @return A random path with sensible default parameters.
 	 */
 	public Trip generateRandomPath() {
-		return generateRandomPath(5, 2, ThreadLocalRandom.current().nextInt(5, 10));
+		return generateRandomPath(5, 2, 5);
 	}
 	
 	/**
@@ -254,7 +244,7 @@ public class DataMocker implements Runnable {
 		HttpResponse response2 = httpclient.execute(httpPost);
 
 		try {
-		    System.out.println(response2.getStatusLine());
+		    //System.out.println(response2.getStatusLine());
 		    HttpEntity entity2 = response2.getEntity();
 		    EntityUtils.consume(entity2);
 		} catch (Exception e) {
@@ -263,16 +253,22 @@ public class DataMocker implements Runnable {
 	}
 	
 	@Override
-	public void run() {
+	public void run() {		
 		PriorityQueue<ThreadAction> heap = new PriorityQueue<>();
 	
-		for (int i = 0; i < NUMBER_OF_CUSTOMERS; i++) {
-			heap.add(new ThreadAction(ThreadLocalRandom.current().nextInt(0, MAX_CUSTOMER_DELAY)));
-		}
-		
 		long currentTime = 0;
-		
-		while (!heap.isEmpty()) {
+				
+		// kill at 30sec for testing until thread killing is implemented
+		while (true) {
+			if (Thread.currentThread().isInterrupted()) {
+				break;
+			}
+			
+			System.out.println(heap);
+			// The delay until the next customer enters the store. We use a random exponential variable
+			// with 5 seconds as the expected value.
+			heap.add(new ThreadAction((int) (currentTime + Math.log(1 - ThreadLocalRandom.current().nextDouble()) / -0.0002)));
+			
 			ThreadAction action = heap.poll();
 			
 			try {
@@ -282,15 +278,12 @@ public class DataMocker implements Runnable {
 			}
 			
 			currentTime = action.getTime();
-						
+			
 			if (action.getAction() == 0) {
 				Trip trip = generateRandomPath();
 				heap.add(new ThreadAction(currentTime + trip.getDuration(), trip));
-				System.out.println("Customer entered shop");
 				// TOOD: Create endpoint for customer entering shop
-			} else {
-				System.out.println("Customer left shop");
-				
+			} else {				
 				try {
 					sendShoppingTripData(action.getTrip());
 				} catch (IOException e) {
