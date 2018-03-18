@@ -1,37 +1,34 @@
 package tdt4140.gr1864.app.core.dataMocker;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
-import tdt4140.gr1864.app.core.database.DataLoader;
 
-
-public class DataMocker {
+public class DataMocker implements Runnable {
+	/**
+	 * The API URL test data will be sent to.
+	 */
+	private static String API_URL = "http://localhost:8080/api";
+	
 	/**
 	 * A Rectangle containing the start and end of all paths. Typically the cashier desks.
 	 */
@@ -44,12 +41,41 @@ public class DataMocker {
 	private List<Rack> zones;
 	
 	/**
-	 * @param home A rectangle containing the cashier desks.
-	 * @param zones A collection of zones where the customer may stop to pick up goods.
+	 * Creates a new DataMocker reflecting a freshly stocked shop.
 	 */
-	public DataMocker(Rectangle home, List<Rack> zones) {
-		this.home = home;
-		this.zones = zones;
+	public DataMocker() {
+		initializeShop();
+	}
+	
+	/**
+	 * Initializes the shop with products.
+	 */
+	private void initializeShop() {
+		home = new Rectangle(new Coordinate(0, 0), new Coordinate(10, 10));
+
+		zones = new ArrayList<>();
+		
+		int rowAmount = 4;
+		
+		int productsPerRack = 4;
+		
+		int rackLength = 20;
+		
+		int rackHeight = 10;
+		
+		for (int y = 10; y < rowAmount * 20; y += 20) {
+			for (int x = 10; x < rowAmount * 40; x += 40) {
+				Collection<Product> products = new ArrayList<>();
+
+				for (int i = 0; i < productsPerRack; i++) {
+					products.add(new Product(180));
+				}
+
+				Rack productRack = new Rack(new Coordinate(x, y), new Coordinate((x + rackLength), (y + rackHeight)), products);
+
+				zones.add(productRack);
+			}
+		}
 	}
 	
 	/**
@@ -115,12 +141,14 @@ public class DataMocker {
 	 * @return A list of coordinates between a random set of zones, starting and ending in the home zone, and
 	 * a list of actions performed by the user.
 	 */
-	private Trip generateRandomPath(double intensity, double fuzz, double speed) {
+	public Trip generateRandomPath(double intensity, double fuzz, double speed) {
+		Inventory inventory = new Inventory();
+		
 		List<Position> coordinates = new ArrayList<>();
 		
 		List<Action> actions = new ArrayList<>();
 		
-		// New date element for timestamp
+		// New date element used for timestamps.
 		Date time = new Date();
 		
 		Coordinate previous = new Position(generateRandomCoordinateInsideRectangle(home), time);
@@ -144,7 +172,7 @@ public class DataMocker {
 			
 			previous = target;
 			
-			actions.add(generateAction(time, box));
+			actions.add(generateAction(inventory, time, box));
 		}
 		
 		Coordinate goal = generateRandomCoordinateInsideRectangle(home);
@@ -158,57 +186,76 @@ public class DataMocker {
 	}
 	
 	/**
+	 * @return A random path with sensible default parameters.
+	 */
+	public Trip generateRandomPath() {
+		return generateRandomPath(5, 2, 15);
+	}
+	
+	/**
 	 * Generates an action at time where a product from the box is either picked up or
 	 * dropped. The product cannot be dropped if it has never been picked up.
 	 * @param time Date object for when the action happened
 	 * @param box A Rectangle object where a random product is picked from
 	 * @return Returns an action object with the product and time for whether the product was picked up or dropped.
 	 */
-	private Action generateAction(Date time, Rack box) {
+	private Action generateAction(Inventory inventory, Date time, Rack box) {
+		// Choose a random product.
 		Product product = box.getRandomItem();
-		int action = product.canBeDropped() ? ThreadLocalRandom.current().nextInt(Action.DROP, Action.PICK_UP + 1) : 1;
+		
+		int action = ThreadLocalRandom.current().nextInt(Action.DROP, Action.PICK_UP + 1);
+		
+		if (product.canPickUp() && inventory.contains(product) && action == 0 || inventory.contains(product) && action == 0) {			
+			inventory.remove(product);
+		} else if (product.canPickUp() && inventory.contains(product) && action == 1 || product.canPickUp() && action == 1) {
+			inventory.add(product);
+		}
+	
 		return new Action(product, time, action);
 	}
 	
 	/**
-	 * A basic function to add time in seconds to a given Date time object.
-	 * @param time The date to add time to
-	 * @param seconds Amount of seconds to add
-	 * @return A Date object where the the given amount of seconds has been added to the time.
+	 * A basic function to add time to a given Date time object.
+	 * The function adds time in milliseconds, as waiting for a long time when testing is boring..
+	 * @param time The date to add time to.
+	 * @param seconds Milliseconds to add to the time.
+	 * @return A Date object where the the given amount of time has been added to the time.
 	 */
 	private Date addTime(Date time, int seconds) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(time);
-		cal.add(Calendar.SECOND, seconds);
+		cal.add(Calendar.MILLISECOND, seconds);
 		time = cal.getTime();
 		return time;
 	}
 	
 	/**
-	 * Post data.json to web-server once it is generated
-	 * @throws IOException 
+	 * Returns JSON describing a shopping trip.
+	 * @return 
+	 * @throws JsonProcessingException
 	 */
-	private static void postData(String path) throws IOException {
-		InputStream is = new FileInputStream(path);
-		BufferedReader buf = new BufferedReader(new InputStreamReader(is));
-				
-		String line = buf.readLine();
-		StringBuilder sb = new StringBuilder();
-				
-		while(line != null) {
-		   sb.append(line).append("\n");
-		   line = buf.readLine();
-		}
-				
-		String json = sb.toString();
+	public String getRandomPathJSON() throws JsonProcessingException {
+		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+		return ow.writeValueAsString(generateRandomPath());
+	}
+	
+	/**
+	 * Sends test data to the server. The data represents one shopping trip.
+	 * @throws IOException 
+	 * @throws ClientProtocolException 
+	 */
+	public void sendShoppingTripData(Trip trip) throws ClientProtocolException, IOException {
+		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+		String json = ow.writeValueAsString(trip);
+		
 		DefaultHttpClient httpclient = new DefaultHttpClient();
-		HttpPost httpPost = new HttpPost("http://localhost:8080/api");
+		HttpPost httpPost = new HttpPost(API_URL);
 		httpPost.addHeader("content-type", "application/json");
 		httpPost.setEntity(new StringEntity(json));
 		HttpResponse response2 = httpclient.execute(httpPost);
 
 		try {
-		    System.out.println(response2.getStatusLine());
+		    //System.out.println(response2.getStatusLine());
 		    HttpEntity entity2 = response2.getEntity();
 		    EntityUtils.consume(entity2);
 		} catch (Exception e) {
@@ -216,65 +263,42 @@ public class DataMocker {
 		}
 	}
 	
-	public static void main(String[] args) throws IOException {
-		Rectangle home = new Rectangle(new Coordinate(0, 0), new Coordinate(10, 10));
-		List<Rack> zones = new ArrayList<>();
-		Collection<Product> products = new ArrayList<>();
-
-		// Define amount of rows, height and width of racks (in the coordinate system)		
-		int rowAmount = 4;
-		int productsPerRack = 4;
-		int rackLength = 20;
-		int rackHeight = 10;
-		
-		
-		// Y coordinate in store grid 
-		for (int y = 10; y < rowAmount*20; y+=20) {
-
-			// X coordinate in store grid
-			for (int x = 10; x < rowAmount*40; x+=40) {
+	@Override
+	public void run() {		
+		PriorityQueue<ThreadAction> heap = new PriorityQueue<>();
+	
+		long currentTime = 0;
 				
-				// Generates productsPerRack products per Rack in products
-				for (int i = 0; i < productsPerRack; i++) {
-					products.add(new Product());
+		while (true) {
+			if (Thread.currentThread().isInterrupted()) {
+				break;
+			}
+
+			// The delay until the next customer enters the store. We use a random exponential variable
+			// with 10 seconds as the expected value.
+			heap.add(new ThreadAction((int) (currentTime + Math.log(1 - ThreadLocalRandom.current().nextDouble()) / -0.0001)));
+			
+			ThreadAction action = heap.poll();
+			
+			try {
+				Thread.sleep(action.getTime() - currentTime);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+			currentTime = action.getTime();
+			
+			if (action.getAction() == 0) {
+				Trip trip = generateRandomPath();
+				heap.add(new ThreadAction(currentTime + trip.getDuration(), trip));
+				// TODO: Send data to customer entering shop endpoint
+			} else {				
+				try {
+					sendShoppingTripData(action.getTrip());
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
-
-				// Creates a rack with following x and y coordinates and corresponding products
-				Rack productRack = new Rack(
-						new Coordinate(x, y), 
-						new Coordinate((x + rackLength), (y + rackHeight)), 
-						products);
-
-				zones.add(productRack);
 			}
 		}
-		
-		DataMocker mocker = new DataMocker(home, zones);
-
-		Trip trip = mocker.generateRandomPath(5, 2, ThreadLocalRandom.current().nextInt(0, 60));		
-		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-		String json = ow.writeValueAsString(trip);
-		String path = "../../../app.core/src/main/resources/data.json";
-		String relativePath;
-		//Finds path by getting URL and converting to URI and then to path 
-		try {
-			URI rerelativeURI = DataMocker.class.getClassLoader().getResource(".").toURI();
-			relativePath = Paths.get(rerelativeURI).toFile().toString() + "/";
-			
-		} catch (URISyntaxException e1) {
-			//If fail to convert to URI use URL path instead
-			relativePath = DataMocker.class.getClassLoader().getResource(".").getPath();
-		} 
-		
-		path = relativePath + path;
-        try {
-            FileWriter fw = new FileWriter(path);
-            BufferedWriter bw = new BufferedWriter(fw);
-            bw.write(json);
-            bw.close();
-        } catch (IOException error) {
-        	error.printStackTrace();
-        }
-        postData(path);
 	}
 }
