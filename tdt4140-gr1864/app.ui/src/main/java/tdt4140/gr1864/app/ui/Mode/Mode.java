@@ -5,7 +5,7 @@ import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
 
 /**
  * 
- * @author 	Håkon Strandlie haakstr@stud.ntnu.no
+ * @author 	Hakon Strandlie haakstr@stud.ntnu.no
  * @version	1.0
  * @since	1.0
  *
