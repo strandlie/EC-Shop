@@ -188,7 +188,7 @@ public class DataMocker implements Runnable {
 	 * @return A random path with sensible default parameters.
 	 */
 	public Trip generateRandomPath() {
-		return generateRandomPath(5, 2, 5);
+		return generateRandomPath(5, 2, 15);
 	}
 	
 	/**
@@ -264,8 +264,8 @@ public class DataMocker implements Runnable {
 			}
 
 			// The delay until the next customer enters the store. We use a random exponential variable
-			// with 5 seconds as the expected value.
-			heap.add(new ThreadAction((int) (currentTime + Math.log(1 - ThreadLocalRandom.current().nextDouble()) / -0.0002)));
+			// with 10 seconds as the expected value.
+			heap.add(new ThreadAction((int) (currentTime + Math.log(1 - ThreadLocalRandom.current().nextDouble()) / -0.0001)));
 			
 			ThreadAction action = heap.poll();
 			
