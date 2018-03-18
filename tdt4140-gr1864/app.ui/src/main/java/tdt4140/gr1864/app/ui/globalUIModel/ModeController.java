@@ -144,7 +144,13 @@ public class ModeController {
 			this.menuViewController.addMenuItem(mode.getName());
 		}
 	}
-	
+
+	public void removeMode(Mode mode) {
+		if (modes.containsKey(mode)) {
+			modes.remove(mode);
+		}
+	}
+
 	/**
 	 * Returns an already created mode from its name, or null if it does not exist
 	 * @param name String The name of the wanted Mode
@@ -200,6 +206,24 @@ public class ModeController {
 		this.currentMode = mode;
 		setMode(this.currentMode);
 	}
-	
+
+	public void updatedRows() {
+		//First removing mode
+		removeMode(modes.get("Demographics"));
+
+		VisualizationTable demographicsTable = new VisualizationTable("Demographics");
+		demographicsTable.addColumn("customerId");
+		demographicsTable.addColumn("firstName");
+		demographicsTable.addColumn("lastName");
+		demographicsTable.addColumn("address");
+		demographicsTable.addColumn("zip");
+		Mode demographicsMode = new Mode("Demographics", demographicsTable);
+		// get data from demographics and add to DemographicsMode
+		CustomerDatabaseController cdc = new CustomerDatabaseController();
+		List<Customer> customers = cdc.retrieveAll();
+		new TableLoader(customers, demographicsTable, true);
+
+		addMode(demographicsMode);
+	}
 
 }
