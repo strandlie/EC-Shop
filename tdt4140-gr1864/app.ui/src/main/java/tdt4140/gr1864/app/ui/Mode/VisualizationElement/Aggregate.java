@@ -190,7 +190,7 @@ public class Aggregate {
 		return numberOnShelves;
 	}
 	
-	public void setNUmberOnShelves(String number) {
+	public void setNumberOnShelves(String number) {
 		this.numberOnShelvesProperty().setValue(number);
 	}
 	
