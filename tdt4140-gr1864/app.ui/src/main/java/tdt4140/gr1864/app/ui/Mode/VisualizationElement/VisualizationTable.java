@@ -60,7 +60,7 @@ public class VisualizationTable extends VisualizationElement {
 	 * and only references are passed
 	 * @param data ArrayList The list of the data used to populate the table
 	 */
-	public void setData(ArrayList<Aggregate> data) {
+	public void setData(List<Aggregate> data) {
 		this.data = FXCollections.observableArrayList(data);
 	}
 	
@@ -112,7 +112,7 @@ public class VisualizationTable extends VisualizationElement {
 		
 		String columnName = allowedColumnNames.get(columnID);
 		TableColumn<Aggregate, String> tempColumn = new TableColumn<Aggregate, String>(columnName);
-		tempColumn.setCellValueFactory(new PropertyValueFactory(columnID));
+		tempColumn.setCellValueFactory(new PropertyValueFactory<>(columnID));
 		columns.add(tempColumn);
 	}
 	
