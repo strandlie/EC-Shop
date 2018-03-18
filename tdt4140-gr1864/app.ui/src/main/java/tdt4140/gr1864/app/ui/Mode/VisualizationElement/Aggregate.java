@@ -67,7 +67,7 @@ public class Aggregate {
 			
 		case "onShelves":
 			setProductName(productName);
-			setNUmberOnShelves(amount);
+			setNumberOnShelves(amount);
 			break;
 		}
 		
