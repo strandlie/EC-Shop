@@ -18,6 +18,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
@@ -229,13 +230,23 @@ public class DataMocker implements Runnable {
 	}
 	
 	/**
+	 * Returns JSON describing a shopping trip.
+	 * @return 
+	 * @throws JsonProcessingException
+	 */
+	public String getRandomPathJSON() throws JsonProcessingException {
+		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+		return ow.writeValueAsString(generateRandomPath());
+	}
+	
+	/**
 	 * Sends test data to the server. The data represents one shopping trip.
 	 * @throws IOException 
 	 * @throws ClientProtocolException 
 	 */
 	public void sendShoppingTripData(Trip trip) throws ClientProtocolException, IOException {
 		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-		String json = ow.writeValueAsString(trip);	
+		String json = ow.writeValueAsString(trip);
 		
 		DefaultHttpClient httpclient = new DefaultHttpClient();
 		HttpPost httpPost = new HttpPost(API_URL);
