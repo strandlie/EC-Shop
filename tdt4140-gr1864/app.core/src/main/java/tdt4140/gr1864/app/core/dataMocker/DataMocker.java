@@ -258,13 +258,11 @@ public class DataMocker implements Runnable {
 	
 		long currentTime = 0;
 				
-		// kill at 30sec for testing until thread killing is implemented
 		while (true) {
 			if (Thread.currentThread().isInterrupted()) {
 				break;
 			}
-			
-			System.out.println(heap);
+
 			// The delay until the next customer enters the store. We use a random exponential variable
 			// with 5 seconds as the expected value.
 			heap.add(new ThreadAction((int) (currentTime + Math.log(1 - ThreadLocalRandom.current().nextDouble()) / -0.0002)));
@@ -282,7 +280,7 @@ public class DataMocker implements Runnable {
 			if (action.getAction() == 0) {
 				Trip trip = generateRandomPath();
 				heap.add(new ThreadAction(currentTime + trip.getDuration(), trip));
-				// TOOD: Create endpoint for customer entering shop
+				// TODO: Send data to customer entering shop endpoint
 			} else {				
 				try {
 					sendShoppingTripData(action.getTrip());
