@@ -71,21 +71,20 @@ public class ModeController {
 		 */
 		this.menuViewController.setModeController(this);
 		
-		
+		// Create a table for mostPickedUp Mode and fill with data
 		VisualizationTable mostPickedUpTable = new VisualizationTable("Most Picked-Up Product");
 		mostPickedUpTable.addColumn("productName");
 		mostPickedUpTable.addColumn("numberOfPickUp");
 		mostPickedUpTable.addColumn("numberOfPutDown");
 		mostPickedUpTable.addColumn("numberOfPurchases");
+		// Create mostPickedUp Mode and add table
 		Mode mostPickedUp = new Mode("Most Picked Up", mostPickedUpTable);
 		
+		// Create a table for stockMode and fill with data
 		VisualizationTable stockTable = new VisualizationTable("Stock");
-		/*
-		stockTable.addData(new Aggregate("Bolle", "5"));
-		stockTable.addData(new Aggregate("Sjokolade", "20"));
-		*/
 		stockTable.addColumn("productName");
 		stockTable.addColumn("numberInStock");
+		// Create stock Mode and add table
 		Mode stock = new Mode("Stock", stockTable);
 		
 		new TestDataLoader();
@@ -99,7 +98,8 @@ public class ModeController {
 		ArrayList<ShoppingTrip> shoppingTripList = new ArrayList<>();
 		shoppingTripList.add(trip);
 		
-		new TableLoader(shoppingTripList, mostPickedUpTable);
+		TableLoader tableLoader = new TableLoader();
+		tableLoader.loadMostPickedUpTable(shoppingTripList, mostPickedUpTable);
 		
 		// Get data from Shop and add to StockMode
 		ShopDatabaseController sdc = new ShopDatabaseController();
@@ -114,7 +114,7 @@ public class ModeController {
 		Map<Integer, Integer> productIDsOnShelf = shop.getShelfs();
 		Map<Integer, Integer> productIDsInStorage = shop.getStorage();
 		
-		new TableLoader(productIDsOnShelf, productIDsInStorage, stockTable);
+		tableLoader.loadStockTable(productIDsOnShelf, productIDsInStorage, stockTable);
 		
 		addMode(mostPickedUp);
 		addMode(stock);

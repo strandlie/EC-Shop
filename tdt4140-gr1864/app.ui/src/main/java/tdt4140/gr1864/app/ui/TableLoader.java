@@ -39,11 +39,10 @@ public class TableLoader {
 	private Map<String, Integer> stock;
 	
 	/**
-	 * The constructor for the MostPickedUpMode
 	 * @param trips A list of shopping trips to load the table from
 	 * @param table A model-layer representation of a table shown to the user. Any changes made to this will reflect to the user immidiately
 	 */
-	public TableLoader(List<ShoppingTrip> trips, VisualizationTable table) {
+	public void loadMostPickedUpTable(List<ShoppingTrip> trips, VisualizationTable table) {
 		if (trips == null || table == null) {
 			return;
 		}
@@ -84,12 +83,11 @@ public class TableLoader {
 		}
 	}
 	/**
-	 * The constructor for the StockMode
 	 * @param productIDsOnShelf The Map of the productIDs with corresponding count on shelf
 	 * @param productIDsInStorage The Map of the productIDs with corresponding count in storage
 	 * @param table A model-layer representation of a table shown to the user. Any changes made to this will reflect to the user immidiately
 	 */
-	public TableLoader(Map<Integer, Integer> productIDsOnShelf, Map<Integer, Integer> productIDsInStorage, VisualizationTable table) {
+	public void loadStockTable(Map<Integer, Integer> productIDsOnShelf, Map<Integer, Integer> productIDsInStorage, VisualizationTable table) {
 		if (productIDsOnShelf == null || productIDsInStorage == null || table == null) {
 			return;
 		}
