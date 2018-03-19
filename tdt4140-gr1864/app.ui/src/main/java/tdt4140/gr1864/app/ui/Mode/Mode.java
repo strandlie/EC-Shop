@@ -20,8 +20,7 @@ public class Mode {
 	private String name;
 	
 	/**
-	 * The list of the VisualizationElements that is shown in the Visualization Area for this mode
-	 * Implemented as List to get an implicit ordering of elements
+	 * A mode can only have one visualizationElement. This is the reference to it. 
 	 */
 	private VisualizationInterface visualizationElement;
 	
@@ -41,6 +40,10 @@ public class Mode {
 		return this.name;
 	}
 	
+	/**
+	 * Gets the visualizationElement that is contained in this Mode
+	 * @return VisualizationInterface (VisualizationElement implements this)
+	 */
 	public VisualizationInterface getVisualizationElement() {
 		return this.visualizationElement;
 	}

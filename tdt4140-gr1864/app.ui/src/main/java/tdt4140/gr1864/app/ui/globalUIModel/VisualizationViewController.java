@@ -1,10 +1,6 @@
 package tdt4140.gr1864.app.ui.globalUIModel;
 
-import java.util.ArrayList;
-
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.image.ImageView;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Row;

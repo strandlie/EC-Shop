@@ -152,7 +152,6 @@ public class ModeController {
 	
 	/**
 	 * Checks if the Mode already exists for this ModeController. If it does it sets it, and shows it to the user
-	 * Can be improved by setting the table as a listener on the currentMode-variable
 	 * @param mode Mode the mode we wish to set
 	 */
 	private void setMode(Mode mode) {
