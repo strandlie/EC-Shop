@@ -230,6 +230,9 @@ public class DataLoader {
 			// create ShoppingTrip
 			trip = new ShoppingTrip(customer, shop, true);
 			trip = new ShoppingTrip(stdc.create(trip), trip.getCustomer(), trip.getShop(), true);
+			
+			// Updates shop
+			shop.shoppingTripAdded(trip);
 
 			// creating Coordinates
 			JSONArray coordsArray = (JSONArray) tripObject.get("path");
@@ -276,6 +279,7 @@ public class DataLoader {
 		// We set the charged flag to true to prevent spamming the Stripe API.		
 		trip = new ShoppingTrip(c1, s1, true);
 		trip = new ShoppingTrip(stdc.create(trip), trip.getCustomer(), trip.getShop(), true);
+		shop.shoppingTripAdded(trip);
 		
 		try {
 			Object obj = parser.parse(new FileReader(relativePath + path));

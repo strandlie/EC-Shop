@@ -207,13 +207,18 @@ public class TestDataLoader {
 		JSONParser parser = new JSONParser();
 		
 		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
+		ShopDatabaseController sdc = new ShopDatabaseController();
 		
 		Customer c1 = createCustomer();
 		Shop s1 = this.shop;
+		s1 = new Shop(this.shop.getAddress(), this.shop.getZip(), sdc.create(s1));
 
 		// We set the charged flag to true to prevent spamming the Stripe API.		
 		trip = new ShoppingTrip(c1, s1, true);
 		trip = new ShoppingTrip(stdc.create(trip), trip.getCustomer(), trip.getShop(), true);
+		
+		// Updates shop
+		shop.shoppingTripAdded(trip);
 		
 		try {
 			Object obj = parser.parse(new FileReader(relativePath + path));
