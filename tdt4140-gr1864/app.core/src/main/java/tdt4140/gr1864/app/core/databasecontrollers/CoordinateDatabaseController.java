@@ -129,33 +129,39 @@ public class CoordinateDatabaseController implements DatabaseCRUD{
 	 * @return A list of coordinates for the given shopping trip.
 	 * @throws SQLException
 	 */
-	public List<Coordinate> retrieveAll(int id) throws SQLException {
-		String query = "SELECT * FROM coordinate WHERE shopping_trip_id=?";
+	public List<Coordinate> retrieveAll(int id) {		
+		List<Coordinate> coordinates = new ArrayList<>();
 		
-		Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
-		
-		PreparedStatement statement = connection.prepareStatement(query);
-		
-		statement.setInt(1, id);
-		
-		ResultSet rs = statement.executeQuery();
+		try {
+			String query = "SELECT * FROM coordinate WHERE shopping_trip_id=?";
 
-		// Used to find the ID of the shopping trip this coordinate is connected to.
-		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();	
-		
-		List<Coordinate> coordinates= new ArrayList<>();
-		
-		while (rs.next()) {
-			Coordinate coordinate = new Coordinate(
-				rs.getDouble("x"), 
-				rs.getDouble("y"), 
-				rs.getString("timeStamp"),
-				stdc.retrieve(rs.getInt("shopping_trip_id")));
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
 			
-			coordinates.add(coordinate);
+			PreparedStatement statement = connection.prepareStatement(query);
+			
+			statement.setInt(1, id);
+			
+			ResultSet rs = statement.executeQuery();
+
+			// Used to find the ID of the shopping trip this coordinate is connected to.
+			ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();	
+					
+			while (rs.next()) {
+				Coordinate coordinate = new Coordinate(
+					rs.getDouble("x"), 
+					rs.getDouble("y"), 
+					rs.getString("timeStamp"),
+					stdc.retrieve(rs.getInt("shopping_trip_id")));
+				
+				coordinates.add(coordinate);
+			}
+			
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		
-		connection.close();
+
 		
 		return coordinates;
 	}
