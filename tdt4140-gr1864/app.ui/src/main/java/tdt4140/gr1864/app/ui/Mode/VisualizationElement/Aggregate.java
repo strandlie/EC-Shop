@@ -42,7 +42,7 @@ public class Aggregate {
 	 * The constructor for the mostPickedUpMode
 	 * @param productName The product name of the product
 	 * @param numberOfPickUp The number of times it was picked up
-	 * @param numberOfPutDownThe number of times it was put down
+	 * @param numberOfPutDown The number of times it was put down
 	 * @param numberOfPurchases The number of purchases (the sum of the two above)
 	 */
 	public Aggregate(String productName, String numberOfPickUp, String numberOfPutDown, String numberOfPurchases) {

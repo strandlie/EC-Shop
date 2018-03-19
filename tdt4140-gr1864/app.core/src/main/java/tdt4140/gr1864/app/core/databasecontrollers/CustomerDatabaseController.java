@@ -161,7 +161,11 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
+
+
 	}
+
+
     
     /**
      * @see tdt4140.gr1864.app.core.interfaces.DatabaseCRUD#delete(int)

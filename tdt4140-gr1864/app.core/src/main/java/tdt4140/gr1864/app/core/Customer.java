@@ -1,10 +1,11 @@
 package tdt4140.gr1864.app.core;
 
 import java.util.List;
+import java.util.Observable;
 
 import tdt4140.gr1864.app.core.interfaces.UserInterface;
 
-public class Customer implements UserInterface {
+public class Customer extends Observable implements UserInterface {
 
 	private int customerId;
 
@@ -15,6 +16,8 @@ public class Customer implements UserInterface {
 	private int zip = 0;
 
 	private List<ShoppingTrip> shoppingTrips;
+
+	private boolean hasUpdated;
 	
 	/**
 	 * @param customerId		id provided by database
@@ -28,6 +31,7 @@ public class Customer implements UserInterface {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.shoppingTrips = shoppingTrips;
+		this.hasUpdated = false;
 	}
 	
 	/**
@@ -35,7 +39,6 @@ public class Customer implements UserInterface {
 	 * @param customerId		id provided by database
 	 * @param firstName			name of customer
 	 * @param lastName			name of customer
-	 * @param shoppingTrips 	trips of customer
 	 */
 	public Customer(String firstName, String lastName, int customerId,
 			 String address, int zip) {
@@ -103,6 +106,9 @@ public class Customer implements UserInterface {
 	}
 	
 	public void setZip(int zip) {
+        setChanged();
+		notifyObservers();
+		clearChanged();
 		this.zip = zip;
 	}
 	
@@ -111,6 +117,9 @@ public class Customer implements UserInterface {
 	}
 	
 	public void setAddress(String address) {
+		setChanged();
+		notifyObservers();
+		clearChanged();
 		this.address = address;
 	}
 
@@ -149,5 +158,11 @@ public class Customer implements UserInterface {
 			return false;
 		return true;
 	}
+
+	public boolean getHasUpdated() {
+		return this.hasUpdated;
+	}
+
+
 }
 

@@ -1,11 +1,7 @@
 package tdt4140.gr1864.app.ui.globalUIModel; 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import tdt4140.gr1864.app.core.Action;
 import tdt4140.gr1864.app.core.Customer;
 import tdt4140.gr1864.app.core.Shop;
 import tdt4140.gr1864.app.core.ShoppingTrip;
@@ -13,7 +9,6 @@ import tdt4140.gr1864.app.core.database.DataLoader;
 import tdt4140.gr1864.app.core.databasecontrollers.*;
 import tdt4140.gr1864.app.ui.TableLoader;
 import tdt4140.gr1864.app.ui.Mode.Mode;
-import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Aggregate;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
 import javafx.fxml.FXML;
 
@@ -23,7 +18,7 @@ import javafx.fxml.FXML;
  * @author Hakon StrandliE
  *
  */
-public class ModeController {
+public class ModeController implements Observer {
 	/**
 	 * Different modes saved with their names as key. Only valid Modes exist here. 
 	 */
@@ -66,7 +61,7 @@ public class ModeController {
 		 * The menuViewController needs a reference to it	's mode controller to let it know when the user
 		 * has selected a different Mode
 		 */
-		this.menuViewController.setModeController(this);
+		menuViewController.setModeController(this);
 		
 		
 		VisualizationTable mostPickedUpTable = new VisualizationTable("Most Picked-Up Product");
@@ -124,6 +119,9 @@ public class ModeController {
 		// get data from demographics and add to DemographicsMode
 		CustomerDatabaseController cdc = new CustomerDatabaseController();
 		List<Customer> customers = cdc.retrieveAll();
+		for (Customer customer : customers) {
+			customer.addObserver(this);
+		}
 		new TableLoader(customers, demographicsTable, true);
 
 		//Adding modes
@@ -138,14 +136,14 @@ public class ModeController {
 	 * Adds a mode. Used by the initialize-methods. Does not allow Modes with equal names
 	 * @param mode An already constructed mode
 	 */
-	public void addMode(Mode mode) {
-		if (! this.modes.containsKey(mode.getName())) {
-			this.modes.put(mode.getName(), mode);
-			this.menuViewController.addMenuItem(mode.getName());
+	public  void addMode(Mode mode) {
+		if (! modes.containsKey(mode.getName())) {
+			modes.put(mode.getName(), mode);
+			menuViewController.addMenuItem(mode.getName());
 		}
 	}
 
-	public void removeMode(Mode mode) {
+	public  void removeMode(Mode mode) {
 		if (modes.containsKey(mode)) {
 			modes.remove(mode);
 		}
@@ -167,7 +165,7 @@ public class ModeController {
 	public Mode getCurrentMode() {
 		return this.currentMode;
 	}
-	
+
 	/**
 	 * Checks if the Mode already exists for this ModeController. If it does it sets it, and shows it to the user
 	 * Can be improved by setting the table as a listener on the currentMode-variable
@@ -181,7 +179,7 @@ public class ModeController {
 		this.visualizationViewController.setData(mode.getVisualizationElement().getData());
 		this.visualizationViewController.setColumns(mode.getVisualizationElement().getColumns());
 	}
-	
+
 	/**
 	 * Checks if the mode is a mode already created
 	 * @param mode Mode The mode we wish to show to the user
@@ -226,4 +224,8 @@ public class ModeController {
 		addMode(demographicsMode);
 	}
 
+	@Override
+	public void update(Observable o, Object arg) {
+		this.updatedRows();
+	}
 }
