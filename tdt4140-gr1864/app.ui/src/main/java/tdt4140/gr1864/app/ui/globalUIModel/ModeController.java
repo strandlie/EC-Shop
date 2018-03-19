@@ -119,6 +119,8 @@ public class ModeController implements Observer {
 		// get data from demographics and add to DemographicsMode
 		CustomerDatabaseController cdc = new CustomerDatabaseController();
 		List<Customer> customers = cdc.retrieveAll();
+
+		// Adding an observer to each customer to listen for changes
 		for (Customer customer : customers) {
 			customer.addObserver(this);
 		}
@@ -205,6 +207,10 @@ public class ModeController implements Observer {
 		setMode(this.currentMode);
 	}
 
+    /**
+     * Updates rows of customer table when a customer gets updated
+     * TODO: Should be refactored to not delete and instantiate a new table each time
+     */
 	public void updatedRows() {
 		//First removing mode
 		removeMode(modes.get("Demographics"));
@@ -224,6 +230,11 @@ public class ModeController implements Observer {
 		addMode(demographicsMode);
 	}
 
+    /**
+     * Getting called every time a cutomer object gets updated
+     * @param o a reference to the updated customer object
+     * @param arg an argument
+     */
 	@Override
 	public void update(Observable o, Object arg) {
 		this.updatedRows();

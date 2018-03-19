@@ -104,7 +104,11 @@ public class Customer extends Observable implements UserInterface {
 	public int getZip() {
 		return zip;
 	}
-	
+
+	/**
+	 * Sets new zip code and notifies observer
+	 * @param zip new zip code
+	 */
 	public void setZip(int zip) {
         setChanged();
 		notifyObservers();
@@ -115,7 +119,11 @@ public class Customer extends Observable implements UserInterface {
 	public String getAddress() {
 		return address;
 	}
-	
+
+	/**
+	 * Sets new address and notifies observer
+	 * @param address new address
+	 */
 	public void setAddress(String address) {
 		setChanged();
 		notifyObservers();
@@ -158,11 +166,5 @@ public class Customer extends Observable implements UserInterface {
 			return false;
 		return true;
 	}
-
-	public boolean getHasUpdated() {
-		return this.hasUpdated;
-	}
-
-
 }
 
