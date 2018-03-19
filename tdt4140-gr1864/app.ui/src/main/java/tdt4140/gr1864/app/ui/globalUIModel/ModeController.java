@@ -14,7 +14,7 @@ import tdt4140.gr1864.app.core.databasecontrollers.CoordinateDatabaseController;
 import tdt4140.gr1864.app.core.Action;
 import tdt4140.gr1864.app.core.Shop;
 import tdt4140.gr1864.app.core.ShoppingTrip;
-import tdt4140.gr1864.app.core.database.DataLoader;
+import tdt4140.gr1864.app.core.database.TestDataLoader;
 import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
@@ -22,14 +22,14 @@ import tdt4140.gr1864.app.core.databasecontrollers.ShopDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
 import tdt4140.gr1864.app.ui.TableLoader;
 import tdt4140.gr1864.app.ui.Mode.Mode;
-import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Aggregate;
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Row;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
 import javafx.fxml.FXML;
 
 /**
  * Initializes the different modes, and handles the switching between them. Also hands of responsibility
  * to the sub-controllerclasses
- * @author Håkon Strandlie
+ * @author Hakon Strandlie
  *
  */
 public class ModeController {
@@ -78,24 +78,23 @@ public class ModeController {
 		 */
 		this.menuViewController.setModeController(this);
 		
-		
+		// Create a table for mostPickedUp Mode and fill with data
 		VisualizationTable mostPickedUpTable = new VisualizationTable("Most Picked-Up Product");
 		mostPickedUpTable.addColumn("productName");
 		mostPickedUpTable.addColumn("numberOfPickUp");
 		mostPickedUpTable.addColumn("numberOfPutDown");
 		mostPickedUpTable.addColumn("numberOfPurchases");
+		// Create mostPickedUp Mode and add table
 		Mode mostPickedUp = new Mode("Most Picked Up", mostPickedUpTable);
 		
+		// Create a table for stockMode and fill with data
 		VisualizationTable stockTable = new VisualizationTable("Stock");
-		/*
-		stockTable.addData(new Aggregate("Bolle", "5"));
-		stockTable.addData(new Aggregate("Sjokolade", "20"));
-		*/
 		stockTable.addColumn("productName");
 		stockTable.addColumn("numberInStock");
+		// Create stock Mode and add table
 		Mode stock = new Mode("Stock", stockTable);
 		
-		new DataLoader();
+		new TestDataLoader();
 		
 		// Get data from shoppin trip and add to TableView
 		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
@@ -108,20 +107,8 @@ public class ModeController {
 		ArrayList<ShoppingTrip> shoppingTripList = new ArrayList<>();
 		shoppingTripList.add(trip);
 		
-		HeatMap map = new HeatMap(180, 100);
-		
-		List<Point> points = new ArrayList<>();
-		
-		for (ShoppingTrip shoppingTrip : shoppingTripList) {
-			for (Coordinate coordinate : shoppingTrip.getCoordinates()) {
-				points.add(new Point(coordinate.getX(), coordinate.getY()));
-			}
-		}
-		
-		map.addSpots(points);
-		map.saveAsPng("map");
-		
-		new TableLoader(shoppingTripList, mostPickedUpTable);
+		TableLoader tableLoader = new TableLoader();
+		tableLoader.loadMostPickedUpTable(shoppingTripList, mostPickedUpTable);
 		
 		// Get data from Shop and add to StockMode
 		ShopDatabaseController sdc = new ShopDatabaseController();
@@ -136,7 +123,7 @@ public class ModeController {
 		Map<Integer, Integer> productIDsOnShelf = shop.getShelfs();
 		Map<Integer, Integer> productIDsInStorage = shop.getStorage();
 		
-		new TableLoader(productIDsOnShelf, productIDsInStorage, stockTable);
+		tableLoader.loadStockTable(productIDsOnShelf, productIDsInStorage, stockTable);
 		
 		addMode(mostPickedUp);
 		addMode(stock);
@@ -174,7 +161,6 @@ public class ModeController {
 	
 	/**
 	 * Checks if the Mode already exists for this ModeController. If it does it sets it, and shows it to the user
-	 * Can be improved by setting the table as a listener on the currentMode-variable
 	 * @param mode Mode the mode we wish to set
 	 */
 	private void setMode(Mode mode) {
@@ -182,8 +168,7 @@ public class ModeController {
 			throw new IllegalArgumentException(mode.getName() + " is not a valid mode");
 		}
 		this.currentMode = mode;
-		this.visualizationViewController.setData(mode.getVisualizationElement().getData());
-		this.visualizationViewController.setColumns(mode.getVisualizationElement().getColumns());
+		this.visualizationViewController.setActiveElement(mode.getVisualizationElement());
 	}
 	
 	/**

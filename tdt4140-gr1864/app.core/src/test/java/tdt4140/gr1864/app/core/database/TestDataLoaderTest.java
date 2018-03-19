@@ -1,4 +1,4 @@
-package tdt4140.gr1864.app.core;
+package tdt4140.gr1864.app.core.database;
 
 import java.io.IOException;
 
@@ -9,23 +9,28 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import tdt4140.gr1864.app.core.database.DataLoader;
+import tdt4140.gr1864.app.core.database.TestDataLoader;
+import tdt4140.gr1864.app.core.Action;
+import tdt4140.gr1864.app.core.Coordinate;
+import tdt4140.gr1864.app.core.Product;
+import tdt4140.gr1864.app.core.Shop;
+import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.database.DatabaseWiper;
 import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;;
 
 /* Uses test-data.json for testing */
-public class DataLoaderTest {
+public class TestDataLoaderTest {
 	
-	String pathToShoppingTrip;
-	String pathToProducts;
-	DataLoader loader;
-	ProductDatabaseController pdc;
+	static String pathToShoppingTrip;
+	static String pathToProducts;
+	static TestDataLoader loader;
+	static ProductDatabaseController pdc;
 
-	ShoppingTrip trip;
-	List<Coordinate> coords;
-	List<Product> products;
-	List<Action> actions;
+	static ShoppingTrip trip;
+	static List<Coordinate> coords;
+	static List<Product> products;
+	static List<Action> actions;
 	
 	/*
 	 * Setting up database before running tests
@@ -35,25 +40,20 @@ public class DataLoaderTest {
 	public static void setupDatabase() throws IOException {
 		DatabaseWiper viper = new DatabaseWiper();
 		viper.wipe();
-	}
-	
-	@Before
-	public void setupDataloader() {
-		loader = new DataLoader();
+		loader = new TestDataLoader();
 		pdc = new ProductDatabaseController();
 		coords = loader.getCoordinates();
 		products = loader.getProducts();
 		actions = loader.getActions();
 		trip = loader.getTrip();
 	}
-
 	
 	@Test
 	public void testCoordinateLoadingFromFileExpectFirstCoordFromDataFile() {
 		Coordinate coord = coords.get(0);
-		double expectedX = 8.622905145346992;
-		double expectedY = 4.569762307274866;
-		long expectedTime = 1519216783919L;
+		double expectedX = 8.12313777180195;
+		double expectedY = 4.330388562062142;
+		long expectedTime = 1520861376132L;
 
 		Assert.assertEquals(expectedX, coord.getX(), 0);
 		Assert.assertEquals(expectedY, coord.getY(), 0);
@@ -73,9 +73,9 @@ public class DataLoaderTest {
 	@Test
 	public void testActionLoadingFromFileExpectFirstActionFromDataFile() {
 		Action action = actions.get(0);
-		long expectedTime = 1519220923919L;
+		long expectedTime = 1520865366132L;
 		int expectedType = 1;
-		int expectedProduct = 52;
+		int expectedProduct = 44;
 		
 		Assert.assertEquals(expectedTime, action.getTimeStamp());
 		Assert.assertEquals(expectedType, action.getActionType());
