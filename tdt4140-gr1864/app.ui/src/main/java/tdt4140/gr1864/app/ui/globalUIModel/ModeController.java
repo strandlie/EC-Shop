@@ -16,7 +16,7 @@ import tdt4140.gr1864.app.core.databasecontrollers.ShopDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
 import tdt4140.gr1864.app.ui.TableLoader;
 import tdt4140.gr1864.app.ui.Mode.Mode;
-import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Aggregate;
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Row;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
 import javafx.fxml.FXML;
 
@@ -160,8 +160,7 @@ public class ModeController {
 			throw new IllegalArgumentException(mode.getName() + " is not a valid mode");
 		}
 		this.currentMode = mode;
-		this.visualizationViewController.setData(mode.getVisualizationElement().getData());
-		this.visualizationViewController.setColumns(mode.getVisualizationElement().getColumns());
+		this.visualizationViewController.setActiveElement(mode.getVisualizationElement());
 	}
 	
 	/**

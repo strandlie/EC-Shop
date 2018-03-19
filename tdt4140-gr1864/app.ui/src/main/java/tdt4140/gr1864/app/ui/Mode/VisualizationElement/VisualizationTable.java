@@ -8,7 +8,10 @@ import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
+import tdt4140.gr1864.app.ui.globalUIModel.VisualizationViewController;
 
 public class VisualizationTable extends VisualizationElement {
 	/**
@@ -36,11 +39,11 @@ public class VisualizationTable extends VisualizationElement {
 	/**
 	 * Container for the columns in this table
 	 */
-	private ArrayList<TableColumn<Aggregate, String>> columns;
+	private ArrayList<TableColumn<Row, String>> columns;
 	/**
 	 * Container for the data used to populate the table in the GUI
 	 */
-	private ObservableList<Aggregate> data;
+	private ObservableList<Row> data;
 
 
 	/**
@@ -49,8 +52,8 @@ public class VisualizationTable extends VisualizationElement {
 	 */
 	public VisualizationTable(String name) {
 		super(name);
-		this.columns = new ArrayList<TableColumn<Aggregate, String>>();
-		this.data = FXCollections.observableArrayList(new ArrayList<Aggregate>());
+		this.columns = new ArrayList<TableColumn<Row, String>>();
+		this.data = FXCollections.observableArrayList(new ArrayList<Row>());
 	}
 	
 	/**
@@ -58,15 +61,17 @@ public class VisualizationTable extends VisualizationElement {
 	 * and only references are passed
 	 * @param data ArrayList The list of the data used to populate the table
 	 */
-	public void setData(ArrayList<Aggregate> data) {
-		this.data = FXCollections.observableArrayList(data);
+	@Override
+	public void setData(Object data) {
+		List<Row> list = objectIsList(data);
+		this.data = FXCollections.observableArrayList(list);
 	}
 	
 	/**
 	 * Add a single row to the table
-	 * @param Aggregate the new row. Immidiately shown to the user if the mode is active
+	 * @param Row the new row. Immidiately shown to the user if the mode is active
 	 */
-	public void addData(Aggregate a) {
+	public void addData(Row a) {
 		this.data.add(a);
 	}
 	
@@ -74,8 +79,27 @@ public class VisualizationTable extends VisualizationElement {
 	 * Gets the items currently shown to the user
 	 * @return ObservableList the reference to the data currently populating the table
 	 */
-	public ObservableList<Aggregate> getData() {
+	public ObservableList<Row> getData() {
 		return this.data;
+	}
+	
+	/**
+	 * Implementation of the interfaceMethod. Loads the data from this VisualizationTable into 
+	 * the TableView
+	 */
+	public void loadData(TableView<Row> tableView, ImageView imageView) {
+		tableView.setItems(this.data);
+	}
+	
+	/**
+	 * Implementation of the interface method. Shows the TableView, hides the ImageView
+	 * Also loads data and Columns into the TableView
+	 */
+	public void setAsActiveElement(VisualizationViewController vvc, TableView<Row> tableView, ImageView imageView) {
+		vvc.imageViewSetDisable(true);
+		vvc.tableViewSetDisable(false);
+		loadData(tableView, imageView);
+		tableView.getColumns().setAll(this.getColumns());
 	}
 	
 	
@@ -83,13 +107,13 @@ public class VisualizationTable extends VisualizationElement {
 	 * Gets the Columns of this table. Changing this will not immidiately reflect to the user, as this is controlled by the ModeController
 	 * @return ArrayList
 	 */
-	public ArrayList<TableColumn<Aggregate, String>> getColumns() {
+	public ArrayList<TableColumn<Row, String>> getColumns() {
 		return this.columns;
 	}
 	
 	
 	/**
-	 * Takes a list of Aggregate-Property-names and creates the corresponding TableColumns and CellValueFactories
+	 * Takes a list of Row-Property-names and creates the corresponding TableColumns and CellValueFactories
 	 * Assumes that columnnames already has been verified
 	 * @param columns ArrayList of strings of columnnames
 	 */
@@ -109,7 +133,7 @@ public class VisualizationTable extends VisualizationElement {
 		}
 		
 		String columnName = allowedColumnNames.get(columnID);
-		TableColumn<Aggregate, String> tempColumn = new TableColumn<Aggregate, String>(columnName);
+		TableColumn<Row, String> tempColumn = new TableColumn<Row, String>(columnName);
 		tempColumn.setCellValueFactory(new PropertyValueFactory(columnID));
 		columns.add(tempColumn);
 	}
@@ -129,17 +153,16 @@ public class VisualizationTable extends VisualizationElement {
 	 * @return boolean true if has the column name
 	 */
 	public boolean hasColumn(String name) {
-		for (TableColumn<Aggregate, String> column : columns) {
+		for (TableColumn<Row, String> column : columns) {
 			if (column.getText().equals(name)) {
 				return true;
 			}
 		}
 		return false;
 	}
-
-	@Override
-	public void setData(List<Aggregate> data) {
-		// TODO Auto-generated method stub
-		
+	
+	@SuppressWarnings("unchecked")
+	private List<Row> objectIsList(Object object) throws ClassCastException {
+		return (List<Row>) object;
 	}
 }
