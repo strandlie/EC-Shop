@@ -16,7 +16,7 @@ import tdt4140.gr1864.app.core.databasecontrollers.ShopDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
 import tdt4140.gr1864.app.ui.TableLoader;
 import tdt4140.gr1864.app.ui.Mode.Mode;
-import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Aggregate;
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Row;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
 import javafx.fxml.FXML;
 
@@ -71,21 +71,20 @@ public class ModeController {
 		 */
 		this.menuViewController.setModeController(this);
 		
-		
+		// Create a table for mostPickedUp Mode and fill with data
 		VisualizationTable mostPickedUpTable = new VisualizationTable("Most Picked-Up Product");
 		mostPickedUpTable.addColumn("productName");
 		mostPickedUpTable.addColumn("numberOfPickUp");
 		mostPickedUpTable.addColumn("numberOfPutDown");
 		mostPickedUpTable.addColumn("numberOfPurchases");
+		// Create mostPickedUp Mode and add table
 		Mode mostPickedUp = new Mode("Most Picked Up", mostPickedUpTable);
 		
+		// Create a table for stockMode and fill with data
 		VisualizationTable stockTable = new VisualizationTable("Stock");
-		/*
-		stockTable.addData(new Aggregate("Bolle", "5"));
-		stockTable.addData(new Aggregate("Sjokolade", "20"));
-		*/
 		stockTable.addColumn("productName");
 		stockTable.addColumn("numberInStock");
+		// Create stock Mode and add table
 		Mode stock = new Mode("Stock", stockTable);
 		
 		new TestDataLoader();
@@ -99,7 +98,8 @@ public class ModeController {
 		ArrayList<ShoppingTrip> shoppingTripList = new ArrayList<>();
 		shoppingTripList.add(trip);
 		
-		new TableLoader(shoppingTripList, mostPickedUpTable);
+		TableLoader tableLoader = new TableLoader();
+		tableLoader.loadMostPickedUpTable(shoppingTripList, mostPickedUpTable);
 		
 		// Get data from Shop and add to StockMode
 		ShopDatabaseController sdc = new ShopDatabaseController();
@@ -114,7 +114,7 @@ public class ModeController {
 		Map<Integer, Integer> productIDsOnShelf = shop.getShelfs();
 		Map<Integer, Integer> productIDsInStorage = shop.getStorage();
 		
-		new TableLoader(productIDsOnShelf, productIDsInStorage, stockTable);
+		tableLoader.loadStockTable(productIDsOnShelf, productIDsInStorage, stockTable);
 		
 		addMode(mostPickedUp);
 		addMode(stock);
@@ -152,7 +152,6 @@ public class ModeController {
 	
 	/**
 	 * Checks if the Mode already exists for this ModeController. If it does it sets it, and shows it to the user
-	 * Can be improved by setting the table as a listener on the currentMode-variable
 	 * @param mode Mode the mode we wish to set
 	 */
 	private void setMode(Mode mode) {
@@ -160,8 +159,7 @@ public class ModeController {
 			throw new IllegalArgumentException(mode.getName() + " is not a valid mode");
 		}
 		this.currentMode = mode;
-		this.visualizationViewController.setData(mode.getVisualizationElement().getData());
-		this.visualizationViewController.setColumns(mode.getVisualizationElement().getColumns());
+		this.visualizationViewController.setActiveElement(mode.getVisualizationElement());
 	}
 	
 	/**

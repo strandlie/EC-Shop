@@ -23,7 +23,6 @@ public class OwnerApp extends Application{
 	}
 	public static void main(String[] args) {
 		launch(args);
-		//ModeController mc = new ModeController();
 	}
 
 }
