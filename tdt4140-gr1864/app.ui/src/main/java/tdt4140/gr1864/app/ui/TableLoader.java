@@ -10,7 +10,8 @@ import tdt4140.gr1864.app.core.Product;
 import tdt4140.gr1864.app.core.Shop;
 import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
-import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Row;
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.MostPickedUpTableRow;
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.InStockTableRow;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
 
 /**
@@ -79,7 +80,7 @@ public class TableLoader {
 			String pickups = this.pickUps.get(productName).toString();
 			String putdowns = this.putDowns.containsKey(productName) ? this.putDowns.get(productName).toString() : "0";
 			String purchases = this.purchases.containsKey(productName) ? this.purchases.get(productName).toString() : "0";
-			table.addData(new Row(productName, pickups, putdowns, purchases));
+			table.addData(new MostPickedUpTableRow(productName, pickups, putdowns, purchases));
 		}
 	}
 	/**
@@ -112,7 +113,7 @@ public class TableLoader {
 		
 		for (String productName : this.stock.keySet()) {
 			String totalStock = this.stock.get(productName).toString();
-			table.addData(new Row(productName, totalStock));
+			table.addData(new InStockTableRow(productName, totalStock));
 		}
 		
 	}
