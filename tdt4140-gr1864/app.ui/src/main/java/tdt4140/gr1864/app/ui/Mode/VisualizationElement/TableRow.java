@@ -12,7 +12,7 @@ import javafx.beans.property.StringProperty;
  * @author Hakon Strandlie
  *
  */
-public class Row {
+public class TableRow {
 	
 	// Common variables for mostPickedUpMode and stockMode
 	private StringProperty productName;
@@ -38,7 +38,7 @@ public class Row {
 	 * @param numberOfPutDownThe number of times it was put down
 	 * @param numberOfPurchases The number of purchases (the sum of the two above)
 	 */
-	public Row(String productName, String numberOfPickUp, String numberOfPutDown, String numberOfPurchases) {
+	public TableRow(String productName, String numberOfPickUp, String numberOfPutDown, String numberOfPurchases) {
 		setProductName(productName);
 		setNumberOfPickUp(numberOfPickUp);
 		setNumberOfPutDown(numberOfPutDown);
@@ -52,7 +52,7 @@ public class Row {
 	 * @param productName
 	 * @param numberInStock
 	 */
-	public Row(String productName, String numberInStock) {
+	public TableRow(String productName, String numberInStock) {
 		setProductName(productName);
 		setNumberInStock(numberInStock);
 		
