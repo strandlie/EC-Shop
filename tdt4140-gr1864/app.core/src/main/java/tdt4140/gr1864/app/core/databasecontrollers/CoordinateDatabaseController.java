@@ -135,7 +135,7 @@ public class CoordinateDatabaseController implements DatabaseCRUD{
 		try {
 			String query = "SELECT * FROM coordinate WHERE shopping_trip_id=?";
 
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:database.db");
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			
 			PreparedStatement statement = connection.prepareStatement(query);
 			
