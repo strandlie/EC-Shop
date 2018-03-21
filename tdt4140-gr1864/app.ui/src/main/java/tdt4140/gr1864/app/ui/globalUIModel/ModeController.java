@@ -1,14 +1,23 @@
 package tdt4140.gr1864.app.ui.globalUIModel; 
 
 import java.util.*;
-
 import tdt4140.gr1864.app.core.Customer;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
+import tdt4140.gr1864.app.core.databasecontrollers.CoordinateDatabaseController;
 import tdt4140.gr1864.app.core.Shop;
 import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.database.DataLoader;
 import tdt4140.gr1864.app.core.databasecontrollers.*;
 import tdt4140.gr1864.app.ui.TableLoader;
 import tdt4140.gr1864.app.ui.Mode.Mode;
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationHeatMap;
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationSimplePlot;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
 import javafx.fxml.FXML;
 
@@ -52,9 +61,10 @@ public class ModeController implements Observer {
 	/**
 	 * Is called automatically by JavaFX after the scene is set up and the @FXML-variables are connected
 	 * Is used here to set up the different modes and set the initial mode
+	 * @throws SQLException 
 	 */
 	@FXML
-	public void initialize() {
+	public void initialize() throws SQLException {
 		this.modes = new HashMap<String, Mode>();
 		
 		/**
@@ -63,21 +73,20 @@ public class ModeController implements Observer {
 		 */
 		menuViewController.setModeController(this);
 		
-		
+		// Create a table for mostPickedUp Mode and fill with data
 		VisualizationTable mostPickedUpTable = new VisualizationTable("Most Picked-Up Product");
 		mostPickedUpTable.addColumn("productName");
 		mostPickedUpTable.addColumn("numberOfPickUp");
 		mostPickedUpTable.addColumn("numberOfPutDown");
 		mostPickedUpTable.addColumn("numberOfPurchases");
+		// Create mostPickedUp Mode and add table
 		Mode mostPickedUp = new Mode("Most Picked Up", mostPickedUpTable);
 		
+		// Create a table for stockMode and fill with data
 		VisualizationTable stockTable = new VisualizationTable("Stock");
-		/*
-		stockTable.addData(new Aggregate("Bolle", "5"));
-		stockTable.addData(new Aggregate("Sjokolade", "20"));
-		*/
 		stockTable.addColumn("productName");
 		stockTable.addColumn("numberInStock");
+		// Create stock Mode and add table
 		Mode stock = new Mode("Stock", stockTable);
 		
 		DataLoader.main(null);
@@ -94,18 +103,22 @@ public class ModeController implements Observer {
 		// Get data from shoppin trip and add to TableView
 		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
 		ActionDatabaseController adc = new ActionDatabaseController();
-		
+		CoordinateDatabaseController cdc = new CoordinateDatabaseController();
+	
 		ShoppingTrip trip = stdc.retrieve(1);
 		trip.setActions(adc.retrieveAll(1));
+		trip.setCoordinates(cdc.retrieveAll(1));
 		ArrayList<ShoppingTrip> shoppingTripList = new ArrayList<>();
 		shoppingTripList.add(trip);
 		
-		new TableLoader(shoppingTripList, mostPickedUpTable);
+		TableLoader tableLoader = new TableLoader();
+		tableLoader.loadMostPickedUpTable(shoppingTripList, mostPickedUpTable);
 		
 		// Get data from Shop and add to StockMode
 		ShopDatabaseController sdc = new ShopDatabaseController();
 		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
 		ProductDatabaseController pdc = new ProductDatabaseController();
+
 		Shop shop = sdc.retrieve(1);
 		for (int i = 1; i < 65; i++) {
 			osdc.retrieve(shop, i);
@@ -114,23 +127,35 @@ public class ModeController implements Observer {
 		Map<Integer, Integer> productIDsOnShelf = shop.getShelfs();
 		Map<Integer, Integer> productIDsInStorage = shop.getStorage();
 		
-		new TableLoader(productIDsOnShelf, productIDsInStorage, stockTable);
+		tableLoader.loadStockTable(productIDsOnShelf, productIDsInStorage, stockTable);
 
 		// get data from demographics and add to DemographicsMode
-		CustomerDatabaseController cdc = new CustomerDatabaseController();
-		List<Customer> customers = cdc.retrieveAll();
+		CustomerDatabaseController customerDatabaseController = new CustomerDatabaseController();
+		List<Customer> customers = customerDatabaseController.retrieveAll();
 
 		// Adding an observer to each customer to listen for changes
 		for (Customer customer : customers) {
 			customer.addObserver(this);
 		}
-		new TableLoader(customers, demographicsTable, true);
+		tableLoader.loadDemographicsTable(customers, demographicsTable);
 
 		//Adding modes
 		addMode(mostPickedUp);
 		addMode(stock);
 		addMode(demographicsMode);
+		tableLoader.loadStockTable(productIDsOnShelf, productIDsInStorage, stockTable);
 		
+		VisualizationHeatMap heatMap = new VisualizationHeatMap("Heatmap", shoppingTripList);
+		Mode heatMapMode = new Mode("Heatmap", heatMap);
+		
+		VisualizationSimplePlot plot = new VisualizationSimplePlot("Plot", shoppingTripList);
+		Mode plotMode = new Mode("Plot", plot);
+		
+		addMode(mostPickedUp);
+		addMode(stock);
+		addMode(heatMapMode);
+		addMode(plotMode);
+
 		setMode(mostPickedUp);
 	}
 	
@@ -170,7 +195,6 @@ public class ModeController implements Observer {
 
 	/**
 	 * Checks if the Mode already exists for this ModeController. If it does it sets it, and shows it to the user
-	 * Can be improved by setting the table as a listener on the currentMode-variable
 	 * @param mode Mode the mode we wish to set
 	 */
 	private void setMode(Mode mode) {
@@ -178,8 +202,7 @@ public class ModeController implements Observer {
 			throw new IllegalArgumentException(mode.getName() + " is not a valid mode");
 		}
 		this.currentMode = mode;
-		this.visualizationViewController.setData(mode.getVisualizationElement().getData());
-		this.visualizationViewController.setColumns(mode.getVisualizationElement().getColumns());
+		this.visualizationViewController.setActiveElement(mode.getVisualizationElement());
 	}
 
 	/**
@@ -211,24 +234,7 @@ public class ModeController implements Observer {
      * Updates rows of customer table when a customer gets updated
      * TODO: Should be refactored to not delete and instantiate a new table each time
      */
-	public void updatedRows() {
-		//First removing mode
-		removeMode(modes.get("Demographics"));
 
-		VisualizationTable demographicsTable = new VisualizationTable("Demographics");
-		demographicsTable.addColumn("customerId");
-		demographicsTable.addColumn("firstName");
-		demographicsTable.addColumn("lastName");
-		demographicsTable.addColumn("address");
-		demographicsTable.addColumn("zip");
-		Mode demographicsMode = new Mode("Demographics", demographicsTable);
-		// get data from demographics and add to DemographicsMode
-		CustomerDatabaseController cdc = new CustomerDatabaseController();
-		List<Customer> customers = cdc.retrieveAll();
-		new TableLoader(customers, demographicsTable, true);
-
-		addMode(demographicsMode);
-	}
 
     /**
      * Getting called every time a cutomer object gets updated

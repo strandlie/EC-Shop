@@ -6,13 +6,13 @@ import org.junit.Test;
 
 public class AggregateTest {
 	
-	Aggregate aggregate4;
-	Aggregate aggregate2;
+	Row aggregate4;
+	Row aggregate2;
 	
 	@Before
 	public void setup() {
-		this.aggregate4 = new Aggregate("Bolle", "1", "2", "1");
-		this.aggregate2 = new Aggregate("Bille", "200");
+		this.aggregate4 = new Row("Bolle", "1", "2", "1");
+		this.aggregate2 = new Row("Bille", "200");
 		
 	}
 	

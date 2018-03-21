@@ -7,7 +7,7 @@ import java.util.Map;
 
 import tdt4140.gr1864.app.core.*;
 import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
-import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Aggregate;
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Row;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
 
 /**
@@ -36,12 +36,14 @@ public class TableLoader {
 	private Map<String, Integer> stock;
 	
 	/**
+<<<<<<< HEAD
 	 * The constructor for CustomerList
+=======
+>>>>>>> 78d8bf6195ac973dbc373daccc0688ca90a46973
 	 * @param trips A list of shopping trips to load the table from
 	 * @param table A model-layer representation of a table shown to the user. Any changes made to this will reflect to the user immidiately
-	 * @param inputZero Dummy parameter to "skille" between the different tableLoders with the same erassure
 	 */
-	public TableLoader(List<ShoppingTrip> trips, VisualizationTable table) {
+	public void loadMostPickedUpTable(List<ShoppingTrip> trips, VisualizationTable table) {
 		if (trips == null || table == null) {
 			return;
 		}
@@ -78,16 +80,15 @@ public class TableLoader {
 			String pickups = this.pickUps.get(productName).toString();
 			String putdowns = this.putDowns.containsKey(productName) ? this.putDowns.get(productName).toString() : "0";
 			String purchases = this.purchases.containsKey(productName) ? this.purchases.get(productName).toString() : "0";
-			table.addData(new Aggregate(productName, pickups, putdowns, purchases));
+			table.addData(new Row(productName, pickups, putdowns, purchases));
 		}
 	}
 	/**
-	 * The constructor for the StockMode
 	 * @param productIDsOnShelf The Map of the productIDs with corresponding count on shelf
 	 * @param productIDsInStorage The Map of the productIDs with corresponding count in storage
 	 * @param table A model-layer representation of a table shown to the user. Any changes made to this will reflect to the user immidiately
 	 */
-	public TableLoader(Map<Integer, Integer> productIDsOnShelf, Map<Integer, Integer> productIDsInStorage, VisualizationTable table) {
+	public void loadStockTable(Map<Integer, Integer> productIDsOnShelf, Map<Integer, Integer> productIDsInStorage, VisualizationTable table) {
 		if (productIDsOnShelf == null || productIDsInStorage == null || table == null) {
 			return;
 		}
@@ -112,7 +113,7 @@ public class TableLoader {
 		
 		for (String productName : this.stock.keySet()) {
 			String totalStock = this.stock.get(productName).toString();
-			table.addData(new Aggregate(productName, totalStock));
+			table.addData(new Row(productName, totalStock));
 		}
 		
 	}
@@ -123,13 +124,13 @@ public class TableLoader {
 	 * @param table
 	 * @param inputZero to differentiate the differetn tableloaders, no real function
 	 */
-	public TableLoader(List<Customer> customers, VisualizationTable table, boolean inputZero) {
+	public void loadDemographicsTable(List<Customer> customers, VisualizationTable table) {
 		if (customers == null || table == null) {
 			return;
 		}
 
 		for (Customer customer: customers) {
-			table.addData(new Aggregate(Integer.toString(customer.getUserId()), customer.getFirstName(), customer.getLastName(), customer.getAddress(), Integer.toString(customer.getZip())));
+			table.addData(new Row(Integer.toString(customer.getUserId()), customer.getFirstName(), customer.getLastName(), customer.getAddress(), Integer.toString(customer.getZip())));
 		}
 	}
 

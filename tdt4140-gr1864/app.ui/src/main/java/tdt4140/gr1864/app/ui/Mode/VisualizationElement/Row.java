@@ -12,7 +12,7 @@ import javafx.beans.property.StringProperty;
  * @author Hakon Strandlie
  *
  */
-public class Aggregate {
+public class Row {
 	
 	// Common variables for mostPickedUpMode and stockMode
 	private StringProperty productName;
@@ -45,7 +45,7 @@ public class Aggregate {
 	 * @param numberOfPutDown The number of times it was put down
 	 * @param numberOfPurchases The number of purchases (the sum of the two above)
 	 */
-	public Aggregate(String productName, String numberOfPickUp, String numberOfPutDown, String numberOfPurchases) {
+	public Row(String productName, String numberOfPickUp, String numberOfPutDown, String numberOfPurchases) {
 		setProductName(productName);
 		setNumberOfPickUp(numberOfPickUp);
 		setNumberOfPutDown(numberOfPutDown);
@@ -59,7 +59,7 @@ public class Aggregate {
 	 * @param productName
 	 * @param numberInStock
 	 */
-	public Aggregate(String productName, String numberInStock) {
+	public Row(String productName, String numberInStock) {
 		setProductName(productName);
 		setNumberInStock(numberInStock);
 		
