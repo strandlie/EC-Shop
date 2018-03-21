@@ -25,6 +25,7 @@ import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.CoordinateDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.CustomerDatabaseController;
+import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShopDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
@@ -63,6 +64,7 @@ public class DataLoader {
 		loadProducts();
 		createShop();
 		loadShoppingTrips();
+		addProductsInShelfsInDB(products);
 	}
 	
 	/**
@@ -370,6 +372,25 @@ public class DataLoader {
 		}
 		actions = localActions;
 		return actions;
+	}
+	
+	
+	/**
+	 * A function that adds products to the shelfs and storage of the shop, also updates the DB
+	 */
+	public static void addProductsInShelfsInDB(List<Product> products) {
+		ShopDatabaseController sdc = new ShopDatabaseController();
+		Shop shop = sdc.retrieve(1);
+		
+		int amountInStorage = 90;
+		int amountOnShelfs = 20;
+		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
+		for(Product p : products) {
+			int productID = p.getID();
+			shop.setAmountInShelfs(productID, amountOnShelfs);
+			shop.setAmountInStorage(productID, amountInStorage);
+			osdc.create(shop, productID);
+		}
 	}
 	
 }
