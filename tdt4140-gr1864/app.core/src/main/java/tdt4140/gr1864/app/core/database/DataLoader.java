@@ -155,7 +155,6 @@ public class DataLoader {
 			// Adds the newProduct to database
 			int productID = pdc.create(newProduct);
 			Product tempProduct = new Product(productID, name, price);
-			System.out.println(tempProduct.getID());
 			
 			products.add(tempProduct);
 		}
