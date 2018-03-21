@@ -39,6 +39,7 @@ public class UserServlet extends HttpServlet {
 				jb += line;
 
     		DataLoader.loadUserDemographics(jb);
+			System.out.println("Got data");
     	} catch (Exception e) {
     		e.printStackTrace();
     	}

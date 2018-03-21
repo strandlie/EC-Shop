@@ -171,4 +171,8 @@ public class VisualizationTable extends VisualizationElement {
 	private List<Row> objectIsList(Object object) throws ClassCastException {
 		return (List<Row>) object;
 	}
+
+	public void wipeTable() {
+		this.data.clear();
+	}
 }

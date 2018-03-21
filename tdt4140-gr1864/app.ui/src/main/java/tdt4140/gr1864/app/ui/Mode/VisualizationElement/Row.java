@@ -74,7 +74,7 @@ public class Row {
 	 * @param address
 	 * @param zip
 	 */
-	public Aggregate(String customerId, String firstName, String lastName, String address, String zip) {
+	public Row(String customerId, String firstName, String lastName, String address, String zip) {
 		setCustomerId(customerId);
 	    setFirstName(firstName);
 	    setLastName(lastName);
