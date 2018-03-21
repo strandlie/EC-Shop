@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import tdt4140.gr1864.app.core.Receipt;
 import tdt4140.gr1864.app.core.Shop;
 import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.database.TestDataLoader;
@@ -67,18 +66,21 @@ public class ModeController {
 		 */
 		this.menuViewController.setModeController(this);
 		
-		
+		// Create a table for mostPickedUp Mode and fill with data
 		VisualizationTable mostPickedUpTable = new VisualizationTable("Most Picked-Up Product");
 		mostPickedUpTable.addColumn("productName");
 		mostPickedUpTable.addColumn("numberOfPickUp");
 		mostPickedUpTable.addColumn("numberOfPutDown");
 		mostPickedUpTable.addColumn("numberOfPurchases");
+		// Create mostPickedUp Mode and add table
 		Mode mostPickedUp = new Mode("Most Picked Up", mostPickedUpTable);
 		
+		// Create a table for stockMode and fill with data
 		VisualizationTable stockTable = new VisualizationTable("Stock");
 
 		stockTable.addColumn("productName");
 		stockTable.addColumn("numberInStock");
+		// Create stock Mode and add table
 		Mode stock = new Mode("Stock", stockTable);
 		
 		new TestDataLoader();
@@ -91,7 +93,9 @@ public class ModeController {
 		trip.setActions(adc.retrieveAll(1));
 		ArrayList<ShoppingTrip> shoppingTripList = new ArrayList<>();
 		shoppingTripList.add(trip);
-		new TableLoader(shoppingTripList, mostPickedUpTable);
+		
+		TableLoader tableLoader = new TableLoader();
+		tableLoader.loadMostPickedUpTable(shoppingTripList, mostPickedUpTable);
 		
 		// Get data from Shop and add to StockMode
 		ShopDatabaseController sdc = new ShopDatabaseController();
@@ -101,7 +105,7 @@ public class ModeController {
 		Map<Integer, Integer> productIDsOnShelf = shop.getShelfs();
 		Map<Integer, Integer> productIDsInStorage = shop.getStorage();
 		
-		new TableLoader(productIDsOnShelf, productIDsInStorage, stockTable);
+		tableLoader.loadStockTable(productIDsOnShelf, productIDsInStorage, stockTable);
 		
 		// OnShelves
 		VisualizationTable onShelvesTable = new VisualizationTable("Shelves");
@@ -109,7 +113,7 @@ public class ModeController {
 		onShelvesTable.addColumn("numberOnShelves");
 		Mode shelves = new Mode("Shelves", onShelvesTable);
 		
-		new TableLoader(productIDsOnShelf, onShelvesTable);
+		tableLoader.loadInShelvesTable(productIDsOnShelf, onShelvesTable);
 		
 		//Add modes and set default
 		addMode(mostPickedUp);
@@ -149,7 +153,6 @@ public class ModeController {
 	
 	/**
 	 * Checks if the Mode already exists for this ModeController. If it does it sets it, and shows it to the user
-	 * Can be improved by setting the table as a listener on the currentMode-variable
 	 * @param mode Mode the mode we wish to set
 	 */
 	private void setMode(Mode mode) {
@@ -157,8 +160,7 @@ public class ModeController {
 			throw new IllegalArgumentException(mode.getName() + " is not a valid mode");
 		}
 		this.currentMode = mode;
-		this.visualizationViewController.setData(mode.getVisualizationElement().getData());
-		this.visualizationViewController.setColumns(mode.getVisualizationElement().getColumns());
+		this.visualizationViewController.setActiveElement(mode.getVisualizationElement());
 	}
 	
 	/**
@@ -180,6 +182,9 @@ public class ModeController {
 	 * @param newMode String The String of the ListItem in the menu selected by the user
 	 */
 	public void modeChanged(String newMode) {
+		// Create tableLoader
+		TableLoader tableLoader = new TableLoader();
+		
 		Mode mode = getMode(newMode);
 		if (mode == null) {
 			throw new IllegalStateException("modeChanged should not be called when there is no corresponding mode in modes");
@@ -187,6 +192,7 @@ public class ModeController {
 		
 		// Wipe and re-load tables
 		if (mode.getName() == "Shelves") {
+			
 			// Retrieve the shop from DB and extract products on shelves from said shop
 			ShopDatabaseController sdc = new ShopDatabaseController();
 			Shop shop = sdc.retrieve(1);
@@ -194,11 +200,11 @@ public class ModeController {
 			Map<Integer, Integer> productIDsOnShelf = shop.getShelfs();
 			
 			// Wipe the data table in mode
-			VisualizationTable onShelvesTable = mode.getVisualizationElement();
+			VisualizationTable onShelvesTable = (VisualizationTable) mode.getVisualizationElement();
 			onShelvesTable.wipeTable();
 			
 			// Load the data table with the new values
-			new TableLoader(productIDsOnShelf, onShelvesTable);
+			tableLoader.loadInShelvesTable(productIDsOnShelf, onShelvesTable);
 		}
 			
 		else if (mode.getName() == "Stock") {
@@ -210,14 +216,15 @@ public class ModeController {
 			Map<Integer, Integer> productIDsInStorage = shop.getStorage();
 			
 			// Wipe the data table in mode
-			VisualizationTable stockTable = mode.getVisualizationElement();
+			VisualizationTable stockTable = (VisualizationTable) mode.getVisualizationElement();
 			stockTable.wipeTable();
 			
 			// Load the data table with the new values
-			new TableLoader(productIDsOnShelf, productIDsInStorage, stockTable);
+			tableLoader.loadStockTable(productIDsOnShelf, productIDsInStorage, stockTable);
 			}
 		
 		else if (mode.getName() == "Most Picked Up") {
+
 			// Retrieve the shopping trips from DB and put in a list
 			ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
 			ActionDatabaseController adc = new ActionDatabaseController();
@@ -234,11 +241,11 @@ public class ModeController {
 			}
 			
 			// Wipe the data table in mode
-			VisualizationTable mostPickedUpTable = mode.getVisualizationElement();
+			VisualizationTable mostPickedUpTable = (VisualizationTable) mode.getVisualizationElement();
 			mostPickedUpTable.wipeTable();
 			
 			// Load the data table with new values
-			new TableLoader(shoppingTripList, mostPickedUpTable);
+			tableLoader.loadMostPickedUpTable(shoppingTripList, mostPickedUpTable);
 		}
 		
 		this.currentMode = mode;

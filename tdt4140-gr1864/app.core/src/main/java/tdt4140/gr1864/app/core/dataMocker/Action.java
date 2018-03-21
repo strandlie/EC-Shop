@@ -34,18 +34,9 @@ public class Action {
 	 * @param type Whether the item was picked up or dropped down.
 	 */
 	public Action(Product product, Date time, int type) {
-		if (type == DROP && product.canBeDropped()) {
-			product.drop();
-		} else if (type == PICK_UP) {
-			product.pickUp();
-		} else {
-			throw new IllegalStateException("Cannot DROP a product which is not being carried.");
-		}
-
 		this.product = product;
 		this.time = time;
 		this.type = type;
-		
 	}
 	
 	/**

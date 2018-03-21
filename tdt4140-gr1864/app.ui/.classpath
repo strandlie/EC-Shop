@@ -27,7 +27,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path="/tdt4140-gr1864.app.core"/>
 	<classpathentry kind="var" path="M2_REPO/com/fasterxml/jackson/core/jackson-core/2.9.3/jackson-core-2.9.3.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/apache/httpcomponents/httpclient/4.1.1/httpclient-4.1.1.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/apache/httpcomponents/httpcore/4.1/httpcore-4.1.jar"/>
@@ -44,6 +43,7 @@
 	<classpathentry kind="var" path="M2_REPO/org/testfx/testfx-core/4.0.10-alpha/testfx-core-4.0.10-alpha.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/testfx/testfx-internal-java8/4.0.10-alpha/testfx-internal-java8-4.0.10-alpha.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/testfx/testfx-junit/4.0.10-alpha/testfx-junit-4.0.10-alpha.jar"/>
+	<classpathentry kind="lib" path="libs/charts-1.0.5.jar"/>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>

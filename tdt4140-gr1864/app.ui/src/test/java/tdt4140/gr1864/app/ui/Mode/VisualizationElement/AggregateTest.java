@@ -6,59 +6,57 @@ import org.junit.Test;
 
 public class AggregateTest {
 	
-	Aggregate aggregate4;
-	Aggregate aggregate2;
-	
-	Aggregate aggregate1;
+	Row row4;
+	Row row2;
+	Row row1;
 	
 	@Before
 	public void setup() {
-		this.aggregate4 = new Aggregate("Bolle", "1", "2", "1");
-		this.aggregate2 = new Aggregate("Bille", "200", "stock");
-		
-		this.aggregate1 = new Aggregate("Banan", "60", "onShelves");
+		this.row4 = new Row("Bolle", "1", "2", "1");
+		this.row2 = new Row("Bille", "200", "onShelves");
+		this.row1 = new Row("Banan", "60", "onShelves");
 	}
 	
 	@Test
 	public void testAggregateHasExpectedProductName() {
-		Assert.assertEquals("Bolle", this.aggregate4.getProductName());
-		Assert.assertEquals("Bille", this.aggregate2.getProductName());
+		Assert.assertEquals("Bolle", this.row4.getProductName());
+		Assert.assertEquals("Bille", this.row2.getProductName());
 	}
 	
 	@Test
 	public void testAggregateHasExpectedNumberOfPickUp() {
-		Assert.assertEquals("1", this.aggregate4.getNumberOfPickUp());
+		Assert.assertEquals("1", this.row4.getNumberOfPickUp());
 	}
 	
 	@Test
 	public void testAggregateHasExpectedNumberOfPutDowns() {
-		Assert.assertEquals("2", this.aggregate4.getNumberOfPutDown());
+		Assert.assertEquals("2", this.row4.getNumberOfPutDown());
 	}
 	
 	@Test
 	public void testAggregateHasExpectedNumberOfPurchases() {
-		Assert.assertEquals("1", this.aggregate4.getNumberOfPurchases());
+		Assert.assertEquals("1", this.row4.getNumberOfPurchases());
 	}
 	
 	@Test
 	public void testAggregateHasExpectedSize() {
-		Assert.assertEquals(4, this.aggregate4.getSize());
-		Assert.assertEquals(2, this.aggregate2.getSize());
+		Assert.assertEquals(4, this.row4.getSize());
+		Assert.assertEquals(2, this.row2.getSize());
 	}
 	
 	@Test
 	public void testAggregateHasExpectedNumberInStock() {
-		Assert.assertEquals("200", this.aggregate2.getNumberInStock());
+		Assert.assertEquals("200", this.row2.getNumberInStock());
 	}
 	
 	@Test
 	public void testAggregateDoesNotHaveUnapplicableFields() {
-		Assert.assertNull(this.aggregate2.getNumberOfPickUp());
-		Assert.assertNull(this.aggregate4.getNumberInStock());
+		Assert.assertNull(this.row2.getNumberOfPickUp());
+		Assert.assertNull(this.row4.getNumberInStock());
 	}
 	
 	@Test
 	public void testAggregateHasExpectedNumberOnSHelves() {
-		Assert.assertEquals("60", aggregate1.getNumberOnShelves());
+		Assert.assertEquals("60", row1.getNumberOnShelves());
 	}
 }

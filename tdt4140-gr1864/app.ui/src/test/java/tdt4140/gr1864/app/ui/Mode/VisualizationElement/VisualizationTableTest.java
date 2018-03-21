@@ -50,10 +50,10 @@ public class VisualizationTableTest {
 	@Test
 	public void canAddData() {
 		Assert.assertTrue(this.table.getData().size() == 0);
-		Aggregate agg = new Aggregate("Bolle", "1", "stock");
+		Row row = new Row("Bolle", "1", "onShelves");
 		
-		this.table.addData(agg);
-		Assert.assertEquals(agg, this.table.getData().get(0));
+		this.table.addData(row);
+		Assert.assertEquals(row, this.table.getData().get(0));
 	}
 	
 

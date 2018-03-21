@@ -236,7 +236,6 @@ public class DataLoader {
 
 			// creating Coordinates
 			JSONArray coordsArray = (JSONArray) tripObject.get("path");
-			System.out.println(trip.getShoppingTripID());
 			coordinates = (ArrayList<Coordinate>) createCoordinates(coordsArray, trip);
 			
 			// creating Actions
