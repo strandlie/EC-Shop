@@ -1,4 +1,4 @@
-<h1><img src="https://i.imgur.com/sTrXVki.png =100x20" width="100" />&nbsp; &nbsp; E.C. Shop :apple: :bacon: :hamburger: :stuffed_flatbread:</h1>
+<h1><img src="https://i.imgur.com/NaEWdZ3.png" width="100" />&nbsp; &nbsp; E.C. Shop :apple: :bacon: :hamburger: :stuffed_flatbread:</h1>
 
 <img src="https://gitlab.stud.iie.ntnu.no/tdt4140-2018/64/badges/master/build.svg">
 <img src="https://gitlab.stud.iie.ntnu.no/tdt4140-2018/64/badges/master/coverage.svg">
