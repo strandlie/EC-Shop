@@ -153,4 +153,31 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 			return customer;
 		}
 	}
+	
+	/**
+	 * Counts amount of customers and returning the amount
+	 * @return int	The amount of customers registered in the database
+	 */
+	public int countCustomers() {
+		String sql = "SELECT COUNT(*) FROM customer";
+	    try {
+			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
+	        statement = connection.prepareStatement(sql);
+	        ResultSet rs = statement.executeQuery();
+	
+	        // Returned nothing
+	        if (!rs.next()) {
+	        	connection.close();
+	            return 0;
+	        }
+
+	        statement.close();
+	        System.out.println("Returned customer amount: " + rs.getInt(1));
+	        return rs.getInt(1);
+	  
+	    } catch (SQLException e) {
+	    	e.printStackTrace();
+	    }
+		return 0;
+	}
 }
