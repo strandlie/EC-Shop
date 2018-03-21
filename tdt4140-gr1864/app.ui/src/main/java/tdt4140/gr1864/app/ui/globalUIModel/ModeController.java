@@ -14,6 +14,7 @@ import tdt4140.gr1864.app.core.databasecontrollers.CoordinateDatabaseController;
 import tdt4140.gr1864.app.core.Action;
 import tdt4140.gr1864.app.core.Shop;
 import tdt4140.gr1864.app.core.ShoppingTrip;
+import tdt4140.gr1864.app.core.database.DataLoader;
 import tdt4140.gr1864.app.core.database.TestDataLoader;
 import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
@@ -96,7 +97,7 @@ public class ModeController {
 		// Create stock Mode and add table
 		Mode stock = new Mode("Stock", stockTable);
 		
-		new TestDataLoader();
+		new DataLoader().main(null);
 		
 		// Get data from shoppin trip and add to TableView
 		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
