@@ -1,10 +1,16 @@
 package tdt4140.gr1864.app.ui.globalUIModel; 
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import eu.hansolo.fx.charts.heatmap.HeatMap;
+import eu.hansolo.fx.charts.tools.Point;
+import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
+import tdt4140.gr1864.app.core.Coordinate;
+import tdt4140.gr1864.app.core.databasecontrollers.CoordinateDatabaseController;
 import tdt4140.gr1864.app.core.Action;
 import tdt4140.gr1864.app.core.Shop;
 import tdt4140.gr1864.app.core.ShoppingTrip;
@@ -17,6 +23,7 @@ import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseControlle
 import tdt4140.gr1864.app.ui.TableLoader;
 import tdt4140.gr1864.app.ui.Mode.Mode;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Row;
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationHeatMap;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
 import javafx.fxml.FXML;
 
@@ -60,9 +67,10 @@ public class ModeController {
 	/**
 	 * Is called automatically by JavaFX after the scene is set up and the @FXML-variables are connected
 	 * Is used here to set up the different modes and set the initial mode
+	 * @throws SQLException 
 	 */
 	@FXML
-	public void initialize() {
+	public void initialize() throws SQLException {
 		this.modes = new HashMap<String, Mode>();
 		
 		/**
@@ -92,9 +100,11 @@ public class ModeController {
 		// Get data from shoppin trip and add to TableView
 		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
 		ActionDatabaseController adc = new ActionDatabaseController();
-		
+		CoordinateDatabaseController cdc = new CoordinateDatabaseController();
+	
 		ShoppingTrip trip = stdc.retrieve(1);
 		trip.setActions(adc.retrieveAll(1));
+		trip.setCoordinates(cdc.retrieveAll(1));
 		ArrayList<ShoppingTrip> shoppingTripList = new ArrayList<>();
 		shoppingTripList.add(trip);
 		
@@ -105,6 +115,7 @@ public class ModeController {
 		ShopDatabaseController sdc = new ShopDatabaseController();
 		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
 		ProductDatabaseController pdc = new ProductDatabaseController();
+
 		Shop shop = sdc.retrieve(1);
 		for (int i = 1; i < 65; i++) {
 			osdc.retrieve(shop, i);
@@ -116,8 +127,13 @@ public class ModeController {
 		
 		tableLoader.loadStockTable(productIDsOnShelf, productIDsInStorage, stockTable);
 		
+		VisualizationHeatMap heatMap = new VisualizationHeatMap("Heatmap", shoppingTripList);
+		
+		Mode heatMapMode = new Mode("Heatmap", heatMap);
+		
 		addMode(mostPickedUp);
 		addMode(stock);
+		addMode(heatMapMode);
 		
 		setMode(mostPickedUp);
 	}
