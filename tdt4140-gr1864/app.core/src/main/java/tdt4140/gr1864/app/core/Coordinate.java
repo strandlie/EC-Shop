@@ -33,7 +33,7 @@ public class Coordinate {
 		this.y = y;
 		this.timeStamp = Long.parseLong(timeStamp);
 	}
-	
+
 	public double getX() {
 		return x;
 	}
@@ -45,9 +45,8 @@ public class Coordinate {
 	public long getTimeStamp() {
 		return timeStamp;
 	}
-	
+
 	public ShoppingTrip getShoppingTrip() {
 		return trip;
 	}
-
 }

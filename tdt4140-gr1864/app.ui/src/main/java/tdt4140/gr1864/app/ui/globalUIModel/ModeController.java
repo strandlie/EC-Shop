@@ -24,6 +24,7 @@ import tdt4140.gr1864.app.ui.TableLoader;
 import tdt4140.gr1864.app.ui.Mode.Mode;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Row;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationHeatMap;
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationSimplePlot;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
 import javafx.fxml.FXML;
 
@@ -128,12 +129,15 @@ public class ModeController {
 		tableLoader.loadStockTable(productIDsOnShelf, productIDsInStorage, stockTable);
 		
 		VisualizationHeatMap heatMap = new VisualizationHeatMap("Heatmap", shoppingTripList);
-		
 		Mode heatMapMode = new Mode("Heatmap", heatMap);
+		
+		VisualizationSimplePlot plot = new VisualizationSimplePlot("Plot", shoppingTripList);
+		Mode plotMode = new Mode("Plot", plot);
 		
 		addMode(mostPickedUp);
 		addMode(stock);
 		addMode(heatMapMode);
+		addMode(plotMode);
 		
 		setMode(mostPickedUp);
 	}
