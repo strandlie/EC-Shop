@@ -53,21 +53,10 @@ public class TestDataLoader {
 		String pathToProducts = "../../../app.core/src/main/resources/mock-products.json";
 
 		products = this.loadProducts(pathToProducts, pdc);
-	
-		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
 		
 		// loads trip
 		String pathToTrip = "../../../app.core/src/main/resources/test-data.json";
 		trip = this.loadShoppingTrip(pathToTrip);
-		
-		Customer c1 = createCustomer();
-		System.out.println(c1 + " is customer");
-		Shop s1 = new Shop("bane", 213);
-		trip = new ShoppingTrip(stdc.create(trip), customer, s1, true);
-		
-		trips.add(trip);
-		
-		System.out.println(trips.size() + " size");
 		
 		// Adds amounts of products to shelfs and storage of DB and updates DB
 		addProductsInShelfsInDB(products);
@@ -218,7 +207,6 @@ public class TestDataLoader {
 		// We set the charged flag to true to prevent spamming the Stripe API.		
 		trip = new ShoppingTrip(c1, s1, true);
 		trip = new ShoppingTrip(stdc.create(trip), trip.getCustomer(), trip.getShop(), true);
-		System.out.println(trips.size());
 		
 		try {
 			Object obj = parser.parse(new FileReader(relativePath + path));
