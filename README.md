@@ -7,9 +7,14 @@ E.C. Shop is a system for tracking customers in a store, similarly to systems su
 
 ## Feature overview
 
-### Features for service providers (shop owners)
+### Features for service providers / shop owners
 
-### Features for data providers (customers)
+Most of the features for service providers are shown in the owner application user interface. In the first tab, owners can see 
+stats describing how often items are picked up, so that you can see which items are popular. In the second tab, owners can see how many items are remainding, so that you know when restocking is needed. The HeatMap and Plot tabs shows how customers move in the store, and which areas of the store usually have the largest amount of people. This can aid with the placement of items.
+
+### Features for data providers / customers
+
+The main feature for customers is automatically being charged for your picked up goods when leaving store. In addition, our service provides multiple endpoints providing reccomenations for items to buy and descriptions of your shopping habits. 
 
 ## Installation
 
@@ -38,4 +43,4 @@ Lastly, you should start the shop owner user interface, which is where the major
 
 ## System architecture
 
-## License
+The project is split into two main parts, `app.core` and `app.ui`. The `app.core` package contains all the business logic such as computing receipts and all the database handling, while `app.ui` contains the JavaFX code for the owner user interface. Inside `app.core`, most of the business logic such as computing receipts and modeling shopping trips resides in `tdt4140.gr1864.app.core`. The package `tdt4140.gr1864.app.core.databasecontrollers` contains code responsible for interfacing with the database. The `tdt4140.gr1864.app.core.databasecontrollers` package is a standalone system for generating fake yet reasonable shopping trips for local testing purposes, and `tdt4140.gr1864.app.core.interfaces` contains interfaces used in different parts of the system. 
