@@ -6,21 +6,33 @@ package tdt4140.gr1864.app.core;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.*;
 
-/**
- * @author anders
- *
- */
+import tdt4140.gr1864.app.core.database.TestDataLoader;
+import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
+
 public class CustomerTest {
+
+	private static TestDataLoader loader;
+	private static ShoppingTrip trip;
+	private static Customer c1;
+	private static Customer c2;
+	
+	@BeforeClass
+	public static void setup() {
+		loader = new TestDataLoader();
+		trip = loader.getTrip();
+	}
 
 	/**
 	 * Test method for {@link tdt4140.gr1864.app.core.Customer#Customer(int, java.lang.String, java.lang.String, java.util.ArrayList)}.
 	 */
 	@Test
 	public void testCustomer() {
-		Customer a = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
-		assertNotEquals(a, null);
+		c1 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
+		assertNotEquals(c1, null);
 	}
 	
 	/**
@@ -28,9 +40,9 @@ public class CustomerTest {
 	 */
 	@Test
 	public void testHashCode() {
-		Customer a = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
-		Customer b = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
-		assertEquals(a.hashCode(), b.hashCode());
+		c1 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
+		c2 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
+		assertEquals(c1.hashCode(), c2.hashCode());
 	}
 
 	/**
@@ -38,9 +50,9 @@ public class CustomerTest {
 	 */
 	@Test
 	public void testEqualsObject() {
-		Customer a = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
-		Customer b = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
-		assertEquals(a, b);
+		c1 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
+		c2 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
+		assertEquals(c1, c2);
 	}
 
 	/**
@@ -48,8 +60,8 @@ public class CustomerTest {
 	 */
 	@Test
 	public void testGetUserId() {
-		Customer a = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
-		assertEquals(a.getUserId(), 1);
+		c1 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
+		assertEquals(c1.getUserId(), 1);
 	}
 
 	/**
@@ -57,9 +69,9 @@ public class CustomerTest {
 	 */
 	@Test
 	public void testSetUserId() {
-		Customer a = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
-		a.setUserId(2);
-		assertEquals(a.getUserId(), 2);
+		c1 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
+		c1.setUserId(2);
+		assertEquals(c1.getUserId(), 2);
 	}
 
 	/**
@@ -67,8 +79,8 @@ public class CustomerTest {
 	 */
 	@Test
 	public void testGetFirstName() {
-		Customer a = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
-		assertEquals(a.getFirstName(), "Roger");
+		c1 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
+		assertEquals(c1.getFirstName(), "Roger");
 	}
 
 	/**
@@ -76,9 +88,9 @@ public class CustomerTest {
 	 */
 	@Test
 	public void testSetFirstName() {
-		Customer a = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
-		a.setFirstName("Benny");
-		assertEquals(a.getFirstName(), "Benny");
+		c1 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
+		c1.setFirstName("Benny");
+		assertEquals(c1.getFirstName(), "Benny");
 	}
 
 	/**
@@ -86,8 +98,8 @@ public class CustomerTest {
 	 */
 	@Test
 	public void testGetLastName() {
-		Customer a = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
-		assertEquals(a.getLastName(), "Nilsen");
+		c1 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
+		assertEquals(c1.getLastName(), "Nilsen");
 	}
 
 	/**
@@ -95,8 +107,20 @@ public class CustomerTest {
 	 */
 	@Test
 	public void testSetLastName() {
-		Customer a = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
-		a.setLastName("Knudsen");
-		assertEquals(a.getLastName(), "Knudsen");
+		c1 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
+		c1.setLastName("Knudsen");
+		assertEquals(c1.getLastName(), "Knudsen");
+	}
+	
+	@Test
+	public void testGiveRecommendationWhenNotBought() {
+		//ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
+		
+		//System.out.println(c1.giveRecommendation());
+	}
+	
+	@Test
+	public void testGiveRecommendationWhenBought() {
+		//c1 = new Customer(1, "Karen", "Sommerville", trips);
 	}
 }

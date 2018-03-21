@@ -123,6 +123,9 @@ public class Customer implements UserInterface {
 		int[] productsBoughtInTotal = new int[amountOfProducts];
 		
 		// Updating the productsBoughtInTotal based on all shopping trips
+		System.out.println("alltrips " + allTrips);
+		if (allTrips == null) return -1;
+		
 		for (ShoppingTrip st : allTrips) {
 			for (Action action : st.getActions()) {
 				/* 
@@ -247,7 +250,7 @@ public class Customer implements UserInterface {
 		
 		/* 
 		 * Converts back from 0-indexing to 1-indexing
-		 * Adding a ++ before the variable increments the productID by 1 before returning.
+		 * Adding '++' before the variable increments the productID by 1 before returning.
 		 */
 		return ++productID;
 	}

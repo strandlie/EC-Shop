@@ -154,6 +154,7 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 									sdc.retrieve(rs.getInt(3)), // Shop object
 									rs.getBoolean(4)) // charged boolean
 								);
+			System.out.println(shoppingTrips.size());
 			}
 			
 			if (!rs.next()) {

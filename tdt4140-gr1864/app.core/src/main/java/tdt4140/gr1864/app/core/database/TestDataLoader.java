@@ -40,22 +40,34 @@ public class TestDataLoader {
 	List<Product> products;
 	List<Action> actions;
 	List<Coordinate> coordinates;
-
+	List<Customer> customers;
+	List<ShoppingTrip> trips;
 	
 	public TestDataLoader() {
 		// clean database
 		cleanDatabase();
 		
 		ProductDatabaseController pdc = new ProductDatabaseController();
-	
+		
 		// loads products
 		String pathToProducts = "../../../app.core/src/main/resources/mock-products.json";
 
 		products = this.loadProducts(pathToProducts, pdc);
 	
-		// loads trips
+		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
+		
+		// loads trip
 		String pathToTrip = "../../../app.core/src/main/resources/test-data.json";
-		trip = this.loadShoppingTrips(pathToTrip);
+		trip = this.loadShoppingTrip(pathToTrip);
+		
+		Customer c1 = createCustomer();
+		System.out.println(c1 + " is customer");
+		Shop s1 = new Shop("bane", 213);
+		trip = new ShoppingTrip(stdc.create(trip), customer, s1, true);
+		
+		trips.add(trip);
+		
+		System.out.println(trips.size() + " size");
 		
 		// Adds amounts of products to shelfs and storage of DB and updates DB
 		addProductsInShelfsInDB(products);
@@ -184,7 +196,7 @@ public class TestDataLoader {
 	 * @param path	relative path to JSON-data (relative to this)
 	 * @return shoppingTrip
 	 */
-	public ShoppingTrip loadShoppingTrips(String path) {
+	public ShoppingTrip loadShoppingTrip(String path) {
 		
 		String relativePath;
 		//Finds path by getting URL and converting to URI and then to path 
@@ -203,10 +215,10 @@ public class TestDataLoader {
 		
 		Shop s1 = createShop();
 		Customer c1 = createCustomer();
-
 		// We set the charged flag to true to prevent spamming the Stripe API.		
 		trip = new ShoppingTrip(c1, s1, true);
 		trip = new ShoppingTrip(stdc.create(trip), trip.getCustomer(), trip.getShop(), true);
+		System.out.println(trips.size());
 		
 		try {
 			Object obj = parser.parse(new FileReader(relativePath + path));
@@ -222,7 +234,6 @@ public class TestDataLoader {
 			
 			// adds Coordinate and Action to ShoppingTrip
 			trip = createShoppingTrip(trip, coordinates, actions);
-			
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -335,5 +346,8 @@ public class TestDataLoader {
 	}
 	public List<Coordinate> getCoordinates() {
 		return coordinates;
+	}
+	public List<ShoppingTrip> getTrips() {
+		return trips;
 	}
 }
