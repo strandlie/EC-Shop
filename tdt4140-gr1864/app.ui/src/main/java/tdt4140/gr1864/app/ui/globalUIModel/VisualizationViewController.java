@@ -1,20 +1,19 @@
 package tdt4140.gr1864.app.ui.globalUIModel;
 
-import java.util.ArrayList;
-
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Aggregate;
+import javafx.scene.image.ImageView;
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Row;
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationInterface;
 
 /**
  * The controller in charge of the VisualizationElement, the largest part of the app, which shows tables 
  * and other visualizations of data 
  * 
- * In good, agile spirit this class is now tailored for the TableView. Later it will probably have to be
- * made abstract and extended for the different types of visualiztions 
- * @author Håkon Strandlie
+ * The controller initializes all the possible views, and hides and shows them
+ * when needed.
+ * 
+ * @author Hakon Strandlie
  *
  */
 public class VisualizationViewController {
@@ -23,32 +22,55 @@ public class VisualizationViewController {
 	 * The reference to the actual TableView shown to the user
 	 */
 	@FXML
-	private TableView<Aggregate> visualizationView;
+	private TableView<Row> tableView;
+	
+	/**
+	 * The reference to the ImageView used to show pictures
+	 */
+	@FXML
+	private ImageView imageView;
 	
 	/**
 	 * The method called after the TableView has been created. Only used here to make it not-editable
 	 */
 	@FXML
 	public void initialize() { 
-		
-		visualizationView.setEditable(false);
+		tableView.setEditable(false);
 	}
 	
 	
 	/**
-	 * Creates the columns and fills in the ColumnNames
-	 * @param columns ArrayList A list of TableColumns already created
+	 * Takes an element that implements the VisualizationInterface, and
+	 * loads the data from it into the GUI
+	 * @param element
 	 */
-	public void setColumns(ArrayList<TableColumn<Aggregate, String>> columns) {
-		this.visualizationView.getColumns().setAll(columns);
+	public void setData(VisualizationInterface element) {
+		element.loadData(this.tableView, this.imageView);
 	}
 	
 	/**
-	 * Sets the data that populates the table. The table observes this data, and updates if the data is changed
-	 * @param data ObservableList The list from the VisualizationTable from the model of the table. If the 
-	 * 							  VisualizationTable is changed the table changes for the user
+	 * Changes the currently active VisualizationElement
+	 * @param element The element that is to be active now
 	 */
-	public void setData(ObservableList<Aggregate> data) {
-		this.visualizationView.setItems(data);
+	public void setActiveElement(VisualizationInterface element) {
+		element.setAsActiveElement(this, this.tableView, this.imageView);
+	}
+	
+	/**
+	 * Show, or not show the ImageView
+	 * @param disable boolean
+	 */
+	public void imageViewSetDisable(boolean disable) {
+		this.imageView.setDisable(disable);
+		this.imageView.setVisible(!disable);
+	}
+	
+	/**
+	 * Show or not show the TableView
+	 * @param disable boolean
+	 */
+	public void tableViewSetDisable(boolean disable) {
+		this.tableView.setDisable(disable);
+		this.tableView.setVisible(!disable);
 	}
 }

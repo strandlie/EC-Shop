@@ -2,8 +2,6 @@ package tdt4140.gr1864.app.core;
 
 import java.util.List;
 
-import tdt4140.gr1864.app.core.storage.Shop;
-
 public class ShoppingTrip {
 	
 	/* start-time of ShoppingTrip in UNIX-time */
@@ -134,7 +132,7 @@ public class ShoppingTrip {
 	 * Sets coordinates after ShoppingTrip is created
 	 * @param coordinates The list of coordinates
 	 */
-	private void setCoordinates(List<Coordinate> coordinates) {
+	public void setCoordinates(List<Coordinate> coordinates) {
 		this.coordinates = coordinates;
 	}
 
