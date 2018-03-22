@@ -67,4 +67,11 @@ public class CustomerDatabaseControllerTest {
 		
 		Assert.assertEquals(null, cdc.retrieve(c2.getUserId()));
 	}
+	
+	@Test
+	public void EtestCountCustomerExpectFour() {
+		Customer c3 = new Customer("hans", "nordmann", cdc.create(c0));
+		int countCustomer = cdc.countCustomers();
+		Assert.assertEquals(4, countCustomer);
+	}
 }

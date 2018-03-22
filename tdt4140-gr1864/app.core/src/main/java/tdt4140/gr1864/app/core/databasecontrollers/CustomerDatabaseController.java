@@ -164,18 +164,16 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 	        statement = connection.prepareStatement(sql);
 	        ResultSet rs = statement.executeQuery();
-	        System.out.println("rs: " + rs);
-	        System.out.println("rs1: " + rs.getInt(1));
-	
 	        // Returned nothing
 	        if (!rs.next()) {
+	        	System.out.println("closed");
 	        	connection.close();
 	            return 0;
 	        }
+	        int countCustomer = rs.getInt(1);
 
 	        statement.close();
-	        System.out.println("Returned customer amount: " + rs.getInt(1));
-	        return rs.getInt(1);
+	        return countCustomer;
 	  
 	    } catch (SQLException e) {
 	    	e.printStackTrace();

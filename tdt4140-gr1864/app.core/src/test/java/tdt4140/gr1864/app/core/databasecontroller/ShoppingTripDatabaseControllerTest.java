@@ -3,6 +3,7 @@ package tdt4140.gr1864.app.core.databasecontroller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Assert;
@@ -23,6 +24,7 @@ public class ShoppingTripDatabaseControllerTest {
 	ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
 	CustomerDatabaseController cdc = new CustomerDatabaseController();
 	ShopDatabaseController sdc = new ShopDatabaseController();
+	static DatabaseWiper viper;
 	ShoppingTrip t1, t2, t3;
 	Customer c1, c2, c3;
 	Shop s1, s2, s3;
@@ -43,11 +45,20 @@ public class ShoppingTripDatabaseControllerTest {
 		
 		c2 = new Customer("Kari", "Hansen");
 		c2 = new Customer(c2.getFirstName(), c2.getLastName(), cdc.create(c2));
-
+		
+		
 		t1 = new ShoppingTrip(c1, s1, true);
+		t2 = new ShoppingTrip(c1, s1, true);
+		t3 = new ShoppingTrip(c2, s1, true);
+		
 		List<ShoppingTrip> trips = new ArrayList<ShoppingTrip>();
 		trips.add(t1);
+		trips.add(t2);
 		c1.setShoppingTrips(trips);		
+		
+		trips = new ArrayList<ShoppingTrip>();
+		trips.add(t3);
+		c2.setShoppingTrips(trips);	
 	}
 
 	@Test
@@ -85,6 +96,39 @@ public class ShoppingTripDatabaseControllerTest {
 		t2 = stdc.retrieve(t1.getShoppingTripID());
 		
 		Assert.assertEquals(c2.getUserId(), t2.getCustomer().getUserId());;
+	}
+	
+	@Test
+	public void testRetrieveAllShoppingTripsExpectSizeEqualOne() {
+		t1 =stdc.retrieve(1);
+		List<ShoppingTrip> trips = stdc.retrieveAllShoppingTrips();
+		Assert.assertEquals(1, trips.size());
+			
+	}
+	
+	@Test
+	public void testRetrieveAllShoppingTripsExpectAllShoppingTrips() {
+		t1 =stdc.retrieve(1);
+		
+		List<ShoppingTrip> expectedTrips = Arrays.asList(t1);
+	
+		List<ShoppingTrip> trips = stdc.retrieveAllShoppingTrips();
+		
+		boolean wrongList = true;
+		
+		for (ShoppingTrip trip : trips) {
+			for (ShoppingTrip exTrip : expectedTrips) {
+				if (trip.getCustomer().getUserId() == exTrip.getCustomer().getUserId() && 
+						trip.getCharged() == exTrip.getCharged() && 
+						trip.getShoppingTripID() == exTrip.getShoppingTripID() && 
+						trip.getShop().getShopID() == exTrip.getShop().getShopID()) {
+					wrongList = false;
+				}
+			}
+		}
+
+		Assert.assertEquals(false, wrongList);
+		
 	}
 
 }
