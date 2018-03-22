@@ -42,7 +42,7 @@
 	            <scope>system</scope>
 		    <systemPath>${project.basedir}/libs/charts-1.0.5.jar</systemPath>
 		</dependency>
-	
+
 		<dependency>
 			<groupId>tdt4140-gr1864</groupId>
 			<artifactId>tdt4140-gr1864.app.core</artifactId>

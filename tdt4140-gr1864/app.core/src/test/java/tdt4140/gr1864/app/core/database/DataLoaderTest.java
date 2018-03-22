@@ -10,10 +10,13 @@ import tdt4140.gr1864.app.core.Action;
 import tdt4140.gr1864.app.core.Coordinate;
 import tdt4140.gr1864.app.core.Customer;
 import tdt4140.gr1864.app.core.Product;
+import tdt4140.gr1864.app.core.Shop;
 import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.CoordinateDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.CustomerDatabaseController;
+import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
+import tdt4140.gr1864.app.core.databasecontrollers.ShopDatabaseController;
 
 public class DataLoaderTest {
 
@@ -79,5 +82,17 @@ public class DataLoaderTest {
 		Assert.assertEquals(expectedTime, action.getTimeStamp());
 		Assert.assertEquals(expectedType, action.getActionType());
 		Assert.assertEquals(expectedProduct, (int) action.getProduct().getID());
+	}
+	
+	@Test
+	public void testOnShelfLoadingFromFileExpectFirstProductFromDataFile() {
+		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
+		ShopDatabaseController sdc = new ShopDatabaseController();
+		Shop shop = sdc.retrieve(1);
+		int expected_shop_id = 1;
+		int expected_product_id = 2;
+		int expected_amount_in_shelfs;
+		
+		
 	}
 }	

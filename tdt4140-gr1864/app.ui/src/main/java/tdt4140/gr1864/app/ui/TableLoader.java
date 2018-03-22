@@ -5,10 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import tdt4140.gr1864.app.core.Action;
-import tdt4140.gr1864.app.core.Product;
-import tdt4140.gr1864.app.core.Shop;
-import tdt4140.gr1864.app.core.ShoppingTrip;
+import tdt4140.gr1864.app.core.*;
 import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Row;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
@@ -28,6 +25,11 @@ public class TableLoader {
 	 * The list of shoppingtrips for MostPickedUpMode
 	 */
 	private List<ShoppingTrip> trips;
+	
+	/**
+	 * The list of customers for DemographicsMode
+	 */
+	private List<Customer> customers;
 	
 	/**
 	 * The Map of ProductIDs on shelf
@@ -54,7 +56,7 @@ public class TableLoader {
 	 * @param trips
 	 * @param table
 	 */
-	public TableLoader(List<ShoppingTrip> trips, VisualizationTable table) {
+	public TableLoader(ArrayList<ShoppingTrip> trips, VisualizationTable table) {
 		this.trips = trips;
 		this.table = table;
 		loadMostPickedUpTable();
@@ -84,12 +86,26 @@ public class TableLoader {
 		loadInShelvesTable();
 	}
 	
+	public TableLoader(List<Customer> customers, VisualizationTable table) {
+		this.customers = customers;
+		this.table = table;
+		loadDemographicsTable();
+	}
+	
 	public List<ShoppingTrip> getTrips() {
 		return this.trips;
 	}
 	
 	public void setTrips(List<ShoppingTrip> trips) {
 		this.trips = trips;
+	}
+	
+	public List<Customer> getCustomers() {
+		return this.customers;
+	}
+	
+	public void setCustomers(List<Customer> customers) {
+		this.customers = customers;
 	}
 	
 	public Map<Integer, Integer> getProductIDsOnShelf() {
@@ -122,7 +138,7 @@ public class TableLoader {
 	 */
 	public void loadMostPickedUpTable(List<ShoppingTrip> trips) {
 		this.trips = trips;
-		loadMostPickedUpTable(this.trips, this.table);
+		loadMostPickedUpTable();
 	}
 	
 	/**
@@ -190,7 +206,7 @@ public class TableLoader {
 	public void loadStockTable(Map<Integer, Integer> productIDsOnShelf, Map<Integer, Integer> productIDsInStorage) {
 		this.productIDsOnShelf = productIDsOnShelf;
 		this.productIDsInStorage = productIDsInStorage;
-		loadStockTable(this.productIDsOnShelf, this.productIDsInStorage, this.table);
+		loadStockTable();
 	}
 	
 	/**
@@ -230,6 +246,31 @@ public class TableLoader {
 		}
 	}
 	
+	public void loadDemographicsTable() {
+		loadDemographicsTable(this.customers, this.table);
+	}
+	
+	public void loadDemographicsTable(List<Customer> customers) {
+		this.customers = customers;
+		loadDemographicsTable();
+	}
+
+	/**
+	 *
+	 * @param customers
+	 * @param table
+	 * @param inputZero to differentiate the differetn tableloaders, no real function
+	 */
+	public static void loadDemographicsTable(List<Customer> customers, VisualizationTable table) {
+		if (customers == null || table == null) {
+			return;
+		}
+
+		for (Customer customer: customers) {
+			table.addData(new Row(Integer.toString(customer.getUserId()), customer.getFirstName(), customer.getLastName(), customer.getAddress(), Integer.toString(customer.getZip())));
+		}
+	}
+
 	/**
 	 * Load the data in the productIDsInShelf-Map into the table. C
 	 * Only uses the data in the instance. Is called by the constructor. 
@@ -244,7 +285,7 @@ public class TableLoader {
 	 */
 	public void loadInShelvesTable(Map<Integer, Integer> productIDsOnShelf) {
 		this.productIDsOnShelf = productIDsOnShelf;
-		loadInShelvesTable(this.productIDsOnShelf, this.table);
+		loadInShelvesTable();
 	}
 	
 	/**

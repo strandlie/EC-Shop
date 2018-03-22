@@ -11,6 +11,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import tdt4140.gr1864.app.core.Customer;
 import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.ui.TableLoader;
 import tdt4140.gr1864.app.ui.globalUIModel.VisualizationViewController;
@@ -38,6 +39,12 @@ public class VisualizationTable extends VisualizationElement {
 		allowedColumnNames.put("numberInStock", "In Stock");
 		//OnShelves
 		allowedColumnNames.put("numberOnShelves", "On shelves");
+		allowedColumnNames.put("customerId", "Customer ID");
+		allowedColumnNames.put("firstName", "First Name");
+		allowedColumnNames.put("lastName", "Last Name");
+		allowedColumnNames.put("address", "Address");
+		allowedColumnNames.put("zip", "ZIP");
+		allowedColumnNames.put("name", "Name");
 	}
 	
 	/**
@@ -66,7 +73,7 @@ public class VisualizationTable extends VisualizationElement {
 	 * Constructor for MostPickedUpModeVisualizationTable
 	 * @param trips
 	 */
-	public VisualizationTable(String name, List<ShoppingTrip> trips) {
+	public VisualizationTable(String name, ArrayList<ShoppingTrip> trips) {
 		super(name);
 		this.columns = new ArrayList<TableColumn<Row, String>>();
 		this.data = FXCollections.observableArrayList(new ArrayList<Row>());
@@ -96,6 +103,13 @@ public class VisualizationTable extends VisualizationElement {
 		this.columns = new ArrayList<TableColumn<Row, String>>();
 		this.data = FXCollections.observableArrayList(new ArrayList<Row>());
 		this.tableLoader = new TableLoader(productIDsOnShelf, this);
+	}
+	
+	public VisualizationTable(String name, List<Customer> customerList) {
+		super(name);
+		this.columns = new ArrayList<TableColumn<Row, String>>();
+		this.data = FXCollections.observableArrayList(new ArrayList<Row>());
+		this.tableLoader = new TableLoader(customerList, this);
 	}
 	
 	/**
