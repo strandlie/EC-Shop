@@ -11,6 +11,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import tdt4140.gr1864.app.core.ShoppingTrip;
+import tdt4140.gr1864.app.ui.TableLoader;
 import tdt4140.gr1864.app.ui.globalUIModel.VisualizationViewController;
 
 public class VisualizationTable extends VisualizationElement {
@@ -46,6 +48,8 @@ public class VisualizationTable extends VisualizationElement {
 	 * Container for the data used to populate the table in the GUI
 	 */
 	private ObservableList<Row> data;
+	
+	private TableLoader tableLoader;
 
 
 	/**
@@ -56,6 +60,42 @@ public class VisualizationTable extends VisualizationElement {
 		super(name);
 		this.columns = new ArrayList<TableColumn<Row, String>>();
 		this.data = FXCollections.observableArrayList(new ArrayList<Row>());
+	}
+	
+	/**
+	 * Constructor for MostPickedUpModeVisualizationTable
+	 * @param trips
+	 */
+	public VisualizationTable(String name, List<ShoppingTrip> trips) {
+		super(name);
+		this.columns = new ArrayList<TableColumn<Row, String>>();
+		this.data = FXCollections.observableArrayList(new ArrayList<Row>());
+		this.tableLoader = new TableLoader(trips, this);
+	}
+	
+	/**
+	 * Constructor for StockModeVisualizationTable
+	 * @param name
+	 * @param productIDsOnShelf
+	 * @param productIDsInStorage
+	 */
+	public VisualizationTable(String name, Map<Integer, Integer> productIDsOnShelf, Map<Integer, Integer> productIDsInStorage) {
+		super(name);
+		this.columns = new ArrayList<TableColumn<Row, String>>();
+		this.data = FXCollections.observableArrayList(new ArrayList<Row>());
+		this.tableLoader = new TableLoader(productIDsOnShelf, productIDsInStorage, this);
+	}
+	
+	/**
+	 * Constructor for OnShelvesModeVisualizationTable
+	 * @param name
+	 * @param productIDsOnShelf
+	 */
+	public VisualizationTable(String name, Map<Integer, Integer> productIDsOnShelf) {
+		super(name);
+		this.columns = new ArrayList<TableColumn<Row, String>>();
+		this.data = FXCollections.observableArrayList(new ArrayList<Row>());
+		this.tableLoader = new TableLoader(productIDsOnShelf, this);
 	}
 	
 	/**
@@ -161,6 +201,10 @@ public class VisualizationTable extends VisualizationElement {
 			}
 		}
 		return false;
+	}
+	
+	public TableLoader getTableLoader() {
+		return this.tableLoader;
 	}
 	
 	public void wipeTable() {

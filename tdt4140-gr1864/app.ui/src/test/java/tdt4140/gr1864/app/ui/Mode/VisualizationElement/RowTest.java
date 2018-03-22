@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class AggregateTest {
+public class RowTest {
 	
 	Row row4;
 	Row row2;
@@ -13,7 +13,7 @@ public class AggregateTest {
 	@Before
 	public void setup() {
 		this.row4 = new Row("Bolle", "1", "2", "1");
-		this.row2 = new Row("Bille", "200", "onShelves");
+		this.row2 = new Row("Bille", "200", "stock");
 		this.row1 = new Row("Banan", "60", "onShelves");
 	}
 	
