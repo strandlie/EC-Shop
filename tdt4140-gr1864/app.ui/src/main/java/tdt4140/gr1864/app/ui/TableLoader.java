@@ -5,10 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import tdt4140.gr1864.app.core.Action;
-import tdt4140.gr1864.app.core.Product;
-import tdt4140.gr1864.app.core.Shop;
-import tdt4140.gr1864.app.core.ShoppingTrip;
+import tdt4140.gr1864.app.core.*;
 import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Row;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
@@ -39,6 +36,10 @@ public class TableLoader {
 	private Map<String, Integer> stock;
 	
 	/**
+<<<<<<< HEAD
+	 * The constructor for CustomerList
+=======
+>>>>>>> 78d8bf6195ac973dbc373daccc0688ca90a46973
 	 * @param trips A list of shopping trips to load the table from
 	 * @param table A model-layer representation of a table shown to the user. Any changes made to this will reflect to the user immidiately
 	 */
@@ -116,7 +117,23 @@ public class TableLoader {
 		}
 		
 	}
-	
+
+	/**
+	 *
+	 * @param customers
+	 * @param table
+	 * @param inputZero to differentiate the differetn tableloaders, no real function
+	 */
+	public void loadDemographicsTable(List<Customer> customers, VisualizationTable table) {
+		if (customers == null || table == null) {
+			return;
+		}
+
+		for (Customer customer: customers) {
+			table.addData(new Row(Integer.toString(customer.getUserId()), customer.getFirstName(), customer.getLastName(), customer.getAddress(), Integer.toString(customer.getZip())));
+		}
+	}
+
 	/**
 	 * A simple method used by the tableLoader test
 	 * @return Map<String, Integer> The stock of this tableLoader

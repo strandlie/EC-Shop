@@ -2,8 +2,8 @@ CREATE TABLE customer(
 customer_id integer primary key autoincrement,
 first_name varchar(30) not null,
 last_name varchar(30) not null,
-age integer,
-sex varchar(15),
+address	varchar(31),
+zip integer,
 foreign key(customer_id) references shopping_trip(customer_id)
 );
 

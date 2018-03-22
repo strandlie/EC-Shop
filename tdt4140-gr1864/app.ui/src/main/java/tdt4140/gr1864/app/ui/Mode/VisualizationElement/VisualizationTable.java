@@ -34,6 +34,12 @@ public class VisualizationTable extends VisualizationElement {
 		allowedColumnNames.put("numberOfPutDown", "Number Of Put Down");
 		allowedColumnNames.put("numberOfPurchases", "Number Of Purchases");
 		allowedColumnNames.put("numberInStock", "In Stock");
+		allowedColumnNames.put("customerId", "Customer ID");
+		allowedColumnNames.put("firstName", "First Name");
+		allowedColumnNames.put("lastName", "Last Name");
+		allowedColumnNames.put("address", "Address");
+		allowedColumnNames.put("zip", "ZIP");
+		allowedColumnNames.put("name", "Name");
 	}
 	
 	/**
@@ -164,5 +170,9 @@ public class VisualizationTable extends VisualizationElement {
 	@SuppressWarnings("unchecked")
 	private List<Row> objectIsList(Object object) throws ClassCastException {
 		return (List<Row>) object;
+	}
+
+	public void wipeTable() {
+		this.data.clear();
 	}
 }
