@@ -10,20 +10,44 @@ import java.util.List;
 
 import org.junit.*;
 
+import tdt4140.gr1864.app.core.database.DatabaseWiper;
 import tdt4140.gr1864.app.core.database.TestDataLoader;
+import tdt4140.gr1864.app.core.databasecontrollers.CustomerDatabaseController;
+import tdt4140.gr1864.app.core.databasecontrollers.ShopDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
 
 public class CustomerTest {
 
-	private static TestDataLoader loader;
-	private static ShoppingTrip trip;
-	private static Customer c1;
-	private static Customer c2;
+	ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
+	CustomerDatabaseController cdc = new CustomerDatabaseController();
+	ShopDatabaseController sdc = new ShopDatabaseController();
+	static DatabaseWiper viper = new DatabaseWiper();
+	ShoppingTrip t1, t2, t3;
+	Customer c1, c2, c3;
+	Shop s1;
 	
 	@BeforeClass
-	public static void setup() {
-		loader = new TestDataLoader();
-		trip = loader.getTrip();
+	public static void wipeDatabase() {
+		viper.wipe();
+	}
+	
+	@Before
+	public void setup() {
+		s1 = new Shop("Kings Road 2", 10);
+		s1 = new Shop(s1.getAddress(),s1.getZip(), sdc.create(s1));
+
+		c1 = new Customer("Ola", "Nordmann");
+		c1 = new Customer(c1.getFirstName(), c1.getLastName(), cdc.create(c1));
+		
+		c2 = new Customer("Kari", "Hansen");
+		c2 = new Customer(c2.getFirstName(), c2.getLastName(), cdc.create(c2));
+
+		c3 = new Customer("Nils", "Nordmann");
+		c3 = new Customer(c3.getFirstName(), c3.getLastName(), cdc.create(c3));
+		
+		t1 = new ShoppingTrip(c1, s1, true);
+		t2 = new ShoppingTrip(c1, s1, true);
+		t3 = new ShoppingTrip(c2, s1, true);
 	}
 
 	/**
@@ -114,9 +138,19 @@ public class CustomerTest {
 	
 	@Test
 	public void testGiveRecommendationWhenNotBought() {
-		//ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
+		t1 = new ShoppingTrip(stdc.create(t1), c1, s1, true);
+		t1 = new ShoppingTrip(t1.getShoppingTripID(), c2, s1, true);
+		stdc.update(t1);
+		t2 = stdc.retrieve(t1.getShoppingTripID());
+
+		t1 = new ShoppingTrip(stdc.create(t1), c3, s1, true);
+		t1 = new ShoppingTrip(t1.getShoppingTripID(), c3, s1, true);
+		stdc.update(t1);
+		t3 = stdc.retrieve(t1.getShoppingTripID());
 		
-		//System.out.println(c1.giveRecommendation());
+		System.out.println(c2.giveRecommendation());
+		
+		//Assert.assertEquals(1, c2.getRecommendedProductID());
 	}
 	
 	@Test

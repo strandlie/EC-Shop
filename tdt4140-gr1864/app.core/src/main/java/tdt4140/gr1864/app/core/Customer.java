@@ -123,8 +123,8 @@ public class Customer implements UserInterface {
 		int[] productsBoughtInTotal = new int[amountOfProducts];
 		
 		// Updating the productsBoughtInTotal based on all shopping trips
-		System.out.println("alltrips " + allTrips);
-		if (allTrips == null) return -1;
+		System.out.println("alltrips size in recommendation " + allTrips.size());
+		if (allTrips.size() == 0) return -1;
 		
 		for (ShoppingTrip st : allTrips) {
 			for (Action action : st.getActions()) {
