@@ -1,6 +1,7 @@
 package tdt4140.gr1864.app.ui.Mode;
 
 
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationElement;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationInterface;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
 
@@ -49,7 +50,7 @@ public class Mode {
 	}
 	
 	// Allow tables to be updated
-	public void setTable(VisualizationTable table) {
-		this.visualizationElement = table;
+	public void setVisualizationElement(VisualizationElement element) {
+		this.visualizationElement = element;
 	}
 }	
