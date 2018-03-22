@@ -6,7 +6,6 @@ package tdt4140.gr1864.app.core;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.*;
 
@@ -22,12 +21,14 @@ public class CustomerTest {
 	CustomerDatabaseController cdc = new CustomerDatabaseController();
 	ShopDatabaseController sdc = new ShopDatabaseController();
 	static DatabaseWiper viper = new DatabaseWiper();
+	static TestDataLoader tdl;
 	ShoppingTrip t1, t2, t3;
 	Customer c1, c2, c3;
 	Shop s1;
 	
 	@BeforeClass
 	public static void wipeDatabase() {
+		tdl = new TestDataLoader();
 		viper.wipe();
 	}
 	
@@ -47,7 +48,8 @@ public class CustomerTest {
 		
 		t1 = new ShoppingTrip(c1, s1, true);
 		t2 = new ShoppingTrip(c1, s1, true);
-		t3 = new ShoppingTrip(c2, s1, true);
+		t3 = tdl.loadShoppingTrip("../../../app.core/src/main/resources/test-data.json");
+		System.out.println(t3.getActions().size() + " actions");
 	}
 
 	/**
@@ -143,10 +145,11 @@ public class CustomerTest {
 		stdc.update(t1);
 		t2 = stdc.retrieve(t1.getShoppingTripID());
 
-		t1 = new ShoppingTrip(stdc.create(t1), c3, s1, true);
-		t1 = new ShoppingTrip(t1.getShoppingTripID(), c3, s1, true);
-		stdc.update(t1);
-		t3 = stdc.retrieve(t1.getShoppingTripID());
+		t3 = new ShoppingTrip(stdc.create(t3), c3, s1, true);
+		t3 = new ShoppingTrip(t3.getShoppingTripID(), c3, s1, true);
+		stdc.update(t3);
+		t3 = stdc.retrieve(t3.getShoppingTripID());
+		System.out.println(stdc.retrieve(t3.getShoppingTripID()).getActions().size() + " t3's trip amount of actions");
 		
 		System.out.println(c2.giveRecommendation());
 		
