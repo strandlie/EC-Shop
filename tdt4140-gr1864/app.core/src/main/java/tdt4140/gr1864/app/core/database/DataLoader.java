@@ -93,6 +93,39 @@ public class DataLoader {
 		}
 	}
 	
+	public static void loadUserDemographics(String json) {
+		JSONParser parser = new JSONParser();
+
+		Customer customer;
+		String address;
+		int zip;
+
+		try {
+			JSONObject customerObject = (JSONObject) parser.parse(json);
+			
+			// get Customer
+			customer = (Customer) getCustomer(toIntExact((long) customerObject.get("customerID")));
+
+			// get Address
+			address = (String) customerObject.get("address");
+			
+			// get Zip
+			zip = toIntExact((long) customerObject.get("zip"));
+			
+			CustomerDatabaseController cdc = new CustomerDatabaseController();
+			List<Customer> customers = cdc.retrieveAll();
+			customers.remove(customer);
+			customer.setAddress(address);
+			customer.setZip(zip);
+			
+			cdc.update(customer);
+			customers.add(customer);
+
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * Loads mock-products file and creates Product objects with corresponding name and price
 	 * @return A list of products which are generated from .json file.

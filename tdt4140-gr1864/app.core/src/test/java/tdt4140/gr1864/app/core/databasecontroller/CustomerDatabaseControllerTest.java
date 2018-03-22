@@ -1,6 +1,7 @@
 package tdt4140.gr1864.app.core.databasecontroller;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -73,5 +74,12 @@ public class CustomerDatabaseControllerTest {
 		Customer c3 = new Customer("hans", "nordmann", cdc.create(c0));
 		int countCustomer = cdc.countCustomers();
 		Assert.assertEquals(4, countCustomer);
+	}
+		
+	public void FtestRetrieveAllExpectAllCustomers() {
+		List<Customer> customers = cdc.retrieveAll();
+		
+		Assert.assertEquals("Ola", customers.get(0).getFirstName());
+		Assert.assertEquals("Kari", customers.get(2).getFirstName());
 	}
 }
