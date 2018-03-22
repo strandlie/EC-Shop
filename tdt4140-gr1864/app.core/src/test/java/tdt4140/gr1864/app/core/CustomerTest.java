@@ -1,17 +1,16 @@
-/**
- * 
- */
 package tdt4140.gr1864.app.core;
 
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.*;
 
 import tdt4140.gr1864.app.core.database.DatabaseWiper;
 import tdt4140.gr1864.app.core.database.TestDataLoader;
 import tdt4140.gr1864.app.core.databasecontrollers.CustomerDatabaseController;
+import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShopDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
 
@@ -19,16 +18,21 @@ public class CustomerTest {
 
 	ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
 	CustomerDatabaseController cdc = new CustomerDatabaseController();
+	ProductDatabaseController pdc = new ProductDatabaseController();
 	ShopDatabaseController sdc = new ShopDatabaseController();
 	static DatabaseWiper viper = new DatabaseWiper();
-	static TestDataLoader tdl;
 	ShoppingTrip t1, t2, t3;
 	Customer c1, c2, c3;
+	Product p1, p2, p3;
 	Shop s1;
 	
+	List<Action> actions;
+	List<Coordinate> coords;
+	
 	@BeforeClass
-	public static void wipeDatabase() {
-		tdl = new TestDataLoader();
+	public static void createDatabase() {
+		viper = new DatabaseWiper();
+		//tdl = new TestDataLoader();
 		viper.wipe();
 	}
 	
@@ -48,8 +52,14 @@ public class CustomerTest {
 		
 		t1 = new ShoppingTrip(c1, s1, true);
 		t2 = new ShoppingTrip(c1, s1, true);
-		t3 = tdl.loadShoppingTrip("../../../app.core/src/main/resources/test-data.json");
-		System.out.println(t3.getActions().size() + " actions");
+		t3 = new ShoppingTrip(c2, s1, true);
+
+		p1 = new Product("chicken", 12);
+		p2 = new Product("beef", 32);
+		p3 = new Product("fish", 122);
+		
+		actions = new ArrayList<>();
+		coords = new ArrayList<>();
 	}
 
 	/**
@@ -140,19 +150,43 @@ public class CustomerTest {
 	
 	@Test
 	public void testGiveRecommendationWhenNotBought() {
+		/* work in progress
+		Action a1 = new Action("4352364321", 1, new Product("soup", 12));
+		Action a2 = new Action("4351642321", 2, new Product("beef", 32));
+		Action a3 = new Action("4356412321", 3, new Product("chick", 11));
+		
+		actions.add(a1);
+		actions.add(a2);
+		actions.add(a3);
+		
+		Coordinate coord1 = new Coordinate(1, 2, "232135123");
+		Coordinate coord2 = new Coordinate(2, 4, "232135234");
+		
+		coords.add(coord1);
+		coords.add(coord2);
+		
+		t1 = new ShoppingTrip(coords, actions, 1);
 		t1 = new ShoppingTrip(stdc.create(t1), c1, s1, true);
 		t1 = new ShoppingTrip(t1.getShoppingTripID(), c2, s1, true);
+		
 		stdc.update(t1);
 		t2 = stdc.retrieve(t1.getShoppingTripID());
-
+		
 		t3 = new ShoppingTrip(stdc.create(t3), c3, s1, true);
 		t3 = new ShoppingTrip(t3.getShoppingTripID(), c3, s1, true);
 		stdc.update(t3);
 		t3 = stdc.retrieve(t3.getShoppingTripID());
+		*/
+		/*
+		 * shopping_trip_id integer,
+		 * timestamp varchar(255),
+		 * action_type integer not null,
+		 * product_id integer not null,
+		 
 		System.out.println(stdc.retrieve(t3.getShoppingTripID()).getActions().size() + " t3's trip amount of actions");
 		
 		System.out.println(c2.giveRecommendation());
-		
+		*/
 		//Assert.assertEquals(1, c2.getRecommendedProductID());
 	}
 	
