@@ -262,6 +262,9 @@ public class TableLoader {
 	 * @param inputZero to differentiate the differetn tableloaders, no real function
 	 */
 	public static void loadDemographicsTable(List<Customer> customers, VisualizationTable table) {
+		
+		table.wipeTable();
+		
 		if (customers == null || table == null) {
 			return;
 		}

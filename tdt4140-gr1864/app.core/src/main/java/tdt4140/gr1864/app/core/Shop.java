@@ -138,7 +138,6 @@ public class Shop //implements IShoppingTripListener{
 		Map<Integer, Integer> inventory = receipt.getInventory();
 		OnShelfDatabaseController osdbc = new OnShelfDatabaseController();
 		for (Integer id : inventory.keySet()) {
-			
 			int amount = inventory.get(id);
 			int currentAmount = osdbc.retrieve(this, id).getAmountInShelfs(id);
 			
