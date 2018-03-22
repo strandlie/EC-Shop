@@ -167,7 +167,6 @@ public class VisualizationTable extends VisualizationElement {
 		return this.columns;
 	}
 	
-	
 	/**
 	 * Takes a list of Row-Property-names and creates the corresponding TableColumns and CellValueFactories
 	 * Assumes that columnnames already has been verified

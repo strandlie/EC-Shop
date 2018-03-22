@@ -42,26 +42,23 @@ public class TestDataLoader {
 	List<Product> products;
 	List<Action> actions;
 	List<Coordinate> coordinates;
-		
+	List<Customer> customers;
+	List<ShoppingTrip> trips;
 	
 	public TestDataLoader() {
 		// clean database
 		cleanDatabase();
 		
 		ProductDatabaseController pdc = new ProductDatabaseController();
-	
+		
 		// loads products
 		String pathToProducts = "../../../app.core/src/main/resources/mock-products.json";
 
 		products = this.loadProducts(pathToProducts, pdc);
 		
-		this.shop = createShop();
-		// Adds amounts of products to shelfs and storage of DB and updates DB
-		addProductsInShelfsInDB(products);
-		
-		// loads trips
+		// loads trip
 		String pathToTrip = "../../../app.core/src/main/resources/test-data.json";
-		trip = this.loadShoppingTrips(pathToTrip);
+		trip = this.loadShoppingTrip(pathToTrip);
 		
 		/* Update shop from trip, this was supposed to be a listener, but proved unnecessarily
 		 * complicated */
@@ -191,7 +188,7 @@ public class TestDataLoader {
 	 * @param path	relative path to JSON-data (relative to this)
 	 * @return shoppingTrip
 	 */
-	public ShoppingTrip loadShoppingTrips(String path) {
+	public ShoppingTrip loadShoppingTrip(String path) {
 		
 		String relativePath;
 		//Finds path by getting URL and converting to URI and then to path 
@@ -210,9 +207,6 @@ public class TestDataLoader {
 		ShopDatabaseController sdc = new ShopDatabaseController();
 		
 		Customer c1 = createCustomer();
-		Shop s1 = this.shop;
-		s1 = new Shop(this.shop.getAddress(), this.shop.getZip(), sdc.create(s1));
-
 		// We set the charged flag to true to prevent spamming the Stripe API.		
 		trip = new ShoppingTrip(c1, s1, true);
 		trip = new ShoppingTrip(stdc.create(trip), trip.getCustomer(), trip.getShop(), true);
@@ -234,7 +228,6 @@ public class TestDataLoader {
 			
 			// adds Coordinate and Action to ShoppingTrip
 			trip = createShoppingTrip(trip, coordinates, actions);
-			
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -347,5 +340,8 @@ public class TestDataLoader {
 	}
 	public List<Coordinate> getCoordinates() {
 		return coordinates;
+	}
+	public List<ShoppingTrip> getTrips() {
+		return trips;
 	}
 }
