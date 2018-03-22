@@ -193,13 +193,7 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 								);
 			}
 			
-			if (!rs.next()) {
-				connection.close();
-				return null;
-			}
-			
-			connection.close();
-			
+			connection.close();	
 			return shoppingTrips;
 			
 		

@@ -24,14 +24,14 @@ public class ShoppingTripDatabaseControllerTest {
 	ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
 	CustomerDatabaseController cdc = new CustomerDatabaseController();
 	ShopDatabaseController sdc = new ShopDatabaseController();
-	static DatabaseWiper viper;
+	static DatabaseWiper viper = new DatabaseWiper();
 	ShoppingTrip t1, t2, t3;
 	Customer c1, c2, c3;
 	Shop s1, s2, s3;
 
 	@BeforeClass
 	public static void createDatabase() throws IOException {
-		DatabaseWiper viper = new DatabaseWiper();
+		viper = new DatabaseWiper();
 		viper.wipe();
 	}
 	
@@ -50,15 +50,6 @@ public class ShoppingTripDatabaseControllerTest {
 		t1 = new ShoppingTrip(c1, s1, true);
 		t2 = new ShoppingTrip(c1, s1, true);
 		t3 = new ShoppingTrip(c2, s1, true);
-		
-		List<ShoppingTrip> trips = new ArrayList<ShoppingTrip>();
-		trips.add(t1);
-		trips.add(t2);
-		c1.setShoppingTrips(trips);		
-		
-		trips = new ArrayList<ShoppingTrip>();
-		trips.add(t3);
-		c2.setShoppingTrips(trips);	
 	}
 
 	@Test
@@ -95,20 +86,46 @@ public class ShoppingTripDatabaseControllerTest {
 		stdc.update(t1);
 		t2 = stdc.retrieve(t1.getShoppingTripID());
 		
-		Assert.assertEquals(c2.getUserId(), t2.getCustomer().getUserId());;
+		Assert.assertEquals(c2.getUserId(), t2.getCustomer().getUserId());
 	}
 	
 	@Test
 	public void testRetrieveAllShoppingTripsExpectSizeEqualOne() {
-		t1 =stdc.retrieve(1);
 		List<ShoppingTrip> trips = stdc.retrieveAllShoppingTrips();
-		Assert.assertEquals(1, trips.size());
+		Assert.assertEquals(2, trips.size());
 			
+	}
+	
+	@Test 
+	public void testRetrieveAllShoppingTripsExpectCustomerShoppingTrips() {
+		
+		t1 = new ShoppingTrip(stdc.create(t1), c1, s1, true);
+		t1 = new ShoppingTrip(t1.getShoppingTripID(), c2, s1, true);
+		stdc.update(t1);
+		t2 = stdc.retrieve(t1.getShoppingTripID());
+		
+		List<ShoppingTrip> customerTrips = stdc.retrieveAllShoppingTripsForCustomer(c2.getUserId());		
+		List<ShoppingTrip> expectedTrips = Arrays.asList(t1);
+		
+		boolean wrongList = true;
+		
+		for (ShoppingTrip trip : customerTrips) {
+			for (ShoppingTrip exTrip : expectedTrips) {
+				if (trip.getCustomer().getUserId() == exTrip.getCustomer().getUserId() && 
+						trip.getCharged() == exTrip.getCharged() && 
+						trip.getShoppingTripID() == exTrip.getShoppingTripID() && 
+						trip.getShop().getShopID() == exTrip.getShop().getShopID()) {
+					wrongList = false;
+				}
+			}
+		}
+		
+		Assert.assertEquals(false, wrongList);
 	}
 	
 	@Test
 	public void testRetrieveAllShoppingTripsExpectAllShoppingTrips() {
-		t1 =stdc.retrieve(1);
+		t1 = stdc.retrieve(1);
 		
 		List<ShoppingTrip> expectedTrips = Arrays.asList(t1);
 	
@@ -128,7 +145,12 @@ public class ShoppingTripDatabaseControllerTest {
 		}
 
 		Assert.assertEquals(false, wrongList);
-		
 	}
-
+	
+	@Test
+	public void wTestRetrieveAllShoppingTripsForCustomerExpectSizeEqualOne() {
+		t1 = new ShoppingTrip(stdc.create(t1), c1, s1, true);	
+		List<ShoppingTrip> customerTrips = stdc.retrieveAllShoppingTripsForCustomer(c1.getUserId());
+		Assert.assertEquals(1, customerTrips.size());
+	}
 }
