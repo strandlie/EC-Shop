@@ -60,9 +60,6 @@ public class TestDataLoader {
 		String pathToTrip = "../../../app.core/src/main/resources/test-data.json";
 		trip = this.loadShoppingTrip(pathToTrip);
 		
-		/* Update shop from trip, this was supposed to be a listener, but proved unnecessarily
-		 * complicated */
-		this.shop.updateAmountInShelfsFromReceipt(new Receipt(trip));
 	}
 	
 	/**
@@ -205,14 +202,12 @@ public class TestDataLoader {
 		
 		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
 		ShopDatabaseController sdc = new ShopDatabaseController();
-		
+
+		Shop s1 = createShop();
 		Customer c1 = createCustomer();
 		// We set the charged flag to true to prevent spamming the Stripe API.		
 		trip = new ShoppingTrip(c1, s1, true);
 		trip = new ShoppingTrip(stdc.create(trip), trip.getCustomer(), trip.getShop(), true);
-		
-		// Updates shop
-		shop.shoppingTripAdded(trip);
 		
 		try {
 			Object obj = parser.parse(new FileReader(relativePath + path));
