@@ -19,6 +19,12 @@ import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.database.DataLoader;
 import tdt4140.gr1864.app.core.databasecontrollers.*;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.*;
+import tdt4140.gr1864.app.core.database.TestDataLoader;
+import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
+import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
+import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
+import tdt4140.gr1864.app.core.databasecontrollers.ShopDatabaseController;
+import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
 import tdt4140.gr1864.app.ui.TableLoader;
 import tdt4140.gr1864.app.ui.Mode.Mode;
 import javafx.fxml.FXML;
@@ -99,6 +105,9 @@ public class ModeController {
 		Mode demographicsMode = new Mode("Demographics", demographicsTable);
 
 
+		
+		//new DataLoader().main(null);
+		
 		// Get data from shoppin trip and add to TableView
 		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
 		ActionDatabaseController adc = new ActionDatabaseController();
