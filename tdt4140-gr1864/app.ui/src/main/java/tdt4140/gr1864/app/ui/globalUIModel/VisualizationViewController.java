@@ -3,7 +3,6 @@ package tdt4140.gr1864.app.ui.globalUIModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableView;
 import javafx.scene.image.ImageView;
-import tdt4140.gr1864.app.ui.Mode.VisualizationElement.MostPickedUpTableRow;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.TableRow;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationInterface;
 

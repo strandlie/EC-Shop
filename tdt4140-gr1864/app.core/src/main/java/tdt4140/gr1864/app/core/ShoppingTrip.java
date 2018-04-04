@@ -132,7 +132,7 @@ public class ShoppingTrip {
 	 * Sets coordinates after ShoppingTrip is created
 	 * @param coordinates The list of coordinates
 	 */
-	private void setCoordinates(List<Coordinate> coordinates) {
+	public void setCoordinates(List<Coordinate> coordinates) {
 		this.coordinates = coordinates;
 	}
 

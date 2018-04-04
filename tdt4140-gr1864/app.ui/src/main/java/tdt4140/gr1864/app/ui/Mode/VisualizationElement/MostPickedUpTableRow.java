@@ -15,8 +15,6 @@ import javafx.beans.property.StringProperty;
 public class MostPickedUpTableRow implements TableRow {
 	
 	private StringProperty productName;
-	
-	// The variables for MostPickedUpMode
 	private StringProperty numberOfPickUp;
 	private StringProperty numberOfPutDown;
 	private StringProperty numberOfPurchases;

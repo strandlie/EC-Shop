@@ -32,7 +32,7 @@ public class VisualizationHeatMap extends VisualizationElement {
 	 */
 	public VisualizationHeatMap(String name, List<ShoppingTrip> shoppingTripList) {
 		super(name);
-		this.map = new HeatMap();
+		this.map = new HeatMap(180, 100);
 		map.addSpots(getPoints(shoppingTripList));
 	}
 
