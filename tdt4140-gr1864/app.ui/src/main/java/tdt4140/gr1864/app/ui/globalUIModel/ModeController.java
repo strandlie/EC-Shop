@@ -316,14 +316,30 @@ public class ModeController {
 			}
 				
 			else if (mode.getName() == "Stock") {
-				// Retrieve the shop from DB and extract products on shelves and in storage from said shop
+				// Retrieve the shop from DB
 				Shop shop = sdc.retrieve(1);
 				shop.refreshShop();
-				Map<Integer, Integer> productIDsOnShelf = shop.getShelfs();
-				Map<Integer, Integer> productIDsInStorage = shop.getStorage();
+				
+				// Retrieve the shopping trips from DB and put in a list
+				ArrayList<ShoppingTrip> shoppingTripList = new ArrayList<>();
+				int iterator = 1;
+				while(true) {
+					ShoppingTrip trip = stdc.retrieve(iterator);
+					if (trip == null) {
+						break;
+					}
+					trip.setActions(adc.retrieveAll(iterator));
+					shoppingTripList.add(trip);
+					iterator++;
+				}
+				
+				// Update the shop object
+				for (ShoppingTrip trip : shoppingTripList) {
+					shop.updateShopFromReceipt(new Receipt(trip));
+				}
 				
 				table = (VisualizationTable) mode.getVisualizationElement();
-				table.getTableLoader().loadStockTable(productIDsOnShelf, productIDsInStorage);
+				table.getTableLoader().loadStockTable(shop.getShelfs(), shop.getStorage());
 			}
 			
 			else if (mode.getName() == "Most Picked Up") {
