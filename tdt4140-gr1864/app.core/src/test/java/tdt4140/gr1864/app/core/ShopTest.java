@@ -116,4 +116,24 @@ public class ShopTest {
 		Assert.assertEquals(55, shop3.getAmountInShelfs(p1.getID()));
 		Assert.assertEquals(20, shop3.getAmountInShelfs(p2.getID()));
 	}
+	
+	@Test
+	public void testUpdateShopFromReceiptExpectSuccess() {
+		p1 = new Product(1, "p1", 1);
+		p2 = new Product(2, "p2", 2);
+		
+		inventory = new HashMap<>();
+		inventory.put(p1.getID(), 5);
+		inventory.put(p2.getID(), 10);
+		receipt = new Receipt(inventory);
+		
+		shop.setAmountInShelfs(p1.getID(), 60);
+		shop.setAmountInShelfs(p2.getID(), 30);
+		
+		shop.updateShopFromReceipt(receipt);
+		
+		
+		Assert.assertEquals(55, shop.getAmountInShelfs(p1.getID()));
+		Assert.assertEquals(20, shop.getAmountInShelfs(p2.getID()));
+	}
 }

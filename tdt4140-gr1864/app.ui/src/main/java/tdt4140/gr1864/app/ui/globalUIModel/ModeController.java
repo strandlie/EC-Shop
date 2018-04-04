@@ -286,10 +286,16 @@ public class ModeController {
 		
 			if (mode.getName() == "Shelves") {
 				
-				// Retrieve the shop from DB and extract products on shelves from said shop
+				// Retrieve the shop from DB
 				Shop shop = sdc.retrieve(1);
 				shop.refreshShop();
 				Map<Integer, Integer> productIDsOnShelf = shop.getShelfs();
+				
+				// Retrieve shopping trips from DB and update the shop object
+				List<ShoppingTrip> shoppingTrips = stdc.retrieveAllShoppingTrips();
+				for (ShoppingTrip trip : shoppingTrips) {
+					
+				}
 				
 				// Wipe the data table in mode
 				table = (VisualizationTable) mode.getVisualizationElement();

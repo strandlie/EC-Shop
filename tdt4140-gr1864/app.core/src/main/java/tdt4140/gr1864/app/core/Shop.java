@@ -148,6 +148,20 @@ public class Shop //implements IShoppingTripListener{
 	}
 	
 	/**
+	 * Same as above, but doesn't update DB
+	 * 
+	 * @param receipt	A receipt from a shopping trip
+	 */
+	public void updateShopFromReceipt(Receipt receipt) {
+		Map<Integer, Integer> inventory = receipt.getInventory();
+		for (Integer productID : inventory.keySet()) {
+			int amount = inventory.get(productID);
+			int currentAmount = this.getAmountInShelfs(productID);
+			setAmountInShelfs(productID, currentAmount - amount);
+		}
+	}
+	
+	/**
 	 * Updates the amounts of products in the shop object according to the DB,
 	 * used to get new shop objects up to date. Currently have to assume fixed
 	 * amount of products, if not productDBctrl could support this

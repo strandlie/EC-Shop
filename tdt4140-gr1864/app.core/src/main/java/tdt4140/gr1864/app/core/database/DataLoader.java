@@ -325,10 +325,6 @@ public class DataLoader {
 			
 			// adds Coordinate and Action to ShoppingTrip
 			trip = createShoppingTrip(trip, coordinates, actions);
-			
-			// Update the shop from trip
-			s1.updateAmountInShelfsFromReceipt(new Receipt(trip));
-			shop = s1;
 		}
 		catch (Exception e) {
 			e.printStackTrace();
