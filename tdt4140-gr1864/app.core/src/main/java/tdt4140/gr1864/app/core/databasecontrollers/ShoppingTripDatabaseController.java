@@ -97,44 +97,16 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 			e.printStackTrace();
 		}
 	}
-	
-	public List<ShoppingTrip> getTripsForCustomer(int customerID) {
-		String sql = "SELECT * "
-				   + "FROM shopping_trip "
-				   + "WHERE customer_id=?";
-		try {
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
-			statement = connection.prepareStatement(sql);
-			statement.setInt(1, customerID);
-			ResultSet rs = statement.executeQuery();
-			
-			CustomerDatabaseController cdc = new CustomerDatabaseController();
-			ShopDatabaseController sdc = new ShopDatabaseController();
-			ShoppingTrip trip;
-			List<ShoppingTrip> trips = new ArrayList<>();
-			while (rs.next()) {
-				trip = new ShoppingTrip(
-					rs.getInt("shopping_trip_id"), 
-					cdc.retrieve(rs.getInt("customer_id")),
-					sdc.retrieve(rs.getInt("shop_id")),
-					true,
-					rs.getBoolean("anonymous"));	
-				trips.add(trip);
-			}
-			connection.close();
-			return trips;
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
 
 	/**
 	 * @see tdt4140.gr1864.app.core.interfaces.DatabaseCRUD#retrieve(int)
 	 */
 	@Override
 	public ShoppingTrip retrieve(int id) {
+		CustomerDatabaseController cdc = new CustomerDatabaseController();
+		ShopDatabaseController sdc = new ShopDatabaseController();
+		ActionDatabaseController adc = new ActionDatabaseController();
+		
 		String sql = "SELECT * "
 					+ "FROM shopping_trip "
 					+ "WHERE shopping_trip_id=?";
@@ -149,14 +121,16 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 				return null;
 			}
 			
-			CustomerDatabaseController cdc = new CustomerDatabaseController();
-			ShopDatabaseController sdc = new ShopDatabaseController();
+			int tripID = rs.getInt("shopping_trip_id");
+			
 			ShoppingTrip trip = new ShoppingTrip(
-					rs.getInt("shopping_trip_id"), 
+					tripID, 
 					cdc.retrieve(rs.getInt("customer_id")),
 					sdc.retrieve(rs.getInt("shop_id")),
-					true,
+					rs.getBoolean(4),
 					rs.getBoolean("anonymous"));
+			trip.setActions(adc.retrieveAll(tripID));
+			
 			connection.close();
 			return trip;
 
@@ -173,7 +147,9 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 	public List<ShoppingTrip> retrieveAllShoppingTrips() {
 		CustomerDatabaseController cdc = new CustomerDatabaseController();
 		ShopDatabaseController sdc = new ShopDatabaseController();
-		List<ShoppingTrip> shoppingTrips = new ArrayList<>();
+		ActionDatabaseController adc = new ActionDatabaseController();
+		ShoppingTrip trip;
+		List<ShoppingTrip> trips = new ArrayList<>();
 		
 		String sql = "SELECT * FROM shopping_trip";
 		try {
@@ -182,17 +158,20 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 			ResultSet rs = statement.executeQuery();
 			
 			while(rs.next()) {
-				shoppingTrips.add(new ShoppingTrip(
+				int tripID = rs.getInt(1);
+				trip = new ShoppingTrip(
 									rs.getInt(1), // ShopID
 									cdc.retrieve(rs.getInt(2)), // Customer object 
 									sdc.retrieve(rs.getInt(3)), // Shop object
 									rs.getBoolean(4), // charged boolean
-									rs.getBoolean(5)) // anonymous flag
+									rs.getBoolean(5) // anonymous flag
 								);
+				trip.setActions(adc.retrieveAll(tripID));
+				trips.add(trip);
 			}
 			
 			connection.close();
-			return shoppingTrips;
+			return trips;
 			
 		
 		} catch (SQLException e) {
@@ -203,16 +182,21 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 	
 	/**
 	 * Retrieves and creates a list of shopping trip objects from the database
-	 * for the customer with ID = customerID
+	 * for the customer with ID = customerID and are not anonymized.
 	 * @param customerID The ID of the customer for the shopping trips
 	 * @return A list of ShoppingTrip objects corresponding to database instances
 	 */
 	public List<ShoppingTrip> retrieveAllShoppingTripsForCustomer(int customerID) {
 		CustomerDatabaseController cdc = new CustomerDatabaseController();
 		ShopDatabaseController sdc = new ShopDatabaseController();
-		List<ShoppingTrip> shoppingTrips = new ArrayList<>();
+		ActionDatabaseController adc = new ActionDatabaseController();
+		ShoppingTrip trip;
+		List<ShoppingTrip> trips = new ArrayList<>();
 		
-		String sql = "SELECT * FROM shopping_trip WHERE customer_id=? AND anonymous=?";
+		String sql = "SELECT * "
+				   + "FROM shopping_trip "
+				   + "WHERE customer_id=? AND anonymous=?";
+		
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql);
@@ -220,20 +204,21 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 			statement.setBoolean(2, false);
 			ResultSet rs = statement.executeQuery();
 			
-			while(rs.next()) {
-				shoppingTrips.add(new ShoppingTrip(
-									rs.getInt(1), // ShopID
-									cdc.retrieve(rs.getInt(2)), // Customer object 
-									sdc.retrieve(rs.getInt(3)), // Shop object
-									rs.getBoolean(4), // charged boolean
-									rs.getBoolean(5)) // anonymous flag
-								);
+			while (rs.next()) {
+				int tripID = rs.getInt("shopping_trip_id");
+				trip = new ShoppingTrip(
+						rs.getInt(1), // ShopID
+						cdc.retrieve(rs.getInt(2)), // Customer object 
+						sdc.retrieve(rs.getInt(3)), // Shop object
+						rs.getBoolean(4), // charged boolean
+						rs.getBoolean(5) // anonymous flag
+					);	
+				trip.setActions(adc.retrieveAll(tripID));
+				trips.add(trip);
 			}
+			connection.close();
+			return trips;
 			
-			connection.close();	
-			return shoppingTrips;
-			
-		
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

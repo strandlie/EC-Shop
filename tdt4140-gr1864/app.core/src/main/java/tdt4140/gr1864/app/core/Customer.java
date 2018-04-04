@@ -19,7 +19,10 @@ public class Customer extends Observable implements UserInterface {
 
 	private List<ShoppingTrip> shoppingTrips;
 	private int recommendedProductID = -1;
+<<<<<<< Updated upstream
 	private boolean anonymous;
+=======
+>>>>>>> Stashed changes
 	
 	/**
 	 * @param customerID		id provided by database
@@ -29,11 +32,18 @@ public class Customer extends Observable implements UserInterface {
 	 */
 	public Customer(int customerID, String firstName, String lastName, 
 			List<ShoppingTrip> shoppingTrips) {
+<<<<<<< Updated upstream
 		this.customerID = customerID;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.shoppingTrips = shoppingTrips;
 		this.anonymous = false;
+=======
+		this.customerID = customerId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.shoppingTrips = shoppingTrips;
+>>>>>>> Stashed changes
 	}
 	
 	/**
@@ -42,9 +52,15 @@ public class Customer extends Observable implements UserInterface {
 	 * @param firstName			name of customer
 	 * @param lastName			name of customer
 	 */
+<<<<<<< Updated upstream
 	public Customer(String firstName, String lastName, int customerID,
 			 String address, int zip, boolean anonymous) {
 		this.customerID = customerID;
+=======
+	public Customer(String firstName, String lastName, int customerId,
+			 String address, int zip) {
+		this.customerID = customerId;
+>>>>>>> Stashed changes
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.address = address;
@@ -60,8 +76,12 @@ public class Customer extends Observable implements UserInterface {
 	public Customer(String firstName, String lastName, int customerID) { 
 		this.firstName = firstName;
 		this.lastName = lastName;
+<<<<<<< Updated upstream
 		this.customerID = customerID;
 		this.anonymous = false;
+=======
+		this.customerID = customerId;
+>>>>>>> Stashed changes
 	}
 	
 	/**
@@ -72,6 +92,45 @@ public class Customer extends Observable implements UserInterface {
 		this.firstName = firstName;
 		this.lastName = lastName;
 	}
+<<<<<<< Updated upstream
+=======
+
+	public int getUserId() {
+		return customerID;
+	}
+
+	public void setUserId(int userId) {
+		this.customerID = userId;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+	
+	public List<ShoppingTrip> getShoppingTrips() {
+		return shoppingTrips;
+	}
+
+	public void setShoppingTrips(List<ShoppingTrip> shoppingTrips) {
+		this.shoppingTrips = shoppingTrips;
+	}
+	
+	public int getRecommendedProductID() {
+		return this.recommendedProductID;
+	}
+>>>>>>> Stashed changes
 	
 	/**
 	 *  The recommendation is based on shopping trips stored in the database and 
@@ -99,6 +158,16 @@ public class Customer extends Observable implements UserInterface {
 		
 		// List of all shopping trips for this customer	
 		List<ShoppingTrip> customerTrips = stdc.retrieveAllShoppingTripsForCustomer(this.customerID);
+<<<<<<< Updated upstream
+=======
+		
+		// PRINT
+		System.out.println(allTrips.size() + " all trips size");
+		System.out.println(customerTrips.size() + " customer all trips size, customerID: " + this.customerID);
+		
+		
+		
+>>>>>>> Stashed changes
 		
 		// Amount of customers (registered)
 		int countCustomers = cdc.countCustomers();
