@@ -3,21 +3,38 @@ package tdt4140.gr1864.app.core;
 import java.util.List;
 import java.util.Observable;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import tdt4140.gr1864.app.core.databasecontrollers.CustomerDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
+import tdt4140.gr1864.app.core.interfaces.Model;
 import tdt4140.gr1864.app.core.interfaces.UserInterface;
 
-public class Customer extends Observable implements UserInterface {
+@JsonAutoDetect
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Customer extends Observable implements Model, UserInterface {
 
+	@JsonProperty("customerID")
 	private int customerId;
 
+	@JsonProperty
 	private String firstName;
+	@JsonProperty	
 	private String lastName;
+
 	/* has a default value for Customers without demographic data */
+	@JsonProperty
 	private String address = null;
+
+	@JsonProperty
 	private int zip = 0;
 
 	private List<ShoppingTrip> shoppingTrips;
+	
+	@JsonProperty
 	private int recommendedProductID = -1;
 	private boolean hasUpdated;
 	
@@ -34,6 +51,10 @@ public class Customer extends Observable implements UserInterface {
 		this.lastName = lastName;
 		this.shoppingTrips = shoppingTrips;
 		this.hasUpdated = false;
+	}
+	
+	public Customer() {
+		
 	}
 	
 	/**
@@ -71,11 +92,16 @@ public class Customer extends Observable implements UserInterface {
 		this.lastName = lastName;
 	}
 
-	public int getUserId() {
+	@JsonIgnore
+	public int getID() {
+		return customerId;
+	}
+	
+	public int getCustomerID() {
 		return customerId;
 	}
 
-	public void setUserId(int userId) {
+	public void setCustomerId(int userId) {
 		this.customerId = userId;
 	}
 
