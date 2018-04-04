@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.web.server.serializers.Serializer;
 
 import tdt4140.gr1864.app.core.Customer;
+import tdt4140.gr1864.app.core.database.DatabaseWiper;
 import tdt4140.gr1864.app.core.database.TestDataLoader;
 import tdt4140.gr1864.app.core.databasecontrollers.CustomerDatabaseController;
 
@@ -18,6 +19,8 @@ public class SerializerTest {
 	
 	@BeforeClass
 	public static void setup() {
+		DatabaseWiper wiper = new DatabaseWiper();
+		wiper.wipe();
 		new TestDataLoader();
 	}
 
