@@ -64,8 +64,8 @@ public class DataLoader {
 		loadCustomers();
 		loadProducts();
 		createShop();
-		loadShoppingTrips();
 		addProductsInShelfsInDB(products);
+		loadShoppingTrips();
 	}
 	
 	/**
@@ -304,7 +304,7 @@ public class DataLoader {
 		
 		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
 		
-		Shop s1 = createShop();
+		Shop s1 = shop;
 		Customer c1 = getCustomer(1);
 
 		// We set the charged flag to true to prevent spamming the Stripe API.		
@@ -326,6 +326,9 @@ public class DataLoader {
 			// adds Coordinate and Action to ShoppingTrip
 			trip = createShoppingTrip(trip, coordinates, actions);
 			
+			// Update the shop from trip
+			s1.updateAmountInShelfsFromReceipt(new Receipt(trip));
+			shop = s1;
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -413,9 +416,6 @@ public class DataLoader {
 	 * A function that adds products to the shelfs and storage of the shop, also updates the DB
 	 */
 	public static void addProductsInShelfsInDB(List<Product> products) {
-		ShopDatabaseController sdc = new ShopDatabaseController();
-		Shop shop = sdc.retrieve(1);
-		
 		int amountInStorage = 90;
 		int amountOnShelfs = 20;
 		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
