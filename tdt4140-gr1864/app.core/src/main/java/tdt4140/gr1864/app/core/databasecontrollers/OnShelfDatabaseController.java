@@ -62,7 +62,7 @@ public class OnShelfDatabaseController implements DatabaseCRUD {
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql);
-			statement.setInt(1, shop.getShopID());
+			statement.setInt(1, shop.getID());
 			statement.setInt(2, productID);
 			statement.setInt(3, shop.getAmountInShelfs(productID));
 			statement.setInt(4, shop.getAmountInStorage(productID));
@@ -95,7 +95,7 @@ public class OnShelfDatabaseController implements DatabaseCRUD {
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, shop.getAmountInShelfs(productID));
 			statement.setInt(2, shop.getAmountInStorage(productID));
-			statement.setInt(3, shop.getShopID());
+			statement.setInt(3, shop.getID());
 			statement.setInt(4, productID);
 			statement.executeUpdate();
 			connection.close();
@@ -126,7 +126,7 @@ public class OnShelfDatabaseController implements DatabaseCRUD {
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql);
-			statement.setInt(1, shop.getShopID());
+			statement.setInt(1, shop.getID());
 			statement.setInt(2, productID);
 			
 			ResultSet rs = statement.executeQuery();

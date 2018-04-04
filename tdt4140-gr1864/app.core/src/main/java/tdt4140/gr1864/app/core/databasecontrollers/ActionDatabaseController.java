@@ -49,11 +49,11 @@ public class ActionDatabaseController implements DatabaseCRUD {
 			statement.setString(1,  Long.toString(action.getTimeStamp()));
 			statement.setInt(2, action.getActionType());
 			statement.setInt(3, action.getProduct().getID());
-			statement.setInt(4, action.getShoppingTrip().getShoppingTripID());
+			statement.setInt(4, action.getShoppingTrip().getID());
 			statement.executeUpdate();
 			connection.close();
 			
-			return action.getShoppingTrip().getShoppingTripID();
+			return action.getShoppingTrip().getID();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -76,7 +76,7 @@ public class ActionDatabaseController implements DatabaseCRUD {
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, action.getActionType());
 			statement.setInt(2, action.getProduct().getID());
-			statement.setInt(3, action.getShoppingTrip().getShoppingTripID());
+			statement.setInt(3, action.getShoppingTrip().getID());
 			statement.setString(4, Long.toString(action.getTimeStamp()));
 			statement.executeUpdate();
 			connection.close();
@@ -193,7 +193,7 @@ public class ActionDatabaseController implements DatabaseCRUD {
 	public void delete(int id) {
 		System.err.println("not in use, see delete(int shopping_trip_id, long timestamp)");
 	}
-	
+
 	/**
 	 * deletes action from database based on shopping_trip_id and timeStamp
 	 * @param shopping_trip_id	id of trip action is a part of
