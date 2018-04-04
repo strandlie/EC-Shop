@@ -6,6 +6,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import tdt4140.gr1864.app.core.Customer;
+import tdt4140.gr1864.app.core.Receipt;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -289,17 +291,28 @@ public class ModeController {
 				// Retrieve the shop from DB
 				Shop shop = sdc.retrieve(1);
 				shop.refreshShop();
-				Map<Integer, Integer> productIDsOnShelf = shop.getShelfs();
 				
-				// Retrieve shopping trips from DB and update the shop object
-				List<ShoppingTrip> shoppingTrips = stdc.retrieveAllShoppingTrips();
-				for (ShoppingTrip trip : shoppingTrips) {
-					
+				// Retrieve the shopping trips from DB and put in a list
+				ArrayList<ShoppingTrip> shoppingTripList = new ArrayList<>();
+				int iterator = 1;
+				while(true) {
+					ShoppingTrip trip = stdc.retrieve(iterator);
+					if (trip == null) {
+						break;
+					}
+					trip.setActions(adc.retrieveAll(iterator));
+					shoppingTripList.add(trip);
+					iterator++;
+				}
+				
+				// Update the shop object
+				for (ShoppingTrip trip : shoppingTripList) {
+					shop.updateShopFromReceipt(new Receipt(trip));
 				}
 				
 				// Wipe the data table in mode
 				table = (VisualizationTable) mode.getVisualizationElement();
-				table.getTableLoader().loadInShelvesTable(productIDsOnShelf);
+				table.getTableLoader().loadInShelvesTable(shop.getShelfs());
 			}
 				
 			else if (mode.getName() == "Stock") {
