@@ -71,11 +71,11 @@ public class Customer extends Observable implements UserInterface {
 	 * @param numberOfPersonsInHousehold
 	 * @param shoppingTrips
 	 */
-	public Customer(int customerId, String firstName, String lastName, String address, int zip, String gender,
-					int age, int numberOfPersonsInHousehold, List<ShoppingTrip> shoppingTrips) {
-		this.customerId = customerId;
+	public Customer(String firstName, String lastName, int customerId, String address, int zip, String gender,
+					int age, int numberOfPersonsInHousehold) {
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.customerId = customerId;
 
 		// Input validation
 		if (address != null)
@@ -88,8 +88,6 @@ public class Customer extends Observable implements UserInterface {
             this.age = age;
 		if (numberOfPersonsInHousehold != 0)
             this.numberOfPersonsInHousehold = numberOfPersonsInHousehold;
-		if (shoppingTrips != null)
-            this.shoppingTrips = shoppingTrips;
 	}
 
 	/**
