@@ -71,6 +71,12 @@ public class MenuViewController  {
 		);
 	}
 	
+	public void updateMenuItemWithString(String contains, String newValue) {
+		for (String item : this.items) {
+			// Update the name of the MenuItem
+		}
+	}
+	
 	/**
 	 * Used to add another item to the menu. Just a String. Should match the name of a mode, or else the modeController will throw an error when the item is selected
 	 * Is called by the ModeController when a new mode is created. 

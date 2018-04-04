@@ -103,6 +103,8 @@ public class ModeController {
 		demographicsTable.addColumn("address");
 		demographicsTable.addColumn("zip");
 		Mode demographicsMode = new Mode("Demographics", demographicsTable);
+		
+		Mode durationMode = new Mode("Average time in store: 5.0 min", null);
 
 
 		
@@ -147,6 +149,7 @@ public class ModeController {
 		tableLoader.loadDemographicsTable(customers, demographicsTable);
 
 		//Adding modes
+		addMode(durationMode);
 		addMode(mostPickedUp);
 		addMode(stock);
 		addMode(demographicsMode);
@@ -168,6 +171,8 @@ public class ModeController {
 		executor.scheduleAtFixedRate(runnable, 3, 3, TimeUnit.SECONDS);
 
 		setMode(mostPickedUp);
+		
+		
 	}
 
 	/**
@@ -200,6 +205,20 @@ public class ModeController {
 	 */
 	public Mode getMode(String name) {
 		return this.modes.getOrDefault(name, null);
+	}
+	
+	/**
+	 * Returns the mode with a similar name as the input string, or null
+	 * @param name The string name to match against
+	 * @return The Mode, or null
+	 */
+	public Mode getModeWithSimilarNameAs(String name) {
+		for (String key : this.modes.keySet()) {
+			if (key.contains(name)) {
+				return getMode(key);
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -255,6 +274,8 @@ public class ModeController {
      * Updates rows of demographicstable
 	 */
 	public void updateRows() {
+		
+		// UPDATE DEMOGRAPHICS MODE
         CustomerDatabaseController cdc = new CustomerDatabaseController();
         List<Customer> customers = cdc.retrieveAll();
 
@@ -263,6 +284,25 @@ public class ModeController {
 		table.wipeTable();
         TableLoader loader = new TableLoader();
         loader.loadDemographicsTable(customers, table);
+        
+        // UPDATE DURATION MODE
+        
+	}
+	
+	
+	private void calculateAndShowAverageDuration() {
+		CoordinateDatabaseController cdc = new CoordinateDatabaseController();
+		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
+		long sumOfDurations = 0;
+		int numberOfTrips = 0;
+		List<ShoppingTrip> allShoppingTrips = stdc.retrieveAllShoppingTrips();
+		for (ShoppingTrip trip : allShoppingTrips) {
+			trip.setCoordinates(cdc.retrieveAll(trip.getShoppingTripID()));
+			numberOfTrips++;
+			sumOfDurations += trip.getDuration();
+		}
+		
+		
 	}
 
 	/**

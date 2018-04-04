@@ -19,7 +19,6 @@ public class Mode {
 	private String name;
 
 	/**
-<<<<<<< HEAD
 	 * The list of the VisualizationElements that is shown in the Visualization Area
 	 * for this mode Implemented as List to get an implicit ordering of elements
 	 */
