@@ -17,7 +17,11 @@ public class DemographicsTableRow implements TableRow {
 	private int size;
 
 	public DemographicsTableRow(String customerId, String firstName, String lastName, String address, String zip) {
-	
+		setCustomerId(customerId);
+		setFirstName(firstName);
+		setLastName(lastName);
+		setAddress(address);
+		setZip(zip);
 		this.size = 5;
 	}
 
