@@ -20,8 +20,9 @@ public class Persister {
 	private static final int DELETE 	= 2;
 	
 	/** Class names compared in switch-case */
-	private static final String SHOPPING_TRIP = "tdt4140.gr1864.app.core.ShoppingTrip";
-	private static final String CUSTOMER = "tdt4140.gr1864.app.core.Customer";
+	public static final String SHOPPING_TRIP = "tdt4140.gr1864.app.core.ShoppingTrip";
+	public static final String CUSTOMER = "tdt4140.gr1864.app.core.Customer";
+	public static final String RECEIPT = "tdt4140.gr1864.app.core.Receipt";
 	
 	/**
 	 * Calls correct function to persist changes that were serialized
@@ -40,7 +41,7 @@ public class Persister {
 			controller = new CustomerDatabaseController();
 			break;
 		}
-
+	
 		switch(method) {
 			case POST: 		Persister.create(object); break;
 			case PUT: 		Persister.update(object); break;

@@ -73,8 +73,8 @@ public class Serializer {
 
 		/* For classes that needs more advanced deserializing */
 		switch(c.getName()) {
-			case "Receipt": return deserializeReceipt((Receipt) o);
-			case "ShoppingTrip": return deserializeShoppingTrip((ShoppingTrip) o);
+			case Persister.RECEIPT: return deserializeReceipt((Receipt) o);
+			case Persister.SHOPPING_TRIP: return deserializeShoppingTrip((ShoppingTrip) o);
 		}
 
 		ObjectMapper mapper = new ObjectMapper();
