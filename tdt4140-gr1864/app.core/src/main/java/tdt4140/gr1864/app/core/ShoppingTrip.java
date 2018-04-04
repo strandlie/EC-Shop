@@ -8,6 +8,8 @@ public class ShoppingTrip {
 	private long start;
 	/* end-time of ShoppingTrip in UNIX-time */
 	private long end;
+	/* duration of the trip in UNIX-time */
+	private long duration;
 	
 	/* customer and shop trip was made by and at */
 	private Shop shop;
@@ -36,6 +38,7 @@ public class ShoppingTrip {
 		this.start = findStart(coordinates);
 		this.end = findEnd(coordinates);
 		this.charged = charged;
+		setDuration();
 		
 		if (!this.charged) {
 			charge();
@@ -121,6 +124,14 @@ public class ShoppingTrip {
 	}
 	
 	/**
+	 * Sets the duration of the ShoppingTrip based on first and last
+	 * timestamp in Coordinates
+	 */
+	private void setDuration() {
+		this.duration = this.findEnd(this.coordinates) - this.findStart(this.coordinates); 
+	}
+	
+	/**
 	 * Sets actions after a ShoppingTrip is created
 	 * @param actions the list of actions
 	 */
@@ -162,5 +173,9 @@ public class ShoppingTrip {
 
 	public int getShoppingTripID() {
 		return shoppingTripID;
+	}
+	
+	public long getDuration() {
+		return duration;
 	}
 }

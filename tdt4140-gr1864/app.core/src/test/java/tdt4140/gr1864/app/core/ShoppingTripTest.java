@@ -58,4 +58,9 @@ public class ShoppingTripTest {
 		Assert.assertEquals(expectedType, action.getActionType());
 		Assert.assertEquals(expectedProduct, (int)action.getProduct().getID());
 	}
+	
+	@Test
+	public void testDurationExpectDurationOfFirstTrip() {
+		Assert.assertEquals(32550000L, shoppingTrip.getDuration());
+	}
 }
