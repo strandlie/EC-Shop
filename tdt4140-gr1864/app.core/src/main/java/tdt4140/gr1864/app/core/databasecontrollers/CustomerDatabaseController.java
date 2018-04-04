@@ -41,8 +41,8 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 	@Override
     public int create(Object object) {
     	Customer customer = objectIsCustomer(object);
-		String sql = "INSERT INTO customer (first_name, last_name, address, zip) "
-					+ "values (?, ?, ?, ?)";
+		String sql = "INSERT INTO customer (first_name, last_name, address, zip, anonymous) "
+					+ "values (?, ?, ?, ?, ?)";
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -50,6 +50,7 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 			statement.setString(2, customer.getLastName());
 			statement.setString(3, customer.getAddress());
 			statement.setInt(4, customer.getUserId());
+			statement.setBoolean(5, customer.getAnonymous());
 			statement.executeUpdate();
 				
 			try {
@@ -76,10 +77,10 @@ public class CustomerDatabaseController implements DatabaseCRUD {
      * @see tdt4140.gr1864.app.core.interfaces.DatabaseCRUD#retrieve(int)
      */
     @Override
-    public Customer retrieve(int userId) {
+    public Customer retrieve(int customerID) {
 		String sql = "SELECT * "
 					+ "FROM customer "
-					+ "WHERE customer_id = " + userId;
+					+ "WHERE customer_id = " + customerID;
         try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
             statement = connection.prepareStatement(sql);
@@ -96,7 +97,9 @@ public class CustomerDatabaseController implements DatabaseCRUD {
             		rs.getString("last_name"), 
             		rs.getInt("customer_id"),
             		rs.getString("address"),
-            		rs.getInt("zip"));
+            		rs.getInt("zip"),
+            		rs.getBoolean("anonymous")
+            		);
             statement.close();
             return user;
       
@@ -126,7 +129,9 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 					rs.getString("last_name"), 
 					rs.getInt("customer_id"),
 					rs.getString("address"),
-					rs.getInt("zip"));
+					rs.getInt("zip"),
+            		rs.getBoolean("anonymous")
+            		);
     			customers.add(customer);
     		}
     		connection.close();

@@ -9,7 +9,7 @@ import tdt4140.gr1864.app.core.interfaces.UserInterface;
 
 public class Customer extends Observable implements UserInterface {
 
-	private int customerId;
+	private int customerID;
 
 	private String firstName;
 	private String lastName;
@@ -19,47 +19,49 @@ public class Customer extends Observable implements UserInterface {
 
 	private List<ShoppingTrip> shoppingTrips;
 	private int recommendedProductID = -1;
-	private boolean hasUpdated;
+	private boolean anonymous;
 	
 	/**
-	 * @param customerId		id provided by database
+	 * @param customerID		id provided by database
 	 * @param firstName			name of customer
 	 * @param lastName			name of customer
 	 * @param shoppingTrips 	trips of customer
 	 */
-	public Customer(int customerId, String firstName, String lastName, 
+	public Customer(int customerID, String firstName, String lastName, 
 			List<ShoppingTrip> shoppingTrips) {
-		this.customerId = customerId;
+		this.customerID = customerID;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.shoppingTrips = shoppingTrips;
-		this.hasUpdated = false;
+		this.anonymous = false;
 	}
 	
 	/**
 	 * Constructor used by CustomerDatabaseController when there is an address
-	 * @param customerId		id provided by database
+	 * @param customerID		id provided by database
 	 * @param firstName			name of customer
 	 * @param lastName			name of customer
 	 */
-	public Customer(String firstName, String lastName, int customerId,
-			 String address, int zip) {
-		this.customerId = customerId;
+	public Customer(String firstName, String lastName, int customerID,
+			 String address, int zip, boolean anonymous) {
+		this.customerID = customerID;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.address = address;
 		this.zip = zip;
+		this.anonymous = anonymous;
 	}
 
 	/**
 	 * @param firstName			name of customer
 	 * @param lastName			name of customer
-	 * @param customerId		id provided by database
+	 * @param customerID		id provided by database
 	 */
-	public Customer(String firstName, String lastName, int customerId) { 
+	public Customer(String firstName, String lastName, int customerID) { 
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.customerId = customerId;
+		this.customerID = customerID;
+		this.anonymous = false;
 	}
 	
 	/**
@@ -69,42 +71,6 @@ public class Customer extends Observable implements UserInterface {
 	public Customer(String firstName, String lastName) { 
 		this.firstName = firstName;
 		this.lastName = lastName;
-	}
-
-	public int getUserId() {
-		return customerId;
-	}
-
-	public void setUserId(int userId) {
-		this.customerId = userId;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-	
-	public List<ShoppingTrip> getShoppingTrips() {
-		return shoppingTrips;
-	}
-
-	public void setShoppingTrips(List<ShoppingTrip> shoppingTrips) {
-		this.shoppingTrips = shoppingTrips;
-	}
-	
-	public int getRecommendedProductID() {
-		return this.recommendedProductID;
 	}
 	
 	/**
@@ -132,7 +98,7 @@ public class Customer extends Observable implements UserInterface {
 		List<ShoppingTrip> allTrips = stdc.retrieveAllShoppingTrips();
 		
 		// List of all shopping trips for this customer	
-		List<ShoppingTrip> customerTrips = stdc.retrieveAllShoppingTripsForCustomer(this.customerId);
+		List<ShoppingTrip> customerTrips = stdc.retrieveAllShoppingTripsForCustomer(this.customerID);
 		
 		// Amount of customers (registered)
 		int countCustomers = cdc.countCustomers();
@@ -146,7 +112,6 @@ public class Customer extends Observable implements UserInterface {
 		int[] productsBoughtInTotal = new int[amountOfProducts];
 		
 		// Updating the productsBoughtInTotal based on all shopping trips
-		System.out.println("alltrips size in recommendation " + allTrips.size());
 		if (allTrips.size() == 0) return -1;
 		
 		for (ShoppingTrip st : allTrips) {
@@ -314,7 +279,7 @@ public class Customer extends Observable implements UserInterface {
 		int result = 1;
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-		result = prime * result + customerId;
+		result = prime * result + customerID;
 		return result;
 	}
 
@@ -339,9 +304,54 @@ public class Customer extends Observable implements UserInterface {
 		} 
 		else if (!lastName.equals(other.lastName))
 			return false;
-		if (customerId != other.customerId)
+		if (customerID != other.customerID)
 			return false;
 		return true;
 	}
+	
+	public int getUserId() {
+		return customerID;
+	}
+
+	public void setUserId(int userId) {
+		this.customerID = userId;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+	
+	public List<ShoppingTrip> getShoppingTrips() {
+		return shoppingTrips;
+	}
+
+	public void setShoppingTrips(List<ShoppingTrip> shoppingTrips) {
+		this.shoppingTrips = shoppingTrips;
+	}
+	
+	public int getRecommendedProductID() {
+		return this.recommendedProductID;
+	}
+	
+	public boolean getAnonymous() {
+		return this.anonymous;
+	}
+	
+	public void setAnonymous(boolean anonymous) {
+		this.anonymous = anonymous;
+	}
 }
+
 

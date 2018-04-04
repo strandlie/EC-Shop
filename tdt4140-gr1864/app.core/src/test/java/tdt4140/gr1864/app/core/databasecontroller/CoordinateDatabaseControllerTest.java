@@ -55,7 +55,7 @@ public class CoordinateDatabaseControllerTest {
 		p1 = new Product(pdc.create(p1), p1.getName(), p1.getPrice());
 		
 		t1 = new ShoppingTrip(customer1, s1, true);
-		t1 = new ShoppingTrip(stdc.create(t1), customer1, s1, true);
+		t1 = new ShoppingTrip(stdc.create(t1), customer1, s1, true, false);
 		List<ShoppingTrip> trips = new ArrayList<ShoppingTrip>();
 		trips.add(t1);
 		customer1.setShoppingTrips(trips);		

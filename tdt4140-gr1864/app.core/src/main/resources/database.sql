@@ -4,6 +4,7 @@ first_name varchar(30) not null,
 last_name varchar(30) not null,
 address	varchar(31),
 zip integer,
+anonymous boolean not null,
 foreign key(customer_id) references shopping_trip(customer_id)
 );
 
@@ -55,6 +56,7 @@ shopping_trip_id integer primary key autoincrement,
 customer_id integer not null,
 shop_id integer not null,
 charged bit not null,
+anonymous boolean not null,
 foreign key(customer_id) references customer(customer_id),
 foreign key(shop_id) references shop(shop_id),
 foreign key(shopping_trip_id) references action(shopping_trip_id),

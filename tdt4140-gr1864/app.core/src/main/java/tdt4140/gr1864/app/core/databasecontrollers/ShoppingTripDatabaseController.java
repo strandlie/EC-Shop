@@ -41,8 +41,8 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 	public int create(Object object) {
 		ShoppingTrip trip = this.objectIsShoppingTrip(object);
 		String sql = "INSERT INTO shopping_trip "
-					+ "(customer_id, shop_id, charged) "
-					+ "VALUES (?, ?, ?)";
+					+ "(customer_id, shop_id, charged, anonymous) "
+					+ "VALUES (?, ?, ?, ?)";
 					
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
@@ -50,6 +50,7 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 			statement.setInt(1, trip.getCustomer().getUserId());
 			statement.setInt(2, trip.getShop().getShopID());
 			statement.setBoolean(3, trip.getCharged());
+			statement.setBoolean(4, trip.getAnonymous());
 			statement.executeUpdate();
 		
 			try {
@@ -79,7 +80,7 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 	public void update(Object object) {
 		ShoppingTrip trip = this.objectIsShoppingTrip(object);
 		String sql = "UPDATE shopping_trip "
-					+ "SET customer_id=?, shop_id=?, charged=? "
+					+ "SET customer_id=?, shop_id=?, charged=?, anonymous=? "
 					+ "WHERE shopping_trip_id=?";
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
@@ -87,7 +88,8 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 			statement.setInt(1, trip.getCustomer().getUserId());
 			statement.setInt(2, trip.getShop().getShopID());
 			statement.setBoolean(3, trip.getCharged());
-			statement.setInt(4, trip.getShoppingTripID());
+			statement.setBoolean(4, trip.getAnonymous());
+			statement.setInt(5, trip.getShoppingTripID());
 			statement.executeUpdate();
 			connection.close();
 			
@@ -115,7 +117,8 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 					rs.getInt("shopping_trip_id"), 
 					cdc.retrieve(rs.getInt("customer_id")),
 					sdc.retrieve(rs.getInt("shop_id")),
-					true);	
+					true,
+					rs.getBoolean("anonymous"));	
 				trips.add(trip);
 			}
 			connection.close();
@@ -152,7 +155,8 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 					rs.getInt("shopping_trip_id"), 
 					cdc.retrieve(rs.getInt("customer_id")),
 					sdc.retrieve(rs.getInt("shop_id")),
-					true);
+					true,
+					rs.getBoolean("anonymous"));
 			connection.close();
 			return trip;
 
@@ -182,7 +186,8 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 									rs.getInt(1), // ShopID
 									cdc.retrieve(rs.getInt(2)), // Customer object 
 									sdc.retrieve(rs.getInt(3)), // Shop object
-									rs.getBoolean(4)) // charged boolean
+									rs.getBoolean(4), // charged boolean
+									rs.getBoolean(5)) // anonymous flag
 								);
 			}
 			
@@ -207,11 +212,12 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 		ShopDatabaseController sdc = new ShopDatabaseController();
 		List<ShoppingTrip> shoppingTrips = new ArrayList<>();
 		
-		String sql = "SELECT * FROM shopping_trip WHERE customer_id=?";
+		String sql = "SELECT * FROM shopping_trip WHERE customer_id=? AND anonymous=?";
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, customerID);
+			statement.setBoolean(2, false);
 			ResultSet rs = statement.executeQuery();
 			
 			while(rs.next()) {
@@ -219,7 +225,8 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 									rs.getInt(1), // ShopID
 									cdc.retrieve(rs.getInt(2)), // Customer object 
 									sdc.retrieve(rs.getInt(3)), // Shop object
-									rs.getBoolean(4)) // charged boolean
+									rs.getBoolean(4), // charged boolean
+									rs.getBoolean(5)) // anonymous flag
 								);
 			}
 			
