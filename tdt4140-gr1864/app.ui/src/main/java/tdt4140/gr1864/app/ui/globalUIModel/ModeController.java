@@ -340,6 +340,7 @@ public class ModeController {
 				
 				table = (VisualizationTable) mode.getVisualizationElement();
 				table.getTableLoader().loadStockTable(shop.getShelfs(), shop.getStorage());
+				
 			}
 			
 			else if (mode.getName() == "Most Picked Up") {
