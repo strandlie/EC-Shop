@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tdt4140.gr1864.app.core.Action;
+import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
 
 public class ActionDatabaseController implements DatabaseCRUD {
@@ -142,20 +143,24 @@ public class ActionDatabaseController implements DatabaseCRUD {
 			ProductDatabaseController pdc = new ProductDatabaseController();
 			ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
 			List<Action> actions = new ArrayList<>();
+			
 			while (rs.next()) {
 				Action action = new Action(
 						rs.getString("timestamp"), 
 						rs.getInt("action_type"), 
 						pdc.retrieve(rs.getInt("product_id")),
-						stdc.retrieve(rs.getInt("shopping_trip_id")));
+						stdc.retrieve(shopping_trip_id));
 				actions.add(action);
 			}
+			
 			connection.close();
 			return actions;
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		System.out.println("gjorde ikke noe");
 		return null;
 	}
 

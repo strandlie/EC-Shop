@@ -3,6 +3,7 @@ package tdt4140.gr1864.app.core.databasecontroller;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Assert;
@@ -123,5 +124,27 @@ public class ActionDatabaseControllerTest {
 		Assert.assertEquals(a1.getActionType(), a2.getActionType());
 		Assert.assertEquals(a1.getTimeStamp(), a2.getTimeStamp());
 		Assert.assertEquals(a1.getShoppingTrip().getShoppingTripID(), a2.getShoppingTrip().getShoppingTripID());
+	}
+	
+	@Test
+	public void wTestRetrieveAllExpectActionListSizeNotZero() {
+		a1 = new Action(
+				Long.toString(a1.getTimeStamp()),
+				a1.getActionType(), 
+				a1.getProduct(),
+				stdc.retrieve(adc.create(a1))
+			);
+		a1 = new Action(
+				Long.toString(a1.getTimeStamp()),
+				0, 
+				a1.getProduct(),
+				a1.getShoppingTrip()
+			);
+		adc.update(a1);
+		a2 = adc.retrieve(a1.getShoppingTrip().getShoppingTripID(), a1.getTimeStamp());
+		
+		int notExpectingSize = 0;
+		List<Action> actualActions = adc.retrieveAll(a1.getShoppingTrip().getShoppingTripID());
+		Assert.assertNotEquals(notExpectingSize, actualActions.size());
 	}
 }
