@@ -19,6 +19,7 @@ import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.database.DataLoader;
 import tdt4140.gr1864.app.core.databasecontrollers.*;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.*;
+import tdt4140.gr1864.app.ui.scheduling.GUIUpdaterRunnable;
 import tdt4140.gr1864.app.core.database.TestDataLoader;
 import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
@@ -28,6 +29,7 @@ import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseControlle
 import tdt4140.gr1864.app.ui.TableLoader;
 import tdt4140.gr1864.app.ui.Mode.Mode;
 import javafx.fxml.FXML;
+import javafx.application.Platform;
 
 /**
  * Initializes the different modes, and handles the switching between them. Also hands of responsibility
@@ -275,7 +277,6 @@ public class ModeController {
 	 */
 	public void updateRows() {
 		
-		// UPDATE DEMOGRAPHICS MODE
         CustomerDatabaseController cdc = new CustomerDatabaseController();
         List<Customer> customers = cdc.retrieveAll();
 
@@ -284,13 +285,10 @@ public class ModeController {
 		table.wipeTable();
         TableLoader loader = new TableLoader();
         loader.loadDemographicsTable(customers, table);
-        
-        // UPDATE DURATION MODE
-        
 	}
 	
 	
-	private void calculateAndShowAverageDuration() {
+	public void calculateAndShowAverageDuration() {
 		CoordinateDatabaseController cdc = new CoordinateDatabaseController();
 		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
 		long sumOfDurations = 0;
@@ -302,6 +300,8 @@ public class ModeController {
 			sumOfDurations += trip.getDuration();
 		}
 		
+		double average = (double) sumOfDurations / numberOfTrips;
+		this.menuViewController.updateTopMenuItem("Average time in store: " + average);
 		
 	}
 
@@ -309,11 +309,13 @@ public class ModeController {
 	 * Code to be run every few seconds. Are calling updaterows at a fixed interval
 	 * Could be extended
 	 */
+	Runnable guiUpdater = new GUIUpdaterRunnable(this);
 	Runnable runnable = new Runnable() {
 		@Override
 		public void run() {
-			updateRows();
+			Platform.runLater(guiUpdater);
 		}
 	};
+	
 }
 

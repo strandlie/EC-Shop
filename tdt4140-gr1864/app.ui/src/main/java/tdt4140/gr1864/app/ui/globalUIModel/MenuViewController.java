@@ -71,10 +71,8 @@ public class MenuViewController  {
 		);
 	}
 	
-	public void updateMenuItemWithString(String contains, String newValue) {
-		for (String item : this.items) {
-			// Update the name of the MenuItem
-		}
+	public void updateTopMenuItem(String newValue) {
+		this.items.set(0, newValue);
 	}
 	
 	/**
