@@ -46,14 +46,14 @@ public class CoordinateDatabaseController implements DatabaseCRUD{
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql);
-			statement.setInt(1, coord.getShoppingTrip().getShoppingTripID());
+			statement.setInt(1, coord.getShoppingTrip().getID());
 			statement.setString(2,  Long.toString(coord.getTimeStamp()));
 			statement.setDouble(3, coord.getX());
 			statement.setDouble(4, coord.getY());
 			statement.executeUpdate();
 			connection.close();
 			
-			return coord.getShoppingTrip().getShoppingTripID();
+			return coord.getShoppingTrip().getID();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -76,7 +76,7 @@ public class CoordinateDatabaseController implements DatabaseCRUD{
 			statement = connection.prepareStatement(sql);
 			statement.setDouble(1,  coord.getX());
 			statement.setDouble(2, coord.getY());
-			statement.setInt(3,  coord.getShoppingTrip().getShoppingTripID());
+			statement.setInt(3,  coord.getShoppingTrip().getID());
 			statement.setString(4, Long.toString(coord.getTimeStamp()));
 			statement.executeUpdate();
 			connection.close();
