@@ -41,8 +41,8 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 	@Override
     public int create(Object object) {
     	Customer customer = objectIsCustomer(object);
-		String sql = "INSERT INTO customer (first_name, last_name, address, zip, gender, age, num_persons_in_household) "
-					+ "values (?, ?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO customer (first_name, last_name, address, zip, gender, age, num_persons_in_household, anonymous) "
+					+ "values (?, ?, ?, ?, ?, ?, ?, ?)";
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -53,6 +53,7 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 			statement.setString(5, customer.getGender());
 			statement.setInt(6, customer.getAge());
 			statement.setInt(7, customer.getNumberOfPersonsInHousehold());
+			statement.setBoolean(8, customer.getAnonymous());
 			statement.executeUpdate();
 				
 			try {
@@ -79,10 +80,10 @@ public class CustomerDatabaseController implements DatabaseCRUD {
      * @see tdt4140.gr1864.app.core.interfaces.DatabaseCRUD#retrieve(int)
      */
     @Override
-    public Customer retrieve(int userId) {
+    public Customer retrieve(int customerID) {
 		String sql = "SELECT * "
 					+ "FROM customer "
-					+ "WHERE customer_id = " + userId;
+					+ "WHERE customer_id = " + customerID;
         try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
             statement = connection.prepareStatement(sql);
@@ -102,7 +103,9 @@ public class CustomerDatabaseController implements DatabaseCRUD {
             		rs.getInt("zip"),
 					rs.getString("gender"),
 					rs.getInt("age"),
-					rs.getInt("num_persons_in_household"));
+					rs.getInt("num_persons_in_household"),
+            		rs.getBoolean("anonymous")
+            		);
             statement.close();
             return user;
       
@@ -125,9 +128,8 @@ public class CustomerDatabaseController implements DatabaseCRUD {
     		ResultSet rs = statement.executeQuery();
 
     		List<Customer> customers = new ArrayList<>();
-    		Customer customer;
     		while (rs.next()) {
-				Customer user = new Customer(
+				Customer customer = new Customer(
 						rs.getString("first_name"),
 						rs.getString("last_name"),
 						rs.getInt("customer_id"),
@@ -135,7 +137,9 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 						rs.getInt("zip"),
 						rs.getString("gender"),
 						rs.getInt("age"),
-						rs.getInt("num_persons_in_household"));
+						rs.getInt("num_persons_in_household"),
+						rs.getBoolean("anonymous"));
+    			customers.add(customer);
     		}
     		connection.close();
     		return customers;

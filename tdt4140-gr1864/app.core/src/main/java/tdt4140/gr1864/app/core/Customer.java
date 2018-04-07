@@ -10,7 +10,7 @@ import tdt4140.gr1864.app.core.interfaces.UserInterface;
 
 public class Customer extends Observable implements UserInterface {
 
-	private int customerId;
+	private int customerID;
 
 	private String firstName;
 	private String lastName;
@@ -25,36 +25,37 @@ public class Customer extends Observable implements UserInterface {
 
 	private List<ShoppingTrip> shoppingTrips;
 	private int recommendedProductID = -1;
-	private boolean hasUpdated;
-	
+	private boolean anonymous;
+
 	/**
-	 * @param customerId		id provided by database
+	 * @param customerID		id provided by database
 	 * @param firstName			name of customer
 	 * @param lastName			name of customer
 	 * @param shoppingTrips 	trips of customer
 	 */
-	public Customer(int customerId, String firstName, String lastName, 
+	public Customer(int customerID, String firstName, String lastName, 
 			List<ShoppingTrip> shoppingTrips) {
-		this.customerId = customerId;
+		this.customerID = customerID;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.shoppingTrips = shoppingTrips;
-		this.hasUpdated = false;
+		this.anonymous = false;
 	}
-	
+
 	/**
 	 * Constructor used by CustomerDatabaseController when there is an address
-	 * @param customerId		id provided by database
+	 * @param customerID		id provided by database
 	 * @param firstName			name of customer
 	 * @param lastName			name of customer
 	 */
-	public Customer(String firstName, String lastName, int customerId,
-			 String address, int zip) {
-		this.customerId = customerId;
+	public Customer(String firstName, String lastName, int customerID,
+			 String address, int zip, boolean anonymous) {
+		this.customerID = customerID;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.address = address;
 		this.zip = zip;
+		this.anonymous = anonymous;
 	}
 
 
@@ -69,13 +70,12 @@ public class Customer extends Observable implements UserInterface {
 	 * @param gender
 	 * @param age
 	 * @param numberOfPersonsInHousehold
-	 * @param shoppingTrips
 	 */
 	public Customer(String firstName, String lastName, int customerId, String address, int zip, String gender,
-					int age, int numberOfPersonsInHousehold) {
+					int age, int numberOfPersonsInHousehold, boolean anonymous) {
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.customerId = customerId;
+		this.customerID = customerId;
 
 		// Input validation
 		if (address != null)
@@ -88,17 +88,21 @@ public class Customer extends Observable implements UserInterface {
             this.age = age;
 		if (numberOfPersonsInHousehold != 0)
             this.numberOfPersonsInHousehold = numberOfPersonsInHousehold;
+
+		// Is a primitive and does not need a check
+		this.anonymous = anonymous;
 	}
 
 	/**
 	 * @param firstName			name of customer
 	 * @param lastName			name of customer
-	 * @param customerId		id provided by database
+	 * @param customerID		id provided by database
 	 */
-	public Customer(String firstName, String lastName, int customerId) { 
+	public Customer(String firstName, String lastName, int customerID) { 
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.customerId = customerId;
+		this.customerID = customerID;
+		this.anonymous = false;
 	}
 	
 	/**
@@ -111,11 +115,11 @@ public class Customer extends Observable implements UserInterface {
 	}
 
 	public int getUserId() {
-		return customerId;
+		return customerID;
 	}
 
 	public void setUserId(int userId) {
-		this.customerId = userId;
+		this.customerID = userId;
 	}
 
 	public String getFirstName() {
@@ -145,7 +149,7 @@ public class Customer extends Observable implements UserInterface {
 	public int getRecommendedProductID() {
 		return this.recommendedProductID;
 	}
-	
+
 	/**
 	 *  The recommendation is based on shopping trips stored in the database and 
 	 *  gives the recommendation based on to occasions:
@@ -171,7 +175,13 @@ public class Customer extends Observable implements UserInterface {
 		List<ShoppingTrip> allTrips = stdc.retrieveAllShoppingTrips();
 		
 		// List of all shopping trips for this customer	
-		List<ShoppingTrip> customerTrips = stdc.retrieveAllShoppingTripsForCustomer(this.customerId);
+		List<ShoppingTrip> customerTrips = stdc.retrieveAllShoppingTripsForCustomer(this.customerID);
+
+		// PRINT
+		System.out.println(allTrips.size() + " all trips size");
+		System.out.println(customerTrips.size() + " customer all trips size, customerID: " + this.customerID);
+		
+		
 		
 		// Amount of customers (registered)
 		int countCustomers = cdc.countCustomers();
@@ -185,7 +195,6 @@ public class Customer extends Observable implements UserInterface {
 		int[] productsBoughtInTotal = new int[amountOfProducts];
 		
 		// Updating the productsBoughtInTotal based on all shopping trips
-		System.out.println("alltrips size in recommendation " + allTrips.size());
 		if (allTrips.size() == 0) return -1;
 		
 		for (ShoppingTrip st : allTrips) {
@@ -376,12 +385,11 @@ public class Customer extends Observable implements UserInterface {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Customer customer = (Customer) o;
-		return customerId == customer.customerId &&
+		return customerID == customer.customerID &&
 				zip == customer.zip &&
 				age == customer.age &&
 				numberOfPersonsInHousehold == customer.numberOfPersonsInHousehold &&
 				recommendedProductID == customer.recommendedProductID &&
-				hasUpdated == customer.hasUpdated &&
 				Objects.equals(firstName, customer.firstName) &&
 				Objects.equals(lastName, customer.lastName) &&
 				Objects.equals(address, customer.address) &&
@@ -392,7 +400,16 @@ public class Customer extends Observable implements UserInterface {
 	@Override
 	public int hashCode() {
 
-		return Objects.hash(customerId, firstName, lastName, address, zip, gender, age, numberOfPersonsInHousehold, shoppingTrips, recommendedProductID, hasUpdated);
+		return Objects.hash(customerID, firstName, lastName, address, zip, gender, age, numberOfPersonsInHousehold, shoppingTrips, recommendedProductID);
+	}
+
+	public boolean getAnonymous() {
+		return this.anonymous;
+	}
+
+	public void setAnonymous(boolean anonymous) {
+		this.anonymous = anonymous;
 	}
 }
+
 
