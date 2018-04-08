@@ -24,6 +24,25 @@ public class Persister {
 	public static final String CUSTOMER = "tdt4140.gr1864.app.core.Customer";
 	public static final String RECEIPT = "tdt4140.gr1864.app.core.Receipt";
 	
+	/* Used for singleton design */
+	private static Persister persister;
+	
+	/**
+	 * Private constructor for singleton design-pattern
+	 */
+	private Persister() {}
+	
+	/**
+	 * Retrieves a Persister object based on singleton design-pattern
+	 * @return Persister object
+	 */
+	public static Persister init() {
+		if (persister == null) {
+			persister = new Persister();
+		}
+		return persister;
+	}
+	
 	/**
 	 * Calls correct function to persist changes that were serialized
 	 * @param object	Model object to persist
@@ -31,7 +50,7 @@ public class Persister {
 	 * @param method	Persist-method to perform (CRUD)
 	 */
 	@SuppressWarnings("rawtypes")
-	public static void persist(Object object, Class c, int method) {
+	public void persist(Object object, Class c, int method) {
 
 		switch(c.getName()) {
 		case SHOPPING_TRIP:
@@ -43,9 +62,9 @@ public class Persister {
 		}
 	
 		switch(method) {
-			case POST: 		Persister.create(object); break;
-			case PUT: 		Persister.update(object); break;
-			case DELETE: 	Persister.delete((Model) object); break;
+			case POST: 		create(object); break;
+			case PUT: 		update(object); break;
+			case DELETE: 	delete((Model) object); break;
 		}
 	}
 
@@ -53,7 +72,7 @@ public class Persister {
 	 * Creates object in database
 	 * @param object
 	 */
-	public static void create(Object object) {
+	private void create(Object object) {
 		controller.create(object);
 	}
 	
@@ -61,7 +80,7 @@ public class Persister {
 	 * Updates object in database
 	 * @param object
 	 */
-	public static void update(Object object) {
+	private void update(Object object) {
 		controller.update(object);
 	}
 
@@ -69,7 +88,7 @@ public class Persister {
 	 * Deleted object from database
 	 * @param object
 	 */
-	public static void delete(Model object) {
+	private void delete(Model object) {
 		controller.delete(object.getID());
 	}
 }

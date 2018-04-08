@@ -23,7 +23,30 @@ public class Serializer {
 	/* Used for Classes that implements Model-framework for streamlined ID */
 	private Model modelObject;
 	private Object object;
+	
+	/* Used for singleton design */
+	private static Serializer serializer;
+	
+	/* Used for persisting objects to/from database */
+	private Persister persister = Persister.init();
 
+	/**
+	 * Private constructor for singleton design
+	 */
+	private Serializer() {}
+	
+	/**
+	 * Retrieves a Serializer object based on singleton design-pattern
+	 * @return Serializer object
+	 */
+	public static Serializer init() {
+		if (serializer == null) {
+			serializer = new Serializer();
+		}
+		return serializer;
+	}
+	
+	
 	/**
 	 * Deserializes JSON data from reader into POJO. Does handle non-POJO models 
 	 * based on the objects class. Further calls functionality in persistence-layer 
@@ -41,7 +64,7 @@ public class Serializer {
 			case "ShoppingTrip": modelObject = deserializeShoppingTrip(reader); break;
 			default: modelObject = genericDeserialize(reader, c); break;
 		}
-		Persister.persist(object, c, method);
+		persister.persist(object, c, method);
 	}
 	
 	/**
@@ -51,7 +74,7 @@ public class Serializer {
 	 * @return object
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Model genericDeserialize(BufferedReader reader, Class c) {
+	private Model genericDeserialize(BufferedReader reader, Class c) {
 		modelObject = null;
 		ObjectMapper mapper = new ObjectMapper();
 		
