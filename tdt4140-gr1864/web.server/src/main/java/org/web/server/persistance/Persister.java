@@ -31,7 +31,7 @@ public class Persister {
 	 * @param method	Persist-method to perform (CRUD)
 	 */
 	@SuppressWarnings("rawtypes")
-	public static void persist(Model object, Class c, int method) {
+	public static void persist(Object object, Class c, int method) {
 
 		switch(c.getName()) {
 		case SHOPPING_TRIP:
@@ -45,7 +45,7 @@ public class Persister {
 		switch(method) {
 			case POST: 		Persister.create(object); break;
 			case PUT: 		Persister.update(object); break;
-			case DELETE: 	Persister.delete(object); break;
+			case DELETE: 	Persister.delete((Model) object); break;
 		}
 	}
 
@@ -53,7 +53,7 @@ public class Persister {
 	 * Creates object in database
 	 * @param object
 	 */
-	public static void create(Model object) {
+	public static void create(Object object) {
 		controller.create(object);
 	}
 	
@@ -61,7 +61,7 @@ public class Persister {
 	 * Updates object in database
 	 * @param object
 	 */
-	public static void update(Model object) {
+	public static void update(Object object) {
 		controller.update(object);
 	}
 
