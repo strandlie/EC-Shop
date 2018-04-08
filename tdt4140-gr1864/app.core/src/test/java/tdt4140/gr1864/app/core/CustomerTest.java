@@ -181,7 +181,6 @@ public class CustomerTest {
 		Assert.assertEquals(expectedProductID, c2.getRecommendedProductID());
 	}
 
-	// test for customer anonymous
 	@Test
 	public void YTestGiveRecommendationWhenCustomerAreAnonymousExpectProductIDEqualMostPopular() {
 		int expectedProductID = 25;
@@ -190,7 +189,6 @@ public class CustomerTest {
 		Assert.assertEquals(expectedProductID, c1.getRecommendedProductID());
 	}
 	
-	// test for some shoppingtrips anonymous
 	@Test
 	public void ZTestGiveRecommendationWhenShoppingTripsAreAnonymousExpectProductIDEqual25() {
 		int expectedProductID = 1;
