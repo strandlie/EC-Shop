@@ -3,14 +3,23 @@ package tdt4140.gr1864.app.core;
 import java.util.List;
 import java.util.Observable;
 
+import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.CustomerDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
 import tdt4140.gr1864.app.core.interfaces.UserInterface;
 
 public class Customer extends Observable implements UserInterface {
 
-	private int customerID;
+	// Controller for handling database request for customer
+	CustomerDatabaseController cdc = new CustomerDatabaseController();
+	
+	// Controller for handling database requests shopping trip
+	ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
+	
+	// Controller for retrieving actions from database
+	ActionDatabaseController adc = new ActionDatabaseController();
 
+	private int customerID;
 	private String firstName;
 	private String lastName;
 	/* has a default value for Customers without demographic data */
@@ -19,10 +28,7 @@ public class Customer extends Observable implements UserInterface {
 
 	private List<ShoppingTrip> shoppingTrips;
 	private int recommendedProductID = -1;
-<<<<<<< Updated upstream
 	private boolean anonymous;
-=======
->>>>>>> Stashed changes
 	
 	/**
 	 * @param customerID		id provided by database
@@ -32,18 +38,11 @@ public class Customer extends Observable implements UserInterface {
 	 */
 	public Customer(int customerID, String firstName, String lastName, 
 			List<ShoppingTrip> shoppingTrips) {
-<<<<<<< Updated upstream
 		this.customerID = customerID;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.shoppingTrips = shoppingTrips;
 		this.anonymous = false;
-=======
-		this.customerID = customerId;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.shoppingTrips = shoppingTrips;
->>>>>>> Stashed changes
 	}
 	
 	/**
@@ -52,15 +51,9 @@ public class Customer extends Observable implements UserInterface {
 	 * @param firstName			name of customer
 	 * @param lastName			name of customer
 	 */
-<<<<<<< Updated upstream
 	public Customer(String firstName, String lastName, int customerID,
 			 String address, int zip, boolean anonymous) {
 		this.customerID = customerID;
-=======
-	public Customer(String firstName, String lastName, int customerId,
-			 String address, int zip) {
-		this.customerID = customerId;
->>>>>>> Stashed changes
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.address = address;
@@ -76,12 +69,8 @@ public class Customer extends Observable implements UserInterface {
 	public Customer(String firstName, String lastName, int customerID) { 
 		this.firstName = firstName;
 		this.lastName = lastName;
-<<<<<<< Updated upstream
 		this.customerID = customerID;
 		this.anonymous = false;
-=======
-		this.customerID = customerId;
->>>>>>> Stashed changes
 	}
 	
 	/**
@@ -92,45 +81,7 @@ public class Customer extends Observable implements UserInterface {
 		this.firstName = firstName;
 		this.lastName = lastName;
 	}
-<<<<<<< Updated upstream
-=======
 
-	public int getUserId() {
-		return customerID;
-	}
-
-	public void setUserId(int userId) {
-		this.customerID = userId;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-	
-	public List<ShoppingTrip> getShoppingTrips() {
-		return shoppingTrips;
-	}
-
-	public void setShoppingTrips(List<ShoppingTrip> shoppingTrips) {
-		this.shoppingTrips = shoppingTrips;
-	}
-	
-	public int getRecommendedProductID() {
-		return this.recommendedProductID;
-	}
->>>>>>> Stashed changes
 	
 	/**
 	 *  The recommendation is based on shopping trips stored in the database and 
@@ -143,31 +94,16 @@ public class Customer extends Observable implements UserInterface {
 	 *      for all customers and the total amount of bought products for this customer.
 	 *      Also, this difference is only relevant for when the total average is larger than 
 	 *      the customers total amount of bought products
-	 * @return productID	The ID of the product that is recommended to the customer
+	 * 
+	 * Sets the ID of the product that is recommended to the customer
 	 */
 	
-	public int giveRecommendation() {
-		// Controller for handling database request for customer
-		CustomerDatabaseController cdc = new CustomerDatabaseController();
-		
-		// Controller for handling database requests shopping trip
-		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
-		
+	public void giveRecommendation() {
 		// List of all shopping trips for all customers
 		List<ShoppingTrip> allTrips = stdc.retrieveAllShoppingTrips();
 		
 		// List of all shopping trips for this customer	
 		List<ShoppingTrip> customerTrips = stdc.retrieveAllShoppingTripsForCustomer(this.customerID);
-<<<<<<< Updated upstream
-=======
-		
-		// PRINT
-		System.out.println(allTrips.size() + " all trips size");
-		System.out.println(customerTrips.size() + " customer all trips size, customerID: " + this.customerID);
-		
-		
-		
->>>>>>> Stashed changes
 		
 		// Amount of customers (registered)
 		int countCustomers = cdc.countCustomers();
@@ -181,15 +117,24 @@ public class Customer extends Observable implements UserInterface {
 		int[] productsBoughtInTotal = new int[amountOfProducts];
 		
 		// Updating the productsBoughtInTotal based on all shopping trips
-		if (allTrips.size() == 0) return -1;
-		
+		if (allTrips.size() == 0) this.recommendedProductID = 0;
+
 		for (ShoppingTrip st : allTrips) {
-			for (Action action : st.getActions()) {
-				/* 
-				 * Adds to total bought products (by 1) by converting the 1-indexed
-				 * productID to be 0-indexed (int[]-index != dbTable-index)
-				 */
-				productsBoughtInTotal[action.getProduct().getID()-1]++;
+			// All actions for a shoppingtrip
+			List<Action> currentActions = st.getActions();
+			if (currentActions != null && currentActions.size() > 0) {
+				for (Action action : currentActions) {
+					/* 
+					 * Adds to the amount of bought products in total (by 1) by converting the 1-indexed
+					 * productID to be 0-indexed (int[]'s index == dbTable's index - 1)
+					 */
+					if (action.getActionType() == Action.DROP) {
+						productsBoughtInTotal[action.getProduct().getID()-1]--;
+						
+					} else if (action.getActionType() == Action.PICK_UP) {
+						productsBoughtInTotal[action.getProduct().getID()-1]++;
+					}
+				}
 			}
 		}
 		
@@ -198,17 +143,8 @@ public class Customer extends Observable implements UserInterface {
 		 * will be set to the most popular one among all customers' shopping trips
 		 */
 		if (customerTrips.size() == 0) {
-			int mostAmount = 0;
-			int productID = 0;
-			
-			for (int i = 0; i < amountOfProducts; i++) {
-				if (mostAmount < productsBoughtInTotal[i]) {
-					mostAmount = productsBoughtInTotal[i];
-					productID = i;
-				}
-			}
-			
-			return productID;
+			setMostPopularProductAsRecommended(amountOfProducts, productsBoughtInTotal);
+			return;
 		}
 		
 		/**
@@ -307,9 +243,22 @@ public class Customer extends Observable implements UserInterface {
 		
 		/* 
 		 * Converts back from 0-indexing to 1-indexing
-		 * Adding '++' before the variable increments the productID by 1 before returning.
+		 * Adding '++' before the variable increments the productID by 1 before setting recommended product.
 		 */
-		return ++productID;
+		this.recommendedProductID = ++productID;
+	}
+	
+	private void setMostPopularProductAsRecommended(int amountOfProducts, int[] productsBoughtInTotal) {
+		int mostAmount = 0;
+		int productID = 0;
+		
+		for (int i = 0; i < amountOfProducts; i++) {
+			if (mostAmount < productsBoughtInTotal[i]) {
+				mostAmount = productsBoughtInTotal[i];
+				productID = i;
+			}
+		}
+		this.recommendedProductID = productID;
 	}
 	
 	public int getZip() {

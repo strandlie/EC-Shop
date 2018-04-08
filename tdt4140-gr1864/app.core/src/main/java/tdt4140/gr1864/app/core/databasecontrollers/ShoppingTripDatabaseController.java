@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import tdt4140.gr1864.app.core.Action;
 import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
 
@@ -78,11 +79,12 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 	 */
 	@Override
 	public void update(Object object) {
-		ShoppingTrip trip = this.objectIsShoppingTrip(object);
+		ShoppingTrip trip = this.objectIsShoppingTrip(object);		
 		String sql = "UPDATE shopping_trip "
 					+ "SET customer_id=?, shop_id=?, charged=?, anonymous=? "
 					+ "WHERE shopping_trip_id=?";
 		try {
+			
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, trip.getCustomer().getUserId());
@@ -105,7 +107,6 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 	public ShoppingTrip retrieve(int id) {
 		CustomerDatabaseController cdc = new CustomerDatabaseController();
 		ShopDatabaseController sdc = new ShopDatabaseController();
-		ActionDatabaseController adc = new ActionDatabaseController();
 		
 		String sql = "SELECT * "
 					+ "FROM shopping_trip "
@@ -129,7 +130,6 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 					sdc.retrieve(rs.getInt("shop_id")),
 					rs.getBoolean(4),
 					rs.getBoolean("anonymous"));
-			trip.setActions(adc.retrieveAll(tripID));
 			
 			connection.close();
 			return trip;

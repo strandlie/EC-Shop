@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tdt4140.gr1864.app.core.Customer;
-import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
 
 public class CustomerDatabaseController implements DatabaseCRUD {

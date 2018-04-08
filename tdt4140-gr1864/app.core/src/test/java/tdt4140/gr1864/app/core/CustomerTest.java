@@ -9,6 +9,7 @@ import org.junit.*;
 
 import tdt4140.gr1864.app.core.database.DatabaseWiper;
 import tdt4140.gr1864.app.core.database.TestDataLoader;
+import tdt4140.gr1864.app.core.databasecontroller.ShopDatabaseControllerTest;
 import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.CustomerDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
@@ -28,6 +29,7 @@ public class CustomerTest {
 	Customer c1, c2, c3;
 	Product p1, p2, p3;
 	Shop s1;
+	Action a1, a2;
 	
 	@BeforeClass
 	public static void createDatabase() {
@@ -51,12 +53,32 @@ public class CustomerTest {
 		c3 = new Customer(c3.getFirstName(), c3.getLastName(), cdc.create(c3));
 		
 		t1 = new ShoppingTrip(c1, s1, true);
-		t2 = new ShoppingTrip(c1, s1, true);
-		t3 = new ShoppingTrip(c2, s1, true);
+		t2 = new ShoppingTrip(c2, s1, true);
+		t3 = new ShoppingTrip(c3, s1, true);
+
+		p1 = new Product("Produt1", 1.0);
+		p1 = new Product(pdc.create(p1), p1.getName(), p1.getPrice());
+		p2 = new Product("Produt2", 2.0);
+		p2 = new Product(pdc.create(p2), p2.getName(), p2.getPrice());
+		p3 = new Product("Produt3", 3.0);
+		p3 = new Product(pdc.create(p3), p3.getName(), p3.getPrice());
 		
-		p1 = new Product("chicken", 12);
-		p2 = new Product("beef", 32);
-		p3 = new Product("fish", 122);
+		t1 = new ShoppingTrip(c1, s1, true);
+		t1 = new ShoppingTrip(stdc.create(t1), c1, s1, true, false);
+		List<ShoppingTrip> trips = new ArrayList<ShoppingTrip>();
+		trips.add(t1);
+		c1.setShoppingTrips(trips);		
+		cdc.update(c1);
+
+		//a1 = new Action(String timestamp, int actiontype, Product prod, Shoppingtrip trip)
+		a1 = new Action("1", 1, p1, t1);
+		adc.create(a1);
+		a1 = new Action("2", 1, p2, t1);
+		adc.create(a1);
+		a1 = new Action("3", 1, p2, t1);
+		adc.create(a1);
+		a1 = new Action("4", 1, p3, t1);
+		adc.create(a1);
 	}
 
 	/**
@@ -146,36 +168,16 @@ public class CustomerTest {
 	}
 	
 	@Test
-	public void testGiveRecommendationWhenBought() {
-		t1 = new ShoppingTrip(stdc.create(t1), c1, s1, true, false);
-		t1 = new ShoppingTrip(t1.getShoppingTripID(), c2, s1, true, false);
-		t1.setActions(tdl.getActions());
-		stdc.update(t1);
-		
-		t2 = new ShoppingTrip(stdc.create(t2), c3, s1, true, false);
-		t2 = new ShoppingTrip(t2.getShoppingTripID(), c3, s1, true, false);
-		t2.setActions(tdl.getActions());
-		stdc.update(t2);
-		
-		/*
-		t3 = new ShoppingTrip(stdc.create(t3), c3, s1, true);
-		t3 = new ShoppingTrip(t3.getShoppingTripID(), c3, s1, true);
-		stdc.update(t3);
-		t3 = stdc.retrieve(t3.getShoppingTripID());
-		*/
-		
-		System.out.println(stdc.retrieve(t1.getShoppingTripID()).getActions().size() + " t1's trip amount of actions");
-
-		
-		System.out.println(c1.giveRecommendation() + " recommendation for c1");
-		
-		System.out.println(c2.giveRecommendation() + " recommendation for c2");
-		
-		//Assert.assertEquals(1, c2.getRecommendedProductID());
+	public void WTestGiveRecommendationBoughtExpectProductIDEqual28() {
+		int expectedProductID = 28;
+		c1.giveRecommendation();
+		Assert.assertEquals(expectedProductID, c1.getRecommendedProductID());
 	}
 	
 	@Test
-	public void testGiveRecommendationWhenNotBought() {
-		System.out.println(c3.giveRecommendation() + " recommendation for c3 not bought");
+	public void XTestGiveRecommendationWhenNotBoughtExpectMostPopularEqualOne() {
+		int expectedProductID = 1;
+		c2.giveRecommendation();
+		Assert.assertEquals(expectedProductID, c2.getRecommendedProductID());
 	}
 }
