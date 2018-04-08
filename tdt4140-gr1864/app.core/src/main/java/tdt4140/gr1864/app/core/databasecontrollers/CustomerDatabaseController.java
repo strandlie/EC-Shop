@@ -79,10 +79,11 @@ public class CustomerDatabaseController implements DatabaseCRUD {
     public Customer retrieve(int customerID) {
 		String sql = "SELECT * "
 					+ "FROM customer "
-					+ "WHERE customer_id = " + customerID;
+					+ "WHERE customer_id=?";
         try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
             statement = connection.prepareStatement(sql);
+            statement.setInt(1, customerID);
             ResultSet rs = statement.executeQuery();
 
             // Returned nothing
