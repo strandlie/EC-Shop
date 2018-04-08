@@ -98,13 +98,13 @@ public class CustomerDatabaseController implements DatabaseCRUD {
             Customer user = new Customer(
             		rs.getString("first_name"), 
             		rs.getString("last_name"), 
-            		rs.getInt("customer_id"),
             		rs.getString("address"),
             		rs.getInt("zip"),
 					rs.getString("gender"),
 					rs.getInt("age"),
 					rs.getInt("num_persons_in_household"),
-            		rs.getBoolean("anonymous")
+            		rs.getBoolean("anonymous"),
+					rs.getInt("customer_id")
             		);
             statement.close();
             return user;
@@ -132,13 +132,13 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 				Customer customer = new Customer(
 						rs.getString("first_name"),
 						rs.getString("last_name"),
-						rs.getInt("customer_id"),
 						rs.getString("address"),
 						rs.getInt("zip"),
 						rs.getString("gender"),
 						rs.getInt("age"),
 						rs.getInt("num_persons_in_household"),
-						rs.getBoolean("anonymous"));
+						rs.getBoolean("anonymous"),
+						rs.getInt("customer_id"));
     			customers.add(customer);
     		}
     		connection.close();

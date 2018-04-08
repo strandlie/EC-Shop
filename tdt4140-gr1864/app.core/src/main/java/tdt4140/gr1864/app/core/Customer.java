@@ -62,7 +62,6 @@ public class Customer extends Observable implements UserInterface {
 	/**
 	 * Constructor used when user have added additional information. Checks for each field being not null
 	 * Thsi is for not having exponentially many constructors
-	 * @param customerId
 	 * @param firstName
 	 * @param lastName
 	 * @param address
@@ -71,11 +70,10 @@ public class Customer extends Observable implements UserInterface {
 	 * @param age
 	 * @param numberOfPersonsInHousehold
 	 */
-	public Customer(String firstName, String lastName, int customerId, String address, int zip, String gender,
+	public Customer(String firstName, String lastName, String address, int zip, String gender,
 					int age, int numberOfPersonsInHousehold, boolean anonymous) {
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.customerID = customerId;
 
 		// Input validation
 		if (address != null)
@@ -91,6 +89,42 @@ public class Customer extends Observable implements UserInterface {
 
 		// Is a primitive and does not need a check
 		this.anonymous = anonymous;
+	}
+
+	/**
+	 * Constructor used when user have added additional information. Checks for each field being not null
+	 * This is for not having exponentially many constructors.
+	 * Also includes customerid from database
+	 * @param firstName
+	 * @param lastName
+	 * @param address
+	 * @param zip
+	 * @param gender
+	 * @param age
+	 * @param numberOfPersonsInHousehold
+	 * @param customerID CustomerId provided from database
+	 */
+	public Customer(String firstName, String lastName, String address, int zip, String gender,
+					int age, int numberOfPersonsInHousehold, boolean anonymous, int customerID) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+
+		// Input validation
+		if (address != null)
+			this.address = address;
+		if (zip != 0)
+			this.zip = zip;
+		if (gender != null)
+			this.gender = gender;
+		if (age != 0)
+			this.age = age;
+		if (numberOfPersonsInHousehold != 0)
+			this.numberOfPersonsInHousehold = numberOfPersonsInHousehold;
+
+		// Is a primitive and does not need a check
+		this.anonymous = anonymous;
+
+		this.customerID = customerID;
 	}
 
 	/**

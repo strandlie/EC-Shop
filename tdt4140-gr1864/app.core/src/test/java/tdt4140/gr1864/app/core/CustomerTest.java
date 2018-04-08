@@ -131,8 +131,8 @@ public class CustomerTest {
 	 */
 	@Test
 	public void testGetAddress() {
-		c1 = new Customer("Ben", "Len", 2, "NTNU", 7047,
-				"Unspecified", 44, 3, true);
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2);
 		assertEquals(c1.getAddress(), "NTNU");
 	}
 
@@ -141,16 +141,16 @@ public class CustomerTest {
 	 */
 	@Test
 	public void testSetAddress() {
-		c1 = new Customer("Ben", "Len", 2, "NTNU", 7047,
-				"Unspecified", 44, 3, true);
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2);
 		c1.setAddress("UiB");
 		assertEquals(c1.getAddress(), "UiB");
 	}
 
 	@Test
 	public void testGetZip() {
-		c1 = new Customer("Ben", "Len", 2, "NTNU", 7047,
-				"Unspecified", 44, 3, true);
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2);
 		assertEquals(c1.getZip(), 7047);
 	}
 
@@ -159,16 +159,16 @@ public class CustomerTest {
 	 */
 	@Test
 	public void testSetZip() {
-		c1 = new Customer("Ben", "Len", 2, "NTNU", 7047,
-				"Unspecified", 44, 3, true);
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2);
 		c1.setZip(0001);
 		assertEquals(c1.getZip(), 0001);
 	}
 
 	@Test
 	public void testGetGender() {
-		c1 = new Customer("Ben", "Len", 2, "NTNU", 7047,
-				"Unspecified", 44, 3, true);
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2);
 		assertEquals(c1.getGender(), "Unspecified");
 	}
 
@@ -177,16 +177,16 @@ public class CustomerTest {
 	 */
 	@Test
 	public void testSetGender() {
-		c1 = new Customer("Ben", "Len", 2, "NTNU", 7047,
-				"Unspecified", 44, 3, true);
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2);
 		c1.setGender("Male");
 		assertEquals(c1.getGender(), "Male");
 	}
 
 	@Test
 	public void testGetAge() {
-		c1 = new Customer("Ben", "Len", 2, "NTNU", 7047,
-				"Unspecified", 44, 3, true);
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2);
 		assertEquals(c1.getAge(), 44);
 	}
 
@@ -195,16 +195,16 @@ public class CustomerTest {
 	 */
 	@Test
 	public void testSetAge() {
-		c1 = new Customer("Ben", "Len", 2, "NTNU", 7047,
-				"Unspecified", 44, 3, true);
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2);
 		c1.setAge(50);
 		assertEquals(c1.getAge(), 50);
 	}
 
 	@Test
 	public void testGetLastName() {
-		c1 = new Customer("Ben", "Len", 2, "NTNU", 7047,
-				"Unspecified", 44, 3, true);
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2);
 		assertEquals(c1.getLastName(), "Len");
 	}
 
@@ -213,16 +213,16 @@ public class CustomerTest {
 	 */
 	@Test
 	public void testSetLastName() {
-		c1 = new Customer("Ben", "Len", 2, "NTNU", 7047,
-				"Unspecified", 44, 3, true);
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2);
 		c1.setLastName("Knudsen");
 		assertEquals(c1.getLastName(), "Knudsen");
 	}
 
 	@Test
 	public void testGetNumberOfPersonsInHousehold() {
-		c1 = new Customer("Ben", "Len", 2, "NTNU", 7047,
-				"Unspecified", 44, 3, true);
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2);
 		assertEquals(c1.getNumberOfPersonsInHousehold(), 3);
 	}
 
@@ -231,8 +231,8 @@ public class CustomerTest {
 	 */
 	@Test
 	public void testSetNumberOfPersonsInHousehold() {
-		c1 = new Customer("Ben", "Len", 2, "NTNU", 7047,
-				"Unspecified", 44, 3, true);
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2);
 		c1.setNumberOfPersonsInHousehold(1);
 		assertEquals(c1.getNumberOfPersonsInHousehold(), 1);
 	}
