@@ -59,7 +59,7 @@ public class CustomerDatabaseControllerTest {
 		
 		Assert.assertEquals("Kari", c2.getFirstName());
 		Assert.assertEquals("Hansen",  c2.getLastName());
-		Assert.assertEquals(false, c2.getAddress());
+		Assert.assertEquals(null, c2.getAddress());
 	}
 	
 	@Test

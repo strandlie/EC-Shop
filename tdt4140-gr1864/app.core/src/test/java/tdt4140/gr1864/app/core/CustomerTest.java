@@ -237,7 +237,10 @@ public class CustomerTest {
 		assertEquals(c1.getNumberOfPersonsInHousehold(), 1);
 	}
 
-	@Test
+	/**
+	 * This is not yet implemented and should therefore not be run
+	 */
+	//@Test
 	public void testGiveRecommendationWhenBought() {
 		t1 = new ShoppingTrip(stdc.create(t1), c1, s1, true, false);
 		t1 = new ShoppingTrip(t1.getShoppingTripID(), c2, s1, true, false);
@@ -265,8 +268,11 @@ public class CustomerTest {
 		
 		//Assert.assertEquals(1, c2.getRecommendedProductID());
 	}
-	
-	@Test
+
+	/**
+	 * This is not yet implemented and should therefore not be run
+	 */
+	//@Test
 	public void testGiveRecommendationWhenNotBought() {
 		System.out.println(c3.giveRecommendation() + " recommendation for c3 not bought");
 	}
