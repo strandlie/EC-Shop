@@ -20,8 +20,6 @@ import tdt4140.gr1864.app.core.interfaces.Model;
 public class Serializer {
 
 	/* global objects used for tests */
-	/* Used for Classes that implements Model-framework for streamlined ID */
-	private Model modelObject;
 	private Object object;
 	
 	/* Used for singleton design */
@@ -61,8 +59,8 @@ public class Serializer {
 		/* For classes that needs more advanced serializing */
 		switch(c.getName()) {
 			case "Receipt": object = deserializeReceipt(reader); break;
-			case "ShoppingTrip": modelObject = deserializeShoppingTrip(reader); break;
-			default: modelObject = genericDeserialize(reader, c); break;
+			case "ShoppingTrip": object = deserializeShoppingTrip(reader); break;
+			default: object = genericDeserialize(reader, c); break;
 		}
 		persister.persist(object, c, method);
 	}
@@ -75,15 +73,14 @@ public class Serializer {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private Model genericDeserialize(BufferedReader reader, Class c) {
-		modelObject = null;
 		ObjectMapper mapper = new ObjectMapper();
 		
 		try {
-			modelObject = (Model) mapper.readValue(reader, c);
+			object = (Model) mapper.readValue(reader, c);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return modelObject;
+		return (Model) object;
 	}
 	
 	/**
@@ -153,10 +150,6 @@ public class Serializer {
 	}
 	
 	/* Used by tests */
-	public Model getModelObject() {
-		return modelObject;
-	}
-
 	public Object getObject() {
 		return object;
 	}
