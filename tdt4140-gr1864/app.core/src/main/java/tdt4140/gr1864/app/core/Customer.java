@@ -120,8 +120,10 @@ public class Customer extends Observable implements UserInterface {
 		if (allTrips.size() == 0) this.recommendedProductID = 0;
 
 		for (ShoppingTrip st : allTrips) {
-			// All actions for a shoppingtrip
+			
 			List<Action> currentActions = st.getActions();
+			
+			// Checks for empty action lists
 			if (currentActions != null && currentActions.size() > 0) {
 				for (Action action : currentActions) {
 					/* 
@@ -248,6 +250,11 @@ public class Customer extends Observable implements UserInterface {
 		this.recommendedProductID = ++productID;
 	}
 	
+	/**
+	 * A private method only used by giveRecommendation() 
+	 * @param amountOfProducts
+	 * @param productsBoughtInTotal
+	 */
 	private void setMostPopularProductAsRecommended(int amountOfProducts, int[] productsBoughtInTotal) {
 		int mostAmount = 0;
 		int productID = 0;

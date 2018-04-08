@@ -169,7 +169,7 @@ public class CustomerTest {
 	
 	@Test
 	public void WTestGiveRecommendationBoughtExpectProductIDEqual28() {
-		int expectedProductID = 28;
+		int expectedProductID = 34;
 		c1.giveRecommendation();
 		Assert.assertEquals(expectedProductID, c1.getRecommendedProductID());
 	}
@@ -177,6 +177,25 @@ public class CustomerTest {
 	@Test
 	public void XTestGiveRecommendationWhenNotBoughtExpectMostPopularEqualOne() {
 		int expectedProductID = 1;
+		c2.giveRecommendation();
+		Assert.assertEquals(expectedProductID, c2.getRecommendedProductID());
+	}
+
+	// test for customer anonymous
+	@Test
+	public void YTestGiveRecommendationWhenCustomerAreAnonymousExpectProductIDEqualMostPopular() {
+		int expectedProductID = 25;
+		c1.setAnonymous(true);
+		c1.giveRecommendation();
+		Assert.assertEquals(expectedProductID, c1.getRecommendedProductID());
+	}
+	
+	// test for some shoppingtrips anonymous
+	@Test
+	public void ZTestGiveRecommendationWhenShoppingTripsAreAnonymousExpectProductIDEqual25() {
+		int expectedProductID = 1;
+		t1.setAnonymous(true);
+		stdc.update(t1);
 		c2.giveRecommendation();
 		Assert.assertEquals(expectedProductID, c2.getRecommendedProductID());
 	}

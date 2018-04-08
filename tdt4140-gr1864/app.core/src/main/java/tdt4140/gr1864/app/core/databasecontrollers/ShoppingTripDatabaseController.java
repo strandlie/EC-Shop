@@ -151,10 +151,11 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 		ShoppingTrip trip;
 		List<ShoppingTrip> trips = new ArrayList<>();
 		
-		String sql = "SELECT * FROM shopping_trip";
+		String sql = "SELECT * FROM shopping_trip WHERE anonymous=?";
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql);
+			statement.setBoolean(1, false);
 			ResultSet rs = statement.executeQuery();
 			
 			while(rs.next()) {
