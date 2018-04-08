@@ -39,7 +39,7 @@ public class Serializer {
 		switch(c.getName()) {
 			case "Receipt": object = deserializeReceipt(reader); break;
 			case "ShoppingTrip": modelObject = deserializeShoppingTrip(reader); break;
-			default: object = genericDeserializer(reader, c); break;
+			default: modelObject = genericDeserialize(reader, c); break;
 		}
 		Persister.persist(object, c, method);
 	}
@@ -51,7 +51,7 @@ public class Serializer {
 	 * @return object
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Model genericDeserializer(BufferedReader reader, Class c) {
+	public Model genericDeserialize(BufferedReader reader, Class c) {
 		modelObject = null;
 		ObjectMapper mapper = new ObjectMapper();
 		
