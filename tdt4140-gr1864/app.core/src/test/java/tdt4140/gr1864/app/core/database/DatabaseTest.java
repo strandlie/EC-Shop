@@ -73,8 +73,8 @@ public class DatabaseTest {
 	         connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 	         
 	         statement = connection.createStatement();
-	         String sql = "INSERT INTO customer (customer_id, first_name, last_name) " +
-	                        "VALUES (-1, 'Ben', 'Ten');"; 
+	         String sql = "INSERT INTO customer (customer_id, first_name, last_name, anonymous) " +
+	                        "VALUES (-1, 'Ben', 'Ten', 'false');"; 
 	         statement.executeUpdate(sql);
 	         statement.close();
 	         connection.close();

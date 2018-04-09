@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import tdt4140.gr1864.app.core.Action;
 import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
 
@@ -59,11 +60,12 @@ public class ShoppingTripDatabaseController extends DatabaseController implement
 	 */
 	@Override
 	public void update(Object object) {
-		ShoppingTrip trip = this.objectIsShoppingTrip(object);
+		ShoppingTrip trip = this.objectIsShoppingTrip(object);		
 		String sql = "UPDATE shopping_trip "
 					+ "SET customer_id=?, shop_id=?, charged=?, anonymous=? "
 					+ "WHERE shopping_trip_id=?";
 		try {
+			
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, trip.getCustomer().getID());
@@ -86,7 +88,6 @@ public class ShoppingTripDatabaseController extends DatabaseController implement
 	public ShoppingTrip retrieve(int id) {
 		CustomerDatabaseController cdc = new CustomerDatabaseController();
 		ShopDatabaseController sdc = new ShopDatabaseController();
-		ActionDatabaseController adc = new ActionDatabaseController();
 		
 		String sql = "SELECT * "
 					+ "FROM shopping_trip "
@@ -110,8 +111,6 @@ public class ShoppingTripDatabaseController extends DatabaseController implement
 					sdc.retrieve(rs.getInt("shop_id")),
 					rs.getBoolean(4),
 					rs.getBoolean("anonymous"));
-			trip.setActions(null);
-			
 			connection.close();
 			return trip;
 
@@ -132,10 +131,11 @@ public class ShoppingTripDatabaseController extends DatabaseController implement
 		ShoppingTrip trip;
 		List<ShoppingTrip> trips = new ArrayList<>();
 		
-		String sql = "SELECT * FROM shopping_trip";
+		String sql = "SELECT * FROM shopping_trip WHERE anonymous=?";
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql);
+			statement.setBoolean(1, false);
 			ResultSet rs = statement.executeQuery();
 			
 			while(rs.next()) {
