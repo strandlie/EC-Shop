@@ -37,7 +37,6 @@ public class CustomerTest {
 		viper.wipe();
 	}
 	
-	@Before
 	public void setup() {
 		s1 = new Shop("Kings Road 2", 10);
 		s1 = new Shop(s1.getAddress(),s1.getZip(), sdc.create(s1));
@@ -69,7 +68,6 @@ public class CustomerTest {
 		c1.setShoppingTrips(trips);		
 		cdc.update(c1);
 
-		//a1 = new Action(String timestamp, int actiontype, Product prod, Shoppingtrip trip)
 		a1 = new Action("1", 1, p1, t1);
 		adc.create(a1);
 		a1 = new Action("2", 1, p2, t1);
@@ -84,7 +82,7 @@ public class CustomerTest {
 	 * Test method for {@link tdt4140.gr1864.app.core.Customer#Customer(int, java.lang.String, java.lang.String, java.util.ArrayList)}.
 	 */
 	@Test
-	public void ATestCustomer() {
+	public void testCustomer() {
 		c1 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
 		assertNotEquals(c1, null);
 	}
@@ -93,7 +91,7 @@ public class CustomerTest {
 	 * Test method for {@link tdt4140.gr1864.app.core.Customer#hashCode()}.
 	 */
 	@Test
-	public void BTestHashCode() {
+	public void testHashCode() {
 		c1 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
 		c2 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
 		assertEquals(c1.hashCode(), c2.hashCode());
@@ -103,7 +101,7 @@ public class CustomerTest {
 	 * Test method for {@link tdt4140.gr1864.app.core.Customer#equals(java.lang.Object)}.
 	 */
 	@Test
-	public void CTestEqualsObject() {
+	public void testEqualsObject() {
 		c1 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
 		c2 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
 		assertEquals(c1, c2);
@@ -113,7 +111,7 @@ public class CustomerTest {
 	 * Test method for {@link tdt4140.gr1864.app.core.Customer#getUserId()}.
 	 */
 	@Test
-	public void DTestGetUserId() {
+	public void testGetUserId() {
 		c1 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
 		assertEquals(c1.getUserId(), 1);
 	}
@@ -122,7 +120,7 @@ public class CustomerTest {
 	 * Test method for {@link tdt4140.gr1864.app.core.Customer#setUserId(int)}.
 	 */
 	@Test
-	public void ETestSetUserId() {
+	public void testSetUserId() {
 		c1 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
 		c1.setUserId(2);
 		assertEquals(c1.getUserId(), 2);
@@ -132,7 +130,7 @@ public class CustomerTest {
 	 * Test method for {@link tdt4140.gr1864.app.core.Customer#getFirstName()}.
 	 */
 	@Test
-	public void FTestGetFirstName() {
+	public void testGetFirstName() {
 		c1 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
 		assertEquals(c1.getFirstName(), "Roger");
 	}
@@ -141,7 +139,7 @@ public class CustomerTest {
 	 * Test method for {@link tdt4140.gr1864.app.core.Customer#setFirstName(java.lang.String)}.
 	 */
 	@Test
-	public void GTestSetFirstName() {
+	public void testSetFirstName() {
 		c1 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
 		c1.setFirstName("Benny");
 		assertEquals(c1.getFirstName(), "Benny");
@@ -151,7 +149,7 @@ public class CustomerTest {
 	 * Test method for {@link tdt4140.gr1864.app.core.Customer#getLastName()}.
 	 */
 	@Test
-	public void HTestGetAddress() {
+	public void testGetAddress() {
 		c1 = new Customer("Ben", "Len", "NTNU", 7047,
 				"Unspecified", 44, 3, true, 2);
 		assertEquals(c1.getAddress(), "NTNU");
@@ -161,7 +159,7 @@ public class CustomerTest {
 	 * Test method for {@link tdt4140.gr1864.app.core.Customer#setLastName(java.lang.String)}.
 	 */
 	@Test
-	public void ITestSetAddress() {
+	public void testSetAddress() {
 		c1 = new Customer("Ben", "Len", "NTNU", 7047,
 				"Unspecified", 44, 3, true, 2);
 		c1.setAddress("UiB");
@@ -169,7 +167,7 @@ public class CustomerTest {
 	}
 
 	@Test
-	public void JTestGetZip() {
+	public void testGetZip() {
 		c1 = new Customer("Ben", "Len", "NTNU", 7047,
 				"Unspecified", 44, 3, true, 2);
 		assertEquals(c1.getZip(), 7047);
@@ -179,7 +177,7 @@ public class CustomerTest {
 	 * Test method for {@link tdt4140.gr1864.app.core.Customer#setLastName(java.lang.String)}.
 	 */
 	@Test
-	public void KTestSetZip() {
+	public void testSetZip() {
 		c1 = new Customer("Ben", "Len", "NTNU", 7047,
 				"Unspecified", 44, 3, true, 2);
 		c1.setZip(0001);
@@ -187,7 +185,7 @@ public class CustomerTest {
 	}
 
 	@Test
-	public void LTestGetGender() {
+	public void testGetGender() {
 		c1 = new Customer("Ben", "Len", "NTNU", 7047,
 				"Unspecified", 44, 3, true, 2);
 		assertEquals(c1.getGender(), "Unspecified");
@@ -197,7 +195,7 @@ public class CustomerTest {
 	 * Test method for {@link tdt4140.gr1864.app.core.Customer#setLastName(java.lang.String)}.
 	 */
 	@Test
-	public void MTestSetGender() {
+	public void testSetGender() {
 		c1 = new Customer("Ben", "Len", "NTNU", 7047,
 				"Unspecified", 44, 3, true, 2);
 		c1.setGender("Male");
@@ -205,7 +203,7 @@ public class CustomerTest {
 	}
 
 	@Test
-	public void NTestGetAge() {
+	public void testGetAge() {
 		c1 = new Customer("Ben", "Len", "NTNU", 7047,
 				"Unspecified", 44, 3, true, 2);
 		assertEquals(c1.getAge(), 44);
@@ -215,7 +213,7 @@ public class CustomerTest {
 	 * Test method for {@link tdt4140.gr1864.app.core.Customer#setLastName(java.lang.String)}.
 	 */
 	@Test
-	public void OTestSetAge() {
+	public void testSetAge() {
 		c1 = new Customer("Ben", "Len", "NTNU", 7047,
 				"Unspecified", 44, 3, true, 2);
 		c1.setAge(50);
@@ -223,7 +221,7 @@ public class CustomerTest {
 	}
 
 	@Test
-	public void PTestGetLastName() {
+	public void testGetLastName() {
 		c1 = new Customer("Ben", "Len", "NTNU", 7047,
 				"Unspecified", 44, 3, true, 2);
 		assertEquals(c1.getLastName(), "Len");
@@ -233,38 +231,46 @@ public class CustomerTest {
 	 * Test method for {@link tdt4140.gr1864.app.core.Customer#setLastName(java.lang.String)}.
 	 */
 	@Test
-	public void QTestSetLastName() {
+	public void testSetLastName() {
 		c1 = new Customer("Ben", "Len", "NTNU", 7047,
 				"Unspecified", 44, 3, true, 2);
 		c1.setLastName("Knudsen");
 		assertEquals(c1.getLastName(), "Knudsen");
 	}
-
+	
 	@Test
-	public void RTestGiveRecommendationBoughtExpectProductIDEqual34() {
-		int expectedProductID = 34;
+	public void testGiveRecommendationBoughtExpectProductIDEqualOne() {
+		viper.wipe();
+		setup();
+		int expectedProductID = 1;
 		c1.giveRecommendation();
 		Assert.assertEquals(expectedProductID, c1.getRecommendedProductID());
 	}
 	
 	@Test
-	public void STestGiveRecommendationWhenNotBoughtExpectMostPopularEqualOne() {
+	public void testGiveRecommendationWhenNotBoughtExpectMostPopularEqualOne() {
+		viper.wipe();
+		setup();
 		int expectedProductID = 1;
 		c2.giveRecommendation();
 		Assert.assertEquals(expectedProductID, c2.getRecommendedProductID());
 	}
 
 	@Test
-	public void TTestGiveRecommendationWhenCustomerAreAnonymousExpectProductIDEqualMostPopularEquals31() {
-		int expectedProductID = 31;
+	public void testGiveRecommendationWhenCustomerAreAnonymousExpectProductIDEqualMostPopularEqualsOne() {
+		viper.wipe();
+		setup();
+		int expectedProductID = 1;
 		c1.setAnonymous(true);
 		c1.giveRecommendation();
 		Assert.assertEquals(expectedProductID, c1.getRecommendedProductID());
 	}
 	
 	@Test
-	public void UTestGiveRecommendationWhenShoppingTripsAreAnonymousExpectProductIDEqualOne() {
-		int expectedProductID = 1;
+	public void testGiveRecommendationWhenShoppingTripsAreAnonymousExpectProductIDEqualZero() {
+		viper.wipe();
+		setup();
+		int expectedProductID = 0;
 		t1.setAnonymous(true);
 		stdc.update(t1);
 		c2.giveRecommendation();
