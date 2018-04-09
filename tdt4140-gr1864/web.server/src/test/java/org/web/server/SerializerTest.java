@@ -41,7 +41,7 @@ public class SerializerTest {
 	@Test
 	public void testDeserializeCustomerExpectCorrectJson() throws IOException {
 		Customer customer = new Customer();
-		customer.setCustomerId(1);
+		customer.setCustomerID(1);
 		customer.setFirstName("fornavn");
 		customer.setLastName("etternvan");
 		customer.setAddress("addresse");

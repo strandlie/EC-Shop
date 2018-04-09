@@ -103,7 +103,7 @@ public class CustomerTest {
 	@Test
 	public void testSetID() {
 		c1 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
-		c1.setCustomerId(2);
+		c1.setCustomerID(2);
 		assertEquals(c1.getID(), 2);
 	}
 
