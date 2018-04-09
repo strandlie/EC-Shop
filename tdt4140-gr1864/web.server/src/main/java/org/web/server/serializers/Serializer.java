@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import org.web.server.AbstractServlet.HTTPMethod;
 import org.web.server.persistance.Persister;
+import org.web.server.persistance.Persister.ModelClasses;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -58,10 +59,10 @@ public class Serializer {
 	public void deserialize(BufferedReader reader, Class c, HTTPMethod method) {
 		
 		/* For classes that needs more advanced serializing */
-		switch(c.getName()) {
-			case "Receipt": object = deserializeReceipt(reader); break;
-			case "ShoppingTrip": object = deserializeShoppingTrip(reader); break;
-			default: object = genericDeserialize(reader, c); break;
+		switch(ModelClasses.fromClass(c)) {
+			case RECEIPT: object = deserializeReceipt(reader); break;
+			case SHOPPING_TRIP: object = deserializeShoppingTrip(reader); break;
+			default: object = genericDeserialize(reader, c);break;
 		}
 		persister.persist(object, c, method);
 	}
@@ -112,9 +113,9 @@ public class Serializer {
 	@SuppressWarnings("rawtypes")
 	public String serialize(Object o, Class c) {
 		/* For classes that needs more advanced serializing */
-		switch(c.getName()) {
-			case Persister.RECEIPT: return serializeReceipt((Receipt) o);
-			case Persister.SHOPPING_TRIP: return serializeShoppingTrip((ShoppingTrip) o);
+		switch(ModelClasses.fromClass(c)) {
+			case RECEIPT: return serializeReceipt((Receipt) o);
+			case SHOPPING_TRIP: return serializeShoppingTrip((ShoppingTrip) o);
 		}
 		return null;
 	}

@@ -203,11 +203,11 @@ public class ActionDatabaseController extends DatabaseController implements Data
 	 * @return action
 	 */
 	public Action objectIsAction(Object object) {
-		Action action = (Action) object;
-		if (!(object instanceof Action)) {
-			throw new IllegalArgumentException("Object is not instance of Action");
-		} else {
-			return action;
+		try {
+			Action a = (Action) object;
+			return a;
+		} catch (ClassCastException e) {
+			throw new IllegalArgumentException("Object is not Action");
 		}
 	}
 }

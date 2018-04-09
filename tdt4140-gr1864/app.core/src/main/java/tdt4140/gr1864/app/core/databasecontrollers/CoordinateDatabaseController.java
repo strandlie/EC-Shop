@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import tdt4140.gr1864.app.core.Action;
 import tdt4140.gr1864.app.core.Coordinate;
 import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
 
@@ -210,11 +211,11 @@ public class CoordinateDatabaseController extends DatabaseController implements 
 	 * @return coordinate
 	 */
 	public Coordinate objectIsCoordinate(Object object) {
-		Coordinate coord = (Coordinate) object;
-		if (!(object instanceof Coordinate)) {
-			throw new IllegalArgumentException("Object is not instance of Coordinate");
-		} else {
-			return coord;
+		try {
+			Coordinate a = (Coordinate) object;
+			return a;
+		} catch (ClassCastException e) {
+			throw new IllegalArgumentException("Object is not Coordinate");
 		}
 	}
 }

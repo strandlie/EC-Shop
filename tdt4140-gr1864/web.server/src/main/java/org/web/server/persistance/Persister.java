@@ -3,6 +3,8 @@ package org.web.server.persistance;
 import org.web.server.AbstractServlet.HTTPMethod;
 
 import tdt4140.gr1864.app.core.Customer;
+import tdt4140.gr1864.app.core.Receipt;
+import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.databasecontrollers.CustomerDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
 import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
@@ -13,14 +15,34 @@ import tdt4140.gr1864.app.core.interfaces.Model;
  * @author vegarab
  */
 public class Persister {
+			
+	/** Class names compared in switch-case */
+	public enum ModelClasses {
+		SHOPPING_TRIP(ShoppingTrip.class.getName()),
+		CUSTOMER(Customer.class.getName()),
+		RECEIPT(Receipt.class.getName());
 		
+		private final String model;
+		
+		private ModelClasses(String model) {
+			this.model = model;
+		}
+		
+		public String toString() {
+			return this.model;
+		}
+		
+		public static ModelClasses fromClass(Class c) {
+			for (ModelClasses m : ModelClasses.values()) {
+				if (m.toString().equals(c.getName()))
+					return m;
+			}
+			throw new IllegalArgumentException("No values for this in ModelClasses");
+		}
+	}
+	
 	/** DBController used by persister-methods */
 	private static DatabaseCRUD controller = null;
-	
-	/** Class names compared in switch-case */
-	public static final String SHOPPING_TRIP = "tdt4140.gr1864.app.core.ShoppingTrip";
-	public static final String CUSTOMER = "tdt4140.gr1864.app.core.Customer";
-	public static final String RECEIPT = "tdt4140.gr1864.app.core.Receipt";
 	
 	/* Used for singleton design */
 	private static Persister persister;
@@ -59,13 +81,9 @@ public class Persister {
 	}
 	
 	private void setController(Class c) {
-		switch(c.getName()) {
-		case SHOPPING_TRIP:
-			controller = new ShoppingTripDatabaseController();
-			break;
-		case CUSTOMER:
-			controller = new CustomerDatabaseController();
-			break;
+		switch(ModelClasses.fromClass(c)) {
+		case SHOPPING_TRIP:	controller = new ShoppingTripDatabaseController(); break;
+		case CUSTOMER: controller = new CustomerDatabaseController(); break;
 		}
 	}
 	

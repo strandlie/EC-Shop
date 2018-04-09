@@ -59,22 +59,29 @@ public abstract class AbstractServlet extends HttpServlet{
 		super.init();
 	}
 	
-	
 	/*
-	 * Under is do method for the five different request-methods we support.
-	 * You can disable a method by setting the "has***" fields for the specific method to false in setup.
-	 * "do***" methods can be overridden if needed.
+	 * Under is `do***` method for the five different request-methods we support.
+	 * You can disable a method by setting the `has***` fields for the specific method to false in setup.
+	 * `do***` methods can be overridden if needed.
 	 * 
-	 * Options method sends the "options" JSONObject with the response, witch can be used to describe wanted JSON syntax.
+	 * Options method sends the `options` JSONObject with the response, witch can be used to describe wanted JSON syntax.
 	 */
+	//TODO: HTTP Errors
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		if (! hasGet) resp.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 		
-		int user = Integer.parseInt(req.getParameter("user"));
-		Object object = persister.read(user, cl);
-		String json = serializer.serialize((Model) object, cl);
+		String json = "";
+		try {
+			int user = Integer.parseInt(req.getParameter("user"));
+			Object object = persister.read(user, cl);
+			json = serializer.serialize((Model) object, cl);
+		} catch (Exception e) {
+			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+		}
+		
+		if (json == null) resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
 		
 		resp.setContentType(JSONRespons);
 		resp.setStatus(HttpServletResponse.SC_OK);
@@ -85,7 +92,12 @@ public abstract class AbstractServlet extends HttpServlet{
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		if (! hasPost) resp.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 		
-		serializer.deserialize(req.getReader(), cl, HTTPMethod.POST);
+		try {
+			serializer.deserialize(req.getReader(), cl, HTTPMethod.POST);
+		} catch (Exception e) {
+			resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+		}
+		
 		resp.setContentType(JSONRespons);
 		resp.setStatus(HttpServletResponse.SC_OK);
 	}
@@ -94,7 +106,11 @@ public abstract class AbstractServlet extends HttpServlet{
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		if (! hasPut) resp.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 		
-		serializer.deserialize(req.getReader(), cl, HTTPMethod.PUT);
+		try {
+			serializer.deserialize(req.getReader(), cl, HTTPMethod.PUT);
+		} catch (Exception e) {
+			resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+		}
 		resp.setContentType(JSONRespons);
 		resp.setStatus(HttpServletResponse.SC_OK);
 	}
@@ -103,15 +119,18 @@ public abstract class AbstractServlet extends HttpServlet{
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		if (! hasDelete) resp.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 		
-		serializer.deserialize(req.getReader(), cl, HTTPMethod.DELETE);
+		try {
+			serializer.deserialize(req.getReader(), cl, HTTPMethod.DELETE);
+		} catch (Exception e) {
+			resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+		}
 		resp.setContentType(JSONRespons);
 		resp.setStatus(HttpServletResponse.SC_OK);
 	}
 	
-	
 	@Override
 	protected void doOptions(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Add response with available methods
+		// TODO Add example request
 		resp.setContentType(JSONRespons);
 		resp.setStatus(HttpServletResponse.SC_OK);
 		
@@ -124,6 +143,5 @@ public abstract class AbstractServlet extends HttpServlet{
 		
 		resp.addHeader("Allow", allow);
 		resp.getWriter().print(options);
-	}
-	
+	}	
 }

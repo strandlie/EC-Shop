@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import tdt4140.gr1864.app.core.Shop;
 import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
 
@@ -231,11 +232,11 @@ public class ShoppingTripDatabaseController extends DatabaseController implement
 	 * @return shoppingTrip
 	 */
 	public ShoppingTrip objectIsShoppingTrip(Object object) {
-		ShoppingTrip trip = (ShoppingTrip) object;
-		if (!(object instanceof ShoppingTrip)) {
-			throw new IllegalArgumentException("Object is not instance of ShoppingTrip");
-		} else {
-			return trip;
+		try {
+			ShoppingTrip a = (ShoppingTrip) object;
+			return a;
+		} catch (ClassCastException e) {
+			throw new IllegalArgumentException("Object is not ShoppingTrip");
 		}
 	}
 }
