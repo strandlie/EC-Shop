@@ -2,7 +2,13 @@ package tdt4140.gr1864.app.core;
 
 import java.util.List;
 
-public class ShoppingTrip {
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import tdt4140.gr1864.app.core.interfaces.Model;
+
+public class ShoppingTrip implements Model {
 	
 	/* start-time of ShoppingTrip in UNIX-time */
 	private long start;
@@ -164,7 +170,7 @@ public class ShoppingTrip {
 		return customer;
 	}
 
-	public int getShoppingTripID() {
+	public int getID() {
 		return shoppingTripID;
 	}
 	

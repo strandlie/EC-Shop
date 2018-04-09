@@ -80,7 +80,7 @@ public class ShopDatabaseController implements DatabaseCRUD{
 			// Object has been given an ID:
 			statement.setString(1, shop.getAddress());
 			statement.setInt(2, shop.getZip());
-			statement.setInt(3, shop.getShopID());
+			statement.setInt(3, shop.getID());
 			statement.executeUpdate();
 			connection.close();
 			
