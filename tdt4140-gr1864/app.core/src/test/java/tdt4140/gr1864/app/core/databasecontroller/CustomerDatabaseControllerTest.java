@@ -112,7 +112,7 @@ public class CustomerDatabaseControllerTest {
 		Customer c1 = new  Customer("Ben", "Len", "NTNU", 7047,
 				"Unspecified", 44, 3, true, cdc.create(extendedCustomer));
 
-		Customer c2 = cdc.retrieve(c1.getUserId());
+		Customer c2 = cdc.retrieve(c1.getID());
 		Assert.assertEquals(c1.getFirstName(), c2.getFirstName());
 		Assert.assertEquals(c1.getLastName(), c2.getLastName());
 		Assert.assertEquals(c1.getAddress(), c2.getAddress());

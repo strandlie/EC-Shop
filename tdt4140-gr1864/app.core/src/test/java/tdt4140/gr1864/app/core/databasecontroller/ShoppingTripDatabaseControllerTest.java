@@ -81,8 +81,8 @@ public class ShoppingTripDatabaseControllerTest {
 	
 	@Test
 	public void testUpdateExpectNewlyPresistedObject() {
-		t1 = new ShoppingTrip(stdc.create(t1), c1, s1, true);
-		t1 = new ShoppingTrip(t1.getID(), c2, s1, true);
+		t1 = new ShoppingTrip(stdc.create(t1), c1, s1, true, false);
+		t1 = new ShoppingTrip(t1.getID(), c2, s1, true, false);
 
 		stdc.update(t1);
 		t2 = stdc.retrieve(t1.getID());
@@ -99,8 +99,8 @@ public class ShoppingTripDatabaseControllerTest {
 	
 	@Test 
 	public void testRetrieveAllShoppingTripsExpectCustomerShoppingTrips() {
-		t1 = new ShoppingTrip(stdc.create(t1), c1, s1, true);
-		t1 = new ShoppingTrip(t1.getID(), c2, s1, true);
+		t1 = new ShoppingTrip(stdc.create(t1), c1, s1, true, false);
+		t1 = new ShoppingTrip(t1.getID(), c2, s1, true, false);
 
 		stdc.update(t1);
 		t2 = stdc.retrieve(t1.getID());
@@ -150,7 +150,7 @@ public class ShoppingTripDatabaseControllerTest {
 	
 	@Test
 	public void wTestRetrieveAllShoppingTripsForCustomerExpectSizeEqualOne() {
-		t1 = new ShoppingTrip(stdc.create(t1), c1, s1, true);	
+		t1 = new ShoppingTrip(stdc.create(t1), c1, s1, true, false);	
 		List<ShoppingTrip> customerTrips = stdc.retrieveAllShoppingTripsForCustomer(c1.getID());
 
 		Assert.assertEquals(1, customerTrips.size());

@@ -243,23 +243,23 @@ public class CustomerTest {
 	//@Test
 	public void testGiveRecommendationWhenBought() {
 		t1 = new ShoppingTrip(stdc.create(t1), c1, s1, true, false);
-		t1 = new ShoppingTrip(t1.getShoppingTripID(), c2, s1, true, false);
+		t1 = new ShoppingTrip(t1.getID(), c2, s1, true, false);
 		t1.setActions(tdl.getActions());
 		stdc.update(t1);
 		
 		t2 = new ShoppingTrip(stdc.create(t2), c3, s1, true, false);
-		t2 = new ShoppingTrip(t2.getShoppingTripID(), c3, s1, true, false);
+		t2 = new ShoppingTrip(t2.getID(), c3, s1, true, false);
 		t2.setActions(tdl.getActions());
 		stdc.update(t2);
 		
 		/*
 		t3 = new ShoppingTrip(stdc.create(t3), c3, s1, true);
-		t3 = new ShoppingTrip(t3.getShoppingTripID(), c3, s1, true);
+		t3 = new ShoppingTrip(t3.getID(), c3, s1, true);
 		stdc.update(t3);
-		t3 = stdc.retrieve(t3.getShoppingTripID());
+		t3 = stdc.retrieve(t3.getID());
 		*/
 		
-		System.out.println(stdc.retrieve(t1.getShoppingTripID()).getActions().size() + " t1's trip amount of actions");
+		System.out.println(stdc.retrieve(t1.getID()).getActions().size() + " t1's trip amount of actions");
 
 		
 		System.out.println(c1.giveRecommendation() + " recommendation for c1");
