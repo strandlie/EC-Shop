@@ -1,6 +1,5 @@
 package tdt4140.gr1864.app.ui.globalUIModel; 
 
-import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -21,14 +20,22 @@ import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.database.DataLoader;
 import tdt4140.gr1864.app.core.databasecontrollers.*;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.*;
+<<<<<<< HEAD
 import tdt4140.gr1864.app.core.database.TestDataLoader;
 import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.CustomerDatabaseController;
+=======
+import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
+import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
+>>>>>>> sprint-3
 import tdt4140.gr1864.app.core.databasecontrollers.ShopDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
 import tdt4140.gr1864.app.ui.TableLoader;
 import tdt4140.gr1864.app.ui.Mode.Mode;
+<<<<<<< HEAD
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationInterface;
+=======
+>>>>>>> sprint-3
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
 import javafx.fxml.FXML;
 
@@ -82,6 +89,7 @@ public class ModeController {
 		 * The menuViewController needs a reference to it	's mode controller to let it know when the user
 		 * has selected a different Mode
 		 */
+<<<<<<< HEAD
 		this.menuViewController.setModeController(this);
 		
 		DataLoader.main(null);
@@ -106,6 +114,12 @@ public class ModeController {
 		 */
 		// Create a table for mostPickedUp Mode and fill with data
 		VisualizationTable mostPickedUpTable = new VisualizationTable("Most Picked-Up Product", shoppingTripList);
+=======
+		menuViewController.setModeController(this);
+		
+		
+		VisualizationTable mostPickedUpTable = new VisualizationTable("Most Picked-Up Product");
+>>>>>>> sprint-3
 		mostPickedUpTable.addColumn("productName");
 		mostPickedUpTable.addColumn("numberOfPickUp");
 		mostPickedUpTable.addColumn("numberOfPutDown");
@@ -143,6 +157,7 @@ public class ModeController {
 
 
 		
+<<<<<<< HEAD
 		/*
 		 * ON SHELF MODE
 		 */
@@ -155,6 +170,44 @@ public class ModeController {
 		 * HEAT MAP MODE
 		 */
 		
+=======
+		// Get data from shoppin trip and add to TableView
+		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
+		ActionDatabaseController adc = new ActionDatabaseController();
+		CoordinateDatabaseController cdc = new CoordinateDatabaseController();
+	
+		ShoppingTrip trip = stdc.retrieve(1);
+		trip.setActions(adc.retrieveAll(1));
+		trip.setCoordinates(cdc.retrieveAll(1));
+		ArrayList<ShoppingTrip> shoppingTripList = new ArrayList<>();
+		shoppingTripList.add(trip);
+
+		TableLoader tableLoader = new TableLoader();
+		tableLoader.loadMostPickedUpTable(shoppingTripList, mostPickedUpTable);
+		
+		// Get data from Shop and add to StockMode
+		ShopDatabaseController sdc = new ShopDatabaseController();
+		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
+		ProductDatabaseController pdc = new ProductDatabaseController();
+
+		Shop shop = sdc.retrieve(1);
+		for (int i = 1; i < 65; i++) {
+			osdc.retrieve(shop, i);
+		}
+
+		Map<Integer, Integer> productIDsOnShelf = shop.getShelfs();
+		Map<Integer, Integer> productIDsInStorage = shop.getStorage();
+
+		tableLoader.loadStockTable(productIDsOnShelf, productIDsInStorage, stockTable);
+
+		// get data from demographics and add to DemographicsMode
+		CustomerDatabaseController customerDatabaseController = new CustomerDatabaseController();
+		List<Customer> customers = customerDatabaseController.retrieveAll();
+
+		tableLoader.loadDemographicsTable(customers, demographicsTable);
+
+
+>>>>>>> sprint-3
 		VisualizationHeatMap heatMap = new VisualizationHeatMap("Heatmap", shoppingTripList);
 		Mode heatMapMode = new Mode("Heatmap", heatMap);
 		
@@ -169,9 +222,12 @@ public class ModeController {
 		addMode(mostPickedUp);
 		addMode(stock);
 		addMode(demographicsMode);
+<<<<<<< HEAD
 		addMode(mostPickedUp);
 		addMode(stock);
 		addMode(shelves);
+=======
+>>>>>>> sprint-3
 		addMode(heatMapMode);
 		addMode(plotMode);
 		

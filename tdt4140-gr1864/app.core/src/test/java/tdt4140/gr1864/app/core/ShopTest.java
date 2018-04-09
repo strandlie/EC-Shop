@@ -69,7 +69,7 @@ public class ShopTest {
 	@Test
 	public void testGetIdExpectOne() {
 		int expected = 1;
-		Assert.assertEquals(expected, shop2.getShopID());
+		Assert.assertEquals(expected, shop2.getID());
 	}
 	
 	

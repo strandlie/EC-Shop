@@ -90,7 +90,7 @@ public class TestDataLoaderTest {
 		Shop shop = loader.getShop();
 		shop.setAmountInShelfs(productID, amount);
 		osdc.create(shop, productID);
-		Shop testShop = new Shop("lol", 101, shop.getShopID());
+		Shop testShop = new Shop("lol", 101, shop.getID());
 		Shop retrievedShop = osdc.retrieve(testShop, productID);
 		
 		Assert.assertEquals(shop.getAmountInShelfs(productID), retrievedShop.getAmountInShelfs(productID));

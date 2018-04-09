@@ -3,7 +3,6 @@ package tdt4140.gr1864.app.ui.Mode;
 
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationElement;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationInterface;
-import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
 
 /**
  * 

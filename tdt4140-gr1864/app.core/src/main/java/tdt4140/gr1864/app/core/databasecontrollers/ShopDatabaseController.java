@@ -1,8 +1,5 @@
 package tdt4140.gr1864.app.core.databasecontrollers;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -12,27 +9,13 @@ import java.sql.SQLException;
 import tdt4140.gr1864.app.core.Shop;
 import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
 
-public class ShopDatabaseController implements DatabaseCRUD{
+public class ShopDatabaseController extends DatabaseController implements DatabaseCRUD {
 	
-	/* SQL statement executed on database */
 	PreparedStatement statement;
-	String dbPath;
-	
-	public ShopDatabaseController() {
-		String path = "../../../app.core/src/main/resources/database.db";
-		String relativePath;
-		//Finds path by getting URL and converting to URI and then to path 
-		try {
-			URI rerelativeURI = this.getClass().getClassLoader().getResource(".").toURI();
-			relativePath = Paths.get(rerelativeURI).toFile().toString() + "/";
-			
-		} catch (URISyntaxException e1) {
-			//If fail to convert to URI use URL path instead
-			relativePath = this.getClass().getClassLoader().getResource(".").getPath();
-		} 
-		dbPath = relativePath + path;
-	}
-	
+
+	/**
+	 * @see tdt4140.gr1864.app.core.interfaces.DatabaseCRUD#create(java.lang.Object)
+	 */
 	@Override
 	public int create(Object object) {
 		Shop shop = this.objectIsShop(object);
@@ -68,7 +51,9 @@ public class ShopDatabaseController implements DatabaseCRUD{
 		return -1;
 	}
 	
-	
+	/**
+	 * @see tdt4140.gr1864.app.core.interfaces.DatabaseCRUD#update(java.lang.Object)
+	 */	
 	@Override
 	public void update(Object object) {
 		Shop shop = this.objectIsShop(object);
@@ -80,7 +65,7 @@ public class ShopDatabaseController implements DatabaseCRUD{
 			// Object has been given an ID:
 			statement.setString(1, shop.getAddress());
 			statement.setInt(2, shop.getZip());
-			statement.setInt(3, shop.getShopID());
+			statement.setInt(3, shop.getID());
 			statement.executeUpdate();
 			connection.close();
 			
@@ -89,6 +74,10 @@ public class ShopDatabaseController implements DatabaseCRUD{
 		}
 	}
 	
+	/**
+	 * Retrieves and creates a list of all shopping trips based on what's received by the database
+	 * @return A Shop object
+	 */
 	@Override
 	public Shop retrieve(int shopID) {
 		try {
@@ -113,6 +102,9 @@ public class ShopDatabaseController implements DatabaseCRUD{
 		return null;
 	}
 	
+	/**
+	 * @see tdt4140.gr1864.app.core.interfaces.DatabaseCRUD#delete(int)
+	 */
 	@Override
 	public void delete(int id) {
 		try {
@@ -128,6 +120,11 @@ public class ShopDatabaseController implements DatabaseCRUD{
 		
 	}
 		
+	/**
+	 * Checks if incoming object is Shop
+	 * @param object	suspected Shop
+	 * @return Shop
+	 */
 	public Shop objectIsShop(Object object) {
 		Shop shop = (Shop) object;
 		if (!(object instanceof Shop)) {

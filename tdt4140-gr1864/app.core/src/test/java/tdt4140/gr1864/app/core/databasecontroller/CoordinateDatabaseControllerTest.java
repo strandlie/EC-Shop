@@ -55,7 +55,7 @@ public class CoordinateDatabaseControllerTest {
 		p1 = new Product(pdc.create(p1), p1.getName(), p1.getPrice());
 		
 		t1 = new ShoppingTrip(customer1, s1, true);
-		t1 = new ShoppingTrip(stdc.create(t1), customer1, s1, true);
+		t1 = new ShoppingTrip(stdc.create(t1), customer1, s1, true, false);
 		List<ShoppingTrip> trips = new ArrayList<ShoppingTrip>();
 		trips.add(t1);
 		customer1.setShoppingTrips(trips);		
@@ -72,7 +72,7 @@ public class CoordinateDatabaseControllerTest {
 				stdc.retrieve(cdc.create(c1))
 			);
 
-		Assert.assertEquals(t1.getShoppingTripID(), c1.getShoppingTrip().getShoppingTripID());
+		Assert.assertEquals(t1.getID(), c1.getShoppingTrip().getID());
 	}
 	
 	@Test
@@ -84,9 +84,9 @@ public class CoordinateDatabaseControllerTest {
 				stdc.retrieve(cdc.create(c1))
 			);
 
-		c2 = cdc.retrieve(c1.getShoppingTrip().getShoppingTripID(), c1.getTimeStamp());
+		c2 = cdc.retrieve(c1.getShoppingTrip().getID(), c1.getTimeStamp());
 		
-		Assert.assertEquals(c1.getShoppingTrip().getShoppingTripID(), c2.getShoppingTrip().getShoppingTripID());
+		Assert.assertEquals(c1.getShoppingTrip().getID(), c2.getShoppingTrip().getID());
 		Assert.assertEquals(c1.getTimeStamp(), c2.getTimeStamp());
 	}
 	
@@ -98,9 +98,9 @@ public class CoordinateDatabaseControllerTest {
 				Long.toString(c1.getTimeStamp()),
 				stdc.retrieve(cdc.create(c1))
 			);
-		cdc.delete(c1.getShoppingTrip().getShoppingTripID(), c1.getTimeStamp());
+		cdc.delete(c1.getShoppingTrip().getID(), c1.getTimeStamp());
 		
-		Assert.assertEquals(null, cdc.retrieve(c1.getShoppingTrip().getShoppingTripID(), c1.getTimeStamp()));
+		Assert.assertEquals(null, cdc.retrieve(c1.getShoppingTrip().getID(), c1.getTimeStamp()));
 	}
 	
 	@Test
@@ -119,11 +119,11 @@ public class CoordinateDatabaseControllerTest {
 				c1.getShoppingTrip()
 			);
 		cdc.update(c1);
-		c2 = cdc.retrieve(c1.getShoppingTrip().getShoppingTripID(), c1.getTimeStamp());
+		c2 = cdc.retrieve(c1.getShoppingTrip().getID(), c1.getTimeStamp());
 		
 		Assert.assertEquals(c1.getX(), c2.getX(), 0);
 		Assert.assertEquals(c1.getY(), c2.getY(), 0);
 		Assert.assertEquals(c1.getTimeStamp(), c2.getTimeStamp());
-		Assert.assertEquals(c1.getShoppingTrip().getShoppingTripID(), c2.getShoppingTrip().getShoppingTripID());
+		Assert.assertEquals(c1.getShoppingTrip().getID(), c2.getShoppingTrip().getID());
 	}
 }

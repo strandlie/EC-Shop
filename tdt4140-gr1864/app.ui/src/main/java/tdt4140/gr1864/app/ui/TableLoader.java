@@ -7,7 +7,9 @@ import java.util.Map;
 
 import tdt4140.gr1864.app.core.*;
 import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
-import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Row;
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.MostPickedUpTableRow;
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.DemographicsTableRow;
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.InStockTableRow;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
 
 /**
@@ -76,6 +78,7 @@ public class TableLoader {
 	}
 	
 	/**
+<<<<<<< HEAD
 	 * Constructor for OnShelf Mode
 	 * @param productIDsOnShelf
 	 * @param table
@@ -143,6 +146,9 @@ public class TableLoader {
 	
 	/**
 	 * Wipes the table clear, and loads the data from the trips into the table to 
+=======
+	 * The constructor for CustomerList
+>>>>>>> sprint-3
 	 * @param trips A list of shopping trips to load the table from
 	 * @param table A model-layer representation of a table shown to the user. Any changes made to this will reflect to the user immidiately
 	 */
@@ -182,11 +188,19 @@ public class TableLoader {
 			}
 		}
 		
+<<<<<<< HEAD
 		for (String productNameString : pickUps.keySet()) {
 			String pickupsString = pickUps.get(productNameString).toString();
 			String putdownsString = putDowns.containsKey(productNameString) ? putDowns.get(productNameString).toString() : "0";
 			String purchasesString = purchases.containsKey(productNameString) ? purchases.get(productNameString).toString() : "0";
 			table.addData(new Row(productNameString, pickupsString, putdownsString, purchasesString));
+=======
+		for (String productName : this.pickUps.keySet()) {
+			String pickups = this.pickUps.get(productName).toString();
+			String putdowns = this.putDowns.containsKey(productName) ? this.putDowns.get(productName).toString() : "0";
+			String purchases = this.purchases.containsKey(productName) ? this.purchases.get(productName).toString() : "0";
+			table.addData(new MostPickedUpTableRow(productName, pickups, putdowns, purchases));
+>>>>>>> sprint-3
 		}
 	}
 	
@@ -240,9 +254,15 @@ public class TableLoader {
 			}
 		}
 		
+<<<<<<< HEAD
 		for (String productNameString : stock.keySet()) {
 			String totalStock = stock.get(productNameString).toString();
 			table.addData(new Row(productNameString, totalStock, "stock"));
+=======
+		for (String productName : this.stock.keySet()) {
+			String totalStock = this.stock.get(productName).toString();
+			table.addData(new InStockTableRow(productName, totalStock));
+>>>>>>> sprint-3
 		}
 	}
 	
@@ -270,7 +290,7 @@ public class TableLoader {
 		}
 
 		for (Customer customer: customers) {
-			table.addData(new Row(Integer.toString(customer.getUserId()), customer.getFirstName(), customer.getLastName(), customer.getAddress(), Integer.toString(customer.getZip())));
+			table.addData(new DemographicsTableRow(Integer.toString(customer.getID()), customer.getFirstName(), customer.getLastName(), customer.getAddress(), Integer.toString(customer.getZip())));
 		}
 	}
 
