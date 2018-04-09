@@ -87,7 +87,7 @@ public class TestDataLoaderTest {
 		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
 		int productID = products.get(0).getID();
 		Shop shop = loader.getShop();
-		Shop testShop = new Shop("lol", 101, shop.getShopID());
+		Shop testShop = new Shop("lol", 101, shop.getID());
 		Shop retrievedShop = osdc.retrieve(testShop, productID);
 		
 		Assert.assertEquals(shop.getAmountInShelfs(productID), retrievedShop.getAmountInShelfs(productID));

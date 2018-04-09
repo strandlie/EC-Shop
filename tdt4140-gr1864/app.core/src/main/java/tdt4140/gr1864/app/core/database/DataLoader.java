@@ -245,8 +245,9 @@ public class DataLoader {
 	 * Loads JSON-data from string, creates ShoppingTrip object
 	 * This function is for the API
 	 * @param json	String with json-data of a ShoppingTrip
+	 * @return trip
 	 */
-	public static void loadShoppingTrip(String json) {
+	public static ShoppingTrip loadShoppingTrip(String json) {
 
 		JSONParser parser = new JSONParser();
 		
@@ -263,7 +264,7 @@ public class DataLoader {
 			
 			// create ShoppingTrip
 			trip = new ShoppingTrip(customer, shop, true);
-			trip = new ShoppingTrip(stdc.create(trip), trip.getCustomer(), trip.getShop(), true);
+			trip = new ShoppingTrip(stdc.create(trip), trip.getCustomer(), trip.getShop(), true, false);
 
 			// creating Coordinates
 			JSONArray coordsArray = (JSONArray) tripObject.get("path");
@@ -279,6 +280,7 @@ public class DataLoader {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		return trip;
 	}
 	
 	/**
@@ -308,7 +310,7 @@ public class DataLoader {
 
 		// We set the charged flag to true to prevent spamming the Stripe API.		
 		trip = new ShoppingTrip(c1, s1, true);
-		trip = new ShoppingTrip(stdc.create(trip), trip.getCustomer(), trip.getShop(), true);
+		trip = new ShoppingTrip(stdc.create(trip), trip.getCustomer(), trip.getShop(), true, false);
 		
 		try {
 			Object obj = parser.parse(new FileReader(relativePath + path));
@@ -341,7 +343,7 @@ public class DataLoader {
 	 */
 	private static ShoppingTrip createShoppingTrip(ShoppingTrip trip, List<Coordinate> coordinates, List<Action> actions) {
 		// We set the Charged flag to true to prevent spamming the Stripe API with charges.
-		ShoppingTrip newTrip = new ShoppingTrip(coordinates, actions, trip.getShoppingTripID(), true);
+		ShoppingTrip newTrip = new ShoppingTrip(coordinates, actions, trip.getID(), true);
 		trip = newTrip;
 		return newTrip;
 	}
