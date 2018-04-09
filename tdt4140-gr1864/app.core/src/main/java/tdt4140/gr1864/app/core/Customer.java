@@ -27,8 +27,6 @@ public class Customer extends Observable implements Model, UserInterface {
 	
 	// Controller for retrieving actions from database
 	ActionDatabaseController adc = new ActionDatabaseController();
-
-	private int customerID;
 	
 	@JsonProperty("customerID")
 	private int customerId;
