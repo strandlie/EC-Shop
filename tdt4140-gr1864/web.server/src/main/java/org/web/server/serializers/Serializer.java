@@ -6,7 +6,10 @@ import java.io.IOException;
 import org.web.server.persistance.Persister;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import tdt4140.gr1864.app.core.Receipt;
 import tdt4140.gr1864.app.core.ShoppingTrip;
@@ -124,7 +127,20 @@ public class Serializer {
 	}
 
 	private String serializeReceipt(Receipt receipt) {
-		// TODO Auto-generated method stub
+		ObjectMapper mapper = new ObjectMapper();
+		
+		SimpleModule module = new SimpleModule("ReceiptSerializer", new Version(1, 0, 0, null, null, null));
+		module.addSerializer(Receipt.class, new ReceiptSerializer());
+		mapper.registerModule(module);
+		
+		ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
+		
+		try {
+			return writer.writeValueAsString(receipt);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		
 		return null;
 	}
 

@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import tdt4140.gr1864.app.core.database.CreateDatabase;
 import tdt4140.gr1864.app.core.database.DataLoader;
 
 public class ShoppingTripServlet extends HttpServlet {

@@ -10,37 +10,24 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.web.server.ReceiptServlet.ReceiptSerializer;
+import org.web.server.serializers.Serializer;
 
-import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-
-import tdt4140.gr1864.app.core.Receipt;
+import tdt4140.gr1864.app.core.Customer;
 import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.database.DataLoader;
+import tdt4140.gr1864.app.core.databasecontrollers.CustomerDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
 
 public class UserServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	
+	private CustomerDatabaseController customerController = new CustomerDatabaseController();
 	private ShoppingTripDatabaseController shoppingTripController = new ShoppingTripDatabaseController();
 
 	@Override
 	public void init() throws ServletException {
 		super.init();
-	}
-
-	private class UserData {
-		public List<Integer> shoppingTrips = new ArrayList<>();
-		
-		public UserData(List<ShoppingTrip> trips) {
-			for (ShoppingTrip trip : trips) {
-				shoppingTrips.add(trip.getShoppingTripID());
-			}
-		}
 	}
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -53,17 +40,19 @@ public class UserServlet extends HttpServlet {
 		
 		int id = Integer.valueOf(request.getParameter("id"));
 
-		List<ShoppingTrip> trips = shoppingTripController.getTripsForCustomer(id);
-		
-		if (trips == null) {
-	        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		Customer customer = customerController.retrieve(id);
+
+		if (customer == null) {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 	        return;
 		}
+
+		List<ShoppingTrip> trips = shoppingTripController.getTripsForCustomer(id);
+		
+		customer.setShoppingTrips(trips);
 		
         response.setStatus(HttpServletResponse.SC_OK);
-		ObjectWriter writer = new ObjectMapper().writer().withDefaultPrettyPrinter();
-		String output = writer.writeValueAsString(new UserData(trips));
-		response.getWriter().println(output);
+        response.getWriter().println(Serializer.init().serialize(customer, Customer.class));
     }
     
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
