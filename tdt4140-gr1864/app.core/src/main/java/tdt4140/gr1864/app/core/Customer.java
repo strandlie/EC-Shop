@@ -29,7 +29,7 @@ public class Customer extends Observable implements Model, UserInterface {
 	ActionDatabaseController adc = new ActionDatabaseController();
 	
 	@JsonProperty("customerID")
-	private int customerId;
+	private int customerID;
 
 	@JsonProperty
 	private String firstName;
@@ -62,7 +62,7 @@ public class Customer extends Observable implements Model, UserInterface {
 	 */
 	public Customer(int customerID, String firstName, String lastName, 
 			List<ShoppingTrip> shoppingTrips) {
-		this.customerId = customerID;
+		this.customerID = customerID;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.shoppingTrips = shoppingTrips;
@@ -81,7 +81,7 @@ public class Customer extends Observable implements Model, UserInterface {
 	 */
 	public Customer(String firstName, String lastName, int customerID,
 			 String address, int zip, boolean anonymous) {
-		this.customerId = customerID;
+		this.customerID = customerID;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.address = address;
@@ -155,7 +155,7 @@ public class Customer extends Observable implements Model, UserInterface {
 		// Is a primitive and does not need a check
 		this.anonymous = anonymous;
 
-		this.customerId = customerID;
+		this.customerID = customerID;
 	}
 
 	/**
@@ -166,7 +166,7 @@ public class Customer extends Observable implements Model, UserInterface {
 	public Customer(String firstName, String lastName, int customerID) { 
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.customerId = customerID;
+		this.customerID = customerID;
 		this.anonymous = false;
 	}
 	
@@ -181,15 +181,15 @@ public class Customer extends Observable implements Model, UserInterface {
 
 	@JsonIgnore
 	public int getID() {
-		return customerId;
+		return customerID;
 	}
 	
 	public int getCustomerID() {
-		return customerId;
+		return customerID;
 	}
 
-	public void setCustomerId(int userId) {
-		this.customerId = userId;
+	public void setCustomerID(int userId) {
+		this.customerID = userId;
 	}
 
 	public String getFirstName() {
@@ -302,7 +302,7 @@ public class Customer extends Observable implements Model, UserInterface {
 		List<ShoppingTrip> allTrips = stdc.retrieveAllShoppingTrips();
 		
 		// List of all shopping trips for this customer	
-		List<ShoppingTrip> customerTrips = stdc.retrieveAllShoppingTripsForCustomer(this.customerId);
+		List<ShoppingTrip> customerTrips = stdc.retrieveAllShoppingTripsForCustomer(this.customerID);
 		
 		// Amount of customers (registered)
 		int countCustomers = cdc.countCustomers();
@@ -472,7 +472,7 @@ public class Customer extends Observable implements Model, UserInterface {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Customer customer = (Customer) o;
-		return customerId == customer.customerId &&
+		return customerID == customer.customerID &&
 				zip == customer.zip &&
 				age == customer.age &&
 				numberOfPersonsInHousehold == customer.numberOfPersonsInHousehold &&
@@ -487,7 +487,7 @@ public class Customer extends Observable implements Model, UserInterface {
 	@Override
 	public int hashCode() {
 
-		return Objects.hash(customerId, firstName, lastName, address, zip, gender, age, numberOfPersonsInHousehold, shoppingTrips, recommendedProductID);
+		return Objects.hash(customerID, firstName, lastName, address, zip, gender, age, numberOfPersonsInHousehold, shoppingTrips, recommendedProductID);
 	}
 }
 
