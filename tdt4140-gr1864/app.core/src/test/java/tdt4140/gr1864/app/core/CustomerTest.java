@@ -108,22 +108,22 @@ public class CustomerTest {
 	}
 
 	/**
-	 * Test method for {@link tdt4140.gr1864.app.core.Customer#getUserId()}.
+	 * Test method for {@link tdt4140.gr1864.app.core.Customer#getID()}.
 	 */
 	@Test
 	public void testGetUserId() {
 		c1 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
-		assertEquals(c1.getUserId(), 1);
+		assertEquals(c1.getID(), 1);
 	}
 
 	/**
-	 * Test method for {@link tdt4140.gr1864.app.core.Customer#setUserId(int)}.
+	 * Test method for {@link tdt4140.gr1864.app.core.Customer#setCustomerId(int)}.
 	 */
 	@Test
 	public void testSetUserId() {
 		c1 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
-		c1.setUserId(2);
-		assertEquals(c1.getUserId(), 2);
+		c1.setCustomerId(2);
+		assertEquals(c1.getID(), 2);
 	}
 
 	/**

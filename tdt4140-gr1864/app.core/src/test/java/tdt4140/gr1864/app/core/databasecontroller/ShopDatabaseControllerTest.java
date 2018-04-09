@@ -39,7 +39,7 @@ public class ShopDatabaseControllerTest {
 	@Test
 	public void testRetrieveExepctedPersistedObject() {
 		Shop shop3 = new Shop("Kings Road 2", 10, sdc.create(shop));
-		Shop newShop = (Shop) sdc.retrieve(shop3.getShopID());
+		Shop newShop = (Shop) sdc.retrieve(shop3.getID());
 		
 		Assert.assertEquals(shop3.getAddress(), newShop.getAddress());
 		Assert.assertEquals(shop3.getZip(), newShop.getZip());
@@ -48,17 +48,17 @@ public class ShopDatabaseControllerTest {
 	@Test
 	public void testDeleteExpectedNull() {
 		Shop shop4 = new Shop("Kings Road 2", 10, sdc.create(shop));
-		sdc.delete(shop4.getShopID());
+		sdc.delete(shop4.getID());
 		
-		Assert.assertEquals(null, sdc.retrieve(shop4.getShopID()));
+		Assert.assertEquals(null, sdc.retrieve(shop4.getID()));
 	}
 	
 	@Test
 	public void testUpdateExpectNewlyPresistedObject() {
 		shop = new Shop(shop.getAddress(), shop.getZip(), sdc.create(shop));
-		shop = new Shop("Kings Road 3", 11, shop.getShopID());
+		shop = new Shop("Kings Road 3", 11, shop.getID());
 		sdc.update(shop);
-		Shop newShop = sdc.retrieve(shop.getShopID());
+		Shop newShop = sdc.retrieve(shop.getID());
 		
 		Assert.assertEquals("Kings Road 3", newShop.getAddress());
 		Assert.assertEquals(11, newShop.getZip());

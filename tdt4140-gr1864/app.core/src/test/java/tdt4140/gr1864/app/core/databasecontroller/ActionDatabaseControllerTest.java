@@ -74,7 +74,7 @@ public class ActionDatabaseControllerTest {
 				stdc.retrieve(adc.create(a1))
 			);
 
-		Assert.assertEquals(t1.getShoppingTripID(), a1.getShoppingTrip().getShoppingTripID());
+		Assert.assertEquals(t1.getID(), a1.getShoppingTrip().getID());
 	}
 	
 	@Test
@@ -85,9 +85,9 @@ public class ActionDatabaseControllerTest {
 				a1.getProduct(),
 				stdc.retrieve(adc.create(a1))
 			);
-		a2 = adc.retrieve(a1.getShoppingTrip().getShoppingTripID(), a1.getTimeStamp());
+		a2 = adc.retrieve(a1.getShoppingTrip().getID(), a1.getTimeStamp());
 		
-		Assert.assertEquals(a1.getShoppingTrip().getShoppingTripID(), a2.getShoppingTrip().getShoppingTripID());
+		Assert.assertEquals(a1.getShoppingTrip().getID(), a2.getShoppingTrip().getID());
 		Assert.assertEquals(a1.getTimeStamp(), a2.getTimeStamp());
 	}
 	
@@ -99,9 +99,9 @@ public class ActionDatabaseControllerTest {
 				a1.getProduct(),
 				stdc.retrieve(adc.create(a1))
 			);
-		adc.delete(a1.getShoppingTrip().getShoppingTripID(), a1.getTimeStamp());
+		adc.delete(a1.getShoppingTrip().getID(), a1.getTimeStamp());
 		
-		Assert.assertEquals(null, adc.retrieve(a1.getShoppingTrip().getShoppingTripID(), a1.getTimeStamp()));
+		Assert.assertEquals(null, adc.retrieve(a1.getShoppingTrip().getID(), a1.getTimeStamp()));
 	}
 	
 	@Test
@@ -119,11 +119,11 @@ public class ActionDatabaseControllerTest {
 				a1.getShoppingTrip()
 			);
 		adc.update(a1);
-		a2 = adc.retrieve(a1.getShoppingTrip().getShoppingTripID(), a1.getTimeStamp());
+		a2 = adc.retrieve(a1.getShoppingTrip().getID(), a1.getTimeStamp());
 		
 		Assert.assertEquals(a1.getActionType(), a2.getActionType());
 		Assert.assertEquals(a1.getTimeStamp(), a2.getTimeStamp());
-		Assert.assertEquals(a1.getShoppingTrip().getShoppingTripID(), a2.getShoppingTrip().getShoppingTripID());
+		Assert.assertEquals(a1.getShoppingTrip().getID(), a2.getShoppingTrip().getID());
 	}
 	
 	@Test
@@ -141,10 +141,10 @@ public class ActionDatabaseControllerTest {
 				a1.getShoppingTrip()
 			);
 		adc.update(a1);
-		a2 = adc.retrieve(a1.getShoppingTrip().getShoppingTripID(), a1.getTimeStamp());
+		a2 = adc.retrieve(a1.getShoppingTrip().getID(), a1.getTimeStamp());
 		
 		int notExpectingSize = 0;
-		List<Action> actualActions = adc.retrieveAll(a1.getShoppingTrip().getShoppingTripID());
+		List<Action> actualActions = adc.retrieveAll(a1.getShoppingTrip().getID());
 		Assert.assertNotEquals(notExpectingSize, actualActions.size());
 	}
 }

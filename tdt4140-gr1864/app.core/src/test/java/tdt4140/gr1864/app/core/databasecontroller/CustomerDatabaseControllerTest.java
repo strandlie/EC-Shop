@@ -49,7 +49,7 @@ public class CustomerDatabaseControllerTest {
 	@Test
 	public void BtestRetrieveExpectPresistedObject() {
 		Customer c2 = new Customer("Ola", "Normann", cdc.create(c0));
-		Customer c0 = (Customer) cdc.retrieve(c2.getUserId());
+		Customer c3 = (Customer) cdc.retrieve(c2.getID());
 		
 		Assert.assertEquals(c2.getFirstName(), c0.getFirstName());
 		Assert.assertEquals(c2.getLastName(), c0.getLastName());
@@ -58,9 +58,9 @@ public class CustomerDatabaseControllerTest {
 	@Test
 	public void CtestUpdateExpectedNewlyPresistedObject() {
 		Customer c1 = new Customer(c0.getFirstName(), c0.getLastName(), cdc.create(c0));
-		c1 = new Customer("Kari", "Hansen", c1.getUserId());
+		c1 = new Customer("Kari", "Hansen", c1.getID());
 		cdc.update(c1);
-		Customer c2 = cdc.retrieve(c1.getUserId());
+		Customer c2 = cdc.retrieve(c1.getID());
 		
 		Assert.assertEquals("Kari", c2.getFirstName());
 		Assert.assertEquals("Hansen",  c2.getLastName());
@@ -70,9 +70,9 @@ public class CustomerDatabaseControllerTest {
 	@Test
 	public void DtestDeleteExpectNull() {
 		Customer c2 = new Customer("Ola", "Normann", cdc.create(c0));
-		cdc.delete(c2.getUserId());
+		cdc.delete(c2.getID());
 		
-		Assert.assertEquals(null, cdc.retrieve(c2.getUserId()));
+		Assert.assertEquals(null, cdc.retrieve(c2.getID()));
 	}
 	
 	@Test
@@ -112,7 +112,7 @@ public class CustomerDatabaseControllerTest {
 		Customer c1 = new  Customer("Ben", "Len", "NTNU", 7047,
 				"Unspecified", 44, 3, true, cdc.create(extendedCustomer));
 
-		Customer c2 = cdc.retrieve(c1.getUserId());
+		Customer c2 = cdc.retrieve(c1.getID());
 		Assert.assertEquals(c1.getFirstName(), c2.getFirstName());
 		Assert.assertEquals(c1.getLastName(), c2.getLastName());
 		Assert.assertEquals(c1.getAddress(), c2.getAddress());

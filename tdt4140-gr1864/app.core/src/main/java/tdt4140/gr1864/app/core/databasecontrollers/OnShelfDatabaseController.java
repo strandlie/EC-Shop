@@ -18,25 +18,9 @@ import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
  * 
  * @author stian
  */
-public class OnShelfDatabaseController implements DatabaseCRUD {
+public class OnShelfDatabaseController extends DatabaseController implements DatabaseCRUD {
 	
 	PreparedStatement statement;
-	String dbPath;
-	
-	public OnShelfDatabaseController() {
-		String path = "../../../app.core/src/main/resources/database.db";
-		String relativePath;
-		//Finds path by getting URL and converting to URI and then to path 
-		try {
-			URI rerelativeURI = this.getClass().getClassLoader().getResource(".").toURI();
-			relativePath = Paths.get(rerelativeURI).toFile().toString() + "/";
-			
-		} catch (URISyntaxException e1) {
-			//If fail to convert to URI use URL path instead
-			relativePath = this.getClass().getClassLoader().getResource(".").getPath();
-		} 
-		dbPath = relativePath + path;
-	}
 	
 	/**
 	 * The DatabaseCRUD interface was not compatible with table for on_shelf, so its four methods have been deprecated and replaced
@@ -62,7 +46,7 @@ public class OnShelfDatabaseController implements DatabaseCRUD {
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql);
-			statement.setInt(1, shop.getShopID());
+			statement.setInt(1, shop.getID());
 			statement.setInt(2, productID);
 			statement.setInt(3, shop.getAmountInShelfs(productID));
 			statement.setInt(4, shop.getAmountInStorage(productID));
@@ -95,7 +79,7 @@ public class OnShelfDatabaseController implements DatabaseCRUD {
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, shop.getAmountInShelfs(productID));
 			statement.setInt(2, shop.getAmountInStorage(productID));
-			statement.setInt(3, shop.getShopID());
+			statement.setInt(3, shop.getID());
 			statement.setInt(4, productID);
 			statement.executeUpdate();
 			connection.close();
@@ -126,7 +110,7 @@ public class OnShelfDatabaseController implements DatabaseCRUD {
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql);
-			statement.setInt(1, shop.getShopID());
+			statement.setInt(1, shop.getID());
 			statement.setInt(2, productID);
 			
 			ResultSet rs = statement.executeQuery();

@@ -1,8 +1,5 @@
 package tdt4140.gr1864.app.core.databasecontrollers;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -15,25 +12,9 @@ import tdt4140.gr1864.app.core.Action;
 import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
 
-public class ActionDatabaseController implements DatabaseCRUD {
+public class ActionDatabaseController extends DatabaseController implements DatabaseCRUD {
 	
 	PreparedStatement statement;
-	String dbPath;
-	
-	public ActionDatabaseController() {
-		String path = "../../../app.core/src/main/resources/database.db";
-		String relativePath;
-		//Finds path by getting URL and converting to URI and then to path 
-		try {
-			URI rerelativeURI = this.getClass().getClassLoader().getResource(".").toURI();
-			relativePath = Paths.get(rerelativeURI).toFile().toString() + "/";
-			
-		} catch (URISyntaxException e1) {
-			//If fail to convert to URI use URL path instead
-			relativePath = this.getClass().getClassLoader().getResource(".").getPath();
-		} 
-		dbPath = relativePath + path;
-	}
 
 	/**
 	 * @see tdt4140.gr1864.app.core.interfaces.DatabaseCRUD#create(java.lang.Object)
@@ -50,11 +31,11 @@ public class ActionDatabaseController implements DatabaseCRUD {
 			statement.setString(1,  Long.toString(action.getTimeStamp()));
 			statement.setInt(2, action.getActionType());
 			statement.setInt(3, action.getProduct().getID());
-			statement.setInt(4, action.getShoppingTrip().getShoppingTripID());
+			statement.setInt(4, action.getShoppingTrip().getID());
 			statement.executeUpdate();
 			connection.close();
 			
-			return action.getShoppingTrip().getShoppingTripID();
+			return action.getShoppingTrip().getID();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -77,7 +58,7 @@ public class ActionDatabaseController implements DatabaseCRUD {
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, action.getActionType());
 			statement.setInt(2, action.getProduct().getID());
-			statement.setInt(3, action.getShoppingTrip().getShoppingTripID());
+			statement.setInt(3, action.getShoppingTrip().getID());
 			statement.setString(4, Long.toString(action.getTimeStamp()));
 			statement.executeUpdate();
 			connection.close();
@@ -198,7 +179,7 @@ public class ActionDatabaseController implements DatabaseCRUD {
 	public void delete(int id) {
 		System.err.println("not in use, see delete(int shopping_trip_id, long timestamp)");
 	}
-	
+
 	/**
 	 * deletes action from database based on shopping_trip_id and timeStamp
 	 * @param shopping_trip_id	id of trip action is a part of

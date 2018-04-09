@@ -236,7 +236,7 @@ public class TestDataLoader {
 	 */
 	public ShoppingTrip createShoppingTrip(ShoppingTrip trip, List<Coordinate> coordinates, List<Action> actions) {
 		// We set the Charged flag to true to prevent spamming the Stripe API with charges.
-		ShoppingTrip newTrip = new ShoppingTrip(coordinates, actions, trip.getShoppingTripID(), true);
+		ShoppingTrip newTrip = new ShoppingTrip(coordinates, actions, trip.getID(), true);
 		this.trip = newTrip;
 		return newTrip;
 	}

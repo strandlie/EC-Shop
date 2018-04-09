@@ -4,12 +4,20 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Observable;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.CustomerDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
+import tdt4140.gr1864.app.core.interfaces.Model;
 import tdt4140.gr1864.app.core.interfaces.UserInterface;
 
-public class Customer extends Observable implements UserInterface {
+@JsonAutoDetect
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Customer extends Observable implements Model, UserInterface {
 
 	// Controller for handling database request for customer
 	CustomerDatabaseController cdc = new CustomerDatabaseController();
@@ -21,10 +29,20 @@ public class Customer extends Observable implements UserInterface {
 	ActionDatabaseController adc = new ActionDatabaseController();
 
 	private int customerID;
+	
+	@JsonProperty("customerID")
+	private int customerId;
+
+	@JsonProperty
 	private String firstName;
+	@JsonProperty	
 	private String lastName;
+
 	/* has a default value for Customers without demographic data */
+	@JsonProperty
 	private String address = null;
+
+	@JsonProperty
 	private int zip = 0;
 
 	// Extra data, is optional
@@ -33,6 +51,8 @@ public class Customer extends Observable implements UserInterface {
 	private int numberOfPersonsInHousehold = 1; //default with 1 person in household
 
 	private List<ShoppingTrip> shoppingTrips;
+	
+	@JsonProperty
 	private int recommendedProductID = -1;
 	private boolean anonymous;
 	
@@ -44,13 +64,17 @@ public class Customer extends Observable implements UserInterface {
 	 */
 	public Customer(int customerID, String firstName, String lastName, 
 			List<ShoppingTrip> shoppingTrips) {
-		this.customerID = customerID;
+		this.customerId = customerID;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.shoppingTrips = shoppingTrips;
 		this.anonymous = false;
 	}
-
+	
+	public Customer() {
+		
+	}
+	
 	/**
 	 * Constructor used by CustomerDatabaseController when there is an address
 	 * @param customerID		id provided by database
@@ -59,7 +83,7 @@ public class Customer extends Observable implements UserInterface {
 	 */
 	public Customer(String firstName, String lastName, int customerID,
 			 String address, int zip, boolean anonymous) {
-		this.customerID = customerID;
+		this.customerId = customerID;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.address = address;
@@ -133,7 +157,7 @@ public class Customer extends Observable implements UserInterface {
 		// Is a primitive and does not need a check
 		this.anonymous = anonymous;
 
-		this.customerID = customerID;
+		this.customerId = customerID;
 	}
 
 	/**
@@ -144,7 +168,7 @@ public class Customer extends Observable implements UserInterface {
 	public Customer(String firstName, String lastName, int customerID) { 
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.customerID = customerID;
+		this.customerId = customerID;
 		this.anonymous = false;
 	}
 	
@@ -157,12 +181,17 @@ public class Customer extends Observable implements UserInterface {
 		this.lastName = lastName;
 	}
 
-	public int getUserId() {
-		return customerID;
+	@JsonIgnore
+	public int getID() {
+		return customerId;
+	}
+	
+	public int getCustomerID() {
+		return customerId;
 	}
 
-	public void setUserId(int userId) {
-		this.customerID = userId;
+	public void setCustomerId(int userId) {
+		this.customerId = userId;
 	}
 
 	public String getFirstName() {
@@ -275,8 +304,7 @@ public class Customer extends Observable implements UserInterface {
 		List<ShoppingTrip> allTrips = stdc.retrieveAllShoppingTrips();
 		
 		// List of all shopping trips for this customer	
-		List<ShoppingTrip> customerTrips = stdc.retrieveAllShoppingTripsForCustomer(this.customerID);
-
+		List<ShoppingTrip> customerTrips = stdc.retrieveAllShoppingTripsForCustomer(this.customerId);
 		
 		// Amount of customers (registered)
 		int countCustomers = cdc.countCustomers();
@@ -446,7 +474,7 @@ public class Customer extends Observable implements UserInterface {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Customer customer = (Customer) o;
-		return customerID == customer.customerID &&
+		return customerId == customer.customerId &&
 				zip == customer.zip &&
 				age == customer.age &&
 				numberOfPersonsInHousehold == customer.numberOfPersonsInHousehold &&
@@ -461,7 +489,7 @@ public class Customer extends Observable implements UserInterface {
 	@Override
 	public int hashCode() {
 
-		return Objects.hash(customerID, firstName, lastName, address, zip, gender, age, numberOfPersonsInHousehold, shoppingTrips, recommendedProductID);
+		return Objects.hash(customerId, firstName, lastName, address, zip, gender, age, numberOfPersonsInHousehold, shoppingTrips, recommendedProductID);
 	}
 }
 
