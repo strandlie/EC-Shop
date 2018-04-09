@@ -1,5 +1,8 @@
 package org.web.server.persistance;
 
+import org.web.server.AbstractServlet.HTTPMethod;
+
+import tdt4140.gr1864.app.core.Customer;
 import tdt4140.gr1864.app.core.databasecontrollers.CustomerDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
 import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
@@ -13,11 +16,6 @@ public class Persister {
 		
 	/** DBController used by persister-methods */
 	private static DatabaseCRUD controller = null;
-
-	/** method-types based on HTTP-request */
-	private static final int POST 	= 0;
-	private static final int PUT 		= 1;
-	private static final int DELETE 	= 2;
 	
 	/** Class names compared in switch-case */
 	public static final String SHOPPING_TRIP = "tdt4140.gr1864.app.core.ShoppingTrip";
@@ -50,8 +48,17 @@ public class Persister {
 	 * @param method	Persist-method to perform (CRUD)
 	 */
 	@SuppressWarnings("rawtypes")
-	public void persist(Object object, Class c, int method) {
-
+	public void persist(Object object, Class c, HTTPMethod method) {
+		setController(c);
+		
+		switch(method) {
+			case POST: 		create(object); break;
+			case PUT: 		update(object); break;
+			case DELETE: 	delete((Model) object); break;
+		}
+	}
+	
+	private void setController(Class c) {
 		switch(c.getName()) {
 		case SHOPPING_TRIP:
 			controller = new ShoppingTripDatabaseController();
@@ -60,12 +67,11 @@ public class Persister {
 			controller = new CustomerDatabaseController();
 			break;
 		}
+	}
 	
-		switch(method) {
-			case POST: 		create(object); break;
-			case PUT: 		update(object); break;
-			case DELETE: 	delete((Model) object); break;
-		}
+	public Object read(int id, Class c) {
+		setController(c);
+		return controller.retrieve(id);
 	}
 
 	/**

@@ -3,6 +3,7 @@ package org.web.server.serializers;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+import org.web.server.AbstractServlet.HTTPMethod;
 import org.web.server.persistance.Persister;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -54,7 +55,7 @@ public class Serializer {
 	 * @param method 	HTTP method
 	 */
 	@SuppressWarnings({ "rawtypes" })
-	public void deserialize(BufferedReader reader, Class c, int method) {
+	public void deserialize(BufferedReader reader, Class c, HTTPMethod method) {
 		
 		/* For classes that needs more advanced serializing */
 		switch(c.getName()) {
