@@ -47,8 +47,8 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-			statement.setInt(1, trip.getCustomer().getUserId());
-			statement.setInt(2, trip.getShop().getShopID());
+			statement.setInt(1, trip.getCustomer().getID());
+			statement.setInt(2, trip.getShop().getID());
 			statement.setBoolean(3, trip.getCharged());
 			statement.executeUpdate();
 		
@@ -84,10 +84,10 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql);
-			statement.setInt(1, trip.getCustomer().getUserId());
-			statement.setInt(2, trip.getShop().getShopID());
+			statement.setInt(1, trip.getCustomer().getID());
+			statement.setInt(2, trip.getShop().getID());
 			statement.setBoolean(3, trip.getCharged());
-			statement.setInt(4, trip.getShoppingTripID());
+			statement.setInt(4, trip.getID());
 			statement.executeUpdate();
 			connection.close();
 			

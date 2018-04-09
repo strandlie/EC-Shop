@@ -49,7 +49,7 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 			statement.setString(1, customer.getFirstName());
 			statement.setString(2, customer.getLastName());
 			statement.setString(3, customer.getAddress());
-			statement.setInt(4, customer.getUserId());
+			statement.setInt(4, customer.getID());
 			statement.executeUpdate();
 				
 			try {
@@ -154,7 +154,7 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 			statement.setString(2, customer.getLastName());
 			statement.setString(3, customer.getAddress());
 			statement.setInt(4, customer.getZip());
-			statement.setInt(5, customer.getUserId());
+			statement.setInt(5, customer.getID());
 			statement.executeUpdate();
 			connection.close();
 		} 
@@ -165,8 +165,6 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 
 	}
 
-
-    
     /**
      * @see tdt4140.gr1864.app.core.interfaces.DatabaseCRUD#delete(int)
      */

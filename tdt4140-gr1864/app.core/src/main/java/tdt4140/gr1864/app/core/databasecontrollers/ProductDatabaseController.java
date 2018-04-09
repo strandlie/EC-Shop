@@ -125,9 +125,9 @@ public class ProductDatabaseController implements DatabaseCRUD {
 		}
 		return null;
 	}
-
+	
 	/**
-	 * @see tdt4140.gr1864.app.core.interfaces.DatabaseCRUD#delete(int)
+	 * @see tdt4140.gr1864.app.core.interfaces.DatabaseCRUD#delete(object)
 	 */
 	@Override
 	public void delete(int id) {
