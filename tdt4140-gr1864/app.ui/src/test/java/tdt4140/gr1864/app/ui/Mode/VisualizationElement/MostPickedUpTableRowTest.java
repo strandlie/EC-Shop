@@ -10,7 +10,7 @@ public class MostPickedUpTableRowTest {
 	
 	@Before
 	public void setup() {
-		this.mostPickedUpRow = new MostPickedUpTableRow("Bolle", "1", "2", "1");
+		this.mostPickedUpRow = new MostPickedUpTableRow("Bolle", "2", "1");
 	}
 	
 	@Test
@@ -19,13 +19,13 @@ public class MostPickedUpTableRowTest {
 	}
 	
 	@Test
-	public void testGetNumberOfPickupsExpectOne() {
-		Assert.assertEquals("1", this.mostPickedUpRow.getNumberOfPickUp());
+	public void testGetNumberOfPickupsExpectTwo() {
+		Assert.assertEquals("2", this.mostPickedUpRow.getNumberOfPickUp());
 	}
 	
 	@Test
-	public void testGetNumberOfPutDownExpectTwo() {
-		Assert.assertEquals("2", this.mostPickedUpRow.getNumberOfPutDown());
+	public void testGetNumberOfPutDownExpectOne() {
+		Assert.assertEquals("1", this.mostPickedUpRow.getNumberOfPutDown());
 	}
 	
 	@Test
@@ -39,8 +39,14 @@ public class MostPickedUpTableRowTest {
 	}
 	
 	@Test
-	public void testSetNewNumberOfPutDown() {
-		this.mostPickedUpRow.setNumberOfPutDown("3");
-		
+	public void testSetNewNumberOfPickUpExpecTwo() {
+		this.mostPickedUpRow.setNumberOfPickUp("3");
+		Assert.assertEquals("2", this.mostPickedUpRow.getNumberOfPurchases());
+	}
+	
+	@Test
+	public void testSetNewNumberOfPutDownExpectTwo() {
+		this.mostPickedUpRow.setNumberOfPutDown("0");
+		Assert.assertEquals("2", this.mostPickedUpRow.getNumberOfPurchases());
 	}
 }
