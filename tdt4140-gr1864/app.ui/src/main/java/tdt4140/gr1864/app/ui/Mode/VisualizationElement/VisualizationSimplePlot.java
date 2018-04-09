@@ -58,12 +58,12 @@ public class VisualizationSimplePlot extends VisualizationElement {
 	}
 
 	@Override
-	public void loadData(TableView<Row> tableView, ImageView imageView) {
+	public void loadData(TableView<TableRow> tableView, ImageView imageView) {
 		imageView.setImage(canvas.snapshot(null, null));
 	}
 
 	@Override
-	public void setAsActiveElement(VisualizationViewController vvc, TableView<Row> tableView, ImageView imageView) {
+	public void setAsActiveElement(VisualizationViewController vvc, TableView<TableRow> tableView, ImageView imageView) {
 		vvc.imageViewSetDisable(false);
 		vvc.tableViewSetDisable(true);
 		loadData(tableView, imageView);

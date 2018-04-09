@@ -58,7 +58,7 @@ public class VisualizationHeatMap extends VisualizationElement {
 	 * to conform to the infacemethod, but never used.
 	 */
 	@Override
-	public void loadData(TableView<Row> tableView, ImageView imageView) {
+	public void loadData(TableView<TableRow> tableView, ImageView imageView) {
 		imageView.setImage(this.map.getImage());
 	}
 
@@ -67,7 +67,7 @@ public class VisualizationHeatMap extends VisualizationElement {
 	 * Shows the ImageView and hides the tableView
 	 */
 	@Override
-	public void setAsActiveElement(VisualizationViewController vvc, TableView<Row> tableView, ImageView imageView) {
+	public void setAsActiveElement(VisualizationViewController vvc, TableView<TableRow> tableView, ImageView imageView) {
 		vvc.imageViewSetDisable(false);
 		vvc.tableViewSetDisable(true);
 		loadData(tableView, imageView);

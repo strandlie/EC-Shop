@@ -30,7 +30,7 @@ public interface VisualizationInterface {
 	 * @param tableView The tabelView in the current scene
 	 * @param imageView The imageView in the current scene
 	 */
-	void loadData(TableView<Row> tableView, ImageView imageView);
+	void loadData(TableView<TableRow> tableView, ImageView imageView);
 	
 	/**
 	 * Is called when the VisualizationViewController sets the instance as
@@ -38,7 +38,7 @@ public interface VisualizationInterface {
 	 * @param tableView The TableView in the current scene
 	 * @param imageView The ImageView in the current scene
 	 */
-	void setAsActiveElement(VisualizationViewController vvc, TableView<Row> tableView, ImageView imageView);
+	void setAsActiveElement(VisualizationViewController vvc, TableView<TableRow> tableView, ImageView imageView);
 	
 	/*
 	 * TODO: Add more methods
