@@ -9,7 +9,6 @@ import org.junit.*;
 
 import tdt4140.gr1864.app.core.database.DatabaseWiper;
 import tdt4140.gr1864.app.core.database.TestDataLoader;
-import tdt4140.gr1864.app.core.databasecontroller.ShopDatabaseControllerTest;
 import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.CustomerDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
@@ -152,9 +151,82 @@ public class CustomerTest {
 	 * Test method for {@link tdt4140.gr1864.app.core.Customer#getLastName()}.
 	 */
 	@Test
+	public void testGetAddress() {
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2);
+		assertEquals(c1.getAddress(), "NTNU");
+	}
+
+	/**
+	 * Test method for {@link tdt4140.gr1864.app.core.Customer#setLastName(java.lang.String)}.
+	 */
+	@Test
+	public void testSetAddress() {
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2);
+		c1.setAddress("UiB");
+		assertEquals(c1.getAddress(), "UiB");
+	}
+
+	@Test
+	public void testGetZip() {
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2);
+		assertEquals(c1.getZip(), 7047);
+	}
+
+	/**
+	 * Test method for {@link tdt4140.gr1864.app.core.Customer#setLastName(java.lang.String)}.
+	 */
+	@Test
+	public void testSetZip() {
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2);
+		c1.setZip(0001);
+		assertEquals(c1.getZip(), 0001);
+	}
+
+	@Test
+	public void testGetGender() {
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2);
+		assertEquals(c1.getGender(), "Unspecified");
+	}
+
+	/**
+	 * Test method for {@link tdt4140.gr1864.app.core.Customer#setLastName(java.lang.String)}.
+	 */
+	@Test
+	public void testSetGender() {
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2);
+		c1.setGender("Male");
+		assertEquals(c1.getGender(), "Male");
+	}
+
+	@Test
+	public void testGetAge() {
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2);
+		assertEquals(c1.getAge(), 44);
+	}
+
+	/**
+	 * Test method for {@link tdt4140.gr1864.app.core.Customer#setLastName(java.lang.String)}.
+	 */
+	@Test
+	public void testSetAge() {
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2);
+		c1.setAge(50);
+		assertEquals(c1.getAge(), 50);
+	}
+
+	@Test
 	public void testGetLastName() {
-		c1 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
-		assertEquals(c1.getLastName(), "Nilsen");
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2);
+		assertEquals(c1.getLastName(), "Len");
 	}
 
 	/**
@@ -162,11 +234,12 @@ public class CustomerTest {
 	 */
 	@Test
 	public void testSetLastName() {
-		c1 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2);
 		c1.setLastName("Knudsen");
 		assertEquals(c1.getLastName(), "Knudsen");
 	}
-	
+
 	@Test
 	public void WTestGiveRecommendationBoughtExpectProductIDEqual34() {
 		int expectedProductID = 34;

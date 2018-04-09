@@ -130,7 +130,6 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 					sdc.retrieve(rs.getInt("shop_id")),
 					rs.getBoolean(4),
 					rs.getBoolean("anonymous"));
-			
 			connection.close();
 			return trip;
 

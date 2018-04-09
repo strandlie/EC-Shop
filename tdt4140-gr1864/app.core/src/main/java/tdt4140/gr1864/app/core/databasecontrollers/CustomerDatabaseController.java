@@ -40,8 +40,8 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 	@Override
     public int create(Object object) {
     	Customer customer = objectIsCustomer(object);
-		String sql = "INSERT INTO customer (first_name, last_name, address, zip, anonymous) "
-					+ "values (?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO customer (first_name, last_name, address, zip, gender, age, num_persons_in_household, anonymous) "
+					+ "values (?, ?, ?, ?, ?, ?, ?, ?)";
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -49,7 +49,10 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 			statement.setString(2, customer.getLastName());
 			statement.setString(3, customer.getAddress());
 			statement.setInt(4, customer.getUserId());
-			statement.setBoolean(5, customer.getAnonymous());
+			statement.setString(5, customer.getGender());
+			statement.setInt(6, customer.getAge());
+			statement.setInt(7, customer.getNumberOfPersonsInHousehold());
+			statement.setBoolean(8, customer.getAnonymous());
 			statement.executeUpdate();
 				
 			try {
@@ -95,10 +98,13 @@ public class CustomerDatabaseController implements DatabaseCRUD {
             Customer user = new Customer(
             		rs.getString("first_name"), 
             		rs.getString("last_name"), 
-            		rs.getInt("customer_id"),
             		rs.getString("address"),
             		rs.getInt("zip"),
-            		rs.getBoolean("anonymous")
+					rs.getString("gender"),
+					rs.getInt("age"),
+					rs.getInt("num_persons_in_household"),
+            		rs.getBoolean("anonymous"),
+					rs.getInt("customer_id")
             		);
             statement.close();
             return user;
@@ -122,16 +128,17 @@ public class CustomerDatabaseController implements DatabaseCRUD {
     		ResultSet rs = statement.executeQuery();
 
     		List<Customer> customers = new ArrayList<>();
-    		Customer customer;
     		while (rs.next()) {
-    			customer = new Customer(
-					rs.getString("first_name"), 
-					rs.getString("last_name"), 
-					rs.getInt("customer_id"),
-					rs.getString("address"),
-					rs.getInt("zip"),
-            		rs.getBoolean("anonymous")
-            		);
+				Customer customer = new Customer(
+						rs.getString("first_name"),
+						rs.getString("last_name"),
+						rs.getString("address"),
+						rs.getInt("zip"),
+						rs.getString("gender"),
+						rs.getInt("age"),
+						rs.getInt("num_persons_in_household"),
+						rs.getBoolean("anonymous"),
+						rs.getInt("customer_id"));
     			customers.add(customer);
     		}
     		connection.close();
@@ -150,7 +157,7 @@ public class CustomerDatabaseController implements DatabaseCRUD {
     public void update(Object object) {
     	Customer customer = objectIsCustomer(object);
     	String sql = "UPDATE customer "
-    				+ "SET first_name=?, last_name=?, address=?, zip=? "
+    				+ "SET first_name=?, last_name=?, address=?, zip=?, gender=?, age=?, num_persons_in_household=? "
     				+ "WHERE customer_id=?";
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
@@ -159,7 +166,10 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 			statement.setString(2, customer.getLastName());
 			statement.setString(3, customer.getAddress());
 			statement.setInt(4, customer.getZip());
-			statement.setInt(5, customer.getUserId());
+			statement.setString(5, customer.getGender());
+			statement.setInt(6, customer.getAge());
+			statement.setInt(7, customer.getNumberOfPersonsInHousehold());
+			statement.setInt(8, customer.getUserId());
 			statement.executeUpdate();
 			connection.close();
 		} 

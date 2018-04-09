@@ -4,7 +4,10 @@ first_name varchar(30) not null,
 last_name varchar(30) not null,
 address	varchar(31),
 zip integer,
-anonymous boolean not null,
+gender varchar(31),
+age int,
+num_persons_in_household int,
+anonymous boolean,
 foreign key(customer_id) references shopping_trip(customer_id)
 );
 

@@ -1,6 +1,7 @@
 package tdt4140.gr1864.app.core;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Observable;
 
 import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
@@ -26,6 +27,11 @@ public class Customer extends Observable implements UserInterface {
 	private String address = null;
 	private int zip = 0;
 
+	// Extra data, is optional
+	private String gender = null; //Have to consider more than just male and female
+	private int age = 0;
+	private int numberOfPersonsInHousehold = 1; //default with 1 person in household
+
 	private List<ShoppingTrip> shoppingTrips;
 	private int recommendedProductID = -1;
 	private boolean anonymous;
@@ -44,7 +50,7 @@ public class Customer extends Observable implements UserInterface {
 		this.shoppingTrips = shoppingTrips;
 		this.anonymous = false;
 	}
-	
+
 	/**
 	 * Constructor used by CustomerDatabaseController when there is an address
 	 * @param customerID		id provided by database
@@ -59,6 +65,75 @@ public class Customer extends Observable implements UserInterface {
 		this.address = address;
 		this.zip = zip;
 		this.anonymous = anonymous;
+	}
+
+
+	/**
+	 * Constructor used when user have added additional information. Checks for each field being not null
+	 * Thsi is for not having exponentially many constructors
+	 * @param firstName
+	 * @param lastName
+	 * @param address
+	 * @param zip
+	 * @param gender
+	 * @param age
+	 * @param numberOfPersonsInHousehold
+	 */
+	public Customer(String firstName, String lastName, String address, int zip, String gender,
+					int age, int numberOfPersonsInHousehold, boolean anonymous) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+
+		// Input validation
+		if (address != null)
+			this.address = address;
+		if (zip != 0)
+            this.zip = zip;
+		if (gender != null)
+            this.gender = gender;
+		if (age != 0)
+            this.age = age;
+		if (numberOfPersonsInHousehold != 0)
+            this.numberOfPersonsInHousehold = numberOfPersonsInHousehold;
+
+		// Is a primitive and does not need a check
+		this.anonymous = anonymous;
+	}
+
+	/**
+	 * Constructor used when user have added additional information. Checks for each field being not null
+	 * This is for not having exponentially many constructors.
+	 * Also includes customerid from database
+	 * @param firstName
+	 * @param lastName
+	 * @param address
+	 * @param zip
+	 * @param gender
+	 * @param age
+	 * @param numberOfPersonsInHousehold
+	 * @param customerID CustomerId provided from database
+	 */
+	public Customer(String firstName, String lastName, String address, int zip, String gender,
+					int age, int numberOfPersonsInHousehold, boolean anonymous, int customerID) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+
+		// Input validation
+		if (address != null)
+			this.address = address;
+		if (zip != 0)
+			this.zip = zip;
+		if (gender != null)
+			this.gender = gender;
+		if (age != 0)
+			this.age = age;
+		if (numberOfPersonsInHousehold != 0)
+			this.numberOfPersonsInHousehold = numberOfPersonsInHousehold;
+
+		// Is a primitive and does not need a check
+		this.anonymous = anonymous;
+
+		this.customerID = customerID;
 	}
 
 	/**
@@ -82,7 +157,104 @@ public class Customer extends Observable implements UserInterface {
 		this.lastName = lastName;
 	}
 
+	public int getUserId() {
+		return customerID;
+	}
+
+	public void setUserId(int userId) {
+		this.customerID = userId;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 	
+	public List<ShoppingTrip> getShoppingTrips() {
+		return shoppingTrips;
+	}
+
+	public void setShoppingTrips(List<ShoppingTrip> shoppingTrips) {
+		this.shoppingTrips = shoppingTrips;
+	}
+	
+	public int getRecommendedProductID() {
+		return this.recommendedProductID;
+	}
+	
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public int getNumberOfPersonsInHousehold() {
+		return numberOfPersonsInHousehold;
+	}
+
+	public void setNumberOfPersonsInHousehold(int numberOfPersonsInHousehold) {
+		this.numberOfPersonsInHousehold = numberOfPersonsInHousehold;
+	}
+	
+	public boolean getAnonymous() {
+		return this.anonymous;
+	}
+
+	public void setAnonymous(boolean anonymous) {
+		this.anonymous = anonymous;
+	}
+	
+	public int getZip() {
+		return zip;
+	}
+
+	/**
+	 * Sets new zip code and notifies observer
+	 * @param zip new zip code
+	 */
+	public void setZip(int zip) {
+        setChanged();
+		notifyObservers();
+		clearChanged();
+		this.zip = zip;
+	}
+	
+	public String getAddress() {
+		return address;
+	}
+
+	/**
+	 * Sets new address and notifies observer
+	 * @param address new address
+	 */
+	public void setAddress(String address) {
+		setChanged();
+		notifyObservers();
+		clearChanged();
+		this.address = address;
+	}
+
 	/**
 	 *  The recommendation is based on shopping trips stored in the database and 
 	 *  gives the recommendation based on to occasions:
@@ -104,6 +276,7 @@ public class Customer extends Observable implements UserInterface {
 		
 		// List of all shopping trips for this customer	
 		List<ShoppingTrip> customerTrips = stdc.retrieveAllShoppingTripsForCustomer(this.customerID);
+
 		
 		// Amount of customers (registered)
 		int countCustomers = cdc.countCustomers();
@@ -267,115 +440,28 @@ public class Customer extends Observable implements UserInterface {
 		}
 		this.recommendedProductID = productID;
 	}
-	
-	public int getZip() {
-		return zip;
-	}
 
-	/**
-	 * Sets new zip code and notifies observer
-	 * @param zip new zip code
-	 */
-	public void setZip(int zip) {
-        setChanged();
-		notifyObservers();
-		clearChanged();
-		this.zip = zip;
-	}
-	
-	public String getAddress() {
-		return address;
-	}
-
-	/**
-	 * Sets new address and notifies observer
-	 * @param address new address
-	 */
-	public void setAddress(String address) {
-		setChanged();
-		notifyObservers();
-		clearChanged();
-		this.address = address;
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Customer customer = (Customer) o;
+		return customerID == customer.customerID &&
+				zip == customer.zip &&
+				age == customer.age &&
+				numberOfPersonsInHousehold == customer.numberOfPersonsInHousehold &&
+				recommendedProductID == customer.recommendedProductID &&
+				Objects.equals(firstName, customer.firstName) &&
+				Objects.equals(lastName, customer.lastName) &&
+				Objects.equals(address, customer.address) &&
+				Objects.equals(gender, customer.gender) &&
+				Objects.equals(shoppingTrips, customer.shoppingTrips);
 	}
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-		result = prime * result + customerID;
-		return result;
-	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Customer other = (Customer) obj;
-		if (firstName == null) {
-			if (other.firstName != null)
-				return false;
-		} 
-		else if (!firstName.equals(other.firstName))
-			return false;
-		if (lastName == null) {
-			if (other.lastName != null)
-				return false;
-		} 
-		else if (!lastName.equals(other.lastName))
-			return false;
-		if (customerID != other.customerID)
-			return false;
-		return true;
-	}
-	
-	public int getUserId() {
-		return customerID;
-	}
-
-	public void setUserId(int userId) {
-		this.customerID = userId;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-	
-	public List<ShoppingTrip> getShoppingTrips() {
-		return shoppingTrips;
-	}
-
-	public void setShoppingTrips(List<ShoppingTrip> shoppingTrips) {
-		this.shoppingTrips = shoppingTrips;
-	}
-	
-	public int getRecommendedProductID() {
-		return this.recommendedProductID;
-	}
-	
-	public boolean getAnonymous() {
-		return this.anonymous;
-	}
-	
-	public void setAnonymous(boolean anonymous) {
-		this.anonymous = anonymous;
+		return Objects.hash(customerID, firstName, lastName, address, zip, gender, age, numberOfPersonsInHousehold, shoppingTrips, recommendedProductID);
 	}
 }
 
