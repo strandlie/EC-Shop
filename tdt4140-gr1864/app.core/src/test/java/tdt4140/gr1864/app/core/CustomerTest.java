@@ -190,7 +190,7 @@ public class CustomerTest {
 	}
 	
 	@Test
-	public void ZTestGiveRecommendationWhenShoppingTripsAreAnonymousExpectProductIDEqual1() {
+	public void ZTestGiveRecommendationWhenShoppingTripsAreAnonymousExpectProductIDEqualOne() {
 		int expectedProductID = 1;
 		t1.setAnonymous(true);
 		stdc.update(t1);
