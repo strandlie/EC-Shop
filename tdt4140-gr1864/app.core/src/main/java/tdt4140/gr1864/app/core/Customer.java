@@ -52,7 +52,7 @@ public class Customer extends Observable implements Model, UserInterface {
 	 */
 	public Customer(int customerID, String firstName, String lastName, 
 			List<ShoppingTrip> shoppingTrips) {
-		this.customerID = customerID;
+		this.customerId = customerID;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.shoppingTrips = shoppingTrips;
@@ -71,7 +71,7 @@ public class Customer extends Observable implements Model, UserInterface {
 	 */
 	public Customer(String firstName, String lastName, int customerID,
 			 String address, int zip, boolean anonymous) {
-		this.customerID = customerID;
+		this.customerId = customerID;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.address = address;
@@ -145,7 +145,7 @@ public class Customer extends Observable implements Model, UserInterface {
 		// Is a primitive and does not need a check
 		this.anonymous = anonymous;
 
-		this.customerID = customerID;
+		this.customerId = customerID;
 	}
 
 	/**
@@ -156,7 +156,7 @@ public class Customer extends Observable implements Model, UserInterface {
 	public Customer(String firstName, String lastName, int customerID) { 
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.customerID = customerID;
+		this.customerId = customerID;
 		this.anonymous = false;
 	}
 	
@@ -235,11 +235,11 @@ public class Customer extends Observable implements Model, UserInterface {
 		List<ShoppingTrip> allTrips = stdc.retrieveAllShoppingTrips();
 		
 		// List of all shopping trips for this customer	
-		List<ShoppingTrip> customerTrips = stdc.retrieveAllShoppingTripsForCustomer(this.customerID);
+		List<ShoppingTrip> customerTrips = stdc.retrieveAllShoppingTripsForCustomer(this.customerId);
 
 		// PRINT
 		System.out.println(allTrips.size() + " all trips size");
-		System.out.println(customerTrips.size() + " customer all trips size, customerID: " + this.customerID);
+		System.out.println(customerTrips.size() + " customer all trips size, customerID: " + this.customerId);
 		
 		
 		
@@ -445,7 +445,7 @@ public class Customer extends Observable implements Model, UserInterface {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Customer customer = (Customer) o;
-		return customerID == customer.customerID &&
+		return customerId == customer.customerId &&
 				zip == customer.zip &&
 				age == customer.age &&
 				numberOfPersonsInHousehold == customer.numberOfPersonsInHousehold &&
@@ -460,7 +460,7 @@ public class Customer extends Observable implements Model, UserInterface {
 	@Override
 	public int hashCode() {
 
-		return Objects.hash(customerID, firstName, lastName, address, zip, gender, age, numberOfPersonsInHousehold, shoppingTrips, recommendedProductID);
+		return Objects.hash(customerId, firstName, lastName, address, zip, gender, age, numberOfPersonsInHousehold, shoppingTrips, recommendedProductID);
 	}
 
 	public boolean getAnonymous() {
