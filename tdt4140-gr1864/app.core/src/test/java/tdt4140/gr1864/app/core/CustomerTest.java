@@ -182,8 +182,8 @@ public class CustomerTest {
 	}
 
 	@Test
-	public void YTestGiveRecommendationWhenCustomerAreAnonymousExpectProductIDEqualMostPopularEquals25() {
-		int expectedProductID = 25;
+	public void YTestGiveRecommendationWhenCustomerAreAnonymousExpectProductIDEqualMostPopularEquals31() {
+		int expectedProductID = 31;
 		c1.setAnonymous(true);
 		c1.giveRecommendation();
 		Assert.assertEquals(expectedProductID, c1.getRecommendedProductID());
