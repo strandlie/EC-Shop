@@ -92,7 +92,7 @@ public class CustomerTest {
 	 * Test method for {@link tdt4140.gr1864.app.core.Customer#getID()}.
 	 */
 	@Test
-	public void testGetUserId() {
+	public void testGetID() {
 		c1 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
 		assertEquals(c1.getID(), 1);
 	}
@@ -101,7 +101,7 @@ public class CustomerTest {
 	 * Test method for {@link tdt4140.gr1864.app.core.Customer#setCustomerId(int)}.
 	 */
 	@Test
-	public void testSetUserId() {
+	public void testSetID() {
 		c1 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
 		c1.setCustomerId(2);
 		assertEquals(c1.getID(), 2);

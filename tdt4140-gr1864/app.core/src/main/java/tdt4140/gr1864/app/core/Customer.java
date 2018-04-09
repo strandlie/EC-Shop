@@ -178,7 +178,7 @@ public class Customer extends Observable implements Model, UserInterface {
 		return customerID;
 	}
 
-	public void setCustomerId(int userId) {
+	public void setCustomerID(int userId) {
 		this.customerID = userId;
 	}
 
