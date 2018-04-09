@@ -19,38 +19,60 @@ import tdt4140.gr1864.app.core.interfaces.Model;
  */
 public class Serializer {
 
-	/* global object used for tests */
-	private Model object;
+	/* global objects used for tests */
+	private Object object;
+	
+	/* Used for singleton design */
+	private static Serializer serializer;
+	
+	/* Used for persisting objects to/from database */
+	private Persister persister = Persister.init();
 
 	/**
-	 * Serializes JSON data from reader into POJO. Does handle non-POJO models 
+	 * Private constructor for singleton design
+	 */
+	private Serializer() {}
+	
+	/**
+	 * Retrieves a Serializer object based on singleton design-pattern
+	 * @return Serializer object
+	 */
+	public static Serializer init() {
+		if (serializer == null) {
+			serializer = new Serializer();
+		}
+		return serializer;
+	}
+	
+	
+	/**
+	 * Deserializes JSON data from reader into POJO. Does handle non-POJO models 
 	 * based on the objects class. Further calls functionality in persistence-layer 
 	 * through Persister-class based on method
 	 * @param reader 	BufferedReader with JSON-data
-	 * @param c			Class of object to serialize to
+	 * @param c			Class of object to deserialize to
 	 * @param method 	HTTP method
 	 */
 	@SuppressWarnings({ "rawtypes" })
-	public void serialize(BufferedReader reader, Class c, int method) {
+	public void deserialize(BufferedReader reader, Class c, int method) {
 		
 		/* For classes that needs more advanced serializing */
 		switch(c.getName()) {
-			case "Receipt": object = serializeReceipt(reader); break;
-			case "ShoppingTrip": object = serializeShoppingTrip(reader); break;
-			default: object = genericSerializer(reader, c); break;
+			case "Receipt": object = deserializeReceipt(reader); break;
+			case "ShoppingTrip": object = deserializeShoppingTrip(reader); break;
+			default: object = genericDeserialize(reader, c); break;
 		}
-		Persister.persist(object, c, method);
+		persister.persist(object, c, method);
 	}
 	
 	/**
-	 * Generic serializer that can serialize POJOs with Jackson annotations
+	 * Generic deserializer that can serialize POJOs with Jackson annotations
 	 * @param reader 	BufferedReader with JSON-data
 	 * @param c			Class of object to serialize to 
 	 * @return object
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Model genericSerializer(BufferedReader reader, Class c) {
-		object = null;
+	private Model genericDeserialize(BufferedReader reader, Class c) {
 		ObjectMapper mapper = new ObjectMapper();
 		
 		try {
@@ -58,25 +80,17 @@ public class Serializer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return object;
+		return (Model) object;
 	}
 	
 	/**
-	 * Deserializes POJO into JSON. Does handle non-POJO models based on
-	 * the objects class.
-	 * @param o 	object to serialize
+	 * Serializes POJO into JSON. 
+	 * @param o 	Model object to serialize
 	 * @param c    	Class of object
 	 * @return JSON String
 	 */
 	@SuppressWarnings("rawtypes")
-	public String deserialize(Model o, Class c) {
-
-		/* For classes that needs more advanced deserializing */
-		switch(c.getName()) {
-			case Persister.RECEIPT: return deserializeReceipt((Receipt) o);
-			case Persister.SHOPPING_TRIP: return deserializeShoppingTrip((ShoppingTrip) o);
-		}
-
+	public String serialize(Model o, Class c) {
 		ObjectMapper mapper = new ObjectMapper();
 		String json = null;
 		try {
@@ -86,23 +100,40 @@ public class Serializer {
 		}
 		return json;
 	}
+	
+	/**
+	 * Serializer that handles classes that requires more advanced
+	 * serializing
+	 * @param o		objcet to serialize
+	 * @param c		Class of object
+	 * @return JSON String
+	 */
+	@SuppressWarnings("rawtypes")
+	public String serialize(Object o, Class c) {
+		/* For classes that needs more advanced serializing */
+		switch(c.getName()) {
+			case Persister.RECEIPT: return serializeReceipt((Receipt) o);
+			case Persister.SHOPPING_TRIP: return serializeShoppingTrip((ShoppingTrip) o);
+		}
+		return null;
+	}
 
-	private String deserializeShoppingTrip(ShoppingTrip trip) {
+	private String serializeShoppingTrip(ShoppingTrip trip) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private String deserializeReceipt(Receipt receipt) {
+	private String serializeReceipt(Receipt receipt) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	/**
-	 * Calls functions to serialize ShoppingTrip with its trips and actions.
+	 * Calls functions to deserialize ShoppingTrip with its trips and actions.
 	 * app.core's DataLoader has this functionality, so it is used.
 	 * @param reader	BufferedReader with JSON-data
 	 */
-	private Model serializeShoppingTrip(BufferedReader reader) {
+	private Model deserializeShoppingTrip(BufferedReader reader) {
 		String json = new String();
 		try {
 			for (String line; (line = reader.readLine()) != null; json += line);
@@ -113,13 +144,13 @@ public class Serializer {
 		return trip;
 	}
 
-	private Model serializeReceipt(BufferedReader reader) {
+	private Object deserializeReceipt(BufferedReader reader) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	/* Used by tests */
-	public Model getObject() {
+	public Object getObject() {
 		return object;
 	}
 }

@@ -28,8 +28,8 @@ public class SerializerTest {
 	public void testSerializerWithCustomerExpectCorrectFirstName() throws FileNotFoundException {
 		FileReader fr = new FileReader("customer.json");
 		BufferedReader reader = new BufferedReader(fr);		
-		Serializer sr = new Serializer();
-		sr.serialize(reader, Customer.class, 1);
+		Serializer sr = Serializer.init();
+		sr.deserialize(reader, Customer.class, 1);
 		Customer customer = (Customer) sr.getObject();
 
 		CustomerDatabaseController cdc = new CustomerDatabaseController();
@@ -51,6 +51,6 @@ public class SerializerTest {
 		String expected = reader.readLine();
 		reader.close();
 		
-		Assert.assertEquals(expected, new Serializer().deserialize(customer, customer.getClass()));
+		Assert.assertEquals(expected, Serializer.init().serialize(customer, customer.getClass()));
 	}
 }
