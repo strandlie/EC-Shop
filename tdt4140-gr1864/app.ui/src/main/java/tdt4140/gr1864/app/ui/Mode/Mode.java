@@ -1,7 +1,6 @@
 package tdt4140.gr1864.app.ui.Mode;
 
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationInterface;
-import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
 
 /**
  * 
@@ -19,7 +18,6 @@ public class Mode {
 	private String name;
 
 	/**
-<<<<<<< HEAD
 	 * The list of the VisualizationElements that is shown in the Visualization Area
 	 * for this mode Implemented as List to get an implicit ordering of elements
 	 */

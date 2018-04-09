@@ -3,7 +3,7 @@ package tdt4140.gr1864.app.ui.globalUIModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableView;
 import javafx.scene.image.ImageView;
-import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Row;
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.TableRow;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationInterface;
 
 /**
@@ -22,7 +22,7 @@ public class VisualizationViewController {
 	 * The reference to the actual TableView shown to the user
 	 */
 	@FXML
-	private TableView<Row> tableView;
+	private TableView<TableRow> tableView;
 	
 	/**
 	 * The reference to the ImageView used to show pictures

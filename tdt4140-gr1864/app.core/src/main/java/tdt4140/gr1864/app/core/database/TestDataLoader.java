@@ -206,7 +206,7 @@ public class TestDataLoader {
 		Customer c1 = createCustomer();
 		// We set the charged flag to true to prevent spamming the Stripe API.		
 		trip = new ShoppingTrip(c1, s1, true);
-		trip = new ShoppingTrip(stdc.create(trip), trip.getCustomer(), trip.getShop(), true);
+		trip = new ShoppingTrip(stdc.create(trip), trip.getCustomer(), trip.getShop(), true, false);
 		
 		try {
 			Object obj = parser.parse(new FileReader(relativePath + path));
