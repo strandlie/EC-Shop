@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
+import tdt4140.gr1864.app.core.interfaces.Model;
 
 /**
  * The java object Shop that corresponds to the shop table in DB
@@ -15,7 +16,7 @@ import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
  *  
  * @author stian
  */
-public class Shop{
+public class Shop implements Model {
 	
 	/* Values */
 	private int shopID;
@@ -43,7 +44,7 @@ public class Shop{
 		this.storage = new HashMap<>();
 	}
 	
-	public int getShopID() {
+	public int getID() {
 		return shopID;
 	}
 	

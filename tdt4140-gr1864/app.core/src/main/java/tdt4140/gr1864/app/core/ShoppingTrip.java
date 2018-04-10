@@ -2,7 +2,13 @@ package tdt4140.gr1864.app.core;
 
 import java.util.List;
 
-public class ShoppingTrip {
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import tdt4140.gr1864.app.core.interfaces.Model;
+
+public class ShoppingTrip implements Model {
 	
 	/* start-time of ShoppingTrip in UNIX-time */
 	private long start;
@@ -23,6 +29,7 @@ public class ShoppingTrip {
 	private List<Action> actions;
 
 	private boolean charged;
+	private boolean anonymous;
 	
 	/**
 	 * Normal constructor with charged paramater.
@@ -65,6 +72,7 @@ public class ShoppingTrip {
 		this.customer = customer;
 		this.shop = shop;
 		this.charged = charged;
+		this.anonymous = customer.getAnonymous();
 	}
 	
 	/**
@@ -72,12 +80,14 @@ public class ShoppingTrip {
 	 * @param shoppingTripId	id provided by database
 	 * @param customer			customer performing trip
 	 * @param shop				shop where trip was made
+	 * @param anonymous			whether or not this trip should be counted in the statistics
 	 */
-	public ShoppingTrip(int shoppingTripId, Customer customer, Shop shop, boolean charged) {
+	public ShoppingTrip(int shoppingTripId, Customer customer, Shop shop, boolean charged, boolean anonymous) {
 		this.shoppingTripID = shoppingTripId;
 		this.customer = customer;
 		this.shop = shop;
 		this.charged = charged;
+		this.anonymous = anonymous;
 	}
 	
 	private void charge() {
@@ -171,11 +181,20 @@ public class ShoppingTrip {
 		return customer;
 	}
 
-	public int getShoppingTripID() {
+	public int getID() {
 		return shoppingTripID;
 	}
 	
+
 	public long getDuration() {
 		return duration;
+
+	public void setAnonymous(boolean anonymous) {
+		this.anonymous = anonymous;
+	}
+	
+	public boolean getAnonymous() {
+		return this.anonymous;
+
 	}
 }

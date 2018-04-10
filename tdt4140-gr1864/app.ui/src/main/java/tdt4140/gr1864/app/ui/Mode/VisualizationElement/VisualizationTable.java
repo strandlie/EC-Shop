@@ -45,11 +45,11 @@ public class VisualizationTable extends VisualizationElement {
 	/**
 	 * Container for the columns in this table
 	 */
-	private ArrayList<TableColumn<Row, String>> columns;
+	private ArrayList<TableColumn<TableRow, String>> columns;
 	/**
 	 * Container for the data used to populate the table in the GUI
 	 */
-	private ObservableList<Row> data;
+	private ObservableList<TableRow> data;
 
 
 	/**
@@ -58,8 +58,8 @@ public class VisualizationTable extends VisualizationElement {
 	 */
 	public VisualizationTable(String name) {
 		super(name);
-		this.columns = new ArrayList<TableColumn<Row, String>>();
-		this.data = FXCollections.observableArrayList(new ArrayList<Row>());
+		this.columns = new ArrayList<TableColumn<TableRow, String>>();
+		this.data = FXCollections.observableArrayList(new ArrayList<TableRow>());
 	}
 	
 	/**
@@ -69,15 +69,15 @@ public class VisualizationTable extends VisualizationElement {
 	 */
 	@Override
 	public void setData(Object data) {
-		List<Row> list = objectIsList(data);
+		List<TableRow> list = objectIsList(data);
 		this.data = FXCollections.observableArrayList(list);
 	}
 	
 	/**
 	 * Add a single row to the table
-	 * @param Row the new row. Immidiately shown to the user if the mode is active
+	 * @param MostPickedTableRow the new row. Immidiately shown to the user if the mode is active
 	 */
-	public void addData(Row a) {
+	public void addData(TableRow a) {
 		this.data.add(a);
 	}
 	
@@ -85,7 +85,7 @@ public class VisualizationTable extends VisualizationElement {
 	 * Gets the items currently shown to the user
 	 * @return ObservableList the reference to the data currently populating the table
 	 */
-	public ObservableList<Row> getData() {
+	public ObservableList<TableRow> getData() {
 		return this.data;
 	}
 	
@@ -93,7 +93,7 @@ public class VisualizationTable extends VisualizationElement {
 	 * Implementation of the interfaceMethod. Loads the data from this VisualizationTable into 
 	 * the TableView
 	 */
-	public void loadData(TableView<Row> tableView, ImageView imageView) {
+	public void loadData(TableView<TableRow> tableView, ImageView imageView) {
 		tableView.setItems(this.data);
 	}
 	
@@ -101,7 +101,7 @@ public class VisualizationTable extends VisualizationElement {
 	 * Implementation of the interface method. Shows the TableView, hides the ImageView
 	 * Also loads data and Columns into the TableView
 	 */
-	public void setAsActiveElement(VisualizationViewController vvc, TableView<Row> tableView, ImageView imageView) {
+	public void setAsActiveElement(VisualizationViewController vvc, TableView<TableRow> tableView, ImageView imageView) {
 		vvc.imageViewSetDisable(true);
 		vvc.tableViewSetDisable(false);
 		loadData(tableView, imageView);
@@ -113,7 +113,7 @@ public class VisualizationTable extends VisualizationElement {
 	 * Gets the Columns of this table. Changing this will not immidiately reflect to the user, as this is controlled by the ModeController
 	 * @return ArrayList
 	 */
-	public ArrayList<TableColumn<Row, String>> getColumns() {
+	public ArrayList<TableColumn<TableRow, String>> getColumns() {
 		return this.columns;
 	}
 	
@@ -138,7 +138,7 @@ public class VisualizationTable extends VisualizationElement {
 		}
 		
 		String columnName = allowedColumnNames.get(columnID);
-		TableColumn<Row, String> tempColumn = new TableColumn<Row, String>(columnName);
+		TableColumn<TableRow, String> tempColumn = new TableColumn<TableRow, String>(columnName);
 		tempColumn.setCellValueFactory(new PropertyValueFactory(columnID));
 		columns.add(tempColumn);
 	}
@@ -158,7 +158,7 @@ public class VisualizationTable extends VisualizationElement {
 	 * @return boolean true if has the column name
 	 */
 	public boolean hasColumn(String name) {
-		for (TableColumn<Row, String> column : columns) {
+		for (TableColumn<TableRow, String> column : columns) {
 			if (column.getText().equals(name)) {
 				return true;
 			}
@@ -167,8 +167,8 @@ public class VisualizationTable extends VisualizationElement {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private List<Row> objectIsList(Object object) throws ClassCastException {
-		return (List<Row>) object;
+	private List<TableRow> objectIsList(Object object) throws ClassCastException {
+		return (List<TableRow>) object;
 	}
 
 	public void wipeTable() {

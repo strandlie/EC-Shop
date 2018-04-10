@@ -2,7 +2,6 @@
 package tdt4140.gr1864.app.core.databasecontroller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -54,39 +53,41 @@ public class ShoppingTripDatabaseControllerTest {
 
 	@Test
 	public void testCreateExpectPresistedObject() {
-		t2 = new ShoppingTrip(stdc.create(t1), t1.getCustomer(), t1.getShop(), true);
-		Assert.assertEquals(t1.getCustomer().getUserId(), t2.getCustomer().getUserId());
-		Assert.assertEquals(t1.getShop().getShopID(), t2.getShop().getShopID());
-		
+		t2 = new ShoppingTrip(stdc.create(t1), t1.getCustomer(), t1.getShop(), true, true);
+		Assert.assertEquals(t1.getCustomer().getID(), t2.getCustomer().getID());
+		Assert.assertEquals(t1.getShop().getID(), t2.getShop().getID());
+		Assert.assertEquals(true, t2.getAnonymous());
+
 	}
 	
 	@Test
 	public void testRetrieveExpectPersistedObject() {
-		t2 = new ShoppingTrip(stdc.create(t1), t1.getCustomer(), t1.getShop(), true);
-		t3 = (ShoppingTrip) stdc.retrieve(t2.getShoppingTripID());
+		t2 = new ShoppingTrip(stdc.create(t1), t1.getCustomer(), t1.getShop(), true, false);
+		t3 = (ShoppingTrip) stdc.retrieve(t2.getID());
 		
-		Assert.assertEquals(t2.getCustomer().getUserId(), t3.getCustomer().getUserId());
-		Assert.assertEquals(t2.getCustomer().getUserId(), t3.getCustomer().getUserId());
-		
+		Assert.assertEquals(t2.getCustomer().getID(), t3.getCustomer().getID());
+		Assert.assertEquals(t2.getShop().getID(), t3.getShop().getID());
+		Assert.assertEquals(false, t3.getAnonymous());
 	}
 	
 	@Test
 	public void testDeleteExpectNull() {
 		ShoppingTrip t3 = new ShoppingTrip(c1, s1, true);
-		t3 = new ShoppingTrip(stdc.create(t3), t3.getCustomer(), t3.getShop(), true);
-		stdc.delete(t3.getShoppingTripID());
-		
-		Assert.assertEquals(null, stdc.retrieve(t3.getShoppingTripID()));
+		t3 = new ShoppingTrip(stdc.create(t3), t3.getCustomer(), t3.getShop(), true, false);
+		stdc.delete(t3.getID());
+
+		Assert.assertEquals(null, stdc.retrieve(t3.getID()));
 	}
 	
 	@Test
 	public void testUpdateExpectNewlyPresistedObject() {
-		t1 = new ShoppingTrip(stdc.create(t1), c1, s1, true);
-		t1 = new ShoppingTrip(t1.getShoppingTripID(), c2, s1, true);
+		t1 = new ShoppingTrip(stdc.create(t1), c1, s1, true, false);
+		t1 = new ShoppingTrip(t1.getID(), c2, s1, true, false);
+
 		stdc.update(t1);
-		t2 = stdc.retrieve(t1.getShoppingTripID());
+		t2 = stdc.retrieve(t1.getID());
 		
-		Assert.assertEquals(c2.getUserId(), t2.getCustomer().getUserId());
+		Assert.assertEquals(c2.getID(), t2.getCustomer().getID());
 	}
 	
 	@Test
@@ -98,23 +99,23 @@ public class ShoppingTripDatabaseControllerTest {
 	
 	@Test 
 	public void testRetrieveAllShoppingTripsExpectCustomerShoppingTrips() {
-		
-		t1 = new ShoppingTrip(stdc.create(t1), c1, s1, true);
-		t1 = new ShoppingTrip(t1.getShoppingTripID(), c2, s1, true);
+		t1 = new ShoppingTrip(stdc.create(t1), c1, s1, true, false);
+		t1 = new ShoppingTrip(t1.getID(), c2, s1, true, false);
+
 		stdc.update(t1);
-		t2 = stdc.retrieve(t1.getShoppingTripID());
+		t2 = stdc.retrieve(t1.getID());
 		
-		List<ShoppingTrip> customerTrips = stdc.retrieveAllShoppingTripsForCustomer(c2.getUserId());		
+		List<ShoppingTrip> customerTrips = stdc.retrieveAllShoppingTripsForCustomer(c2.getID());		
 		List<ShoppingTrip> expectedTrips = Arrays.asList(t1);
 		
 		boolean wrongList = true;
 		
 		for (ShoppingTrip trip : customerTrips) {
 			for (ShoppingTrip exTrip : expectedTrips) {
-				if (trip.getCustomer().getUserId() == exTrip.getCustomer().getUserId() && 
+				if (trip.getCustomer().getID() == exTrip.getCustomer().getID() && 
 						trip.getCharged() == exTrip.getCharged() && 
-						trip.getShoppingTripID() == exTrip.getShoppingTripID() && 
-						trip.getShop().getShopID() == exTrip.getShop().getShopID()) {
+						trip.getID() == exTrip.getID() && 
+						trip.getShop().getID() == exTrip.getShop().getID()) {
 					wrongList = false;
 				}
 			}
@@ -135,10 +136,10 @@ public class ShoppingTripDatabaseControllerTest {
 		
 		for (ShoppingTrip trip : trips) {
 			for (ShoppingTrip exTrip : expectedTrips) {
-				if (trip.getCustomer().getUserId() == exTrip.getCustomer().getUserId() && 
+				if (trip.getCustomer().getID() == exTrip.getCustomer().getID() && 
 						trip.getCharged() == exTrip.getCharged() && 
-						trip.getShoppingTripID() == exTrip.getShoppingTripID() && 
-						trip.getShop().getShopID() == exTrip.getShop().getShopID()) {
+						trip.getID() == exTrip.getID() && 
+						trip.getShop().getID() == exTrip.getShop().getID()) {
 					wrongList = false;
 				}
 			}
@@ -149,8 +150,9 @@ public class ShoppingTripDatabaseControllerTest {
 	
 	@Test
 	public void wTestRetrieveAllShoppingTripsForCustomerExpectSizeEqualOne() {
-		t1 = new ShoppingTrip(stdc.create(t1), c1, s1, true);	
-		List<ShoppingTrip> customerTrips = stdc.retrieveAllShoppingTripsForCustomer(c1.getUserId());
+		t1 = new ShoppingTrip(stdc.create(t1), c1, s1, true, false);	
+		List<ShoppingTrip> customerTrips = stdc.retrieveAllShoppingTripsForCustomer(c1.getID());
+
 		Assert.assertEquals(1, customerTrips.size());
 	}
 }

@@ -7,7 +7,9 @@ import java.util.Map;
 
 import tdt4140.gr1864.app.core.*;
 import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
-import tdt4140.gr1864.app.ui.Mode.VisualizationElement.Row;
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.MostPickedUpTableRow;
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.DemographicsTableRow;
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.InStockTableRow;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
 
 /**
@@ -36,10 +38,7 @@ public class TableLoader {
 	private Map<String, Integer> stock;
 	
 	/**
-<<<<<<< HEAD
 	 * The constructor for CustomerList
-=======
->>>>>>> 78d8bf6195ac973dbc373daccc0688ca90a46973
 	 * @param trips A list of shopping trips to load the table from
 	 * @param table A model-layer representation of a table shown to the user. Any changes made to this will reflect to the user immidiately
 	 */
@@ -64,23 +63,11 @@ public class TableLoader {
 			}
 		}
 		
-		for (String productName : this.pickUps.keySet()) {
-			// Assumes there are no products that are put down, that are not picked up
-			if (! putDowns.containsKey(productName)) {
-				// If there are no put downs, only pickups, the number of purchases is equal to the number of pickups
-				this.purchases.put(productName, this.pickUps.get(productName));
-			}
-			else {
-				// Number of purchases = (the number of pickups) - (the number of putdowns)
-				this.purchases.put(productName, this.pickUps.get(productName) - this.putDowns.get(productName));
-			}
-		}
 		
 		for (String productName : this.pickUps.keySet()) {
 			String pickups = this.pickUps.get(productName).toString();
 			String putdowns = this.putDowns.containsKey(productName) ? this.putDowns.get(productName).toString() : "0";
-			String purchases = this.purchases.containsKey(productName) ? this.purchases.get(productName).toString() : "0";
-			table.addData(new Row(productName, pickups, putdowns, purchases));
+			table.addData(new MostPickedUpTableRow(productName, pickups, putdowns));
 		}
 	}
 	/**
@@ -113,7 +100,7 @@ public class TableLoader {
 		
 		for (String productName : this.stock.keySet()) {
 			String totalStock = this.stock.get(productName).toString();
-			table.addData(new Row(productName, totalStock));
+			table.addData(new InStockTableRow(productName, totalStock));
 		}
 		
 	}
@@ -130,7 +117,7 @@ public class TableLoader {
 		}
 
 		for (Customer customer: customers) {
-			table.addData(new Row(Integer.toString(customer.getUserId()), customer.getFirstName(), customer.getLastName(), customer.getAddress(), Integer.toString(customer.getZip())));
+			table.addData(new DemographicsTableRow(Integer.toString(customer.getID()), customer.getFirstName(), customer.getLastName(), customer.getAddress(), Integer.toString(customer.getZip())));
 		}
 	}
 

@@ -1,6 +1,5 @@
 package tdt4140.gr1864.app.ui.globalUIModel; 
 
-import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -28,6 +27,7 @@ import tdt4140.gr1864.app.core.databasecontrollers.ShopDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
 import tdt4140.gr1864.app.ui.TableLoader;
 import tdt4140.gr1864.app.ui.Mode.Mode;
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
 import javafx.fxml.FXML;
 import javafx.application.Platform;
 
@@ -82,6 +82,8 @@ public class ModeController {
 		 * has selected a different Mode
 		 */
 		menuViewController.setModeController(this);
+		
+		
 		VisualizationTable mostPickedUpTable = new VisualizationTable("Most Picked-Up Product");
 		mostPickedUpTable.addColumn("productName");
 		mostPickedUpTable.addColumn("numberOfPickUp");
@@ -110,8 +112,6 @@ public class ModeController {
 
 
 		
-		//new DataLoader().main(null);
-		
 		// Get data from shoppin trip and add to TableView
 		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
 		ActionDatabaseController adc = new ActionDatabaseController();
@@ -126,9 +126,6 @@ public class ModeController {
 		TableLoader tableLoader = new TableLoader();
 		tableLoader.loadMostPickedUpTable(shoppingTripList, mostPickedUpTable);
 		
-
-		tableLoader.loadMostPickedUpTable(shoppingTripList, mostPickedUpTable);
-
 		// Get data from Shop and add to StockMode
 		ShopDatabaseController sdc = new ShopDatabaseController();
 		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
@@ -150,22 +147,17 @@ public class ModeController {
 
 		tableLoader.loadDemographicsTable(customers, demographicsTable);
 
-		//Adding modes
-		addMode(durationMode);
-		addMode(mostPickedUp);
-		addMode(stock);
-		addMode(demographicsMode);
 
-		tableLoader.loadStockTable(productIDsOnShelf, productIDsInStorage, stockTable);
-		
 		VisualizationHeatMap heatMap = new VisualizationHeatMap("Heatmap", shoppingTripList);
 		Mode heatMapMode = new Mode("Heatmap", heatMap);
 		
 		VisualizationSimplePlot plot = new VisualizationSimplePlot("Plot", shoppingTripList);
 		Mode plotMode = new Mode("Plot", plot);
 		
+		addMode(duartionMode);
 		addMode(mostPickedUp);
 		addMode(stock);
+		addMode(demographicsMode);
 		addMode(heatMapMode);
 		addMode(plotMode);
 

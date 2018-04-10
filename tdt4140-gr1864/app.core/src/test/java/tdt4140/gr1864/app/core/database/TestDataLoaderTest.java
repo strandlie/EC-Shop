@@ -51,9 +51,9 @@ public class TestDataLoaderTest {
 	@Test
 	public void testCoordinateLoadingFromFileExpectFirstCoordFromDataFile() {
 		Coordinate coord = coords.get(0);
-		double expectedX = 8.12313777180195;
-		double expectedY = 4.330388562062142;
-		long expectedTime = 1520861376132L;
+		double expectedX = 5.988600917321573;
+		double expectedY = 1.6073608851323462;
+		long expectedTime = 1523367344888L;
 
 		Assert.assertEquals(expectedX, coord.getX(), 0);
 		Assert.assertEquals(expectedY, coord.getY(), 0);
@@ -73,9 +73,9 @@ public class TestDataLoaderTest {
 	@Test
 	public void testActionLoadingFromFileExpectFirstActionFromDataFile() {
 		Action action = actions.get(0);
-		long expectedTime = 1520865366132L;
+		long expectedTime = 1523367346313L;
 		int expectedType = 1;
-		int expectedProduct = 44;
+		int expectedProduct = 55;
 		
 		Assert.assertEquals(expectedTime, action.getTimeStamp());
 		Assert.assertEquals(expectedType, action.getActionType());
@@ -87,7 +87,7 @@ public class TestDataLoaderTest {
 		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
 		int productID = products.get(0).getID();
 		Shop shop = loader.getShop();
-		Shop testShop = new Shop("lol", 101, shop.getShopID());
+		Shop testShop = new Shop("lol", 101, shop.getID());
 		Shop retrievedShop = osdc.retrieve(testShop, productID);
 		
 		Assert.assertEquals(shop.getAmountInShelfs(productID), retrievedShop.getAmountInShelfs(productID));

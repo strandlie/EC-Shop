@@ -1,8 +1,5 @@
 package tdt4140.gr1864.app.core.databasecontrollers;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -11,28 +8,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import tdt4140.gr1864.app.core.Action;
 import tdt4140.gr1864.app.core.Coordinate;
 import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
 
-public class CoordinateDatabaseController implements DatabaseCRUD{
+public class CoordinateDatabaseController extends DatabaseController implements DatabaseCRUD{
 	
 	PreparedStatement statement;
-	String dbPath;
-	
-	public CoordinateDatabaseController() {
-		String path = "../../../app.core/src/main/resources/database.db";
-		String relativePath;
-		//Finds path by getting URL and converting to URI and then to path 
-		try {
-			URI rerelativeURI = this.getClass().getClassLoader().getResource(".").toURI();
-			relativePath = Paths.get(rerelativeURI).toFile().toString() + "/";
-			
-		} catch (URISyntaxException e1) {
-			//If fail to convert to URI use URL path instead
-			relativePath = this.getClass().getClassLoader().getResource(".").getPath();
-		} 
-		dbPath = relativePath + path;
-	}
 
 	/**
 	 * @see tdt4140.gr1864.app.core.interfaces.DatabaseCRUD#create(java.lang.Object)
@@ -46,14 +28,14 @@ public class CoordinateDatabaseController implements DatabaseCRUD{
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql);
-			statement.setInt(1, coord.getShoppingTrip().getShoppingTripID());
+			statement.setInt(1, coord.getShoppingTrip().getID());
 			statement.setString(2,  Long.toString(coord.getTimeStamp()));
 			statement.setDouble(3, coord.getX());
 			statement.setDouble(4, coord.getY());
 			statement.executeUpdate();
 			connection.close();
 			
-			return coord.getShoppingTrip().getShoppingTripID();
+			return coord.getShoppingTrip().getID();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -76,7 +58,7 @@ public class CoordinateDatabaseController implements DatabaseCRUD{
 			statement = connection.prepareStatement(sql);
 			statement.setDouble(1,  coord.getX());
 			statement.setDouble(2, coord.getY());
-			statement.setInt(3,  coord.getShoppingTrip().getShoppingTripID());
+			statement.setInt(3,  coord.getShoppingTrip().getID());
 			statement.setString(4, Long.toString(coord.getTimeStamp()));
 			statement.executeUpdate();
 			connection.close();
@@ -229,11 +211,11 @@ public class CoordinateDatabaseController implements DatabaseCRUD{
 	 * @return coordinate
 	 */
 	public Coordinate objectIsCoordinate(Object object) {
-		Coordinate coord = (Coordinate) object;
-		if (!(object instanceof Coordinate)) {
-			throw new IllegalArgumentException("Object is not instance of Coordinate");
-		} else {
-			return coord;
+		try {
+			Coordinate c = (Coordinate) object;
+			return c;
+		} catch (ClassCastException e) {
+			throw new IllegalArgumentException("Object is not Coordinate");
 		}
 	}
 }

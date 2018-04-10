@@ -1,6 +1,8 @@
 package tdt4140.gr1864.app.core;
 
-public class Product {
+import tdt4140.gr1864.app.core.interfaces.Model;
+
+public class Product implements Model {
 
 	private String name;
 	private double price;
@@ -35,7 +37,7 @@ public class Product {
 		return this.price;
 	}
 	
-	public Integer getID() {
+	public int getID() {
 		return this.productID;
 	}
 }
