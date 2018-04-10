@@ -20,11 +20,6 @@
     <servlet-name>ReceiptFetcher</servlet-name>
     <servlet-class>org.web.server.ReceiptServlet</servlet-class>
   </servlet>
-
-  <servlet>
-    <servlet-name>TestServlet</servlet-name>
-    <servlet-class>org.web.server.TestServlet</servlet-class>
-  </servlet>
   
   <servlet-mapping>
     <servlet-name>DataFetcher</servlet-name>
@@ -34,10 +29,6 @@
   <servlet-mapping>
     <servlet-name>UserFetcher</servlet-name>
     <url-pattern>/api/v1/user</url-pattern>
-  </servlet-mapping>
-    <servlet-mapping>
-    <servlet-name>TestServlet</servlet-name>
-    <url-pattern>/api/test</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>

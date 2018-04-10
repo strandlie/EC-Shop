@@ -47,7 +47,7 @@ public class UserServlet extends HttpServlet {
 	        return;
 		}
 
-		List<ShoppingTrip> trips = shoppingTripController.getTripsForCustomer(id);
+		List<ShoppingTrip> trips = shoppingTripController.retrieveAllShoppingTripsForCustomer(id);
 		
 		customer.setShoppingTrips(trips);
 		

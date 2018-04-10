@@ -2,6 +2,7 @@ package org.web.server.serializers;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.List;
 
 import org.web.server.AbstractServlet.HTTPMethod;
 import org.web.server.persistance.Persister;
@@ -117,7 +118,7 @@ public class Serializer {
 	public String serialize(Object o, Class c) {
 		/* For classes that needs more advanced serializing */
 		switch(ModelClasses.fromClass(c)) {
-			case RECEIPT: return serializeReceipt((Receipt) o);
+			case RECEIPT: return serializeReceipt(o); // We deliberately do not cast here; it is handled in the method itself
 			case SHOPPING_TRIP: return serializeShoppingTrip((ShoppingTrip) o);
 			default:
 				try {
@@ -134,21 +135,25 @@ public class Serializer {
 		return null;
 	}
 
-	private String serializeReceipt(Receipt receipt) {
-		ObjectMapper mapper = new ObjectMapper();
+	private String serializeReceipt(Object object) {
+		if (!(object instanceof Receipt) && !(object instanceof List<?>)) {
+			throw new IllegalArgumentException("Argument passed to serializeReceipt was not a receipt or a list of receipts.");
+		}
 		
+		ObjectMapper mapper = new ObjectMapper();
+
 		SimpleModule module = new SimpleModule("ReceiptSerializer", new Version(1, 0, 0, null, null, null));
 		module.addSerializer(Receipt.class, new ReceiptSerializer());
 		mapper.registerModule(module);
-		
+
 		ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
-		
+
 		try {
-			return writer.writeValueAsString(receipt);
+			return writer.writeValueAsString(object);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
-		
+
 		return null;
 	}
 

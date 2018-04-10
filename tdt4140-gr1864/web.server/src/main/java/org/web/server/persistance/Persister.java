@@ -1,5 +1,8 @@
 package org.web.server.persistance;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.web.server.AbstractServlet.HTTPMethod;
 import org.web.server.serializers.Serializer;
 
@@ -118,12 +121,21 @@ public class Persister {
 	}
 
 	public String readReceipt(int customerID) {
-		//TODO: Make method. Dummy
-		/* Retrieve data from database based on customerID
-		 * Serialize data.
-		 * Return JSON
-		 */
-		return null;
+		ShoppingTripDatabaseController controller = new ShoppingTripDatabaseController();
+		
+		List<ShoppingTrip> trips = controller.retrieveAllShoppingTripsForCustomer(customerID);
+		
+		if (trips == null) {
+		    throw new IllegalArgumentException();
+		}
+		
+		List<Receipt> receipts = new ArrayList<>();
+		
+		for (ShoppingTrip trip : trips) {
+			receipts.add(new Receipt(trip));
+		}
+		
+		return Serializer.init().serialize(receipts, Receipt.class);
 	}
 
 	/**
