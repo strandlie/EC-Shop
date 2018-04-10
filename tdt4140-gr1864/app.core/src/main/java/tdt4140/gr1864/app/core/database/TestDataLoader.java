@@ -214,7 +214,7 @@ public class TestDataLoader {
 			JSONObject tripObject = (JSONObject) obj;
 			
 			// creating Coordinates
-			JSONArray coordsArray = (JSONArray) tripObject.get("path");
+			JSONArray coordsArray = (JSONArray) tripObject.get("coordinates");
 			coordinates = (ArrayList<Coordinate>) createCoordinates(coordsArray, trip);
 			
 			// creating Actions
@@ -258,7 +258,7 @@ public class TestDataLoader {
 			JSONObject jsonCoord = (JSONObject) o;
 			x = (double) jsonCoord.get("x");
 			y = (double) jsonCoord.get("y");
-			timeStamp = Long.toString((long) jsonCoord.get("time"));
+			timeStamp = Long.toString((long) jsonCoord.get("timestamp"));
 
 			coordinate = new Coordinate(x, y, timeStamp, trip);
 			coordinates.add(coordinate);

@@ -6,12 +6,16 @@ import java.util.Map;
 public class Inventory {
 	private Map<Integer, Integer> products = new HashMap<>();
 	
-	public boolean contains(Product product) {
+	private boolean keyExists(Product product) {
 		return products.keySet().contains(product.getCode());
 	}
 	
 	public int getCount(Product product) {
-		return contains(product) ? products.get(product.getCode()) : 0;
+		return keyExists(product) ? products.get(product.getCode()) : 0;
+	}
+
+	public boolean contains(Product product) {
+		return getCount(product) > 0;
 	}
 	
 	public void add(Product product) {

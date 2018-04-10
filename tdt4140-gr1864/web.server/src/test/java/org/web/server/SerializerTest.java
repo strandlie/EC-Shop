@@ -8,6 +8,7 @@ import java.io.IOException;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.web.server.AbstractServlet.HTTPMethod;
 import org.web.server.serializers.Serializer;
 
 import tdt4140.gr1864.app.core.Customer;
@@ -29,7 +30,7 @@ public class SerializerTest {
 		FileReader fr = new FileReader("customer.json");
 		BufferedReader reader = new BufferedReader(fr);		
 		Serializer sr = Serializer.init();
-		sr.deserialize(reader, Customer.class, 1);
+		sr.deserialize(reader, Customer.class, HTTPMethod.PUT);
 		Customer customer = (Customer) sr.getObject();
 
 		CustomerDatabaseController cdc = new CustomerDatabaseController();
@@ -41,7 +42,7 @@ public class SerializerTest {
 	@Test
 	public void testDeserializeCustomerExpectCorrectJson() throws IOException {
 		Customer customer = new Customer();
-		customer.setCustomerId(1);
+		customer.setCustomerID(1);
 		customer.setFirstName("fornavn");
 		customer.setLastName("etternvan");
 		customer.setAddress("addresse");

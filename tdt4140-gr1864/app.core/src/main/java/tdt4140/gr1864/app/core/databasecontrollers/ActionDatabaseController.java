@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tdt4140.gr1864.app.core.Action;
+import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
 
 public class ActionDatabaseController extends DatabaseController implements DatabaseCRUD {
@@ -123,20 +124,24 @@ public class ActionDatabaseController extends DatabaseController implements Data
 			ProductDatabaseController pdc = new ProductDatabaseController();
 			ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
 			List<Action> actions = new ArrayList<>();
+			
 			while (rs.next()) {
 				Action action = new Action(
 						rs.getString("timestamp"), 
 						rs.getInt("action_type"), 
 						pdc.retrieve(rs.getInt("product_id")),
-						stdc.retrieve(rs.getInt("shopping_trip_id")));
+						stdc.retrieve(shopping_trip_id));
 				actions.add(action);
 			}
+			
 			connection.close();
 			return actions;
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		System.out.println("gjorde ikke noe");
 		return null;
 	}
 
@@ -203,11 +208,11 @@ public class ActionDatabaseController extends DatabaseController implements Data
 	 * @return action
 	 */
 	public Action objectIsAction(Object object) {
-		Action action = (Action) object;
-		if (!(object instanceof Action)) {
-			throw new IllegalArgumentException("Object is not instance of Action");
-		} else {
-			return action;
+		try {
+			Action a = (Action) object;
+			return a;
+		} catch (ClassCastException e) {
+			throw new IllegalArgumentException("Object is not Action");
 		}
 	}
 }

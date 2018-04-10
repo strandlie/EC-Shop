@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import tdt4140.gr1864.app.core.Product;
 import tdt4140.gr1864.app.core.Shop;
 import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
 
@@ -126,11 +127,11 @@ public class ShopDatabaseController extends DatabaseController implements Databa
 	 * @return Shop
 	 */
 	public Shop objectIsShop(Object object) {
-		Shop shop = (Shop) object;
-		if (!(object instanceof Shop)) {
-			throw new IllegalArgumentException("Object is not instance of Shop!");
-		} else {
-			return shop;
+		try {
+			Shop s = (Shop) object;
+			return s;
+		} catch (ClassCastException e) {
+			throw new IllegalArgumentException("Object is not Shop");
 		}
 	}
 }

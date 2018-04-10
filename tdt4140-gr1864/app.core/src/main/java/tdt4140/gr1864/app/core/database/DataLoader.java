@@ -268,7 +268,7 @@ public class DataLoader {
 			trip = new ShoppingTrip(stdc.create(trip), trip.getCustomer(), trip.getShop(), true, false);
 
 			// creating Coordinates
-			JSONArray coordsArray = (JSONArray) tripObject.get("path");
+			JSONArray coordsArray = (JSONArray) tripObject.get("coordinates");
 			coordinates = (ArrayList<Coordinate>) createCoordinates(coordsArray, trip);
 			
 			// creating Actions
@@ -318,7 +318,7 @@ public class DataLoader {
 			JSONObject tripObject = (JSONObject) obj;
 			
 			// creating Coordinates
-			JSONArray coordsArray = (JSONArray) tripObject.get("path");
+			JSONArray coordsArray = (JSONArray) tripObject.get("coordinates");
 			coordinates = (ArrayList<Coordinate>) createCoordinates(coordsArray, trip);
 			
 			// creating Actions
@@ -343,9 +343,9 @@ public class DataLoader {
 	 */
 	private static ShoppingTrip createShoppingTrip(ShoppingTrip trip, List<Coordinate> coordinates, List<Action> actions) {
 		// We set the Charged flag to true to prevent spamming the Stripe API with charges.
-		ShoppingTrip newTrip = new ShoppingTrip(coordinates, actions, trip.getID(), true);
-		trip = newTrip;
-		return newTrip;
+		trip.setActions(actions);
+		trip.setCoordinates(coordinates);
+		return trip;
 	}
 	
 	/**
@@ -364,7 +364,7 @@ public class DataLoader {
 			JSONObject jsonCoord = (JSONObject) o;
 			x = (double) jsonCoord.get("x");
 			y = (double) jsonCoord.get("y");
-			timeStamp = Long.toString((long) jsonCoord.get("time"));
+			timeStamp = Long.toString((long) jsonCoord.get("timestamp"));
 
 			coordinate = new Coordinate(x, y, timeStamp, trip);
 			localCoordinates.add(coordinate);
