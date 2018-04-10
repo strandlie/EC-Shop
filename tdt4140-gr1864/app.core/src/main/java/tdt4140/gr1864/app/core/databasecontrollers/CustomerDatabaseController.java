@@ -139,7 +139,7 @@ public class CustomerDatabaseController extends DatabaseController implements Da
     public void update(Object object) {
     	Customer customer = objectIsCustomer(object);
     	String sql = "UPDATE customer "
-    				+ "SET first_name=?, last_name=?, address=?, zip=?, gender=?, age=?, num_persons_in_household=? "
+    				+ "SET first_name=?, last_name=?, address=?, zip=?, gender=?, age=?, num_persons_in_household=?, anonymous=?"
     				+ "WHERE customer_id=?";
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
@@ -151,7 +151,8 @@ public class CustomerDatabaseController extends DatabaseController implements Da
 			statement.setString(5, customer.getGender());
 			statement.setInt(6, customer.getAge());
 			statement.setInt(7, customer.getNumberOfPersonsInHousehold());
-			statement.setInt(8, customer.getID());
+			statement.setBoolean(8, customer.getAnonymous());
+			statement.setInt(9, customer.getID());
 			statement.executeUpdate();
 			connection.close();
 		} 
