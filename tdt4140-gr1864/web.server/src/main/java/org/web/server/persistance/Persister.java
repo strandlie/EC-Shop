@@ -133,7 +133,7 @@ public class Persister {
 		List<ShoppingTrip> trips = stdc.retrieveAllShoppingTripsForCustomer(customerID);
 
 		// If there are no trips
-		if (trips.isEmpty()) throw new IllegalArgumentException("Set is empty");
+		if (trips.isEmpty()) return "[]"; 
 
 		serializer  = Serializer.init();
 		return serializer.serialize(trips, ShoppingTrip.class);
