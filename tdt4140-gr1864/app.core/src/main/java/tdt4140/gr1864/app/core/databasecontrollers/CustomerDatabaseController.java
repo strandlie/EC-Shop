@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import tdt4140.gr1864.app.core.Coordinate;
 import tdt4140.gr1864.app.core.Customer;
 import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
 
@@ -186,11 +187,11 @@ public class CustomerDatabaseController extends DatabaseController implements Da
 	 * @return The customer object if the object is an instance of customer
 	 */
 	public Customer objectIsCustomer(Object object) {
-		Customer customer = (Customer) object;
-		if (!(object instanceof Customer)) {
-			throw new IllegalArgumentException("Object is not instance of Customer");
-		} else {
-			return customer;
+		try {
+			Customer c = (Customer) object;
+			return c;
+		} catch (ClassCastException e) {
+			throw new IllegalArgumentException("Object is not Customer");
 		}
 	}
 	

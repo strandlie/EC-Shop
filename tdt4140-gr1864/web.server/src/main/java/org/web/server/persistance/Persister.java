@@ -1,6 +1,21 @@
 package org.web.server.persistance;
 
+import org.web.server.AbstractServlet.HTTPMethod;
+import org.web.server.serializers.Serializer;
+
+import tdt4140.gr1864.app.core.Action;
+import tdt4140.gr1864.app.core.Coordinate;
+import tdt4140.gr1864.app.core.Customer;
+import tdt4140.gr1864.app.core.Product;
+import tdt4140.gr1864.app.core.Receipt;
+import tdt4140.gr1864.app.core.Shop;
+import tdt4140.gr1864.app.core.ShoppingTrip;
+import tdt4140.gr1864.app.core.StripeShoppingTrip;
+import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
+import tdt4140.gr1864.app.core.databasecontrollers.CoordinateDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.CustomerDatabaseController;
+import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
+import tdt4140.gr1864.app.core.databasecontrollers.ShopDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
 import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
 import tdt4140.gr1864.app.core.interfaces.Model;
@@ -10,19 +25,39 @@ import tdt4140.gr1864.app.core.interfaces.Model;
  * @author vegarab
  */
 public class Persister {
+			
+	/** Class names compared in switch-case */
+	public enum ModelClasses {
+		ACTION(Action.class.getName()),
+		COORDINATE(Coordinate.class.getName()),
+		CUSTOMER(Customer.class.getName()),
+		PRODUCT(Product.class.getName()),
+		RECEIPT(Receipt.class.getName()),
+		SHOP(Shop.class.getName()),
+		SHOPPING_TRIP(ShoppingTrip.class.getName()),
+		STRIPE_SHOPPING_TRIP(StripeShoppingTrip.class.getName());
+
+		private final String model;
 		
+		private ModelClasses(String model) {
+			this.model = model;
+		}
+		
+		public String toString() {
+			return this.model;
+		}
+		
+		public static ModelClasses fromClass(Class c) {
+			for (ModelClasses m : ModelClasses.values()) {
+				if (m.toString().equals(c.getName()))
+					return m;
+			}
+			throw new IllegalArgumentException("No value for this class in ModelClasses");
+		}
+	}
+	
 	/** DBController used by persister-methods */
 	private static DatabaseCRUD controller = null;
-
-	/** method-types based on HTTP-request */
-	private static final int POST 	= 0;
-	private static final int PUT 		= 1;
-	private static final int DELETE 	= 2;
-	
-	/** Class names compared in switch-case */
-	public static final String SHOPPING_TRIP = "tdt4140.gr1864.app.core.ShoppingTrip";
-	public static final String CUSTOMER = "tdt4140.gr1864.app.core.Customer";
-	public static final String RECEIPT = "tdt4140.gr1864.app.core.Receipt";
 	
 	/* Used for singleton design */
 	private static Persister persister;
@@ -50,22 +85,45 @@ public class Persister {
 	 * @param method	Persist-method to perform (CRUD)
 	 */
 	@SuppressWarnings("rawtypes")
-	public void persist(Object object, Class c, int method) {
-
-		switch(c.getName()) {
-		case SHOPPING_TRIP:
-			controller = new ShoppingTripDatabaseController();
-			break;
-		case CUSTOMER:
-			controller = new CustomerDatabaseController();
-			break;
+	public void persist(Object object, Class c, HTTPMethod method) {
+		switch(ModelClasses.fromClass(c)) {
+		case CUSTOMER: controller = new CustomerDatabaseController(); break;
+		case SHOPPING_TRIP:	controller = new ShoppingTripDatabaseController(); break;
+		default:
+			throw new IllegalArgumentException("No controller for this class");
 		}
-	
+		
 		switch(method) {
 			case POST: 		create(object); break;
 			case PUT: 		update(object); break;
 			case DELETE: 	delete((Model) object); break;
 		}
+	}
+	
+	public String read(int customerID, Class c) {
+		String json;
+		
+		switch (ModelClasses.fromClass(c)) {
+		case CUSTOMER: json = readCustomer(customerID); break;
+		case RECEIPT: json = readReceipt(customerID); break;
+		default:
+			throw new IllegalArgumentException();
+		}
+		return json;
+	}
+	
+	private String readCustomer(int customerID) {
+		controller = new CustomerDatabaseController();
+		return Serializer.init().serialize(controller.retrieve(customerID), Customer.class);
+	}
+
+	public String readReceipt(int customerID) {
+		//TODO: Make method. Dummy
+		/* Retrieve data from database based on customerID
+		 * Serialize data.
+		 * Return JSON
+		 */
+		return null;
 	}
 
 	/**
