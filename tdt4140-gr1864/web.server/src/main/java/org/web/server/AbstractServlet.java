@@ -57,6 +57,10 @@ public abstract class AbstractServlet extends HttpServlet{
 		super.init();
 	}
 	
+	private void authorize() {
+		
+	}
+	
 	/*
 	 * Under is `do***` method for the five different request-methods we support.
 	 * You can disable a method by setting the `has***` fields for the specific method to false in setup.
@@ -70,6 +74,7 @@ public abstract class AbstractServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		if (! hasGet) resp.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 		
+		// Authorize
 		int customerID = -1;
 		try {
 			 customerID = Integer.parseInt(req.getParameter("customer-id"));
@@ -109,9 +114,23 @@ public abstract class AbstractServlet extends HttpServlet{
 			return;
 		}
 		
+		// Authorize
+		int customerID = -1;
+		try {
+			 customerID = Integer.parseInt(req.getParameter("customer-id"));
+		} catch (NumberFormatException e) {
+			resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+			return;
+		} catch (Exception e) {
+			e.printStackTrace();
+			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return;
+		}
+		
 		try {
 			serializer.deserialize(req.getReader(), cl, HTTPMethod.POST);
 		} catch (Exception e) {
+			e.printStackTrace();
 			resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		}
@@ -124,6 +143,18 @@ public abstract class AbstractServlet extends HttpServlet{
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		if (! hasPut) {
 			resp.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+			return;
+		}
+		
+		// Authorize
+		int customerID = -1;
+		try {
+			 customerID = Integer.parseInt(req.getParameter("customer-id"));
+		} catch (NumberFormatException e) {
+			resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+			return;
+		} catch (Exception e) {
+			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return;
 		}
 		
@@ -141,6 +172,18 @@ public abstract class AbstractServlet extends HttpServlet{
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		if (! hasDelete) {
 			resp.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+			return;
+		}
+		
+		// Authorize
+		int customerID = -1;
+		try {
+			 customerID = Integer.parseInt(req.getParameter("customer-id"));
+		} catch (NumberFormatException e) {
+			resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+			return;
+		} catch (Exception e) {
+			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return;
 		}
 		

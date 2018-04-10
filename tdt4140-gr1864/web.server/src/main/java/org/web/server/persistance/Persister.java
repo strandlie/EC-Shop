@@ -66,9 +66,7 @@ public class Persister {
 	/**
 	 * Private constructor for singleton design-pattern
 	 */
-	private Persister() {
-		serializer = Serializer.init();
-	}
+	private Persister() {}
 	
 	/**
 	 * Retrieves a Persister object based on singleton design-pattern
@@ -133,6 +131,11 @@ public class Persister {
 	private String readShoppingTrips(int customerID) throws IOException {
 		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
 		List<ShoppingTrip> trips = stdc.retrieveAllShoppingTripsForCustomer(customerID);
+
+		// If there are no trips
+		if (trips.isEmpty()) return "Empty";
+
+		serializer  = Serializer.init();
 		return serializer.serialize(trips, ShoppingTrip.class);
 	}
 
@@ -162,6 +165,7 @@ public class Persister {
 	 * @param object
 	 */
 	private void create(Object object) {
+		ShoppingTrip trip = (ShoppingTrip) object;
 		controller.create(object);
 	}
 	

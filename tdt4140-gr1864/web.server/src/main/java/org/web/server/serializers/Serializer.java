@@ -120,7 +120,7 @@ public class Serializer {
 		/* For classes that needs more advanced serializing */
 		switch(ModelClasses.fromClass(c)) {
 			case RECEIPT: return serializeReceipt((Receipt) o);
-			case SHOPPING_TRIP: return serializeShoppingTrip((ShoppingTrip) o);
+			case SHOPPING_TRIP: return serializeShoppingTrip(o);
 			default:
 				try {
 					return serialize((Model) o, c);
@@ -185,7 +185,7 @@ public class Serializer {
 		JSONObject jCoordinate = new JSONObject();
 		
 		for (Coordinate coordinate : trip.getCoordinates()) {
-			jCoordinate = null;
+			jCoordinate = new JSONObject();
 			jCoordinate.put("x", coordinate.getX());
 			jCoordinate.put("y", coordinate.getY());
 			jCoordinate.put("timestamp", coordinate.getTimeStamp());
@@ -205,7 +205,7 @@ public class Serializer {
 		JSONObject jAction = new JSONObject();
 		
 		for (Action action : trip.getActions()) {
-			jAction = null;
+			jAction = new JSONObject();
 			jAction.put("timestamp", action.getTimeStamp());
 			jAction.put("action", action.getActionType());
 			jAction.put("productID", action.getProduct().getID());
