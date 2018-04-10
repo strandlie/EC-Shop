@@ -2,7 +2,10 @@ package org.web.server.serializers;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.List;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.web.server.AbstractServlet.HTTPMethod;
 import org.web.server.persistance.Persister;
 import org.web.server.persistance.Persister.ModelClasses;
@@ -10,6 +13,8 @@ import org.web.server.persistance.Persister.ModelClasses;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import tdt4140.gr1864.app.core.Action;
+import tdt4140.gr1864.app.core.Coordinate;
 import tdt4140.gr1864.app.core.Receipt;
 import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.database.DataLoader;
@@ -45,7 +50,6 @@ public class Serializer {
 		}
 		return serializer;
 	}
-	
 	
 	/**
 	 * Deserializes JSON data from reader into POJO. Does handle non-POJO models 
@@ -109,9 +113,10 @@ public class Serializer {
 	 * @param o		objcet to serialize
 	 * @param c		Class of object
 	 * @return JSON String
+	 * @throws IOException 
 	 */
 	@SuppressWarnings("rawtypes")
-	public String serialize(Object o, Class c) {
+	public String serialize(Object o, Class c) throws IOException {
 		/* For classes that needs more advanced serializing */
 		switch(ModelClasses.fromClass(c)) {
 			case RECEIPT: return serializeReceipt((Receipt) o);
@@ -126,9 +131,87 @@ public class Serializer {
 		return null;
 	}
 
-	private String serializeShoppingTrip(ShoppingTrip trip) {
-		// TODO Auto-generated method stub
-		return null;
+	/**
+	 * Checks if incoming object is a list or single Trip, serializes based on that
+	 * @param object 	List<ShoppingTrip> or ShoppingTrip to be serialized
+	 * @return	JSON String
+	 */
+	@SuppressWarnings({ "null", "unchecked" })
+	private String serializeShoppingTrip(Object object) {
+		
+		if (object instanceof List<?>) return serializeShoppingTrips((List<ShoppingTrip>) object);
+		ShoppingTrip trip = (ShoppingTrip) object;
+
+		// Trip object
+		JSONObject jTrip = new JSONObject();
+		
+		// customerID in Trip
+		jTrip.put("customerID", trip.getCustomer().getID());
+		
+		// Coordinates
+		JSONArray jCoordinates = serializeCoordinates(trip);
+		jTrip.put("coordinates", jCoordinates);
+		// Actions
+		JSONArray jActions = serializeActions(trip);
+		jTrip.put("actions", jActions);
+		
+		System.out.println(jTrip.toJSONString());
+		return jTrip.toJSONString();
+	}
+	
+	/**
+	 * Serializes a list of ShoppingTrips to JSON
+	 * @param trips		List of Trips to be serialized
+	 * @return JSON String
+	 */
+	@SuppressWarnings("unchecked")
+	private String serializeShoppingTrips(List<ShoppingTrip> trips) {
+		JSONArray jRoot = new JSONArray();
+		
+		for (ShoppingTrip trip : trips) {
+			jRoot.add(serializeShoppingTrip(trip));
+		}
+		return jRoot.toJSONString();
+	}
+
+	/**
+	 * Serializes Coordinates based on ShoppingTrip
+	 * @param trip		trip to serialize Coordinates from
+	 * @return JSON String
+	 */
+	@SuppressWarnings({ "null", "unchecked" })
+	private JSONArray serializeCoordinates(ShoppingTrip trip) {
+		JSONArray jCoordinates = new JSONArray();
+		JSONObject jCoordinate = new JSONObject();
+		
+		for (Coordinate coordinate : trip.getCoordinates()) {
+			jCoordinate = null;
+			jCoordinate.put("x", coordinate.getX());
+			jCoordinate.put("y", coordinate.getY());
+			jCoordinate.put("timestamp", coordinate.getTimeStamp());
+			jCoordinates.add(jCoordinate);
+		}
+		return jCoordinates;
+	}
+	
+	/**
+	 * Serializes Actions based on ShoppingTrip
+	 * @param trip		trip to serialize Actions form
+	 * @return	JSON String
+	 */
+	@SuppressWarnings({ "null", "unchecked" })
+	private JSONArray serializeActions(ShoppingTrip trip) {
+		JSONArray jActions = new JSONArray();
+		JSONObject jAction = new JSONObject();
+		
+		for (Action action : trip.getActions()) {
+			jAction = null;
+			jAction.put("timestamp", action.getTimeStamp());
+			jAction.put("action", action.getActionType());
+			jAction.put("productID", action.getProduct().getID());
+			jActions.add(jAction);
+		}
+		return jActions;
 	}
 
 	private String serializeReceipt(Receipt receipt) {
