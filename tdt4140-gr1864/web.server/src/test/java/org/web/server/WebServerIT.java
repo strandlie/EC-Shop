@@ -7,6 +7,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
@@ -30,11 +31,13 @@ public class WebServerIT {
 	public void testPostDemographics() {
 		JSONObject json = new JSONObject();
 		json.put("customerID", new Integer(7));
+		json.put("firstName", "SomeName");
+		json.put("lastName", "SomeLastName");
 		json.put("address", "Kings Road 6");
 		json.put("zip", new Integer(10));
 		
 		DefaultHttpClient httpclient = new DefaultHttpClient();
-		HttpPost httpPost = new HttpPost("http://localhost:8080/api/v1/user");
+		HttpPut httpPost = new HttpPut("http://localhost:8080/api/v1/user/?customer-id=7");
 		HttpResponse response2 = null;
 		httpPost.addHeader("content-type", "application/json");
 		try {
