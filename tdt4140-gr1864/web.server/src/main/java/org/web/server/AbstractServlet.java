@@ -57,10 +57,6 @@ public abstract class AbstractServlet extends HttpServlet{
 		super.init();
 	}
 	
-	private void authorize() {
-		
-	}
-	
 	/*
 	 * Under is `do***` method for the five different request-methods we support.
 	 * You can disable a method by setting the `has***` fields for the specific method to false in setup.
