@@ -343,9 +343,9 @@ public class DataLoader {
 	 */
 	private static ShoppingTrip createShoppingTrip(ShoppingTrip trip, List<Coordinate> coordinates, List<Action> actions) {
 		// We set the Charged flag to true to prevent spamming the Stripe API with charges.
-		ShoppingTrip newTrip = new ShoppingTrip(coordinates, actions, trip.getID(), true);
-		trip = newTrip;
-		return newTrip;
+		trip.setActions(actions);
+		trip.setCoordinates(coordinates);
+		return trip;
 	}
 	
 	/**
