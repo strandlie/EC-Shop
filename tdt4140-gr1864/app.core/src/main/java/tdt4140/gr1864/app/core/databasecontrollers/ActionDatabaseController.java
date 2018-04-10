@@ -1,8 +1,5 @@
 package tdt4140.gr1864.app.core.databasecontrollers;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -12,27 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tdt4140.gr1864.app.core.Action;
+import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
 
-public class ActionDatabaseController implements DatabaseCRUD {
+public class ActionDatabaseController extends DatabaseController implements DatabaseCRUD {
 	
 	PreparedStatement statement;
-	String dbPath;
-	
-	public ActionDatabaseController() {
-		String path = "../../../app.core/src/main/resources/database.db";
-		String relativePath;
-		//Finds path by getting URL and converting to URI and then to path 
-		try {
-			URI rerelativeURI = this.getClass().getClassLoader().getResource(".").toURI();
-			relativePath = Paths.get(rerelativeURI).toFile().toString() + "/";
-			
-		} catch (URISyntaxException e1) {
-			//If fail to convert to URI use URL path instead
-			relativePath = this.getClass().getClassLoader().getResource(".").getPath();
-		} 
-		dbPath = relativePath + path;
-	}
 
 	/**
 	 * @see tdt4140.gr1864.app.core.interfaces.DatabaseCRUD#create(java.lang.Object)
@@ -142,20 +124,24 @@ public class ActionDatabaseController implements DatabaseCRUD {
 			ProductDatabaseController pdc = new ProductDatabaseController();
 			ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
 			List<Action> actions = new ArrayList<>();
+			
 			while (rs.next()) {
 				Action action = new Action(
 						rs.getString("timestamp"), 
 						rs.getInt("action_type"), 
 						pdc.retrieve(rs.getInt("product_id")),
-						stdc.retrieve(rs.getInt("shopping_trip_id")));
+						stdc.retrieve(shopping_trip_id));
 				actions.add(action);
 			}
+			
 			connection.close();
 			return actions;
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		System.out.println("gjorde ikke noe");
 		return null;
 	}
 
@@ -222,11 +208,11 @@ public class ActionDatabaseController implements DatabaseCRUD {
 	 * @return action
 	 */
 	public Action objectIsAction(Object object) {
-		Action action = (Action) object;
-		if (!(object instanceof Action)) {
-			throw new IllegalArgumentException("Object is not instance of Action");
-		} else {
-			return action;
+		try {
+			Action a = (Action) object;
+			return a;
+		} catch (ClassCastException e) {
+			throw new IllegalArgumentException("Object is not Action");
 		}
 	}
 }

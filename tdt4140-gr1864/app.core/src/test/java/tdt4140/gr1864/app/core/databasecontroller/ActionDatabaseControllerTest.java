@@ -3,6 +3,7 @@ package tdt4140.gr1864.app.core.databasecontroller;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Assert;
@@ -56,7 +57,7 @@ public class ActionDatabaseControllerTest {
 		p1 = new Product(pdc.create(p1), p1.getName(), p1.getPrice());
 		
 		t1 = new ShoppingTrip(c1, s1, true);
-		t1 = new ShoppingTrip(stdc.create(t1), c1, s1, true);
+		t1 = new ShoppingTrip(stdc.create(t1), c1, s1, true, false);
 		List<ShoppingTrip> trips = new ArrayList<ShoppingTrip>();
 		trips.add(t1);
 		c1.setShoppingTrips(trips);		
@@ -123,5 +124,27 @@ public class ActionDatabaseControllerTest {
 		Assert.assertEquals(a1.getActionType(), a2.getActionType());
 		Assert.assertEquals(a1.getTimeStamp(), a2.getTimeStamp());
 		Assert.assertEquals(a1.getShoppingTrip().getID(), a2.getShoppingTrip().getID());
+	}
+	
+	@Test
+	public void wTestRetrieveAllExpectActionListSizeNotZero() {
+		a1 = new Action(
+				Long.toString(a1.getTimeStamp()),
+				a1.getActionType(), 
+				a1.getProduct(),
+				stdc.retrieve(adc.create(a1))
+			);
+		a1 = new Action(
+				Long.toString(a1.getTimeStamp()),
+				0, 
+				a1.getProduct(),
+				a1.getShoppingTrip()
+			);
+		adc.update(a1);
+		a2 = adc.retrieve(a1.getShoppingTrip().getID(), a1.getTimeStamp());
+		
+		int notExpectingSize = 0;
+		List<Action> actualActions = adc.retrieveAll(a1.getShoppingTrip().getID());
+		Assert.assertNotEquals(notExpectingSize, actualActions.size());
 	}
 }

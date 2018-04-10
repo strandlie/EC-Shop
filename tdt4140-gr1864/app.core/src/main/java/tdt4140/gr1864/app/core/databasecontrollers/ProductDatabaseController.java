@@ -1,36 +1,18 @@
 package tdt4140.gr1864.app.core.databasecontrollers;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import tdt4140.gr1864.app.core.Customer;
 import tdt4140.gr1864.app.core.Product;
 import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
 
-public class ProductDatabaseController implements DatabaseCRUD {
+public class ProductDatabaseController extends DatabaseController implements DatabaseCRUD {
 
 	PreparedStatement statement;
-	String dbPath;
-	
-	public ProductDatabaseController() {
-		String path = "../../../app.core/src/main/resources/database.db";
-		String relativePath;
-		//Finds path by getting URL and converting to URI and then to path 
-		try {
-			URI rerelativeURI = this.getClass().getClassLoader().getResource(".").toURI();
-			relativePath = Paths.get(rerelativeURI).toFile().toString() + "/";
-			
-		} catch (URISyntaxException e1) {
-			//If fail to convert to URI use URL path instead
-			relativePath = this.getClass().getClassLoader().getResource(".").getPath();
-		} 
-		dbPath = relativePath + path;
-	}
 	
 	/**
 	 * @see tdt4140.gr1864.app.core.interfaces.DatabaseCRUD#create(java.lang.Object)
@@ -151,11 +133,11 @@ public class ProductDatabaseController implements DatabaseCRUD {
 	 * @return The product object if the object is an instance of product
 	 */
 	public Product objectIsProduct(Object object) {
-		Product product = (Product) object;
-		if (!(object instanceof Product)) {
-			throw new IllegalArgumentException("Object is not instance of Product");
-		} else {
-			return product;
+		try {
+			Product p = (Product) object;
+			return p;
+		} catch (ClassCastException e) {
+			throw new IllegalArgumentException("Object is not Product");
 		}
 	}
 }

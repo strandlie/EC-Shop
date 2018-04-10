@@ -4,15 +4,15 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class AggregateTest {
+public class TableRowTest {
 	
-	Row aggregate4;
-	Row aggregate2;
+	MostPickedUpTableRow aggregate4;
+	InStockTableRow aggregate2;
 	
 	@Before
 	public void setup() {
-		this.aggregate4 = new Row("Bolle", "1", "2", "1");
-		this.aggregate2 = new Row("Bille", "200");
+		this.aggregate4 = new MostPickedUpTableRow("Bolle", "1", "2", "1");
+		this.aggregate2 = new InStockTableRow("Bille", "200");
 		
 	}
 	
@@ -47,12 +47,4 @@ public class AggregateTest {
 	public void testAggregateHasExpectedNumberInStock() {
 		Assert.assertEquals("200", this.aggregate2.getNumberInStock());
 	}
-	
-	@Test
-	public void testAggregateDoesNotHaveUnapplicableFields() {
-		Assert.assertNull(this.aggregate2.getNumberOfPickUp());
-		Assert.assertNull(this.aggregate4.getNumberInStock());
-	}
-	
-	
 }

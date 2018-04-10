@@ -1,1 +1,2 @@
-{"firstName":"fornavn","lastName":"etternvan","address":"addresse","zip":10,"shoppingTrips":null,"recommendedProductID":-1,"customerID":1}
+{"firstName":"fornavn","lastName":"etternvan","address":"addresse","zip":10,"gender":null,"age":0,"numberOfPersonsInHousehold":1,"shoppingTrips":null,"recommendedProductID":-1,"anonymous":false,"customerID":1}
+
