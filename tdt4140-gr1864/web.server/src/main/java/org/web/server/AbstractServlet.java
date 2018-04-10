@@ -9,10 +9,7 @@ import org.json.simple.JSONObject;
 import org.web.server.persistance.Persister;
 import org.web.server.serializers.Serializer;
 
-import tdt4140.gr1864.app.core.interfaces.Model;
-
 public abstract class AbstractServlet extends HttpServlet{
-	
 	
 	/**
 	 * Enum class for HTTP methods.
@@ -37,6 +34,7 @@ public abstract class AbstractServlet extends HttpServlet{
 	
 	private final String JSONRespons = "application/json";
 	
+	@SuppressWarnings("rawtypes")
 	protected Class cl;
 	
 	protected Serializer serializer = Serializer.init();
@@ -72,16 +70,32 @@ public abstract class AbstractServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		if (! hasGet) resp.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 		
-		String json = "";
+		int customerID = -1;
 		try {
-			int user = Integer.parseInt(req.getParameter("user"));
-			Object object = persister.read(user, cl);
-			json = serializer.serialize((Model) object, cl);
+			 customerID = Integer.parseInt(req.getParameter("customer-id"));
+		} catch (NumberFormatException e) {
+			resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+			return;
 		} catch (Exception e) {
 			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return;
 		}
 		
-		if (json == null) resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+		String json = "";
+		try {
+			json = persister.read(customerID, cl);
+		} catch (IllegalArgumentException e) {
+			resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			return;
+		} catch (Exception e) {
+			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return;
+		}
+		
+		if (json == null || json.equals("null")) {
+			resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			return;
+		}
 		
 		resp.setContentType(JSONRespons);
 		resp.setStatus(HttpServletResponse.SC_OK);
@@ -90,12 +104,16 @@ public abstract class AbstractServlet extends HttpServlet{
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		if (! hasPost) resp.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+		if (! hasPost) {
+			resp.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+			return;
+		}
 		
 		try {
 			serializer.deserialize(req.getReader(), cl, HTTPMethod.POST);
 		} catch (Exception e) {
 			resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			return;
 		}
 		
 		resp.setContentType(JSONRespons);
@@ -104,12 +122,16 @@ public abstract class AbstractServlet extends HttpServlet{
 	
 	@Override
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		if (! hasPut) resp.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+		if (! hasPut) {
+			resp.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+			return;
+		}
 		
 		try {
 			serializer.deserialize(req.getReader(), cl, HTTPMethod.PUT);
 		} catch (Exception e) {
 			resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			return;
 		}
 		resp.setContentType(JSONRespons);
 		resp.setStatus(HttpServletResponse.SC_OK);
@@ -117,12 +139,16 @@ public abstract class AbstractServlet extends HttpServlet{
 	
 	@Override
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		if (! hasDelete) resp.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+		if (! hasDelete) {
+			resp.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+			return;
+		}
 		
 		try {
 			serializer.deserialize(req.getReader(), cl, HTTPMethod.DELETE);
 		} catch (Exception e) {
 			resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			return;
 		}
 		resp.setContentType(JSONRespons);
 		resp.setStatus(HttpServletResponse.SC_OK);

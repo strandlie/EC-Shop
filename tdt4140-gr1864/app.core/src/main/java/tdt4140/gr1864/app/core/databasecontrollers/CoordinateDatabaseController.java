@@ -212,8 +212,8 @@ public class CoordinateDatabaseController extends DatabaseController implements 
 	 */
 	public Coordinate objectIsCoordinate(Object object) {
 		try {
-			Coordinate a = (Coordinate) object;
-			return a;
+			Coordinate c = (Coordinate) object;
+			return c;
 		} catch (ClassCastException e) {
 			throw new IllegalArgumentException("Object is not Coordinate");
 		}

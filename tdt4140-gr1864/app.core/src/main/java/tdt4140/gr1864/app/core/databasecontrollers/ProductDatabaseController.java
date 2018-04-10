@@ -134,8 +134,8 @@ public class ProductDatabaseController extends DatabaseController implements Dat
 	 */
 	public Product objectIsProduct(Object object) {
 		try {
-			Product a = (Product) object;
-			return a;
+			Product p = (Product) object;
+			return p;
 		} catch (ClassCastException e) {
 			throw new IllegalArgumentException("Object is not Product");
 		}

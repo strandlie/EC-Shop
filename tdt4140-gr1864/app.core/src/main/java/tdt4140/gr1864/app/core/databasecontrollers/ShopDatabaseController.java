@@ -128,8 +128,8 @@ public class ShopDatabaseController extends DatabaseController implements Databa
 	 */
 	public Shop objectIsShop(Object object) {
 		try {
-			Shop a = (Shop) object;
-			return a;
+			Shop s = (Shop) object;
+			return s;
 		} catch (ClassCastException e) {
 			throw new IllegalArgumentException("Object is not Shop");
 		}

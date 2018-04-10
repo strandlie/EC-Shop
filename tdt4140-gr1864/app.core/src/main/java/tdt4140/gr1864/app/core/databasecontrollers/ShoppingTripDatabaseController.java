@@ -230,8 +230,8 @@ public class ShoppingTripDatabaseController extends DatabaseController implement
 	 */
 	public ShoppingTrip objectIsShoppingTrip(Object object) {
 		try {
-			ShoppingTrip a = (ShoppingTrip) object;
-			return a;
+			ShoppingTrip s = (ShoppingTrip) object;
+			return s;
 		} catch (ClassCastException e) {
 			throw new IllegalArgumentException("Object is not ShoppingTrip");
 		}

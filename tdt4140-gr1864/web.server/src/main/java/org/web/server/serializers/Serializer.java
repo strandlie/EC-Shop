@@ -92,7 +92,7 @@ public class Serializer {
 	 * @return JSON String
 	 */
 	@SuppressWarnings("rawtypes")
-	public String serialize(Model o, Class c) {
+	private String serialize(Model o, Class c) {
 		ObjectMapper mapper = new ObjectMapper();
 		String json = null;
 		try {
@@ -116,6 +116,12 @@ public class Serializer {
 		switch(ModelClasses.fromClass(c)) {
 			case RECEIPT: return serializeReceipt((Receipt) o);
 			case SHOPPING_TRIP: return serializeShoppingTrip((ShoppingTrip) o);
+			default:
+				try {
+					return serialize((Model) o, c);
+				} catch (ClassCastException e) {
+					break;
+				}
 		}
 		return null;
 	}

@@ -188,8 +188,8 @@ public class CustomerDatabaseController extends DatabaseController implements Da
 	 */
 	public Customer objectIsCustomer(Object object) {
 		try {
-			Customer a = (Customer) object;
-			return a;
+			Customer c = (Customer) object;
+			return c;
 		} catch (ClassCastException e) {
 			throw new IllegalArgumentException("Object is not Customer");
 		}
