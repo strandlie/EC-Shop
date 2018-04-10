@@ -91,7 +91,9 @@ public class ModeController {
 		 */
 		menuViewController.setModeController(this);
 		
-		
+		/*
+		 * MostPickedUp
+		 */
 		VisualizationTable mostPickedUpTable = new VisualizationTable("Most Picked-Up Product");
 		mostPickedUpTable.addColumn("productName");
 		mostPickedUpTable.addColumn("numberOfPickUp");
@@ -100,13 +102,14 @@ public class ModeController {
 		// Create mostPickedUp Mode and add table
 		Mode mostPickedUp = new Mode("Most Picked Up", mostPickedUpTable);
 		
+		/*
+		 * Stock
+		 */
 		VisualizationTable stockTable = new VisualizationTable("Stock");
 		stockTable.addColumn("productName");
 		stockTable.addColumn("numberInStock");
 		// Create stock Mode and add table
 		Mode stock = new Mode("Stock", stockTable);
-		
-		DataLoader.main(null);
 		
 		/*
 		 * DEMOGRAPHICS MODE
@@ -119,8 +122,6 @@ public class ModeController {
 		demographicsTable.addColumn("zip");
 		Mode demographicsMode = new Mode("Demographics", demographicsTable);
 
-
-		
 		/*
 		 * ON SHELF MODE
 		 */
@@ -132,8 +133,7 @@ public class ModeController {
 		/*
 		 * HEAT MAP MODE
 		 */
-		
-
+		DataLoader.main(null);
 		// Get data from shoppin trip and add to TableView
 		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
 		ActionDatabaseController adc = new ActionDatabaseController();
@@ -157,11 +157,18 @@ public class ModeController {
 		for (int i = 1; i < 65; i++) {
 			osdc.retrieve(shop, i);
 		}
+		
+		// Update the shop object
+		for (ShoppingTrip tripper : shoppingTripList) {
+			shop.updateShopFromReceipt(new Receipt(tripper));
+		}
 
 		Map<Integer, Integer> productIDsOnShelf = shop.getShelfs();
 		Map<Integer, Integer> productIDsInStorage = shop.getStorage();
+		
 
 		tableLoader.loadStockTable(productIDsOnShelf, productIDsInStorage, stockTable);
+		tableLoader.loadInShelvesTable(productIDsOnShelf, onShelvesTable);
 
 		// get data from demographics and add to DemographicsMode
 		CustomerDatabaseController customerDatabaseController = new CustomerDatabaseController();
@@ -327,7 +334,7 @@ public class ModeController {
 				table = (VisualizationTable) mode.getVisualizationElement();
 				table.wipeTable();
 				TableLoader loader = new TableLoader();
-				loader.loadInShelvesTable(shop.getShelfs());
+				loader.loadInShelvesTable(shop.getShelfs(), table);
 				//table.getTableLoader().loadInShelvesTable(shop.getShelfs());
 			}
 				
@@ -357,7 +364,7 @@ public class ModeController {
 				table = (VisualizationTable) mode.getVisualizationElement();
 				table.wipeTable();
 				TableLoader loader = new TableLoader();
-				loader.loadStockTable(shop.getShelfs(), shop.getStorage());
+				loader.loadStockTable(shop.getShelfs(), shop.getStorage(), table);
 				//table.getTableLoader().loadStockTable(shop.getShelfs(), shop.getStorage());
 				
 			}
@@ -380,7 +387,7 @@ public class ModeController {
 				table = (VisualizationTable) mode.getVisualizationElement();
 				table.wipeTable();
 				TableLoader loader = new TableLoader();
-				loader.loadMostPickedUpTable(shoppingTripList);
+				loader.loadMostPickedUpTable(shoppingTripList, table);
 				//table.getTableLoader().loadMostPickedUpTable(shoppingTripList);
 			}
 			else if (mode.getName() == "Demographics") {
@@ -388,7 +395,7 @@ public class ModeController {
 				table = (VisualizationTable) mode.getVisualizationElement();
 				table.wipeTable();
 				TableLoader loader = new TableLoader();
-				loader.loadDemographicsTable(customerList);
+				loader.loadDemographicsTable(customerList, table);
 				//table.getTableLoader().loadDemographicsTable(customerList);
 			}
 		}
