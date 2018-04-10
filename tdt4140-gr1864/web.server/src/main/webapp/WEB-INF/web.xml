@@ -33,6 +33,6 @@
 
   <servlet-mapping>
     <servlet-name>ReceiptFetcher</servlet-name>
-    <url-pattern>/api/v1/user/receipt</url-pattern>
+    <url-pattern>/api/v1/user/receipt/</url-pattern>
   </servlet-mapping>
 </web-app>
