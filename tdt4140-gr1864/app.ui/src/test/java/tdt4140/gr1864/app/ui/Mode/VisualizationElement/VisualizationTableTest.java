@@ -48,13 +48,9 @@ public class VisualizationTableTest {
 	@Test
 	public void canAddData() {
 		Assert.assertTrue(this.table.getData().size() == 0);
-<<<<<<< HEAD
-		Row row = new Row("Bolle", "1", "onShelves");
-=======
 		InStockTableRow agg = new InStockTableRow("Bolle", "1");
->>>>>>> sprint-3
 		
-		this.table.addData(row);
-		Assert.assertEquals(row, this.table.getData().get(0));
+		this.table.addData(agg);
+		Assert.assertEquals(agg, this.table.getData().get(0));
 	}
 }

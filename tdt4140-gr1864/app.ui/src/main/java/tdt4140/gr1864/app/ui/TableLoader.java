@@ -8,6 +8,7 @@ import java.util.Map;
 import tdt4140.gr1864.app.core.*;
 import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.MostPickedUpTableRow;
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.OnShelvesTableRow;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.DemographicsTableRow;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.InStockTableRow;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
@@ -188,19 +189,11 @@ public class TableLoader {
 			}
 		}
 		
-<<<<<<< HEAD
 		for (String productNameString : pickUps.keySet()) {
 			String pickupsString = pickUps.get(productNameString).toString();
 			String putdownsString = putDowns.containsKey(productNameString) ? putDowns.get(productNameString).toString() : "0";
 			String purchasesString = purchases.containsKey(productNameString) ? purchases.get(productNameString).toString() : "0";
-			table.addData(new Row(productNameString, pickupsString, putdownsString, purchasesString));
-=======
-		for (String productName : this.pickUps.keySet()) {
-			String pickups = this.pickUps.get(productName).toString();
-			String putdowns = this.putDowns.containsKey(productName) ? this.putDowns.get(productName).toString() : "0";
-			String purchases = this.purchases.containsKey(productName) ? this.purchases.get(productName).toString() : "0";
-			table.addData(new MostPickedUpTableRow(productName, pickups, putdowns, purchases));
->>>>>>> sprint-3
+			table.addData(new MostPickedUpTableRow(productNameString, pickupsString, putdownsString, purchasesString));
 		}
 	}
 	
@@ -254,15 +247,9 @@ public class TableLoader {
 			}
 		}
 		
-<<<<<<< HEAD
 		for (String productNameString : stock.keySet()) {
 			String totalStock = stock.get(productNameString).toString();
-			table.addData(new Row(productNameString, totalStock, "stock"));
-=======
-		for (String productName : this.stock.keySet()) {
-			String totalStock = this.stock.get(productName).toString();
-			table.addData(new InStockTableRow(productName, totalStock));
->>>>>>> sprint-3
+			table.addData(new InStockTableRow(productNameString, totalStock));
 		}
 	}
 	
@@ -332,7 +319,7 @@ public class TableLoader {
 		}
 		for (String productNameString : shelves.keySet()) {
 			String amount = shelves.get(productNameString).toString();
-			table.addData(new Row(productNameString, amount, "onShelves"));
+			table.addData(new OnShelvesTableRow(productNameString, amount));
 		}
 	}
 }

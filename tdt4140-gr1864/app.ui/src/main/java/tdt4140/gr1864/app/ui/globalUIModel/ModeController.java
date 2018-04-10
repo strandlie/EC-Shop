@@ -20,22 +20,22 @@ import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.database.DataLoader;
 import tdt4140.gr1864.app.core.databasecontrollers.*;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.*;
-<<<<<<< HEAD
+//<<<<<<< HEAD
 import tdt4140.gr1864.app.core.database.TestDataLoader;
 import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.CustomerDatabaseController;
-=======
+//=======
 import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
->>>>>>> sprint-3
+//>>>>>>> sprint-3
 import tdt4140.gr1864.app.core.databasecontrollers.ShopDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
 import tdt4140.gr1864.app.ui.TableLoader;
 import tdt4140.gr1864.app.ui.Mode.Mode;
-<<<<<<< HEAD
+//<<<<<<< HEAD
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationInterface;
-=======
->>>>>>> sprint-3
+//=======
+//>>>>>>> sprint-3
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
 import javafx.fxml.FXML;
 
@@ -89,37 +89,10 @@ public class ModeController {
 		 * The menuViewController needs a reference to it	's mode controller to let it know when the user
 		 * has selected a different Mode
 		 */
-<<<<<<< HEAD
-		this.menuViewController.setModeController(this);
-		
-		DataLoader.main(null);
-		
-		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
-		ActionDatabaseController adc = new ActionDatabaseController();
-		CoordinateDatabaseController cdc = new CoordinateDatabaseController();
-		ShopDatabaseController sdc = new ShopDatabaseController();
-		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
-		ProductDatabaseController pdc = new ProductDatabaseController();
-		CustomerDatabaseController customerDatabaseController = new CustomerDatabaseController();
-		
-		// Get shoppingTrip, actions and coordinates
-		ShoppingTrip trip = stdc.retrieve(1);
-		trip.setActions(adc.retrieveAll(1));
-		trip.setCoordinates(cdc.retrieveAll(1));
-		ArrayList<ShoppingTrip> shoppingTripList = new ArrayList<>();
-		shoppingTripList.add(trip);
-		
-		/*
-		 * MOST PICKED UP MODE
-		 */
-		// Create a table for mostPickedUp Mode and fill with data
-		VisualizationTable mostPickedUpTable = new VisualizationTable("Most Picked-Up Product", shoppingTripList);
-=======
 		menuViewController.setModeController(this);
 		
 		
 		VisualizationTable mostPickedUpTable = new VisualizationTable("Most Picked-Up Product");
->>>>>>> sprint-3
 		mostPickedUpTable.addColumn("productName");
 		mostPickedUpTable.addColumn("numberOfPickUp");
 		mostPickedUpTable.addColumn("numberOfPutDown");
@@ -127,27 +100,18 @@ public class ModeController {
 		// Create mostPickedUp Mode and add table
 		Mode mostPickedUp = new Mode("Most Picked Up", mostPickedUpTable);
 		
-		/*
-		 * STOCK MODE
-		 */
-		// Get data from Shop and add to StockMode
-		Shop shop = sdc.retrieve(1);
-		shop.refreshShop();
-		
-		Map<Integer, Integer> productIDsOnShelf = shop.getShelfs();
-		Map<Integer, Integer> productIDsInStorage = shop.getStorage();
-		// Create a table for stockMode and fill with data
-		VisualizationTable stockTable = new VisualizationTable("Stock", productIDsOnShelf, productIDsInStorage);
+		VisualizationTable stockTable = new VisualizationTable("Stock");
 		stockTable.addColumn("productName");
 		stockTable.addColumn("numberInStock");
 		// Create stock Mode and add table
 		Mode stock = new Mode("Stock", stockTable);
-
+		
+		DataLoader.main(null);
+		
 		/*
 		 * DEMOGRAPHICS MODE
 		 */
-		List<Customer> customerList = customerDatabaseController.retrieveAll();
-		VisualizationTable demographicsTable = new VisualizationTable("Demographics", customerList);
+		VisualizationTable demographicsTable = new VisualizationTable("Demographics");//, customerList);
 		demographicsTable.addColumn("customerId");
 		demographicsTable.addColumn("firstName");
 		demographicsTable.addColumn("lastName");
@@ -157,11 +121,10 @@ public class ModeController {
 
 
 		
-<<<<<<< HEAD
 		/*
 		 * ON SHELF MODE
 		 */
-		VisualizationTable onShelvesTable = new VisualizationTable("Shelves", productIDsOnShelf);
+		VisualizationTable onShelvesTable = new VisualizationTable("Shelves");//, productIDsOnShelf);
 		onShelvesTable.addColumn("productName");
 		onShelvesTable.addColumn("numberOnShelves");
 		Mode shelves = new Mode("Shelves", onShelvesTable);
@@ -170,7 +133,7 @@ public class ModeController {
 		 * HEAT MAP MODE
 		 */
 		
-=======
+
 		// Get data from shoppin trip and add to TableView
 		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
 		ActionDatabaseController adc = new ActionDatabaseController();
@@ -207,7 +170,6 @@ public class ModeController {
 		tableLoader.loadDemographicsTable(customers, demographicsTable);
 
 
->>>>>>> sprint-3
 		VisualizationHeatMap heatMap = new VisualizationHeatMap("Heatmap", shoppingTripList);
 		Mode heatMapMode = new Mode("Heatmap", heatMap);
 		
@@ -222,12 +184,7 @@ public class ModeController {
 		addMode(mostPickedUp);
 		addMode(stock);
 		addMode(demographicsMode);
-<<<<<<< HEAD
-		addMode(mostPickedUp);
-		addMode(stock);
 		addMode(shelves);
-=======
->>>>>>> sprint-3
 		addMode(heatMapMode);
 		addMode(plotMode);
 		
@@ -368,7 +325,10 @@ public class ModeController {
 				
 				// Wipe the data table in mode
 				table = (VisualizationTable) mode.getVisualizationElement();
-				table.getTableLoader().loadInShelvesTable(shop.getShelfs());
+				table.wipeTable();
+				TableLoader loader = new TableLoader();
+				loader.loadInShelvesTable(shop.getShelfs());
+				//table.getTableLoader().loadInShelvesTable(shop.getShelfs());
 			}
 				
 			else if (mode.getName() == "Stock") {
@@ -395,7 +355,10 @@ public class ModeController {
 				}
 				
 				table = (VisualizationTable) mode.getVisualizationElement();
-				table.getTableLoader().loadStockTable(shop.getShelfs(), shop.getStorage());
+				table.wipeTable();
+				TableLoader loader = new TableLoader();
+				loader.loadStockTable(shop.getShelfs(), shop.getStorage());
+				//table.getTableLoader().loadStockTable(shop.getShelfs(), shop.getStorage());
 				
 			}
 			
@@ -415,12 +378,18 @@ public class ModeController {
 				}
 				
 				table = (VisualizationTable) mode.getVisualizationElement();
-				table.getTableLoader().loadMostPickedUpTable(shoppingTripList);
+				table.wipeTable();
+				TableLoader loader = new TableLoader();
+				loader.loadMostPickedUpTable(shoppingTripList);
+				//table.getTableLoader().loadMostPickedUpTable(shoppingTripList);
 			}
 			else if (mode.getName() == "Demographics") {
 				List<Customer> customerList = cdc.retrieveAll();
 				table = (VisualizationTable) mode.getVisualizationElement();
-				table.getTableLoader().loadDemographicsTable(customerList);
+				table.wipeTable();
+				TableLoader loader = new TableLoader();
+				loader.loadDemographicsTable(customerList);
+				//table.getTableLoader().loadDemographicsTable(customerList);
 			}
 		}
 	}

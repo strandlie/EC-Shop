@@ -54,13 +54,7 @@ public class VisualizationTable extends VisualizationElement {
 	/**
 	 * Container for the data used to populate the table in the GUI
 	 */
-<<<<<<< HEAD
-	private ObservableList<Row> data;
-	
-	private TableLoader tableLoader;
-=======
 	private ObservableList<TableRow> data;
->>>>>>> sprint-3
 
 
 	/**
@@ -71,49 +65,6 @@ public class VisualizationTable extends VisualizationElement {
 		super(name);
 		this.columns = new ArrayList<TableColumn<TableRow, String>>();
 		this.data = FXCollections.observableArrayList(new ArrayList<TableRow>());
-	}
-	
-	/**
-	 * Constructor for MostPickedUpModeVisualizationTable
-	 * @param trips
-	 */
-	public VisualizationTable(String name, ArrayList<ShoppingTrip> trips) {
-		super(name);
-		this.columns = new ArrayList<TableColumn<Row, String>>();
-		this.data = FXCollections.observableArrayList(new ArrayList<Row>());
-		this.tableLoader = new TableLoader(trips, this);
-	}
-	
-	/**
-	 * Constructor for StockModeVisualizationTable
-	 * @param name
-	 * @param productIDsOnShelf
-	 * @param productIDsInStorage
-	 */
-	public VisualizationTable(String name, Map<Integer, Integer> productIDsOnShelf, Map<Integer, Integer> productIDsInStorage) {
-		super(name);
-		this.columns = new ArrayList<TableColumn<Row, String>>();
-		this.data = FXCollections.observableArrayList(new ArrayList<Row>());
-		this.tableLoader = new TableLoader(productIDsOnShelf, productIDsInStorage, this);
-	}
-	
-	/**
-	 * Constructor for OnShelvesModeVisualizationTable
-	 * @param name
-	 * @param productIDsOnShelf
-	 */
-	public VisualizationTable(String name, Map<Integer, Integer> productIDsOnShelf) {
-		super(name);
-		this.columns = new ArrayList<TableColumn<Row, String>>();
-		this.data = FXCollections.observableArrayList(new ArrayList<Row>());
-		this.tableLoader = new TableLoader(productIDsOnShelf, this);
-	}
-	
-	public VisualizationTable(String name, List<Customer> customerList) {
-		super(name);
-		this.columns = new ArrayList<TableColumn<Row, String>>();
-		this.data = FXCollections.observableArrayList(new ArrayList<Row>());
-		this.tableLoader = new TableLoader(customerList, this);
 	}
 	
 	/**
@@ -192,13 +143,8 @@ public class VisualizationTable extends VisualizationElement {
 		}
 		
 		String columnName = allowedColumnNames.get(columnID);
-<<<<<<< HEAD
-		TableColumn<Row, String> tempColumn = new TableColumn<Row, String>(columnName);
-		tempColumn.setCellValueFactory(new PropertyValueFactory<>(columnID));
-=======
 		TableColumn<TableRow, String> tempColumn = new TableColumn<TableRow, String>(columnName);
 		tempColumn.setCellValueFactory(new PropertyValueFactory(columnID));
->>>>>>> sprint-3
 		columns.add(tempColumn);
 	}
 	
@@ -225,22 +171,12 @@ public class VisualizationTable extends VisualizationElement {
 		return false;
 	}
 	
-<<<<<<< HEAD
-	public TableLoader getTableLoader() {
-		return this.tableLoader;
-=======
 	@SuppressWarnings("unchecked")
 	private List<TableRow> objectIsList(Object object) throws ClassCastException {
 		return (List<TableRow>) object;
->>>>>>> sprint-3
 	}
 	
 	public void wipeTable() {
 		this.data.clear();
-	}
-	
-	@SuppressWarnings("unchecked")
-	private List<Row> objectIsList(Object object) throws ClassCastException {
-		return (List<Row>) object;
 	}
 }
