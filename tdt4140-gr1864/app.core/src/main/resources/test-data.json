@@ -466,33 +466,17 @@
     "action" : 1,
     "timestamp" : 1523367346313
   }, {
-    "productID" : 64,
-    "action" : 0,
-    "timestamp" : 1523367347513
-  }, {
     "productID" : 34,
     "action" : 1,
     "timestamp" : 1523367349313
-  }, {
-    "productID" : 20,
-    "action" : 0,
-    "timestamp" : 1523367349538
   }, {
     "productID" : 2,
     "action" : 1,
     "timestamp" : 1523367349988
   }, {
-    "productID" : 41,
-    "action" : 0,
-    "timestamp" : 1523367351338
-  }, {
-    "productID" : 23,
+    "productID" : 2,
     "action" : 0,
     "timestamp" : 1523367352163
-  }, {
-    "productID" : 37,
-    "action" : 0,
-    "timestamp" : 1523367352463
   } ],
   "duration" : 8550
 }

@@ -50,9 +50,9 @@ public class ShoppingTripTest {
 	public void testActionListContainsCorrectActionsExpectedSameAsTestDataFile() {
 		List<Action> actions = shoppingTrip.getActions();
 		Action action = actions.get(1);
-		long expectedTime = 1523367347513L;
-		int expectedType = 0;
-		int expectedProduct = 64;
+		long expectedTime = 1523367349313L;
+		int expectedType = 1;
+		int expectedProduct = 34;
 		
 		Assert.assertEquals(expectedTime, action.getTimeStamp());
 		Assert.assertEquals(expectedType, action.getActionType());
