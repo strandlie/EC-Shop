@@ -42,11 +42,11 @@ public class ReceiptTest {
 			}
 		}
 		
-		Assert.assertTrue(allOne);
+		Assert.assertFalse(allOne);
 	}
 	
 	@Test
 	public void testGetTotalPrice() {
-		Assert.assertEquals(45.63, receipt.getTotalPrice(), 10e-5);
+		Assert.assertEquals(10.16, receipt.getTotalPrice(), 10e-5);
 	}
 }

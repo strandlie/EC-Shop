@@ -61,10 +61,10 @@ public class DataLoaderTest {
 	@Test
 	public void testCoordinateLoadingFromFileExpectFirstCoordFromDataFile() {
 		CoordinateDatabaseController cdc = new CoordinateDatabaseController();
-		Coordinate coord = cdc.retrieve(1, 1520861376132L);
-		double expectedX = 8.12313777180195;
-		double expectedY = 4.330388562062142;
-		long expectedTime = 1520861376132L;
+		Coordinate coord = cdc.retrieve(1, 1523367344888L);
+		double expectedX = 5.988600917321573;
+		double expectedY = 1.6073608851323462;
+		long expectedTime = 1523367344888L;
 
 		Assert.assertEquals(expectedX, coord.getX(), 0);
 		Assert.assertEquals(expectedY, coord.getY(), 0);
@@ -74,10 +74,10 @@ public class DataLoaderTest {
 	@Test
 	public void testActionLoadingFromFileExpectFirstActionFromDataFile() {
 		ActionDatabaseController adc = new ActionDatabaseController();
-		Action action = adc.retrieve(1, 1520865366132L);
-		long expectedTime = 1520865366132L;
+		Action action = adc.retrieve(1, 1523367346313L);
+		long expectedTime = 1523367346313L;
 		int expectedType = 1;
-		int expectedProduct = 44;
+		int expectedProduct = 55;
 		
 		Assert.assertEquals(expectedTime, action.getTimeStamp());
 		Assert.assertEquals(expectedType, action.getActionType());

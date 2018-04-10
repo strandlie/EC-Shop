@@ -169,6 +169,7 @@ public class ShoppingTripDatabaseController extends DatabaseController implement
 		CustomerDatabaseController cdc = new CustomerDatabaseController();
 		ShopDatabaseController sdc = new ShopDatabaseController();
 		ActionDatabaseController adc = new ActionDatabaseController();
+		CoordinateDatabaseController corddc = new CoordinateDatabaseController();
 		ShoppingTrip trip;
 		List<ShoppingTrip> trips = new ArrayList<>();
 		
@@ -193,6 +194,7 @@ public class ShoppingTripDatabaseController extends DatabaseController implement
 						rs.getBoolean(5) // anonymous flag
 					);	
 				trip.setActions(adc.retrieveAll(tripID));
+				trip.setCoordinates(corddc.retrieveAll(tripID));
 				trips.add(trip);
 			}
 			connection.close();
