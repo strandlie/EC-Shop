@@ -9,10 +9,20 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import tdt4140.gr1864.app.core.Product;
 import tdt4140.gr1864.app.core.Receipt;
 
+/**
+ * A Jackson serializer module. This implements a custom serializer, which serializes
+ * Receipt objects in an actually meaningful way. When this module is registered, you
+ * can use Jackson as normally but have Receipts serialized nicely.
+ * For usage, see the Serializer class, where this plugin is being used.
+ */
 public class ReceiptSerializer extends StdSerializer<Receipt> {
+	
 	private static final long serialVersionUID = 1L;
 
 
+	/**
+	 * Boilerplate constructors for Jackson.
+	 */
 	public ReceiptSerializer() {
 		this(null);
 	}
@@ -21,14 +31,20 @@ public class ReceiptSerializer extends StdSerializer<Receipt> {
 		super(receipt);
 	}
  
-
+	/**
+	 * This method receives Receipt objects from Jackson and serializes them using a custom serializer.
+	 * We manually control where JSON sub-objects start and close.
+	 * @param receipt The Receipt being serialized.
+	 * @param jsonGenerator The JSON generator, provides an API for generating JSON data.
+	 * @param serializer The Serializer which uses this plugin.
+	 */
     @Override
     public void serialize(Receipt receipt, JsonGenerator jsonGenerator, SerializerProvider serializer) throws IOException {
         // The root object.
     	jsonGenerator.writeStartObject();
     	
     	// The shopping trip start time.
-        jsonGenerator.writeNumberField("date", receipt.getShoppingTrip().getStart()); //
+        jsonGenerator.writeNumberField("date", receipt.getShoppingTrip().getEnd());
         
         // The total price of the shopping trip.
         jsonGenerator.writeNumberField("totalPrice", receipt.getTotalPrice());
