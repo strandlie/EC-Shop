@@ -29,7 +29,7 @@ public class Customer extends Observable implements Model, UserInterface {
 	ActionDatabaseController adc = new ActionDatabaseController();
 	
 	@JsonProperty("customerID")
-	private int customerId;
+	private int customerID;
 
 	@JsonProperty
 	private String firstName;
@@ -62,7 +62,7 @@ public class Customer extends Observable implements Model, UserInterface {
 	 */
 	public Customer(int customerID, String firstName, String lastName, 
 			List<ShoppingTrip> shoppingTrips) {
-		this.customerId = customerID;
+		this.customerID = customerID;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.shoppingTrips = shoppingTrips;
@@ -81,7 +81,7 @@ public class Customer extends Observable implements Model, UserInterface {
 	 */
 	public Customer(String firstName, String lastName, int customerID,
 			 String address, int zip, boolean anonymous) {
-		this.customerId = customerID;
+		this.customerID = customerID;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.address = address;
@@ -155,7 +155,7 @@ public class Customer extends Observable implements Model, UserInterface {
 		// Is a primitive and does not need a check
 		this.anonymous = anonymous;
 
-		this.customerId = customerID;
+		this.customerID = customerID;
 	}
 
 	/**
@@ -166,7 +166,7 @@ public class Customer extends Observable implements Model, UserInterface {
 	public Customer(String firstName, String lastName, int customerID) { 
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.customerId = customerID;
+		this.customerID = customerID;
 		this.anonymous = false;
 	}
 	
@@ -181,15 +181,15 @@ public class Customer extends Observable implements Model, UserInterface {
 
 	@JsonIgnore
 	public int getID() {
-		return customerId;
+		return customerID;
 	}
 	
 	public int getCustomerID() {
-		return customerId;
+		return customerID;
 	}
 
 	public void setCustomerId(int userId) {
-		this.customerId = userId;
+		this.customerID = userId;
 	}
 
 	public String getFirstName() {
@@ -281,7 +281,62 @@ public class Customer extends Observable implements Model, UserInterface {
 		clearChanged();
 		this.address = address;
 	}
-
+	
+	/**
+	 * Get a sorted list consisting of the most bought products for this customer sorted
+	 * from largest amount to least amount used for getting statistics for this customer.
+	 * @return A sorted int[64][2] list where 
+	 * int[0][0] is the productID and 
+	 * int[0][1] is the amount of the product bought 
+	 * int[0] is the highest amount and int[63] is the least amount of bought products
+	 */
+	public int[][] getStatisticsForAmountBought() {
+		int amountOfProducts = 64;
+		
+		// Get the amount of bought products for this customer
+		int[] temp = getBoughtProductList();
+		
+		// the list for storing the sorted products
+		int[][] sortedProducts = new int[amountOfProducts][2];
+		
+		for (int i = 0; i < amountOfProducts; i++) {
+			// Find the most bought product and amount
+			int[] maxList = findMaxList(temp);
+			
+			// Set the index for the most bought product
+			sortedProducts[i][0] = maxList[0];
+			
+			// Set the amount of bought for the product
+			sortedProducts[i][1] = maxList[1];
+			
+			// Removes the max value for the temporary list
+			temp[maxList[0]] = 0;
+		}
+		
+		return sortedProducts;
+		
+	}
+	
+	/**
+	 * A method for finding the max value in a int[] array list
+	 * @param list the list that consists of numbers for the method to look for max value
+	 * @return a list containing two int's where list[0] is the maxValueIndex and list[1] is the maxValue
+	 */
+	public int[] findMaxList(int[] list) {
+		// maxList[0] = maxValueid.
+		// maxList[1] = maxValue;
+		int[] maxList = {-1, -1};
+		
+		for (int i = 0; i < list.length; i++) {
+			if (list[i] > maxList[1]) {
+				maxList[0] = i;
+				maxList[1] = list[i];
+			}
+		}
+		
+		return maxList;
+	}
+	
 	/**
 	 *  The recommendation is based on shopping trips stored in the database and 
 	 *  gives the recommendation based on to occasions:
@@ -300,9 +355,9 @@ public class Customer extends Observable implements Model, UserInterface {
 	public void giveRecommendation() {
 		// List of all shopping trips for all customers
 		List<ShoppingTrip> allTrips = stdc.retrieveAllShoppingTrips();
-		
+
 		// List of all shopping trips for this customer	
-		List<ShoppingTrip> customerTrips = stdc.retrieveAllShoppingTripsForCustomer(this.customerId);
+		List<ShoppingTrip> customerTrips = stdc.retrieveAllShoppingTripsForCustomer(this.customerID);
 		
 		// Amount of customers (registered)
 		int countCustomers = cdc.countCustomers();
@@ -316,7 +371,10 @@ public class Customer extends Observable implements Model, UserInterface {
 		int[] productsBoughtInTotal = new int[amountOfProducts];
 		
 		// Updating the productsBoughtInTotal based on all shopping trips
-		if (allTrips.size() == 0) this.recommendedProductID = 0;
+		if (allTrips.size() == 0) {
+			this.recommendedProductID = 0;
+			return;
+		}
 
 		for (ShoppingTrip st : allTrips) {
 			
@@ -353,21 +411,8 @@ public class Customer extends Observable implements Model, UserInterface {
 		 * customerProducts[0] gives amount of products with productID = 1 (1-indexed in db) 
 		 * that this customer bought in total
 		 */
-		int[] customerBoughtProductsInTotal= new int[amountOfProducts];
+		int[] customerBoughtProductsInTotal= getBoughtProductList();
 		
-		/* 
-		 * Updating the customerBoughtProductsInTotal based on all 
-		 * shopping trips for this customer
-		 */
-		for (ShoppingTrip st : customerTrips) {
-			for (Action action : st.getActions()) {
-				/* 
-				 * Adds to total bought products (by 1) for customer by converting the 1-indexed
-				 * productID to be 0-indexed (int[]-index != dbTable-index)
-				 */
-				customerBoughtProductsInTotal[action.getProduct().getID()-1]++;
-			}
-		}
 		
 		// Average bought products for all customers based on productsBoughtInTotal / customerAmount
 		double[] avgAmountOfProdBoughtByAll = new double[amountOfProducts];
@@ -466,13 +511,53 @@ public class Customer extends Observable implements Model, UserInterface {
 		}
 		this.recommendedProductID = productID;
 	}
+	
+	/**
+	 * Creates a list for all trips for this customer
+	 * Adds products equally to each action the customer has done. 
+	 * The list consists of the total amount of bought product.
+	 * @return int[] array list for the amount of products bought with productID = int[ID]
+	 */
+	private int[] getBoughtProductList() {
+		// List of all shopping trips for this customer	
+		List<ShoppingTrip> customerTrips = stdc.retrieveAllShoppingTripsForCustomer(this.customerID);
+		
+		/**
+		 * An overview for amount of products the customer bought in total since registering.
+		 * customerProducts[0] gives amount of products with productID = 1 (1-indexed in db) 
+		 * that this customer bought in total
+		 */
+		int amountOfProducts = 64;
+		int[] customerBoughtProductsInTotal= new int[amountOfProducts];
+		
+		/* 
+		 * Updating the customerBoughtProductsInTotal based on all 
+		 * shopping trips for this customer
+		 */
+		for (ShoppingTrip st : customerTrips) {
+			for (Action action : st.getActions()) {
+				/* 
+				 * Adds to the amount of bought products in total (by 1) by converting the 1-indexed
+				 * productID to be 0-indexed (int[]'s index == dbTable's index - 1)
+				 */
+				if (action.getActionType() == Action.DROP) {
+					customerBoughtProductsInTotal[action.getProduct().getID()-1]--;
+					
+				} else if (action.getActionType() == Action.PICK_UP) {
+					customerBoughtProductsInTotal[action.getProduct().getID()-1]++;
+				}
+			}
+		}
+		
+		return customerBoughtProductsInTotal;
+	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Customer customer = (Customer) o;
-		return customerId == customer.customerId &&
+		return customerID == customer.customerID &&
 				zip == customer.zip &&
 				age == customer.age &&
 				numberOfPersonsInHousehold == customer.numberOfPersonsInHousehold &&
@@ -487,7 +572,7 @@ public class Customer extends Observable implements Model, UserInterface {
 	@Override
 	public int hashCode() {
 
-		return Objects.hash(customerId, firstName, lastName, address, zip, gender, age, numberOfPersonsInHousehold, shoppingTrips, recommendedProductID);
+		return Objects.hash(customerID, firstName, lastName, address, zip, gender, age, numberOfPersonsInHousehold, shoppingTrips, recommendedProductID);
 	}
 }
 
