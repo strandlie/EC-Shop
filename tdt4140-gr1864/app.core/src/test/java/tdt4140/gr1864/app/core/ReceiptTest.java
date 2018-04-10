@@ -47,6 +47,7 @@ public class ReceiptTest {
 	
 	@Test
 	public void testGetTotalPrice() {
+		System.out.println(receipt.getTotalPrice());
 		Assert.assertEquals(45.63, receipt.getTotalPrice(), 10e-5);
 	}
 }

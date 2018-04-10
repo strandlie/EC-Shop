@@ -247,6 +247,7 @@ public class DataMocker implements Runnable {
 	public void sendShoppingTripData(Trip trip) throws ClientProtocolException, IOException {
 		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 		String json = ow.writeValueAsString(trip);
+		System.out.println(json);
 		
 		DefaultHttpClient httpclient = new DefaultHttpClient();
 		HttpPost httpPost = new HttpPost(API_URL);
