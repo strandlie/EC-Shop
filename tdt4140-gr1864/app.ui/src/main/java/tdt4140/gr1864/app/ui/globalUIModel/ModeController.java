@@ -6,7 +6,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import java.sql.SQLException;
 
@@ -18,8 +17,6 @@ import tdt4140.gr1864.app.core.Shop;
 import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.database.DataLoader;
 import tdt4140.gr1864.app.core.databasecontrollers.CustomerDatabaseController;
-import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
-import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShopDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
 
@@ -90,7 +87,6 @@ public class ModeController {
 		mostPickedUpTable.addColumn("numberOfPickUp");
 		mostPickedUpTable.addColumn("numberOfPutDown");
 		mostPickedUpTable.addColumn("numberOfPurchases");
-
 		Mode mostPickedUp = new Mode("Most Picked Up", mostPickedUpTable);
 		
 		/*
@@ -99,7 +95,6 @@ public class ModeController {
 		VisualizationTable stockTable = new VisualizationTable("Stock");
 		stockTable.addColumn("productName");
 		stockTable.addColumn("numberInStock");
-
 		Mode stock = new Mode("Stock", stockTable);
 		
 		/*
@@ -119,52 +114,34 @@ public class ModeController {
 		VisualizationTable onShelvesTable = new VisualizationTable("Shelves");//, productIDsOnShelf);
 		onShelvesTable.addColumn("productName");
 		onShelvesTable.addColumn("numberOnShelves");
-
 		Mode shelves = new Mode("Shelves", onShelvesTable);
-		
-		/*
-		 * HEAT MAP MODE
-		 */
 		
 		/*
 		 * LOAD DATA
 		 */
 		// Load data into DB
 		DataLoader.main(null);
+		
 		// Extract shopping trips(with actions and coordinates)
 		ArrayList<ShoppingTrip> shoppingTripList = getShoppingTripsFromDB();
 		// Load data into mostPickedUp
 		TableLoader tableLoader = new TableLoader();
 		tableLoader.loadMostPickedUpTable(shoppingTripList, mostPickedUpTable);
 		
-		// Get data from Shop and add to StockMode
-		ShopDatabaseController sdc = new ShopDatabaseController();
-		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
-
-		Shop shop = sdc.retrieve(1);
-		for (int i = 1; i < 65; i++) {
-			osdc.retrieve(shop, i);
-		}
-		
-		// Update the shop object
-		for (ShoppingTrip trip : shoppingTripList) {
-			shop.updateShopFromReceipt(new Receipt(trip));
-		}
-
-		Map<Integer, Integer> productIDsOnShelf = shop.getShelfs();
-		Map<Integer, Integer> productIDsInStorage = shop.getStorage();
-		
-
-		tableLoader.loadStockTable(productIDsOnShelf, productIDsInStorage, stockTable);
-		tableLoader.loadInShelvesTable(productIDsOnShelf, onShelvesTable);
+		// Get shop and update
+		Shop shop = getShopFromDBAndUpdateFromTrips(shoppingTripList);
+		// Load stock and shelves
+		tableLoader.loadStockTable(shop.getShelfs(), shop.getStorage(), stockTable);
+		tableLoader.loadInShelvesTable(shop.getShelfs(), onShelvesTable);
 
 		// get data from demographics and add to DemographicsMode
 		CustomerDatabaseController customerDatabaseController = new CustomerDatabaseController();
 		List<Customer> customers = customerDatabaseController.retrieveAll();
-
 		tableLoader.loadDemographicsTable(customers, demographicsTable);
 
-
+		/*
+		 * HEAT MAP MODE
+		 */
 		VisualizationHeatMap heatMap = new VisualizationHeatMap("Heatmap", shoppingTripList);
 		Mode heatMapMode = new Mode("Heatmap", heatMap);
 		
@@ -215,6 +192,22 @@ public class ModeController {
 			iterator++;
 		}
 		return shoppingTripList;
+	}
+	
+	/**
+	 * Exracts and update shop drom DB and update shelves from a list of all shoppingtrips
+	 * @param shoppingTripList	An ArrayList of all shoppingtrips in DB
+	 * @return					The updated shop object
+	 */
+	public Shop getShopFromDBAndUpdateFromTrips(ArrayList<ShoppingTrip> shoppingTripList) {
+		ShopDatabaseController sdc = new ShopDatabaseController();
+		Shop shop = sdc.retrieve(1);
+		shop.refreshShop();
+		// Update the shop object
+		for (ShoppingTrip trip : shoppingTripList) {
+			shop.updateShopFromReceipt(new Receipt(trip));
+		}
+		return shop;
 	}
 
 	/**
@@ -290,10 +283,7 @@ public class ModeController {
 	 *
 	 * @param newMode String The String of the ListItem in the menu selected by the user
 	 */
-	public void modeChanged(String newMode) {
-		// Create tableLoader
-		TableLoader tableLoader = new TableLoader();
-		
+	public void modeChanged(String newMode) {	
 		Mode mode = getMode(newMode);
 		if (mode == null) {
 			throw new IllegalStateException("modeChanged should not be called when there is no corresponding mode in modes");
@@ -310,8 +300,6 @@ public class ModeController {
 	@SuppressWarnings({ "static-access"})
 	public void updateTableRows() {
 		
-		ShopDatabaseController sdc = new ShopDatabaseController();
-		CustomerDatabaseController cdc = new CustomerDatabaseController();
 		VisualizationTable table;
 		
 		for (String modeName : modes.keySet()) {
@@ -319,65 +307,50 @@ public class ModeController {
 		
 			if (mode.getName() == "Shelves") {
 				
-				// Retrieve the shop from DB
-				Shop shop = sdc.retrieve(1);
-				shop.refreshShop();
-				
 				// Retrieve the shopping trips from DB and put in a list
 				ArrayList<ShoppingTrip> shoppingTripList = getShoppingTripsFromDB();
-				
-				// Update the shop object
-				for (ShoppingTrip trip : shoppingTripList) {
-					shop.updateShopFromReceipt(new Receipt(trip));
-				}
-				
-				// Wipe the data table in mode
+				// Retrieve shop from DB and update from shoppingTrips
+				Shop shop = getShopFromDBAndUpdateFromTrips(shoppingTripList);
+				// Extract table, wipe and load
 				table = (VisualizationTable) mode.getVisualizationElement();
 				table.wipeTable();
 				TableLoader loader = new TableLoader();
 				loader.loadInShelvesTable(shop.getShelfs(), table);
-				//table.getTableLoader().loadInShelvesTable(shop.getShelfs());
 			}
 				
 			else if (mode.getName() == "Stock") {
-				// Retrieve the shop from DB
-				Shop shop = sdc.retrieve(1);
-				shop.refreshShop();
 				
 				// Retrieve the shopping trips from DB and put in a list
 				ArrayList<ShoppingTrip> shoppingTripList = getShoppingTripsFromDB();
-				
-				// Update the shop object
-				for (ShoppingTrip trip : shoppingTripList) {
-					shop.updateShopFromReceipt(new Receipt(trip));
-				}
-				
+				// Retrieve the shop from DB
+				Shop shop = getShopFromDBAndUpdateFromTrips(shoppingTripList);
+				// Extract table, wipe and load
 				table = (VisualizationTable) mode.getVisualizationElement();
 				table.wipeTable();
 				TableLoader loader = new TableLoader();
 				loader.loadStockTable(shop.getShelfs(), shop.getStorage(), table);
-				//table.getTableLoader().loadStockTable(shop.getShelfs(), shop.getStorage());
-				
 			}
 			
 			else if (mode.getName() == "Most Picked Up") {
 
 				// Retrieve the shopping trips from DB and put in a list
 				ArrayList<ShoppingTrip> shoppingTripList = getShoppingTripsFromDB();
-				
+				// Extract table, wipe and load
 				table = (VisualizationTable) mode.getVisualizationElement();
 				table.wipeTable();
 				TableLoader loader = new TableLoader();
 				loader.loadMostPickedUpTable(shoppingTripList, table);
-				//table.getTableLoader().loadMostPickedUpTable(shoppingTripList);
 			}
 			else if (mode.getName() == "Demographics") {
+				
+				// Retrive list of customers
+				CustomerDatabaseController cdc = new CustomerDatabaseController();
 				List<Customer> customerList = cdc.retrieveAll();
+				// Extract table, wipe and load
 				table = (VisualizationTable) mode.getVisualizationElement();
 				table.wipeTable();
 				TableLoader loader = new TableLoader();
 				loader.loadDemographicsTable(customerList, table);
-				//table.getTableLoader().loadDemographicsTable(customerList);
 			}
 		}
 	}
