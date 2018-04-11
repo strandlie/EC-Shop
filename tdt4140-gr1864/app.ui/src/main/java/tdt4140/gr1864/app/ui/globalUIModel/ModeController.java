@@ -3,40 +3,31 @@ package tdt4140.gr1864.app.ui.globalUIModel;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
-import tdt4140.gr1864.app.core.Customer;
-import tdt4140.gr1864.app.core.Receipt;
-
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import java.sql.SQLException;
+
+import tdt4140.gr1864.app.core.Customer;
+import tdt4140.gr1864.app.core.Receipt;
 import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.CoordinateDatabaseController;
 import tdt4140.gr1864.app.core.Shop;
 import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.database.DataLoader;
-import tdt4140.gr1864.app.core.databasecontrollers.*;
-import tdt4140.gr1864.app.ui.Mode.VisualizationElement.*;
-//<<<<<<< HEAD
-import tdt4140.gr1864.app.core.database.TestDataLoader;
-import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.CustomerDatabaseController;
-//=======
 import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
-//>>>>>>> sprint-3
 import tdt4140.gr1864.app.core.databasecontrollers.ShopDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
+
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.*;
 import tdt4140.gr1864.app.ui.TableLoader;
 import tdt4140.gr1864.app.ui.Mode.Mode;
-//<<<<<<< HEAD
-import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationInterface;
-//=======
-//>>>>>>> sprint-3
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
+
 import javafx.fxml.FXML;
 
 /**
@@ -86,7 +77,7 @@ public class ModeController {
 		this.modes = new HashMap<String, Mode>();
 
 		/**
-		 * The menuViewController needs a reference to it	's mode controller to let it know when the user
+		 * The menuViewController needs a reference to it's mode controller to let it know when the user
 		 * has selected a different Mode
 		 */
 		menuViewController.setModeController(this);
@@ -99,7 +90,7 @@ public class ModeController {
 		mostPickedUpTable.addColumn("numberOfPickUp");
 		mostPickedUpTable.addColumn("numberOfPutDown");
 		mostPickedUpTable.addColumn("numberOfPurchases");
-		// Create mostPickedUp Mode and add table
+
 		Mode mostPickedUp = new Mode("Most Picked Up", mostPickedUpTable);
 		
 		/*
@@ -108,7 +99,7 @@ public class ModeController {
 		VisualizationTable stockTable = new VisualizationTable("Stock");
 		stockTable.addColumn("productName");
 		stockTable.addColumn("numberInStock");
-		// Create stock Mode and add table
+
 		Mode stock = new Mode("Stock", stockTable);
 		
 		/*
@@ -128,38 +119,27 @@ public class ModeController {
 		VisualizationTable onShelvesTable = new VisualizationTable("Shelves");//, productIDsOnShelf);
 		onShelvesTable.addColumn("productName");
 		onShelvesTable.addColumn("numberOnShelves");
+
 		Mode shelves = new Mode("Shelves", onShelvesTable);
 		
 		/*
 		 * HEAT MAP MODE
 		 */
+		
+		/*
+		 * LOAD DATA
+		 */
+		// Load data into DB
 		DataLoader.main(null);
-		// Get data from shoppin trip and add to TableView
-		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
-		ActionDatabaseController adc = new ActionDatabaseController();
-		CoordinateDatabaseController cdc = new CoordinateDatabaseController();
-	
-		ArrayList<ShoppingTrip> shoppingTripList = new ArrayList<>();
-		// Retrieve the shopping trips from DB and put in a list
-		int iterator = 1;
-		while(true) {
-			ShoppingTrip trip = stdc.retrieve(iterator);
-			if (trip == null) {
-				break;
-			}
-			trip.setActions(adc.retrieveAll(iterator));
-			trip.setCoordinates(cdc.retrieveAll(iterator));
-			shoppingTripList.add(trip);
-			iterator++;
-		}
-
+		// Extract shopping trips(with actions and coordinates)
+		ArrayList<ShoppingTrip> shoppingTripList = getShoppingTripsFromDB();
+		// Load data into mostPickedUp
 		TableLoader tableLoader = new TableLoader();
 		tableLoader.loadMostPickedUpTable(shoppingTripList, mostPickedUpTable);
 		
 		// Get data from Shop and add to StockMode
 		ShopDatabaseController sdc = new ShopDatabaseController();
 		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
-		ProductDatabaseController pdc = new ProductDatabaseController();
 
 		Shop shop = sdc.retrieve(1);
 		for (int i = 1; i < 65; i++) {
@@ -206,10 +186,35 @@ public class ModeController {
 		setMode(mostPickedUp);
 		
 		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-		executor.scheduleAtFixedRate(runnable, 3, 3, TimeUnit.SECONDS);
+		// scheduleAtFixedRate(?, Delay, periode, ?)
+		executor.scheduleAtFixedRate(runnable, 1, 10, TimeUnit.SECONDS);
 		
 
 
+	}
+	
+	/**
+	 * A method that extracts all trips from DB and fill them with their coordinates and actions
+	 * @return	An ArrayList of ShoppingTrips
+	 */
+	public ArrayList<ShoppingTrip> getShoppingTripsFromDB(){
+		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
+		ActionDatabaseController adc = new ActionDatabaseController();
+		CoordinateDatabaseController cdc = new CoordinateDatabaseController();
+		
+		ArrayList<ShoppingTrip> shoppingTripList = new ArrayList<>();
+		int iterator = 1;
+		while(true) {
+			ShoppingTrip trip = stdc.retrieve(iterator);
+			if (trip == null) {
+				break;
+			}
+			trip.setActions(adc.retrieveAll(iterator));
+			trip.setCoordinates(cdc.retrieveAll(iterator));
+			shoppingTripList.add(trip);
+			iterator++;
+		}
+		return shoppingTripList;
 	}
 
 	/**
@@ -306,8 +311,6 @@ public class ModeController {
 	public void updateTableRows() {
 		
 		ShopDatabaseController sdc = new ShopDatabaseController();
-		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
-		ActionDatabaseController adc = new ActionDatabaseController();
 		CustomerDatabaseController cdc = new CustomerDatabaseController();
 		VisualizationTable table;
 		
@@ -321,17 +324,7 @@ public class ModeController {
 				shop.refreshShop();
 				
 				// Retrieve the shopping trips from DB and put in a list
-				ArrayList<ShoppingTrip> shoppingTripList = new ArrayList<>();
-				int iterator = 1;
-				while(true) {
-					ShoppingTrip trip = stdc.retrieve(iterator);
-					if (trip == null) {
-						break;
-					}
-					trip.setActions(adc.retrieveAll(iterator));
-					shoppingTripList.add(trip);
-					iterator++;
-				}
+				ArrayList<ShoppingTrip> shoppingTripList = getShoppingTripsFromDB();
 				
 				// Update the shop object
 				for (ShoppingTrip trip : shoppingTripList) {
@@ -352,17 +345,7 @@ public class ModeController {
 				shop.refreshShop();
 				
 				// Retrieve the shopping trips from DB and put in a list
-				ArrayList<ShoppingTrip> shoppingTripList = new ArrayList<>();
-				int iterator = 1;
-				while(true) {
-					ShoppingTrip trip = stdc.retrieve(iterator);
-					if (trip == null) {
-						break;
-					}
-					trip.setActions(adc.retrieveAll(iterator));
-					shoppingTripList.add(trip);
-					iterator++;
-				}
+				ArrayList<ShoppingTrip> shoppingTripList = getShoppingTripsFromDB();
 				
 				// Update the shop object
 				for (ShoppingTrip trip : shoppingTripList) {
@@ -380,17 +363,7 @@ public class ModeController {
 			else if (mode.getName() == "Most Picked Up") {
 
 				// Retrieve the shopping trips from DB and put in a list
-				ArrayList<ShoppingTrip> shoppingTripList = new ArrayList<>();
-				int iterator = 1;
-				while(true) {
-					ShoppingTrip trip = stdc.retrieve(iterator);
-					if (trip == null) {
-						break;
-					}
-					trip.setActions(adc.retrieveAll(iterator));
-					shoppingTripList.add(trip);
-					iterator++;
-				}
+				ArrayList<ShoppingTrip> shoppingTripList = getShoppingTripsFromDB();
 				
 				table = (VisualizationTable) mode.getVisualizationElement();
 				table.wipeTable();
