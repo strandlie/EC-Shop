@@ -67,7 +67,6 @@ public class Serializer {
 		
 		/* For classes that needs more advanced serializing */
 		switch(ModelClasses.fromClass(c)) {
-			case RECEIPT: object = deserializeReceipt(reader); break;
 			case SHOPPING_TRIP: object = deserializeShoppingTrip(reader); break;
 			default: object = genericDeserialize(reader, c);break;
 		}
@@ -141,10 +140,19 @@ public class Serializer {
 	 */
 	@SuppressWarnings({ "null", "unchecked" })
 	private String serializeShoppingTrip(Object object) {
-		
 		if (object instanceof List<?>) return serializeShoppingTrips((List<ShoppingTrip>) object);
 		ShoppingTrip trip = (ShoppingTrip) object;
-
+		
+		return serializeShoppingTrip(trip).toJSONString();
+	}
+	
+	/**
+	 * Serializes a single ShoppingTrip, returns JSONObject
+	 * @param trip 		ShoppingTrip to be serialized
+	 * @return JSONObject
+	 */
+	@SuppressWarnings("unchecked")
+	private JSONObject serializeShoppingTrip(ShoppingTrip trip) {
 		// Trip object
 		JSONObject jTrip = new JSONObject();
 		
@@ -157,9 +165,8 @@ public class Serializer {
 		// Actions
 		JSONArray jActions = serializeActions(trip);
 		jTrip.put("actions", jActions);
-		
-		System.out.println(jTrip.toJSONString());
-		return jTrip.toJSONString();
+
+		return jTrip;
 	}
 	
 	/**
@@ -255,11 +262,6 @@ public class Serializer {
 		return trip;
 	}
 
-	private Object deserializeReceipt(BufferedReader reader) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 	/* Used by tests */
 	public Object getObject() {
 		return object;
