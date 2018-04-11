@@ -188,6 +188,7 @@ public class ShoppingTrip implements Model {
 
 	public long getDuration() {
 		return duration;
+	}
 
 	public void setAnonymous(boolean anonymous) {
 		this.anonymous = anonymous;

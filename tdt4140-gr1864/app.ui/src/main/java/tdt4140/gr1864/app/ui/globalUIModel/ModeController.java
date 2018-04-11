@@ -154,7 +154,7 @@ public class ModeController {
 		VisualizationSimplePlot plot = new VisualizationSimplePlot("Plot", shoppingTripList);
 		Mode plotMode = new Mode("Plot", plot);
 		
-		addMode(duartionMode);
+		addMode(durationMode);
 		addMode(mostPickedUp);
 		addMode(stock);
 		addMode(demographicsMode);
@@ -287,7 +287,7 @@ public class ModeController {
 		int numberOfTrips = 0;
 		List<ShoppingTrip> allShoppingTrips = stdc.retrieveAllShoppingTrips();
 		for (ShoppingTrip trip : allShoppingTrips) {
-			trip.setCoordinates(cdc.retrieveAll(trip.getShoppingTripID()));
+			trip.setCoordinates(cdc.retrieveAll(trip.getID()));
 			numberOfTrips++;
 			sumOfDurations += trip.getDuration();
 		}
