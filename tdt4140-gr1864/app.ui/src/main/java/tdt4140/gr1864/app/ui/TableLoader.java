@@ -153,7 +153,7 @@ public class TableLoader {
 	 * @param trips A list of shopping trips to load the table from
 	 * @param table A model-layer representation of a table shown to the user. Any changes made to this will reflect to the user immidiately
 	 */
-	public static void loadMostPickedUpTable(List<ShoppingTrip> trips, VisualizationTable table) {
+	public void loadMostPickedUpTable(List<ShoppingTrip> trips, VisualizationTable table) {
 		
 		table.wipeTable();
 		
@@ -222,8 +222,8 @@ public class TableLoader {
 	 * @param productIDsInStorage The Map of the productIDs with corresponding count in storage
 	 * @param table A model-layer representation of a table shown to the user. Any changes made to this will reflect to the user immidiately
 	 */
-	public static void loadStockTable(Map<Integer, Integer> productIDsOnShelf, Map<Integer, Integer> productIDsInStorage, VisualizationTable table) {
-		
+	public void loadStockTable(Map<Integer, Integer> productIDsOnShelf, Map<Integer, Integer> productIDsInStorage, VisualizationTable table) {
+
 		table.wipeTable();
 		
 		if (productIDsOnShelf == null || productIDsInStorage == null || table == null) {
@@ -269,7 +269,7 @@ public class TableLoader {
 	 * @param table
 	 * @param inputZero to differentiate the differetn tableloaders, no real function
 	 */
-	public static void loadDemographicsTable(List<Customer> customers, VisualizationTable table) {
+	public void loadDemographicsTable(List<Customer> customers, VisualizationTable table) {
 		
 		table.wipeTable();
 		
@@ -304,7 +304,7 @@ public class TableLoader {
 	 * @param productIDsOnShelf		A map of productIDs and amount on shelves
 	 * @param table					The visualization table for onShelfMode
 	 */
-	public static void loadInShelvesTable(Map<Integer, Integer> productIDsOnShelf, VisualizationTable table) {
+	public void loadInShelvesTable(Map<Integer, Integer> productIDsOnShelf, VisualizationTable table) {
 		
 		table.wipeTable();
 		
