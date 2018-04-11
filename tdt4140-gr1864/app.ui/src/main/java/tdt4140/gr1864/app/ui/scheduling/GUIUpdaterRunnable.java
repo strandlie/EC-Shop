@@ -13,8 +13,8 @@ public class GUIUpdaterRunnable implements Runnable {
 
 	@Override
 	public void run() {
-		mc.updateRows();
-		mc.calculateAndShowAverageDuration();
+		mc.updateDemographicsTable();
+		mc.updateDurationModeField();
 	}
 
 }

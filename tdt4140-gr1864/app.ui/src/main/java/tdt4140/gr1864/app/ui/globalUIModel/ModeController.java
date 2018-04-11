@@ -83,6 +83,7 @@ public class ModeController {
 		 * has selected a different Mode
 		 */
 		menuViewController.setModeController(this);
+		DataLoader.main(null);
 		
 		
 		VisualizationTable mostPickedUpTable = new VisualizationTable("Most Picked-Up Product");
@@ -90,16 +91,13 @@ public class ModeController {
 		mostPickedUpTable.addColumn("numberOfPickUp");
 		mostPickedUpTable.addColumn("numberOfPutDown");
 		mostPickedUpTable.addColumn("numberOfPurchases");
-		// Create mostPickedUp Mode and add table
 		Mode mostPickedUp = new Mode("Most Picked Up", mostPickedUpTable);
 
 		VisualizationTable stockTable = new VisualizationTable("Stock");
 		stockTable.addColumn("productName");
 		stockTable.addColumn("numberInStock");
-		// Create stock Mode and add table
 		Mode stock = new Mode("Stock", stockTable);
 
-		DataLoader.main(null);
 
 		VisualizationTable demographicsTable = new VisualizationTable("Demographics");
 		demographicsTable.addColumn("customerId");
@@ -109,45 +107,10 @@ public class ModeController {
 		demographicsTable.addColumn("zip");
 		Mode demographicsMode = new Mode("Demographics", demographicsTable);
 		
-		Mode durationMode = new Mode("Average time in store: 5.0 min", null);
+		Mode durationMode = new Mode("", null);
 
-
-		
-		// Get data from shoppin trip and add to TableView
 		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
-		ActionDatabaseController adc = new ActionDatabaseController();
-		CoordinateDatabaseController cdc = new CoordinateDatabaseController();
-	
-		ShoppingTrip trip = stdc.retrieve(1);
-		trip.setActions(adc.retrieveAll(1));
-		trip.setCoordinates(cdc.retrieveAll(1));
-		ArrayList<ShoppingTrip> shoppingTripList = new ArrayList<>();
-		shoppingTripList.add(trip);
-
-		TableLoader tableLoader = new TableLoader();
-		tableLoader.loadMostPickedUpTable(shoppingTripList, mostPickedUpTable);
-		
-		// Get data from Shop and add to StockMode
-		ShopDatabaseController sdc = new ShopDatabaseController();
-		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
-		ProductDatabaseController pdc = new ProductDatabaseController();
-
-		Shop shop = sdc.retrieve(1);
-		for (int i = 1; i < 65; i++) {
-			osdc.retrieve(shop, i);
-		}
-
-		Map<Integer, Integer> productIDsOnShelf = shop.getShelfs();
-		Map<Integer, Integer> productIDsInStorage = shop.getStorage();
-
-		tableLoader.loadStockTable(productIDsOnShelf, productIDsInStorage, stockTable);
-
-		// get data from demographics and add to DemographicsMode
-		CustomerDatabaseController customerDatabaseController = new CustomerDatabaseController();
-		List<Customer> customers = customerDatabaseController.retrieveAll();
-
-		tableLoader.loadDemographicsTable(customers, demographicsTable);
-
+		List<ShoppingTrip> shoppingTripList = stdc.retrieveAllShoppingTrips();
 
 		VisualizationHeatMap heatMap = new VisualizationHeatMap("Heatmap", shoppingTripList);
 		Mode heatMapMode = new Mode("Heatmap", heatMap);
@@ -155,13 +118,18 @@ public class ModeController {
 		VisualizationSimplePlot plot = new VisualizationSimplePlot("Plot", shoppingTripList);
 		Mode plotMode = new Mode("Plot", plot);
 		
-		addMode(durationMode);
+		addMode(durationMode); // Must be the first mode
 		addMode(mostPickedUp);
 		addMode(stock);
 		addMode(demographicsMode);
 		addMode(heatMapMode);
 		addMode(plotMode);
 
+		updateMostPickedUpTable();
+		updateStockTable();
+		updateDemographicsTable();
+		updateDurationModeField();
+		
 		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 		executor.scheduleAtFixedRate(runnable, 3, 3, TimeUnit.SECONDS);
 
@@ -264,11 +232,47 @@ public class ModeController {
 		this.currentMode = mode;
 		setMode(this.currentMode);
 	}
+	
+	public void updateMostPickedUpTable() {
+		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
+		ActionDatabaseController adc = new ActionDatabaseController();
+		CoordinateDatabaseController cdc = new CoordinateDatabaseController();
+		VisualizationTable mostPickedUpTable = (VisualizationTable) getMode("Most Picked Up").getVisualizationElement();
+	
+		List<ShoppingTrip> shoppingTripList = new ArrayList<>();
+		shoppingTripList.addAll(stdc.retrieveAllShoppingTrips());
+		for (ShoppingTrip trip : shoppingTripList) {
+			trip.setActions(adc.retrieveAll(1));
+			trip.setCoordinates(cdc.retrieveAll(1));
+		}
+
+		TableLoader tableLoader = new TableLoader();
+		tableLoader.loadMostPickedUpTable(shoppingTripList, mostPickedUpTable);
+	}
+	
+	public void updateStockTable() {
+		ShopDatabaseController sdc = new ShopDatabaseController();
+		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
+		
+		VisualizationTable stockTable = (VisualizationTable) getMode("Stock").getVisualizationElement();
+
+		Shop shop = sdc.retrieve(1);
+		for (int i = 1; i < 65; i++) {
+			osdc.retrieve(shop, i);
+		}
+
+		Map<Integer, Integer> productIDsOnShelf = shop.getShelfs();
+		Map<Integer, Integer> productIDsInStorage = shop.getStorage();
+		
+		TableLoader tableLoader = new TableLoader();
+		tableLoader.loadStockTable(productIDsOnShelf, productIDsInStorage, stockTable);
+		
+	}
 
 	/**
      * Updates rows of demographicstable
 	 */
-	public void updateRows() {
+	public void updateDemographicsTable() {
 		
         CustomerDatabaseController cdc = new CustomerDatabaseController();
         List<Customer> customers = cdc.retrieveAll();
@@ -281,7 +285,7 @@ public class ModeController {
 	}
 	
 	
-	public void calculateAndShowAverageDuration() {
+	public void updateDurationModeField() {
 		CoordinateDatabaseController cdc = new CoordinateDatabaseController();
 		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
 		long sumOfDurations = 0;
@@ -297,7 +301,22 @@ public class ModeController {
 		DecimalFormat df = new DecimalFormat("#.#");
 		String minutes = df.format(average);
 		this.menuViewController.updateTopMenuItem("Average time in store: " + minutes + "min");
-		
+	}
+	
+	
+	public void updateHeatMap() {
+		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
+		List<ShoppingTrip> shoppingTripList = stdc.retrieveAllShoppingTrips();
+		VisualizationHeatMap heatMap = (VisualizationHeatMap) getMode("Heatmap").getVisualizationElement();
+		heatMap.setData(shoppingTripList);
+	}
+	
+	
+	public void updatePlot() {
+		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
+		List<ShoppingTrip> shoppingTripList = stdc.retrieveAllShoppingTrips();
+		VisualizationSimplePlot plot = (VisualizationSimplePlot) getMode("Plot").getVisualizationElement();
+		plot.setData(shoppingTripList);
 	}
 
 	/**
