@@ -16,6 +16,7 @@ public class ShopTest {
 	
 	Shop shop;
 	Shop shop2;
+	Shop shop3;
 	
 	Receipt receipt;
 	
@@ -36,6 +37,7 @@ public class ShopTest {
 	public void setup() {
 		shop = new Shop("Kings Road 2", 1020);
 		shop2 = new Shop("Kings Road 4", 1020, 1);
+		shop3 = new Shop("Somwhere inf", 4343, 0);
 	}
 	
 	@Test
@@ -108,7 +110,27 @@ public class ShopTest {
 		osdc.create(shop, p2.getID());
 		
 		shop.updateAmountInShelfsFromReceipt(receipt);
-		shop.refreshShop();
+		shop3 = shop3.refreshShop();
+		
+		
+		Assert.assertEquals(55, shop3.getAmountInShelfs(p1.getID()));
+		Assert.assertEquals(20, shop3.getAmountInShelfs(p2.getID()));
+	}
+	
+	@Test
+	public void testUpdateShopFromReceiptExpectSuccess() {
+		p1 = new Product(1, "p1", 1);
+		p2 = new Product(2, "p2", 2);
+		
+		inventory = new HashMap<>();
+		inventory.put(p1.getID(), 5);
+		inventory.put(p2.getID(), 10);
+		receipt = new Receipt(inventory);
+		
+		shop.setAmountInShelfs(p1.getID(), 60);
+		shop.setAmountInShelfs(p2.getID(), 30);
+		
+		shop.updateShopFromReceipt(receipt);
 		
 		
 		Assert.assertEquals(55, shop.getAmountInShelfs(p1.getID()));

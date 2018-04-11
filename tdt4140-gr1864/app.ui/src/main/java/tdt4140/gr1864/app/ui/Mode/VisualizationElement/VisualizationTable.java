@@ -11,6 +11,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import tdt4140.gr1864.app.core.Customer;
+import tdt4140.gr1864.app.core.ShoppingTrip;
+import tdt4140.gr1864.app.ui.TableLoader;
 import tdt4140.gr1864.app.ui.globalUIModel.VisualizationViewController;
 
 public class VisualizationTable extends VisualizationElement {
@@ -34,6 +37,8 @@ public class VisualizationTable extends VisualizationElement {
 		allowedColumnNames.put("numberOfPutDown", "Number Of Put Down");
 		allowedColumnNames.put("numberOfPurchases", "Number Of Purchases");
 		allowedColumnNames.put("numberInStock", "In Stock");
+		//OnShelves
+		allowedColumnNames.put("numberOnShelves", "On shelves");
 		allowedColumnNames.put("customerId", "Customer ID");
 		allowedColumnNames.put("firstName", "First Name");
 		allowedColumnNames.put("lastName", "Last Name");
@@ -170,7 +175,7 @@ public class VisualizationTable extends VisualizationElement {
 	private List<TableRow> objectIsList(Object object) throws ClassCastException {
 		return (List<TableRow>) object;
 	}
-
+	
 	public void wipeTable() {
 		this.data.clear();
 	}

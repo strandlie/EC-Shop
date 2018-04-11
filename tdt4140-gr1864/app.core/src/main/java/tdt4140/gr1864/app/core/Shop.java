@@ -1,9 +1,7 @@
 package tdt4140.gr1864.app.core;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
 import tdt4140.gr1864.app.core.interfaces.Model;
@@ -34,7 +32,7 @@ public class Shop implements Model {
 		this.storage = new HashMap<>();
 	}
 	
-	/* Constructor used by DatabseController */
+	/* Constructor used by DatabaseController */
 	public Shop(String address, int zip, int shopId) {
 		this.address = address;
 		this.zip = zip;
@@ -115,6 +113,18 @@ public class Shop implements Model {
 	}
 	
 	/**
+	 * Listener for a new registered shopping trip, updates the amounts of
+	 * products on shelves in DB
+	 * 
+	 * @param trip	The newly added shopping trip
+	 */
+	public void shoppingTripAdded(ShoppingTrip trip) {
+		Receipt receipt = new Receipt(trip);
+		updateAmountInShelfsFromReceipt(receipt);
+		System.out.println("Listener in shop.java triggered and finished");
+	}
+	
+	/**
 	 * Updates the amounts of a product on the shelfs in the shop object from the inventory
 	 * in a receipt from a shoppingTrip
 	 * 
@@ -123,50 +133,45 @@ public class Shop implements Model {
 	 * @param receipt	A receipt from a shopping trip
 	 */
 	public void updateAmountInShelfsFromReceipt(Receipt receipt) {
-		
 		Map<Integer, Integer> inventory = receipt.getInventory();
-		Iterator<Entry<Integer, Integer>> it = inventory.entrySet().iterator();
-		
-		while (it.hasNext()) {
+		OnShelfDatabaseController osdbc = new OnShelfDatabaseController();
+		for (Integer id : inventory.keySet()) {
+			int amount = inventory.get(id);
+			int currentAmount = osdbc.retrieve(this, id).getAmountInShelfs(id);
 			
-			Entry<Integer, Integer> pair = it.next();
-			int productID = (int)pair.getKey();
-			int amount = (int)pair.getValue();
-			int currentAmount = getAmountInShelfs(productID);
+			setAmountInShelfs(id, currentAmount - amount);
 			
-			setAmountInShelfs(productID, currentAmount - amount);
-			
-			OnShelfDatabaseController osdc = new OnShelfDatabaseController();
-			osdc.update(this, productID);
-			
-			it.remove(); // avoids a ConcurrentModificationException
+			osdbc.update(this, id);
 		}
 	}
 	
 	/**
-	 * Updates the amounts of products in the shop object according to the DB, if
-	 * their ID's are in the list
+	 * Same as above, but doesn't update DB
+	 * 
+	 * @param receipt	A receipt from a shopping trip
+	 */
+	public void updateShopFromReceipt(Receipt receipt) {
+		Map<Integer, Integer> inventory = receipt.getInventory();
+		for (Integer productID : inventory.keySet()) {
+			int amount = inventory.get(productID);
+			int currentAmount = this.getAmountInShelfs(productID);
+			setAmountInShelfs(productID, currentAmount - amount);
+		}
+	}
+	
+	/**
+	 * Updates the amounts of products in the shop object according to the DB,
+	 * used to get new shop objects up to date. Currently have to assume fixed
+	 * amount of products, if not productDBctrl could support this
 	 * 
 	 * @return		The updated Shop object
 	 */
 	public Shop refreshShop() {
-		
-		Shop temp = this;
-		Shop temp2;
-		
 		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
-		
-		Iterator<Entry<Integer, Integer>> it = shelfs.entrySet().iterator();
-		
-		while (it.hasNext()) {
-			
-			Entry<Integer, Integer> pair = it.next();
-			int productID = (int)pair.getKey();
-			
-			temp2 = osdc.retrieve(temp, productID);
-			temp = temp2;
-		
+		int numberOfProducts = 65;
+		for (int i = 1; i < numberOfProducts; i++) {
+			osdc.retrieve(this, i);
 		}
-		return temp;
+		return this;
 	}
 }

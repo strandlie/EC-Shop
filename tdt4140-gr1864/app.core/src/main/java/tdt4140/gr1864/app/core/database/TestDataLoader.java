@@ -19,6 +19,7 @@ import tdt4140.gr1864.app.core.Action;
 import tdt4140.gr1864.app.core.Coordinate;
 import tdt4140.gr1864.app.core.Customer;
 import tdt4140.gr1864.app.core.Product;
+import tdt4140.gr1864.app.core.Receipt;
 import tdt4140.gr1864.app.core.Shop;
 import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
@@ -28,6 +29,7 @@ import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShopDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
+
 
 public class TestDataLoader {
 	
@@ -58,8 +60,6 @@ public class TestDataLoader {
 		String pathToTrip = "../../../app.core/src/main/resources/test-data.json";
 		trip = this.loadShoppingTrip(pathToTrip);
 		
-		// Adds amounts of products to shelfs and storage of DB and updates DB
-		addProductsInShelfsInDB(products);
 	}
 	
 	/**
@@ -201,7 +201,8 @@ public class TestDataLoader {
 		JSONParser parser = new JSONParser();
 		
 		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
-		
+		ShopDatabaseController sdc = new ShopDatabaseController();
+
 		Shop s1 = createShop();
 		Customer c1 = createCustomer();
 		// We set the charged flag to true to prevent spamming the Stripe API.		

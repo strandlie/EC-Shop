@@ -1,5 +1,7 @@
 package tdt4140.gr1864.app.ui.Mode;
 
+
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationElement;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationInterface;
 
 /**
@@ -25,10 +27,8 @@ public class Mode {
 	
 	/**
 	 * 
-	 * @param name
-	 *            The name shown in Mode-menu
-	 * @param visualizationElement
-	 *            The list of the VisualizationElements
+	 * @param name The name shown in Mode-menu
+	 * @param visualizationElement The VisualizationElement
 	 */
 	public Mode(String name, VisualizationInterface visualizationElement) {
 		this.name = name;
@@ -46,4 +46,9 @@ public class Mode {
 	public VisualizationInterface getVisualizationElement() {
 		return this.visualizationElement;
 	}
-}
+	
+	// Allow tables to be updated
+	public void setVisualizationElement(VisualizationElement element) {
+		this.visualizationElement = element;
+	}
+}	
