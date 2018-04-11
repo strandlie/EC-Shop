@@ -37,7 +37,7 @@ public class WebServerIT {
 		json.put("zip", new Integer(10));
 		
 		DefaultHttpClient httpclient = new DefaultHttpClient();
-		HttpPut httpPost = new HttpPut("http://localhost:8080/api/v1/user/?customer-id=7");
+		HttpPut httpPost = new HttpPut("http://localhost:8080/api/v1/customer/?customer-id=7");
 		HttpResponse response2 = null;
 		httpPost.addHeader("content-type", "application/json");
 		try {
