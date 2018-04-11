@@ -14,6 +14,8 @@ public class ShoppingTrip implements Model {
 	private long start;
 	/* end-time of ShoppingTrip in UNIX-time */
 	private long end;
+	/* duration of the trip in UNIX-time */
+	private long duration;
 	
 	/* customer and shop trip was made by and at */
 	private Shop shop;
@@ -43,6 +45,7 @@ public class ShoppingTrip implements Model {
 		this.start = findStart(coordinates);
 		this.end = findEnd(coordinates);
 		this.charged = charged;
+		setDuration();
 		
 		if (!this.charged) {
 			charge();
@@ -131,6 +134,14 @@ public class ShoppingTrip implements Model {
 	}
 	
 	/**
+	 * Sets the duration of the ShoppingTrip based on first and last
+	 * timestamp in Coordinates
+	 */
+	private void setDuration() {
+		this.duration = this.findEnd(this.coordinates) - this.findStart(this.coordinates); 
+	}
+	
+	/**
 	 * Sets actions after a ShoppingTrip is created
 	 * @param actions the list of actions
 	 */
@@ -148,6 +159,7 @@ public class ShoppingTrip implements Model {
 		if (coordinates.size() > 0) {
 			this.start = findStart(coordinates);
 			this.end = findEnd(coordinates);
+			setDuration();
 		}
 	}
 
@@ -179,11 +191,17 @@ public class ShoppingTrip implements Model {
 		return shoppingTripID;
 	}
 	
+
+	public long getDuration() {
+		return duration;
+	}
+
 	public void setAnonymous(boolean anonymous) {
 		this.anonymous = anonymous;
 	}
 	
 	public boolean getAnonymous() {
 		return this.anonymous;
+
 	}
 }

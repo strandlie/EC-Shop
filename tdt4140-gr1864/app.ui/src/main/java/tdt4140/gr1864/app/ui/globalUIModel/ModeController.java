@@ -3,29 +3,32 @@ package tdt4140.gr1864.app.ui.globalUIModel;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import tdt4140.gr1864.app.core.Customer;
+import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import java.sql.SQLException;
-
-import tdt4140.gr1864.app.core.Customer;
 import tdt4140.gr1864.app.core.Receipt;
 import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.CoordinateDatabaseController;
 import tdt4140.gr1864.app.core.Shop;
 import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.database.DataLoader;
+import tdt4140.gr1864.app.ui.Mode.VisualizationElement.*;
+import tdt4140.gr1864.app.ui.scheduling.GUIUpdaterRunnable;
 import tdt4140.gr1864.app.core.databasecontrollers.CustomerDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShopDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
 
-import tdt4140.gr1864.app.ui.Mode.VisualizationElement.*;
 import tdt4140.gr1864.app.ui.TableLoader;
 import tdt4140.gr1864.app.ui.Mode.Mode;
 import tdt4140.gr1864.app.ui.Mode.VisualizationElement.VisualizationTable;
 
 import javafx.fxml.FXML;
+import javafx.application.Platform;
 
 /**
  * Initializes the different modes, and handles the switching between them. Also hands of responsibility
@@ -43,7 +46,7 @@ public class ModeController {
 	 * The current mode for easy getting and comparing.
 	 */
 	private Mode currentMode;
-
+	
 
 	/**
 	 * The controller responsible for showing the menu to the user
@@ -78,6 +81,7 @@ public class ModeController {
 		 * has selected a different Mode
 		 */
 		menuViewController.setModeController(this);
+		DataLoader.main(null);
 		
 		/*
 		 * MostPickedUp
@@ -96,7 +100,7 @@ public class ModeController {
 		stockTable.addColumn("productName");
 		stockTable.addColumn("numberInStock");
 		Mode stock = new Mode("Stock", stockTable);
-		
+
 		/*
 		 * DEMOGRAPHICS MODE
 		 */
@@ -116,100 +120,48 @@ public class ModeController {
 		onShelvesTable.addColumn("numberOnShelves");
 		Mode shelves = new Mode("Shelves", onShelvesTable);
 		
+		Mode durationMode = new Mode("", null);
+
+
 		/*
 		 * LOAD DATA
 		 */
 		// Load data into DB
 		DataLoader.main(null);
 		
-		// Extract shopping trips(with actions and coordinates)
-		ArrayList<ShoppingTrip> shoppingTripList = getShoppingTripsFromDB();
-		// Load data into mostPickedUp
-		TableLoader tableLoader = new TableLoader();
-		tableLoader.loadMostPickedUpTable(shoppingTripList, mostPickedUpTable);
-		
-		// Get shop and update
-		Shop shop = getShopFromDBAndUpdateFromTrips(shoppingTripList);
-		// Load stock and shelves
-		tableLoader.loadStockTable(shop.getShelfs(), shop.getStorage(), stockTable);
-		tableLoader.loadInShelvesTable(shop.getShelfs(), onShelvesTable);
-
-		// get data from demographics and add to DemographicsMode
-		CustomerDatabaseController customerDatabaseController = new CustomerDatabaseController();
-		List<Customer> customers = customerDatabaseController.retrieveAll();
-		tableLoader.loadDemographicsTable(customers, demographicsTable);
-
 		/*
 		 * HEAT MAP MODE
 		 */
-		VisualizationHeatMap heatMap = new VisualizationHeatMap("Heatmap", shoppingTripList);
+		VisualizationHeatMap heatMap = new VisualizationHeatMap("Heatmap");
 		Mode heatMapMode = new Mode("Heatmap", heatMap);
 		
 		/*
 		 * PLOT MODE
 		 */
-		VisualizationSimplePlot plot = new VisualizationSimplePlot("Plot", shoppingTripList);
+		VisualizationSimplePlot plot = new VisualizationSimplePlot("Plot");
 		Mode plotMode = new Mode("Plot", plot);
 
 		
-		//Adding modes
+		addMode(durationMode); // Must be the first mode
 		addMode(mostPickedUp);
 		addMode(stock);
 		addMode(demographicsMode);
 		addMode(shelves);
 		addMode(heatMapMode);
 		addMode(plotMode);
-		
-		setMode(mostPickedUp);
+
+		updateMostPickedUpTable();
+		updateStockTable();
+		updateDemographicsTable();
+		updateShelvesTable();
+		updateDurationModeField();
+		updateHeatMap();
+		updatePlot();
 		
 		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-		// scheduleAtFixedRate(?, Delay, periode, ?)
-		executor.scheduleAtFixedRate(runnable, 1, 10, TimeUnit.SECONDS);
-		
-
-
+		executor.scheduleAtFixedRate(runnable, 10, 10, TimeUnit.SECONDS);
+		setMode(mostPickedUp);
 	}
-	
-	/**
-	 * A method that extracts all trips from DB and fill them with their coordinates and actions
-	 * @return	An ArrayList of ShoppingTrips
-	 */
-	public ArrayList<ShoppingTrip> getShoppingTripsFromDB(){
-		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
-		ActionDatabaseController adc = new ActionDatabaseController();
-		CoordinateDatabaseController cdc = new CoordinateDatabaseController();
-		
-		ArrayList<ShoppingTrip> shoppingTripList = new ArrayList<>();
-		int iterator = 1;
-		while(true) {
-			ShoppingTrip trip = stdc.retrieve(iterator);
-			if (trip == null) {
-				break;
-			}
-			trip.setActions(adc.retrieveAll(iterator));
-			trip.setCoordinates(cdc.retrieveAll(iterator));
-			shoppingTripList.add(trip);
-			iterator++;
-		}
-		return shoppingTripList;
-	}
-	
-	/**
-	 * Exracts and update shop drom DB and update shelves from a list of all shoppingtrips
-	 * @param shoppingTripList	An ArrayList of all shoppingtrips in DB
-	 * @return					The updated shop object
-	 */
-	public Shop getShopFromDBAndUpdateFromTrips(ArrayList<ShoppingTrip> shoppingTripList) {
-		ShopDatabaseController sdc = new ShopDatabaseController();
-		Shop shop = sdc.retrieve(1);
-		shop.refreshShop();
-		// Update the shop object
-		for (ShoppingTrip trip : shoppingTripList) {
-			shop.updateShopFromReceipt(new Receipt(trip));
-		}
-		return shop;
-	}
-
 	/**
 	 * Adds a mode. Used by the initialize-methods. Does not allow Modes with equal names
 	 *
@@ -241,6 +193,20 @@ public class ModeController {
 	public Mode getMode(String name) {
 		return this.modes.getOrDefault(name, null);
 	}
+	
+	/**
+	 * Returns the mode with a similar name as the input string, or null
+	 * @param name The string name to match against
+	 * @return The Mode, or null
+	 */
+	public Mode getModeWithSimilarNameAs(String name) {
+		for (String key : this.modes.keySet()) {
+			if (key.contains(name)) {
+				return getMode(key);
+			}
+		}
+		return null;
+	}
 
 	/**
 	 * Gets the mode currently shown to the user
@@ -261,6 +227,30 @@ public class ModeController {
 			throw new IllegalArgumentException(mode.getName() + " is not a valid mode");
 		}
 		this.currentMode = mode;
+		
+		switch (getCurrentMode().getName()) {
+			case "Demographics":
+				updateDemographicsTable();
+				break;
+			case "Most Picked Up":
+				updateMostPickedUpTable();
+				break;
+			case "Heatmap":
+				updateHeatMap();
+				break;
+			case "Plot":
+				updatePlot();
+				break;
+			case "Shelves":
+				updateShelvesTable();
+				break;
+			case "Stock":
+				updateStockTable();
+				break;
+			default:
+				throw new IllegalStateException("Not a valid modename");
+			
+		}
 		this.visualizationViewController.setActiveElement(mode.getVisualizationElement());
 	}
 
@@ -295,76 +285,146 @@ public class ModeController {
 	}
 	
 	/**
-     * Updates rows of all Modes that contains VisualizationTables
+	 * A method that extracts all trips from DB and fill them with their coordinates and actions
+	 * @return	An ArrayList of ShoppingTrips
 	 */
-	@SuppressWarnings({ "static-access"})
-	public void updateTableRows() {
+	public ArrayList<ShoppingTrip> getShoppingTripsFromDB(){
+		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
+		ActionDatabaseController adc = new ActionDatabaseController();
+		CoordinateDatabaseController cdc = new CoordinateDatabaseController();
 		
-		VisualizationTable table;
-		
-		for (String modeName : modes.keySet()) {
-			Mode mode = getMode(modeName);
-		
-			if (mode.getName() == "Shelves") {
-				
-				// Retrieve the shopping trips from DB and put in a list
-				ArrayList<ShoppingTrip> shoppingTripList = getShoppingTripsFromDB();
-				// Retrieve shop from DB and update from shoppingTrips
-				Shop shop = getShopFromDBAndUpdateFromTrips(shoppingTripList);
-				// Extract table, wipe and load
-				table = (VisualizationTable) mode.getVisualizationElement();
-				table.wipeTable();
-				TableLoader loader = new TableLoader();
-				loader.loadInShelvesTable(shop.getShelfs(), table);
+		ArrayList<ShoppingTrip> shoppingTripList = new ArrayList<>();
+		int iterator = 1;
+		while(true) {
+			ShoppingTrip trip = stdc.retrieve(iterator);
+			if (trip == null) {
+				break;
 			}
-				
-			else if (mode.getName() == "Stock") {
-				
-				// Retrieve the shopping trips from DB and put in a list
-				ArrayList<ShoppingTrip> shoppingTripList = getShoppingTripsFromDB();
-				// Retrieve the shop from DB
-				Shop shop = getShopFromDBAndUpdateFromTrips(shoppingTripList);
-				// Extract table, wipe and load
-				table = (VisualizationTable) mode.getVisualizationElement();
-				table.wipeTable();
-				TableLoader loader = new TableLoader();
-				loader.loadStockTable(shop.getShelfs(), shop.getStorage(), table);
-			}
-			
-			else if (mode.getName() == "Most Picked Up") {
-
-				// Retrieve the shopping trips from DB and put in a list
-				ArrayList<ShoppingTrip> shoppingTripList = getShoppingTripsFromDB();
-				// Extract table, wipe and load
-				table = (VisualizationTable) mode.getVisualizationElement();
-				table.wipeTable();
-				TableLoader loader = new TableLoader();
-				loader.loadMostPickedUpTable(shoppingTripList, table);
-			}
-			else if (mode.getName() == "Demographics") {
-				
-				// Retrive list of customers
-				CustomerDatabaseController cdc = new CustomerDatabaseController();
-				List<Customer> customerList = cdc.retrieveAll();
-				// Extract table, wipe and load
-				table = (VisualizationTable) mode.getVisualizationElement();
-				table.wipeTable();
-				TableLoader loader = new TableLoader();
-				loader.loadDemographicsTable(customerList, table);
-			}
+			trip.setActions(adc.retrieveAll(iterator));
+			trip.setCoordinates(cdc.retrieveAll(iterator));
+			shoppingTripList.add(trip);
+			iterator++;
 		}
+		return shoppingTripList;
+	}
+	
+	
+	
+	/**
+	 * Exracts and update shop drom DB and update shelves from a list of all shoppingtrips
+	 * @param shoppingTripList	An ArrayList of all shoppingtrips in DB
+	 * @return					The updated shop object
+	 */
+	public Shop getShopFromDBAndUpdateFromTrips(ArrayList<ShoppingTrip> shoppingTripList) {
+		ShopDatabaseController sdc = new ShopDatabaseController();
+		Shop shop = sdc.retrieve(1);
+		shop.refreshShop();
+		// Update the shop object
+		for (ShoppingTrip trip : shoppingTripList) {
+			shop.updateShopFromReceipt(new Receipt(trip));
+		}
+		return shop;
 	}
 
 	/**
-	 * Code to be run every few seconds. Are calling updaterows at a fixed interval
-	 * Could be extended
+	 * Method to get latest data from DB, and update the MostPickedUpTable with this new data. Also used for initializing the table.
 	 */
+	public void updateMostPickedUpTable() {
+		VisualizationTable mostPickedUpTable = (VisualizationTable) getMode("Most Picked Up").getVisualizationElement();
+	
+		List<ShoppingTrip> shoppingTripList = getShoppingTripsFromDB();
+
+		TableLoader.loadMostPickedUpTable(shoppingTripList, mostPickedUpTable);
+	}
+	
+	/**
+	 * Method to get latest data from DB, and update the StockTable with this new data. 
+	 */
+	public void updateStockTable() {
+		ArrayList<ShoppingTrip> shoppingTripList = getShoppingTripsFromDB();
+		Shop shop = getShopFromDBAndUpdateFromTrips(shoppingTripList);
+		
+		VisualizationTable stockTable = (VisualizationTable) getMode("Stock").getVisualizationElement();
+		
+		TableLoader.loadStockTable(shop.getShelfs(), shop.getStorage(), stockTable);
+	}
+
+	/**
+	 * Method to get latest data from DB, and update the DemographicsTable with this new data. 
+	 */
+	public void updateDemographicsTable() {
+		
+			CustomerDatabaseController cdc = new CustomerDatabaseController();
+			
+			// Retrive list of customers
+			List<Customer> customerList = cdc.retrieveAll();
+			// Extract table, wipe and load
+			VisualizationTable table = (VisualizationTable) getMode("Demographics").getVisualizationElement();
+			TableLoader.loadDemographicsTable(customerList, table);
+	}
+	
+	/**
+	 * Method to get latest data from DB, and update the ShelvesTable with this new data. 
+	 */
+	public void updateShelvesTable() {
+			// Retrieve the shopping trips from DB and put in a list
+			ArrayList<ShoppingTrip> shoppingTripList = getShoppingTripsFromDB();
+			// Retrieve shop from DB and update from shoppingTrips
+			Shop shop = getShopFromDBAndUpdateFromTrips(shoppingTripList);
+			// Extract table and load
+			VisualizationTable table = (VisualizationTable) getMode("Shelves").getVisualizationElement();
+			TableLoader.loadInShelvesTable(shop.getShelfs(), table);
+		
+	}
+	
+	
+	/**
+	 * Method to get latest data from DB, and update the DurationModeField with a new value from this new data. 
+	 */
+	public void updateDurationModeField() {
+		long sumOfDurations = 0;
+		int numberOfTrips = 0;
+		List<ShoppingTrip> allShoppingTrips = getShoppingTripsFromDB();
+		for (ShoppingTrip trip : allShoppingTrips) {
+			numberOfTrips++;
+			sumOfDurations += trip.getDuration();
+		}
+		
+		double average = (double) sumOfDurations / numberOfTrips / 1000 / 60;
+		DecimalFormat df = new DecimalFormat("#.#");
+		String minutes = df.format(average);
+		this.menuViewController.updateTopMenuItem("Average time in store: " + minutes + "min");
+	}
+	
+	
+	/**
+	 * Method to get latest data from DB, and update the HeatMap from this new data. 
+	 */
+	public void updateHeatMap() {
+		List<ShoppingTrip> shoppingTripList = getShoppingTripsFromDB();
+		VisualizationHeatMap heatMap = (VisualizationHeatMap) getMode("Heatmap").getVisualizationElement();
+		heatMap.setData(shoppingTripList);
+	}
+	
+	
+	/**
+	 * Method to get latest data from DB, and update the Plot 
+	 */
+	public void updatePlot() {
+		List<ShoppingTrip> shoppingTripList = getShoppingTripsFromDB();
+		VisualizationSimplePlot plot = (VisualizationSimplePlot) getMode("Plot").getVisualizationElement();
+		plot.setData(shoppingTripList);
+	}
+
+	/**
+	 * Code to be run every few seconds.
+	 */
+	Runnable guiUpdater = new GUIUpdaterRunnable(this);
 	Runnable runnable = new Runnable() {
 		@Override
 		public void run() {
-			updateTableRows();
+			Platform.runLater(guiUpdater);
 		}
 	};
-
 }
 
