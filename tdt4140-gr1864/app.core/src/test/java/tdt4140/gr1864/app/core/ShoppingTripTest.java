@@ -61,6 +61,6 @@ public class ShoppingTripTest {
 	
 	@Test
 	public void testDurationExpectDurationOfFirstTrip() {
-		Assert.assertEquals(32550000L, shoppingTrip.getDuration());
+		Assert.assertEquals(8550L, shoppingTrip.getDuration());
 	}
 }
