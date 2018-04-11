@@ -485,7 +485,7 @@ public class Customer extends Observable implements Model, UserInterface {
 				productID = i;
 			}
 		}
-		this.recommendedProductID = productID;
+		this.recommendedProductID = ++productID;
 	}
 	
 	/**

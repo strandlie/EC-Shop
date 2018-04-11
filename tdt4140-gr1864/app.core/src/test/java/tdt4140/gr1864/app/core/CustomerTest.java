@@ -248,10 +248,10 @@ public class CustomerTest {
 	}
 	
 	@Test
-	public void testGiveRecommendationWhenNotBoughtExpectMostPopularEqualOne() {
+	public void testGiveRecommendationWhenNotBoughtExpectMostPopularEqualTwo() {
 		viper.wipe();
 		setup();
-		int expectedProductID = 1;
+		int expectedProductID = 2;
 		c2.giveRecommendation();
 		Assert.assertEquals(expectedProductID, c2.getRecommendedProductID());
 	}
