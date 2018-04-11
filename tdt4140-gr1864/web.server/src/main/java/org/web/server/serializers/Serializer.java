@@ -11,7 +11,10 @@ import org.web.server.persistance.Persister;
 import org.web.server.persistance.Persister.ModelClasses;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import tdt4140.gr1864.app.core.Action;
 import tdt4140.gr1864.app.core.Coordinate;
@@ -119,7 +122,7 @@ public class Serializer {
 	public String serialize(Object o, Class c) throws IOException {
 		/* For classes that needs more advanced serializing */
 		switch(ModelClasses.fromClass(c)) {
-			case RECEIPT: return serializeReceipt((Receipt) o);
+			case RECEIPT: return serializeReceipt(o); // We deliberately do not cast here; it is handled in the method itself
 			case SHOPPING_TRIP: return serializeShoppingTrip(o);
 			default:
 				try {
@@ -214,8 +217,25 @@ public class Serializer {
 		return jActions;
 	}
 
-	private String serializeReceipt(Receipt receipt) {
-		// TODO Auto-generated method stub
+	private String serializeReceipt(Object object) {
+		if (!(object instanceof Receipt) && !(object instanceof List<?>)) {
+			throw new IllegalArgumentException("Argument passed to serializeReceipt was not a receipt or a list of receipts.");
+		}
+		
+		ObjectMapper mapper = new ObjectMapper();
+
+		SimpleModule module = new SimpleModule("ReceiptSerializer", new Version(1, 0, 0, null, null, null));
+		module.addSerializer(Receipt.class, new ReceiptSerializer());
+		mapper.registerModule(module);
+
+		ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
+
+		try {
+			return writer.writeValueAsString(object);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+
 		return null;
 	}
 

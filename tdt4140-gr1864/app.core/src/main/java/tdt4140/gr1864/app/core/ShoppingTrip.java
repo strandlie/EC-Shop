@@ -104,7 +104,7 @@ public class ShoppingTrip implements Model {
 	 * @param coordinates list of coordinates that makes up the trip
 	 * @return time of first data-point in the list of coordinates
 	 */
-	private long findStart(List<Coordinate> coordinates) {
+	private long findStart(List<Coordinate> coordinates) {		
 		long min = coordinates.get(0).getTimeStamp();
 
 		for (Coordinate coord : coordinates) {
@@ -144,6 +144,11 @@ public class ShoppingTrip implements Model {
 	 */
 	public void setCoordinates(List<Coordinate> coordinates) {
 		this.coordinates = coordinates;
+		
+		if (coordinates.size() > 0) {
+			this.start = findStart(coordinates);
+			this.end = findEnd(coordinates);
+		}
 	}
 
 	public long getStart() {

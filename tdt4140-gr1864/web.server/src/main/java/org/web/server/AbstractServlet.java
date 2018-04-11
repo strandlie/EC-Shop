@@ -78,6 +78,7 @@ public abstract class AbstractServlet extends HttpServlet{
 			resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 			return;
 		} catch (Exception e) {
+			System.out.println(e);
 			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return;
 		}
