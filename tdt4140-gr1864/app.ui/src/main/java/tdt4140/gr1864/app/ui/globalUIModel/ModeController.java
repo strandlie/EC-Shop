@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import tdt4140.gr1864.app.core.Customer;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -292,8 +293,10 @@ public class ModeController {
 			sumOfDurations += trip.getDuration();
 		}
 		
-		double average = (double) sumOfDurations / numberOfTrips;
-		this.menuViewController.updateTopMenuItem("Average time in store: " + average);
+		double average = (double) sumOfDurations / numberOfTrips / 1000 / 60;
+		DecimalFormat df = new DecimalFormat("#.#");
+		String minutes = df.format(average);
+		this.menuViewController.updateTopMenuItem("Average time in store: " + minutes + "min");
 		
 	}
 

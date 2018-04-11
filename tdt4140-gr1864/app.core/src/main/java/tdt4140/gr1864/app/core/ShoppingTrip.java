@@ -159,6 +159,7 @@ public class ShoppingTrip implements Model {
 		if (coordinates.size() > 0) {
 			this.start = findStart(coordinates);
 			this.end = findEnd(coordinates);
+			setDuration();
 		}
 	}
 
