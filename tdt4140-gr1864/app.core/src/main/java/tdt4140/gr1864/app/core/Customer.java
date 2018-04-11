@@ -1,8 +1,10 @@
 package tdt4140.gr1864.app.core;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Observable;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -11,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.CustomerDatabaseController;
+import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
 import tdt4140.gr1864.app.core.interfaces.Model;
 import tdt4140.gr1864.app.core.interfaces.UserInterface;
@@ -283,58 +286,31 @@ public class Customer extends Observable implements Model, UserInterface {
 	}
 	
 	/**
-	 * Get a sorted list consisting of the most bought products for this customer sorted
-	 * from largest amount to least amount used for getting statistics for this customer.
-	 * @return A sorted int[64][2] list where 
-	 * int[0][0] is the productID and 
-	 * int[0][1] is the amount of the product bought 
-	 * int[0] is the highest amount and int[63] is the least amount of bought products
+	 * Creates a relation between product objects and amount based on amount of bought for customer
+	 * and a sorted list sorted based on amount bought.
+	 * @return A sorted list (desc) consisting of relations between product and amount bought
 	 */
-	public int[][] getStatisticsForAmountBought() {
+	public List<ProductAmount> getStatisticsForAmountBought() {
+		ProductDatabaseController pdc = new ProductDatabaseController();
 		int amountOfProducts = 64;
 		
 		// Get the amount of bought products for this customer
 		int[] temp = getBoughtProductList();
-		
+
 		// the list for storing the sorted products
-		int[][] sortedProducts = new int[amountOfProducts][2];
+		List<ProductAmount> sortedList = new ArrayList<>();
 		
 		for (int i = 0; i < amountOfProducts; i++) {
-			// Find the most bought product and amount
-			int[] maxList = findMaxList(temp);
-			
-			// Set the index for the most bought product
-			sortedProducts[i][0] = maxList[0];
-			
-			// Set the amount of bought for the product
-			sortedProducts[i][1] = maxList[1];
-			
-			// Removes the max value for the temporary list
-			temp[maxList[0]] = 0;
+			// temp[i] is the amount, i+1 is the index of product in database (0-index vs. 1-index)
+			ProductAmount pa = new ProductAmount(temp[i], pdc.retrieve(i+1));
+			sortedList.add(pa);
 		}
 		
-		return sortedProducts;
+		// Sorts the ProductAmount Desc based on the amount
+		sortedList.sort((a1, a2) -> a2.getAmount().compareTo(a1.getAmount()));
 		
-	}
-	
-	/**
-	 * A method for finding the max value in a int[] array list
-	 * @param list the list that consists of numbers for the method to look for max value
-	 * @return a list containing two int's where list[0] is the maxValueIndex and list[1] is the maxValue
-	 */
-	public int[] findMaxList(int[] list) {
-		// maxList[0] = maxValueid.
-		// maxList[1] = maxValue;
-		int[] maxList = {-1, -1};
+		return sortedList;
 		
-		for (int i = 0; i < list.length; i++) {
-			if (list[i] > maxList[1]) {
-				maxList[0] = i;
-				maxList[1] = list[i];
-			}
-		}
-		
-		return maxList;
 	}
 	
 	/**

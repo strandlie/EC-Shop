@@ -282,20 +282,26 @@ public class CustomerTest {
 		viper.wipe();
 		setup();
 		
-		int[][] actualArray = c1.getStatisticsForAmountBought();
-		int[][] expectedArray = new int[64][2];
-		expectedArray[0][0] = 1; // index for max value
-		expectedArray[0][1] = 2; // max value
+		List<ProductAmount> actualArray = c1.getStatisticsForAmountBought();
+		
+		List<ProductAmount> expectedArray = new ArrayList<>();
+		// index for max value = 2 (in DB), maxamount = 2
+		ProductAmount pa1 = new ProductAmount(2, pdc.retrieve(2));
 
-		expectedArray[1][0] = 0; // index for second max value
-		expectedArray[1][1] = 1; // second max value
+		// index for max value = 1 (in DB), maxamount = 1
+		ProductAmount pa2 = new ProductAmount(1, pdc.retrieve(1));
 
-		expectedArray[2][0] = 2; // index for third max value
-		expectedArray[2][1] = 1; // third max value which in this case is equal to second max value
+		// index for max value = 3 (in DB), maxamount = 1
+		ProductAmount pa3 = new ProductAmount(1, pdc.retrieve(3));
+		
+		expectedArray.add(pa1);
+		expectedArray.add(pa2);
+		expectedArray.add(pa3);
 		
 		boolean correctList = true;
-		for (int i = 0; i < 64; i++) {
-			if (actualArray[i][0] != expectedArray[i][0] || actualArray[i][1] != expectedArray[i][1]) {
+		for (int i = 0; i < 3; i++) {
+			if (expectedArray.get(i).getAmount() != actualArray.get(i).getAmount() || 
+				expectedArray.get(i).getProduct().getID() != actualArray.get(i).getProduct().getID()) {
 				correctList = !correctList;
 			}
 		}
