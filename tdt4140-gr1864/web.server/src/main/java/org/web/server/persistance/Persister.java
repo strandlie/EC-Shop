@@ -1,5 +1,6 @@
 package org.web.server.persistance;
 
+import java.util.ArrayList;
 import java.io.IOException;
 import java.util.List;
 
@@ -14,6 +15,8 @@ import tdt4140.gr1864.app.core.Receipt;
 import tdt4140.gr1864.app.core.Shop;
 import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.StripeShoppingTrip;
+import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
+import tdt4140.gr1864.app.core.databasecontrollers.CoordinateDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.CustomerDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
 import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
@@ -151,13 +154,32 @@ public class Persister {
 		return Serializer.init().serialize(controller.retrieve(customerID), Customer.class);
 	}
 
-	public String readReceipt(int customerID) {
-		//TODO: Make method. Dummy
-		/* Retrieve data from database based on customerID
-		 * Serialize data.
-		 * Return JSON
-		 */
-		return null;
+	/**
+	 * Reads all receipts for a given customer and serializes it.
+	 * @param customerID The ID of the customer to find receipts for.
+	 * @return The serialized list of receipts.
+	 * @throws IOException
+	 */
+	public String readReceipt(int customerID) throws IOException {
+		ShoppingTripDatabaseController shoppingTripController = new ShoppingTripDatabaseController();
+		ActionDatabaseController actionController = new ActionDatabaseController();
+		CoordinateDatabaseController coordinateController = new CoordinateDatabaseController();
+		
+		List<ShoppingTrip> trips = shoppingTripController.retrieveAllShoppingTripsForCustomer(customerID);
+		
+		if (trips == null) {
+		    throw new IllegalArgumentException();
+		}
+		
+		List<Receipt> receipts = new ArrayList<>();
+		
+		for (ShoppingTrip trip : trips) {
+			trip.setActions(actionController.retrieveAll(trip.getID()));
+			trip.setCoordinates(coordinateController.retrieveAll(trip.getID()));
+			receipts.add(new Receipt(trip));
+		}
+		
+		return Serializer.init().serialize(receipts, Receipt.class);
 	}
 
 	/**
