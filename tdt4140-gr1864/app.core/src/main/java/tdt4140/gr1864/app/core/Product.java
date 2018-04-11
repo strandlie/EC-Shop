@@ -1,7 +1,12 @@
 package tdt4140.gr1864.app.core;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import tdt4140.gr1864.app.core.interfaces.Model;
 
+@JsonAutoDetect
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Product implements Model {
 
 	private String name;
