@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import tdt4140.gr1864.app.core.Coordinate;
 import tdt4140.gr1864.app.core.Customer;
 import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
 
@@ -138,7 +139,7 @@ public class CustomerDatabaseController extends DatabaseController implements Da
     public void update(Object object) {
     	Customer customer = objectIsCustomer(object);
     	String sql = "UPDATE customer "
-    				+ "SET first_name=?, last_name=?, address=?, zip=?, gender=?, age=?, num_persons_in_household=? "
+    				+ "SET first_name=?, last_name=?, address=?, zip=?, gender=?, age=?, num_persons_in_household=?, anonymous=?"
     				+ "WHERE customer_id=?";
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
@@ -150,7 +151,8 @@ public class CustomerDatabaseController extends DatabaseController implements Da
 			statement.setString(5, customer.getGender());
 			statement.setInt(6, customer.getAge());
 			statement.setInt(7, customer.getNumberOfPersonsInHousehold());
-			statement.setInt(8, customer.getID());
+			statement.setBoolean(8, customer.getAnonymous());
+			statement.setInt(9, customer.getID());
 			statement.executeUpdate();
 			connection.close();
 		} 
@@ -186,11 +188,11 @@ public class CustomerDatabaseController extends DatabaseController implements Da
 	 * @return The customer object if the object is an instance of customer
 	 */
 	public Customer objectIsCustomer(Object object) {
-		Customer customer = (Customer) object;
-		if (!(object instanceof Customer)) {
-			throw new IllegalArgumentException("Object is not instance of Customer");
-		} else {
-			return customer;
+		try {
+			Customer c = (Customer) object;
+			return c;
+		} catch (ClassCastException e) {
+			throw new IllegalArgumentException("Object is not Customer");
 		}
 	}
 	

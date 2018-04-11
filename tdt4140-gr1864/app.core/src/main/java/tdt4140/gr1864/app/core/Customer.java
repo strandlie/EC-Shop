@@ -188,8 +188,8 @@ public class Customer extends Observable implements Model, UserInterface {
 		return customerID;
 	}
 
-	public void setCustomerId(int userId) {
-		this.customerID = userId;
+	public void setCustomerID(int customerID) {
+		this.customerID = customerID;
 	}
 
 	public String getFirstName() {

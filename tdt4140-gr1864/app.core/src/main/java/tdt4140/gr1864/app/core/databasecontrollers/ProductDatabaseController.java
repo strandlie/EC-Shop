@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import tdt4140.gr1864.app.core.Customer;
 import tdt4140.gr1864.app.core.Product;
 import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
 
@@ -132,11 +133,11 @@ public class ProductDatabaseController extends DatabaseController implements Dat
 	 * @return The product object if the object is an instance of product
 	 */
 	public Product objectIsProduct(Object object) {
-		Product product = (Product) object;
-		if (!(object instanceof Product)) {
-			throw new IllegalArgumentException("Object is not instance of Product");
-		} else {
-			return product;
+		try {
+			Product p = (Product) object;
+			return p;
+		} catch (ClassCastException e) {
+			throw new IllegalArgumentException("Object is not Product");
 		}
 	}
 }

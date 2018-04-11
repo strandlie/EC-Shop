@@ -63,23 +63,11 @@ public class TableLoader {
 			}
 		}
 		
-		for (String productName : this.pickUps.keySet()) {
-			// Assumes there are no products that are put down, that are not picked up
-			if (! putDowns.containsKey(productName)) {
-				// If there are no put downs, only pickups, the number of purchases is equal to the number of pickups
-				this.purchases.put(productName, this.pickUps.get(productName));
-			}
-			else {
-				// Number of purchases = (the number of pickups) - (the number of putdowns)
-				this.purchases.put(productName, this.pickUps.get(productName) - this.putDowns.get(productName));
-			}
-		}
 		
 		for (String productName : this.pickUps.keySet()) {
 			String pickups = this.pickUps.get(productName).toString();
 			String putdowns = this.putDowns.containsKey(productName) ? this.putDowns.get(productName).toString() : "0";
-			String purchases = this.purchases.containsKey(productName) ? this.purchases.get(productName).toString() : "0";
-			table.addData(new MostPickedUpTableRow(productName, pickups, putdowns, purchases));
+			table.addData(new MostPickedUpTableRow(productName, pickups, putdowns));
 		}
 	}
 	/**

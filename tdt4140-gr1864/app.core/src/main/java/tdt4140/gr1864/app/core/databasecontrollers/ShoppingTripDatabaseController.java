@@ -7,8 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import tdt4140.gr1864.app.core.Action;
 import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
 
@@ -171,6 +169,7 @@ public class ShoppingTripDatabaseController extends DatabaseController implement
 		CustomerDatabaseController cdc = new CustomerDatabaseController();
 		ShopDatabaseController sdc = new ShopDatabaseController();
 		ActionDatabaseController adc = new ActionDatabaseController();
+		CoordinateDatabaseController corddc = new CoordinateDatabaseController();
 		ShoppingTrip trip;
 		List<ShoppingTrip> trips = new ArrayList<>();
 		
@@ -195,6 +194,7 @@ public class ShoppingTripDatabaseController extends DatabaseController implement
 						rs.getBoolean(5) // anonymous flag
 					);	
 				trip.setActions(adc.retrieveAll(tripID));
+				trip.setCoordinates(corddc.retrieveAll(tripID));
 				trips.add(trip);
 			}
 			connection.close();
@@ -231,11 +231,11 @@ public class ShoppingTripDatabaseController extends DatabaseController implement
 	 * @return shoppingTrip
 	 */
 	public ShoppingTrip objectIsShoppingTrip(Object object) {
-		ShoppingTrip trip = (ShoppingTrip) object;
-		if (!(object instanceof ShoppingTrip)) {
-			throw new IllegalArgumentException("Object is not instance of ShoppingTrip");
-		} else {
-			return trip;
+		try {
+			ShoppingTrip s = (ShoppingTrip) object;
+			return s;
+		} catch (ClassCastException e) {
+			throw new IllegalArgumentException("Object is not ShoppingTrip");
 		}
 	}
 }
