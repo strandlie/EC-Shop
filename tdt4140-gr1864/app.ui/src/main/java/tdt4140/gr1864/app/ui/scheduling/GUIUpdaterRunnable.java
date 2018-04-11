@@ -13,13 +13,30 @@ public class GUIUpdaterRunnable implements Runnable {
 
 	@Override
 	public void run() {
-		mc.updateDemographicsTable();
 		mc.updateDurationModeField();
-		mc.updateMostPickedUpTable();
-		mc.updateHeatMap();
-		mc.updatePlot();
-		mc.updateShelvesTable();
-		mc.updateStockTable();
+		switch (mc.getCurrentMode().getName()) {
+			case "Demographics":
+				mc.updateDemographicsTable();
+				break;
+			case "Most Picked Up":
+				mc.updateMostPickedUpTable();
+				break;
+			case "Heatmap":
+				mc.updateHeatMap();
+				break;
+			case "Plot":
+				mc.updatePlot();
+				break;
+			case "Shelves":
+				mc.updateShelvesTable();
+				break;
+			case "Stock":
+				mc.updateStockTable();
+				break;
+			default:
+				throw new IllegalStateException("Not a valid modename");
+			
+		}
 	}
 
 }

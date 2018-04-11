@@ -129,18 +129,16 @@ public class ModeController {
 		// Load data into DB
 		DataLoader.main(null);
 		
-		// Extract shopping trips(with actions and coordinates)
-		ArrayList<ShoppingTrip> shoppingTripList = getShoppingTripsFromDB();
 		/*
 		 * HEAT MAP MODE
 		 */
-		VisualizationHeatMap heatMap = new VisualizationHeatMap("Heatmap", shoppingTripList);
+		VisualizationHeatMap heatMap = new VisualizationHeatMap("Heatmap");
 		Mode heatMapMode = new Mode("Heatmap", heatMap);
 		
 		/*
 		 * PLOT MODE
 		 */
-		VisualizationSimplePlot plot = new VisualizationSimplePlot("Plot", shoppingTripList);
+		VisualizationSimplePlot plot = new VisualizationSimplePlot("Plot");
 		Mode plotMode = new Mode("Plot", plot);
 
 		
@@ -155,7 +153,10 @@ public class ModeController {
 		updateMostPickedUpTable();
 		updateStockTable();
 		updateDemographicsTable();
+		updateShelvesTable();
 		updateDurationModeField();
+		updateHeatMap();
+		updatePlot();
 		
 		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 		executor.scheduleAtFixedRate(runnable, 3, 3, TimeUnit.SECONDS);
@@ -165,47 +166,6 @@ public class ModeController {
 
 
 	}
-	
-	/**
-	 * A method that extracts all trips from DB and fill them with their coordinates and actions
-	 * @return	An ArrayList of ShoppingTrips
-	 */
-	public ArrayList<ShoppingTrip> getShoppingTripsFromDB(){
-		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
-		ActionDatabaseController adc = new ActionDatabaseController();
-		CoordinateDatabaseController cdc = new CoordinateDatabaseController();
-		
-		ArrayList<ShoppingTrip> shoppingTripList = new ArrayList<>();
-		int iterator = 1;
-		while(true) {
-			ShoppingTrip trip = stdc.retrieve(iterator);
-			if (trip == null) {
-				break;
-			}
-			trip.setActions(adc.retrieveAll(iterator));
-			trip.setCoordinates(cdc.retrieveAll(iterator));
-			shoppingTripList.add(trip);
-			iterator++;
-		}
-		return shoppingTripList;
-	}
-	
-	/**
-	 * Exracts and update shop drom DB and update shelves from a list of all shoppingtrips
-	 * @param shoppingTripList	An ArrayList of all shoppingtrips in DB
-	 * @return					The updated shop object
-	 */
-	public Shop getShopFromDBAndUpdateFromTrips(ArrayList<ShoppingTrip> shoppingTripList) {
-		ShopDatabaseController sdc = new ShopDatabaseController();
-		Shop shop = sdc.retrieve(1);
-		shop.refreshShop();
-		// Update the shop object
-		for (ShoppingTrip trip : shoppingTripList) {
-			shop.updateShopFromReceipt(new Receipt(trip));
-		}
-		return shop;
-	}
-
 	/**
 	 * Adds a mode. Used by the initialize-methods. Does not allow Modes with equal names
 	 *
@@ -303,6 +263,49 @@ public class ModeController {
 		setMode(this.currentMode);
 		
 	}
+	
+	/**
+	 * A method that extracts all trips from DB and fill them with their coordinates and actions
+	 * @return	An ArrayList of ShoppingTrips
+	 */
+	public ArrayList<ShoppingTrip> getShoppingTripsFromDB(){
+		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
+		ActionDatabaseController adc = new ActionDatabaseController();
+		CoordinateDatabaseController cdc = new CoordinateDatabaseController();
+		
+		ArrayList<ShoppingTrip> shoppingTripList = new ArrayList<>();
+		int iterator = 1;
+		while(true) {
+			ShoppingTrip trip = stdc.retrieve(iterator);
+			if (trip == null) {
+				break;
+			}
+			trip.setActions(adc.retrieveAll(iterator));
+			trip.setCoordinates(cdc.retrieveAll(iterator));
+			shoppingTripList.add(trip);
+			iterator++;
+		}
+		return shoppingTripList;
+	}
+	
+	
+	
+	/**
+	 * Exracts and update shop drom DB and update shelves from a list of all shoppingtrips
+	 * @param shoppingTripList	An ArrayList of all shoppingtrips in DB
+	 * @return					The updated shop object
+	 */
+	public Shop getShopFromDBAndUpdateFromTrips(ArrayList<ShoppingTrip> shoppingTripList) {
+		ShopDatabaseController sdc = new ShopDatabaseController();
+		Shop shop = sdc.retrieve(1);
+		shop.refreshShop();
+		// Update the shop object
+		for (ShoppingTrip trip : shoppingTripList) {
+			shop.updateShopFromReceipt(new Receipt(trip));
+		}
+		return shop;
+	}
+
 	
 	public void updateMostPickedUpTable() {
 		VisualizationTable mostPickedUpTable = (VisualizationTable) getMode("Most Picked Up").getVisualizationElement();

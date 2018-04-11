@@ -35,6 +35,11 @@ public class VisualizationHeatMap extends VisualizationElement {
 		this.map = new HeatMap(180, 100);
 		map.addSpots(getPoints(shoppingTripList));
 	}
+	
+	public VisualizationHeatMap(String name) {
+		super(name);
+		this.map = new HeatMap(180, 100);
+	}
 
 	/**
 	 * Set the points to the heatmap, after validating
