@@ -139,11 +139,21 @@ public class ModeController {
 		ActionDatabaseController adc = new ActionDatabaseController();
 		CoordinateDatabaseController cdc = new CoordinateDatabaseController();
 	
-		ShoppingTrip trip = stdc.retrieve(1);
-		trip.setActions(adc.retrieveAll(1));
-		trip.setCoordinates(cdc.retrieveAll(1));
 		ArrayList<ShoppingTrip> shoppingTripList = new ArrayList<>();
-		shoppingTripList.add(trip);
+		// Retrieve the shopping trips from DB and put in a list
+		int iterator = 1;
+		while(true) {
+			ShoppingTrip trip = stdc.retrieve(iterator);
+			if (trip == null) {
+				break;
+			}
+			trip.setActions(adc.retrieveAll(iterator));
+			trip.setCoordinates(cdc.retrieveAll(iterator));
+			shoppingTripList.add(trip);
+			iterator++;
+			System.out.println(iterator-1);
+			System.out.println(trip.getActions());
+		}
 
 		TableLoader tableLoader = new TableLoader();
 		tableLoader.loadMostPickedUpTable(shoppingTripList, mostPickedUpTable);
@@ -159,8 +169,8 @@ public class ModeController {
 		}
 		
 		// Update the shop object
-		for (ShoppingTrip tripper : shoppingTripList) {
-			shop.updateShopFromReceipt(new Receipt(tripper));
+		for (ShoppingTrip trip : shoppingTripList) {
+			shop.updateShopFromReceipt(new Receipt(trip));
 		}
 
 		Map<Integer, Integer> productIDsOnShelf = shop.getShelfs();
