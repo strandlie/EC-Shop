@@ -290,6 +290,7 @@ public class Customer extends Observable implements Model, UserInterface {
 	 * and a sorted list sorted based on amount bought.
 	 * @return A sorted list (desc) consisting of relations between product and amount bought
 	 */
+	@JsonIgnore
 	public List<ProductAmount> getStatisticsForAmountBought() {
 		ProductDatabaseController pdc = new ProductDatabaseController();
 		int amountOfProducts = 64;
