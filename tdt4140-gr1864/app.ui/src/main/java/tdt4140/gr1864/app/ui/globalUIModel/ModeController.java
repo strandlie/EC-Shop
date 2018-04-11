@@ -151,8 +151,6 @@ public class ModeController {
 			trip.setCoordinates(cdc.retrieveAll(iterator));
 			shoppingTripList.add(trip);
 			iterator++;
-			System.out.println(iterator-1);
-			System.out.println(trip.getActions());
 		}
 
 		TableLoader tableLoader = new TableLoader();
