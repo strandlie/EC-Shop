@@ -10,25 +10,29 @@
     <servlet-name>ShoppingTripServlet</servlet-name>
     <servlet-class>org.web.server.ShoppingTripServlet</servlet-class>
   </servlet>
-    <servlet>
+
+  <servlet>
     <servlet-name>CustomerServlet</servlet-name>
     <servlet-class>org.web.server.CustomerServlet</servlet-class>
   </servlet>
+
   <servlet>
-    <servlet-name>TestServlet</servlet-name>
-    <servlet-class>org.web.server.TestServlet</servlet-class>
+    <servlet-name>ReceiptFetcher</servlet-name>
+    <servlet-class>org.web.server.ReceiptServlet</servlet-class>
   </servlet>
+  
   <servlet-mapping>
     <servlet-name>ShoppingTripServlet</servlet-name>
     <url-pattern>/api/v1/shoppingtrip/</url-pattern>
   </servlet-mapping>
+  
   <servlet-mapping>
     <servlet-name>CustomerServlet</servlet-name>
-    <url-pattern>/api/v1/user/</url-pattern>
-  </servlet-mapping>
-    <servlet-mapping>
-    <servlet-name>TestServlet</servlet-name>
-    <url-pattern>/api/test</url-pattern>
+    <url-pattern>/api/v1/customer/</url-pattern>
   </servlet-mapping>
 
+  <servlet-mapping>
+    <servlet-name>ReceiptFetcher</servlet-name>
+    <url-pattern>/api/v1/user/receipt/</url-pattern>
+  </servlet-mapping>
 </web-app>

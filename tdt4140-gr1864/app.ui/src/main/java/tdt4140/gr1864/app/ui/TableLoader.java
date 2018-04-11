@@ -194,6 +194,7 @@ public class TableLoader {
 			String putdownsString = putDowns.containsKey(productNameString) ? putDowns.get(productNameString).toString() : "0";
 			String purchasesString = purchases.containsKey(productNameString) ? purchases.get(productNameString).toString() : "0";
 			table.addData(new MostPickedUpTableRow(productNameString, pickupsString, putdownsString, purchasesString));
+
 		}
 	}
 	
