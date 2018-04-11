@@ -38,19 +38,22 @@ public class Receipt {
 	 * Compute the costs for products purchased during this trip.
 	 */
 	private void computePrices() {
-		for (Action action : shoppingTrip.getActions()) {
-			int product = action.getProduct().getID();
-			
-			// Figure out the amount currently in the inventory, 0 if it was not being carried.
-			int previous = inventory.containsKey(product) ? inventory.get(product) : 0;
+		if (shoppingTrip.getActions() != null) {
+			for (Action action : shoppingTrip.getActions()) {
+				int product = action.getProduct().getID();
+				
+				// Figure out the amount currently in the inventory, 0 if it was not being carried.
+				int previous = inventory.containsKey(product) ? inventory.get(product) : 0;
 
-			// Increase or decrease the amount of the given product in the inventory based
-			// on the action type.
-			if (action.getActionType() == Action.DROP) {
-				inventory.put(product, previous - 1);
-			} else if (action.getActionType() == Action.PICK_UP) {
-				inventory.put(product, previous + 1);
-			}	
+				// Increase or decrease the amount of the given product in the inventory based
+				// on the action type.
+				if (action.getActionType() == Action.DROP) {
+					inventory.put(product, previous - 1);
+				} else if (action.getActionType() == Action.PICK_UP) {
+					inventory.put(product, previous + 1);
+				}	
+		}
+		
 		}
 
 		ProductDatabaseController database = new ProductDatabaseController();

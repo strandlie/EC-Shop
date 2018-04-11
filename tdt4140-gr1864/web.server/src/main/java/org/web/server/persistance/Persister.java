@@ -92,7 +92,7 @@ public class Persister {
 	public void persist(Object object, Class c, HTTPMethod method) {
 		switch(ModelClasses.fromClass(c)) {
 		case CUSTOMER: controller = new CustomerDatabaseController(); break;
-		case SHOPPING_TRIP:	controller = new ShoppingTripDatabaseController(); break;
+		case SHOPPING_TRIP: return;
 		default:
 			throw new IllegalArgumentException("No controller for this class");
 		}
@@ -187,7 +187,6 @@ public class Persister {
 	 * @param object
 	 */
 	private void create(Object object) {
-		ShoppingTrip trip = (ShoppingTrip) object;
 		controller.create(object);
 	}
 	

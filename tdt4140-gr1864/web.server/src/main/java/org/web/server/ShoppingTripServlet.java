@@ -10,5 +10,6 @@ public class ShoppingTripServlet extends AbstractServlet {
 	protected void setup() {
 		cl = ShoppingTrip.class;
 		hasDelete = false;
+		hasPut = false;
 	}
 }

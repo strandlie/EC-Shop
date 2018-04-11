@@ -257,7 +257,7 @@ public class CustomerTest {
 	}
 
 	@Test
-	public void testGiveRecommendationWhenCustomerAreAnonymousExpectProductIDEqualMostPopularEqualsOne() {
+	public void testGiveRecommendationWhenCustomerAreAnonymousExpectProductIDEqualsMostPopularEqualsOne() {
 		viper.wipe();
 		setup();
 		int expectedProductID = 1;
@@ -275,5 +275,37 @@ public class CustomerTest {
 		stdc.update(t1);
 		c2.giveRecommendation();
 		Assert.assertEquals(expectedProductID, c2.getRecommendedProductID());
+	}
+	
+	@Test
+	public void testGetStatisticsForAmountBoughtExpectSortedList() {
+		viper.wipe();
+		setup();
+		
+		List<ProductAmount> actualArray = c1.getStatisticsForAmountBought();
+		
+		List<ProductAmount> expectedArray = new ArrayList<>();
+		// index for max value = 2 (in DB), maxamount = 2
+		ProductAmount pa1 = new ProductAmount(2, pdc.retrieve(2));
+
+		// index for max value = 1 (in DB), maxamount = 1
+		ProductAmount pa2 = new ProductAmount(1, pdc.retrieve(1));
+
+		// index for max value = 3 (in DB), maxamount = 1
+		ProductAmount pa3 = new ProductAmount(1, pdc.retrieve(3));
+		
+		expectedArray.add(pa1);
+		expectedArray.add(pa2);
+		expectedArray.add(pa3);
+		
+		boolean correctList = true;
+		for (int i = 0; i < 3; i++) {
+			if (expectedArray.get(i).getAmount() != actualArray.get(i).getAmount() || 
+				expectedArray.get(i).getProduct().getID() != actualArray.get(i).getProduct().getID()) {
+				correctList = !correctList;
+			}
+		}
+		
+		Assert.assertEquals(true, correctList);
 	}
 }

@@ -86,7 +86,10 @@ public class TestDataLoaderTest {
 	public void testProductsOnSHelf(){
 		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
 		int productID = products.get(0).getID();
+		int amount = 5;
 		Shop shop = loader.getShop();
+		shop.setAmountInShelfs(productID, amount);
+		osdc.create(shop, productID);
 		Shop testShop = new Shop("lol", 101, shop.getID());
 		Shop retrievedShop = osdc.retrieve(testShop, productID);
 		

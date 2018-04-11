@@ -15,6 +15,11 @@ public class GUIUpdaterRunnable implements Runnable {
 	public void run() {
 		mc.updateDemographicsTable();
 		mc.updateDurationModeField();
+		mc.updateMostPickedUpTable();
+		mc.updateHeatMap();
+		mc.updatePlot();
+		mc.updateShelvesTable();
+		mc.updateStockTable();
 	}
 
 }
