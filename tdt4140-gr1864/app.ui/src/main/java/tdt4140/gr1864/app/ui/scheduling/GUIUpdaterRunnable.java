@@ -1,6 +1,5 @@
 package tdt4140.gr1864.app.ui.scheduling;
 
-import javafx.application.Platform;
 import tdt4140.gr1864.app.ui.globalUIModel.ModeController;
 
 public class GUIUpdaterRunnable implements Runnable {
@@ -13,7 +12,9 @@ public class GUIUpdaterRunnable implements Runnable {
 
 	@Override
 	public void run() {
+		// Must always be updated, since it is always visible to the user
 		mc.updateDurationModeField();
+		
 		switch (mc.getCurrentMode().getName()) {
 			case "Demographics":
 				mc.updateDemographicsTable();

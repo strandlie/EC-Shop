@@ -161,10 +161,6 @@ public class ModeController {
 		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 		executor.scheduleAtFixedRate(runnable, 3, 3, TimeUnit.SECONDS);
 		setMode(mostPickedUp);
-		
-		
-
-
 	}
 	/**
 	 * Adds a mode. Used by the initialize-methods. Does not allow Modes with equal names
@@ -306,7 +302,9 @@ public class ModeController {
 		return shop;
 	}
 
-	
+	/**
+	 * Method to get latest data from DB, and update the MostPickedUpTable with this new data. Also used for initializing the table.
+	 */
 	public void updateMostPickedUpTable() {
 		VisualizationTable mostPickedUpTable = (VisualizationTable) getMode("Most Picked Up").getVisualizationElement();
 	
@@ -315,7 +313,9 @@ public class ModeController {
 		TableLoader.loadMostPickedUpTable(shoppingTripList, mostPickedUpTable);
 	}
 	
-	
+	/**
+	 * Method to get latest data from DB, and update the StockTable with this new data. 
+	 */
 	public void updateStockTable() {
 		ArrayList<ShoppingTrip> shoppingTripList = getShoppingTripsFromDB();
 		Shop shop = getShopFromDBAndUpdateFromTrips(shoppingTripList);
@@ -326,7 +326,7 @@ public class ModeController {
 	}
 
 	/**
-     * Updates rows of all Modes that contains VisualizationTables
+	 * Method to get latest data from DB, and update the DemographicsTable with this new data. 
 	 */
 	public void updateDemographicsTable() {
 		
@@ -339,6 +339,9 @@ public class ModeController {
 			TableLoader.loadDemographicsTable(customerList, table);
 	}
 	
+	/**
+	 * Method to get latest data from DB, and update the ShelvesTable with this new data. 
+	 */
 	public void updateShelvesTable() {
 			// Retrieve the shopping trips from DB and put in a list
 			ArrayList<ShoppingTrip> shoppingTripList = getShoppingTripsFromDB();
@@ -351,6 +354,9 @@ public class ModeController {
 	}
 	
 	
+	/**
+	 * Method to get latest data from DB, and update the DurationModeField with a new value from this new data. 
+	 */
 	public void updateDurationModeField() {
 		long sumOfDurations = 0;
 		int numberOfTrips = 0;
@@ -367,6 +373,9 @@ public class ModeController {
 	}
 	
 	
+	/**
+	 * Method to get latest data from DB, and update the HeatMap from this new data. 
+	 */
 	public void updateHeatMap() {
 		List<ShoppingTrip> shoppingTripList = getShoppingTripsFromDB();
 		VisualizationHeatMap heatMap = (VisualizationHeatMap) getMode("Heatmap").getVisualizationElement();
@@ -374,6 +383,9 @@ public class ModeController {
 	}
 	
 	
+	/**
+	 * Method to get latest data from DB, and update the Plot 
+	 */
 	public void updatePlot() {
 		List<ShoppingTrip> shoppingTripList = getShoppingTripsFromDB();
 		VisualizationSimplePlot plot = (VisualizationSimplePlot) getMode("Plot").getVisualizationElement();
@@ -381,8 +393,7 @@ public class ModeController {
 	}
 
 	/**
-	 * Code to be run every few seconds. Are calling updaterows at a fixed interval
-	 * Could be extended
+	 * Code to be run every few seconds.
 	 */
 	Runnable guiUpdater = new GUIUpdaterRunnable(this);
 	Runnable runnable = new Runnable() {
