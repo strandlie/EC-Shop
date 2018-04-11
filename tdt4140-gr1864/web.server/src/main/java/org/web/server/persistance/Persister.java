@@ -18,6 +18,7 @@ import tdt4140.gr1864.app.core.StripeShoppingTrip;
 import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.CoordinateDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.CustomerDatabaseController;
+import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
 import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
 import tdt4140.gr1864.app.core.interfaces.Model;
@@ -118,12 +119,32 @@ public class Persister {
 		case CUSTOMER: json = readCustomer(customerID); break;
 		case RECEIPT: json = readReceipt(customerID); break;
 		case SHOPPING_TRIP: json = readShoppingTrips(customerID); break;
+		case PRODUCT: json = readProductRecommendation(customerID); break;
 		default:
 			throw new IllegalArgumentException();
 		}
 		return json;
 	}
 	
+	private String readProductRecommendation(int customerID) throws IOException {
+		controller = new CustomerDatabaseController();
+		Customer customer = (Customer) controller.retrieve(customerID);
+		
+		// No Customer
+		if (customer == null) throw new IllegalArgumentException();
+		
+		// Calculate recommendation
+		customer.giveRecommendation();
+		
+		// If there is no recommendation to give
+		if (customer.getRecommendedProductID() == 0) return "{}";
+
+		controller = new ProductDatabaseController();
+		Product product = (Product) controller.retrieve(customer.getRecommendedProductID());
+
+		return Serializer.init().serialize((Model) product, Product.class);
+	}
+
 	/**
 	 * Reads ShoppingTrips from database based on customerID, serializes them
 	 * and returns the JSON string

@@ -78,7 +78,7 @@ public abstract class AbstractServlet extends HttpServlet{
 			resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 			return;
 		} catch (Exception e) {
-			System.out.println(e);
+			e.printStackTrace();
 			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return;
 		}
@@ -87,13 +87,16 @@ public abstract class AbstractServlet extends HttpServlet{
 		try {
 			json = persister.read(customerID, cl);
 		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
 			resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		} catch (Exception e) {
+			e.printStackTrace();
 			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return;
 		}
 		
+		System.out.println(json);
 		if (json == null || json.equals("null")) {
 			resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
