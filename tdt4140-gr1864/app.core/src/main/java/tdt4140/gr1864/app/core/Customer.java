@@ -1,8 +1,10 @@
 package tdt4140.gr1864.app.core;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Observable;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -11,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.CustomerDatabaseController;
+import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
 import tdt4140.gr1864.app.core.interfaces.Model;
 import tdt4140.gr1864.app.core.interfaces.UserInterface;
@@ -188,8 +191,8 @@ public class Customer extends Observable implements Model, UserInterface {
 		return customerID;
 	}
 
-	public void setCustomerID(int userId) {
-		this.customerID = userId;
+	public void setCustomerID(int customerID) {
+		this.customerID = customerID;
 	}
 
 	public String getFirstName() {
@@ -281,7 +284,35 @@ public class Customer extends Observable implements Model, UserInterface {
 		clearChanged();
 		this.address = address;
 	}
+	
+	/**
+	 * Creates a relation between product objects and amount based on amount of bought for customer
+	 * and a sorted list sorted based on amount bought.
+	 * @return A sorted list (desc) consisting of relations between product and amount bought
+	 */
+	public List<ProductAmount> getStatisticsForAmountBought() {
+		ProductDatabaseController pdc = new ProductDatabaseController();
+		int amountOfProducts = 64;
+		
+		// Get the amount of bought products for this customer
+		int[] temp = getBoughtProductList();
 
+		// the list for storing the sorted products
+		List<ProductAmount> sortedList = new ArrayList<>();
+		
+		for (int i = 0; i < amountOfProducts; i++) {
+			// temp[i] is the amount, i+1 is the index of product in database (0-index vs. 1-index)
+			ProductAmount pa = new ProductAmount(temp[i], pdc.retrieve(i+1));
+			sortedList.add(pa);
+		}
+		
+		// Sorts the ProductAmount Desc based on the amount
+		sortedList.sort((a1, a2) -> a2.getAmount().compareTo(a1.getAmount()));
+		
+		return sortedList;
+		
+	}
+	
 	/**
 	 *  The recommendation is based on shopping trips stored in the database and 
 	 *  gives the recommendation based on to occasions:
@@ -300,7 +331,7 @@ public class Customer extends Observable implements Model, UserInterface {
 	public void giveRecommendation() {
 		// List of all shopping trips for all customers
 		List<ShoppingTrip> allTrips = stdc.retrieveAllShoppingTrips();
-		
+
 		// List of all shopping trips for this customer	
 		List<ShoppingTrip> customerTrips = stdc.retrieveAllShoppingTripsForCustomer(this.customerID);
 		
@@ -316,7 +347,10 @@ public class Customer extends Observable implements Model, UserInterface {
 		int[] productsBoughtInTotal = new int[amountOfProducts];
 		
 		// Updating the productsBoughtInTotal based on all shopping trips
-		if (allTrips.size() == 0) this.recommendedProductID = 0;
+		if (allTrips.size() == 0) {
+			this.recommendedProductID = 0;
+			return;
+		}
 
 		for (ShoppingTrip st : allTrips) {
 			
@@ -353,21 +387,8 @@ public class Customer extends Observable implements Model, UserInterface {
 		 * customerProducts[0] gives amount of products with productID = 1 (1-indexed in db) 
 		 * that this customer bought in total
 		 */
-		int[] customerBoughtProductsInTotal= new int[amountOfProducts];
+		int[] customerBoughtProductsInTotal= getBoughtProductList();
 		
-		/* 
-		 * Updating the customerBoughtProductsInTotal based on all 
-		 * shopping trips for this customer
-		 */
-		for (ShoppingTrip st : customerTrips) {
-			for (Action action : st.getActions()) {
-				/* 
-				 * Adds to total bought products (by 1) for customer by converting the 1-indexed
-				 * productID to be 0-indexed (int[]-index != dbTable-index)
-				 */
-				customerBoughtProductsInTotal[action.getProduct().getID()-1]++;
-			}
-		}
 		
 		// Average bought products for all customers based on productsBoughtInTotal / customerAmount
 		double[] avgAmountOfProdBoughtByAll = new double[amountOfProducts];
@@ -465,6 +486,46 @@ public class Customer extends Observable implements Model, UserInterface {
 			}
 		}
 		this.recommendedProductID = productID;
+	}
+	
+	/**
+	 * Creates a list for all trips for this customer
+	 * Adds products equally to each action the customer has done. 
+	 * The list consists of the total amount of bought product.
+	 * @return int[] array list for the amount of products bought with productID = int[ID]
+	 */
+	private int[] getBoughtProductList() {
+		// List of all shopping trips for this customer	
+		List<ShoppingTrip> customerTrips = stdc.retrieveAllShoppingTripsForCustomer(this.customerID);
+		
+		/**
+		 * An overview for amount of products the customer bought in total since registering.
+		 * customerProducts[0] gives amount of products with productID = 1 (1-indexed in db) 
+		 * that this customer bought in total
+		 */
+		int amountOfProducts = 64;
+		int[] customerBoughtProductsInTotal= new int[amountOfProducts];
+		
+		/* 
+		 * Updating the customerBoughtProductsInTotal based on all 
+		 * shopping trips for this customer
+		 */
+		for (ShoppingTrip st : customerTrips) {
+			for (Action action : st.getActions()) {
+				/* 
+				 * Adds to the amount of bought products in total (by 1) by converting the 1-indexed
+				 * productID to be 0-indexed (int[]'s index == dbTable's index - 1)
+				 */
+				if (action.getActionType() == Action.DROP) {
+					customerBoughtProductsInTotal[action.getProduct().getID()-1]--;
+					
+				} else if (action.getActionType() == Action.PICK_UP) {
+					customerBoughtProductsInTotal[action.getProduct().getID()-1]++;
+				}
+			}
+		}
+		
+		return customerBoughtProductsInTotal;
 	}
 
 	@Override
