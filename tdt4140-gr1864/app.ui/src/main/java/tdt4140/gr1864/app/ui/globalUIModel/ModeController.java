@@ -159,7 +159,7 @@ public class ModeController {
 		updatePlot();
 		
 		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-		executor.scheduleAtFixedRate(runnable, 3, 3, TimeUnit.SECONDS);
+		executor.scheduleAtFixedRate(runnable, 10, 10, TimeUnit.SECONDS);
 		setMode(mostPickedUp);
 	}
 	/**
@@ -227,6 +227,30 @@ public class ModeController {
 			throw new IllegalArgumentException(mode.getName() + " is not a valid mode");
 		}
 		this.currentMode = mode;
+		
+		switch (getCurrentMode().getName()) {
+			case "Demographics":
+				updateDemographicsTable();
+				break;
+			case "Most Picked Up":
+				updateMostPickedUpTable();
+				break;
+			case "Heatmap":
+				updateHeatMap();
+				break;
+			case "Plot":
+				updatePlot();
+				break;
+			case "Shelves":
+				updateShelvesTable();
+				break;
+			case "Stock":
+				updateStockTable();
+				break;
+			default:
+				throw new IllegalStateException("Not a valid modename");
+			
+		}
 		this.visualizationViewController.setActiveElement(mode.getVisualizationElement());
 	}
 

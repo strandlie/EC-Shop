@@ -47,6 +47,7 @@ public class VisualizationHeatMap extends VisualizationElement {
 	@Override
 	public void setData(Object object) {
 		List<ShoppingTrip> shoppingTripList = objectIsList(object);
+		map.clearHeatMap();
 		map.addSpots(getPoints(shoppingTripList));
 	}
 
