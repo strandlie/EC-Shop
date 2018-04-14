@@ -69,10 +69,13 @@ public class CustomerDatabaseControllerTest {
 	
 	@Test
 	public void testDeleteExpectNull() {
+		DatabaseWiper wiper = new DatabaseWiper();
+		wiper.wipe();
+		
 		Customer c2 = new Customer("Ola", "Normann", cdc.create(c0));
 		cdc.delete(c2.getID());
-		
-		Assert.assertEquals(null, cdc.retrieve(c2.getID()));
+
+		Assert.assertEquals(true, cdc.retrieve(c2.getID()).isDeleted());
 	}
 	
 	@Test
@@ -84,16 +87,22 @@ public class CustomerDatabaseControllerTest {
 	
 	@Test
 	public void testRetrieveAllExpectAllCustomers() {
+		DatabaseWiper wiper = new DatabaseWiper();
+		wiper.wipe();
+		
+		cdc.create(extendedCustomer);
+		cdc.create(extendedCustomer);
+		
 		List<Customer> customers = cdc.retrieveAll();
 		
-		Assert.assertEquals("Ola", customers.get(0).getFirstName());
-		Assert.assertEquals("Ben", customers.get(2).getFirstName());
+		Assert.assertEquals("Ben", customers.get(0).getFirstName());
+		Assert.assertEquals("Ben", customers.get(1).getFirstName());
 	}
 	
 	@Test
 	public void testCreateUserWithAllFields() {
 		Customer c2 = new  Customer("Ben", "Len", "NTNU", 7047,
-				"Unspecified", 44, 3, true, cdc.create(extendedCustomer));
+				"Unspecified", 44, 3, true, cdc.create(extendedCustomer), false);
 		cdc.create(c2);
 		
 		Assert.assertEquals(c2.getFirstName(), "Ben");
@@ -105,12 +114,13 @@ public class CustomerDatabaseControllerTest {
 		Assert.assertEquals(c2.getAge(), 44);
 		Assert.assertEquals(c2.getNumberOfPersonsInHousehold(), 3);
 		Assert.assertEquals(c2.getAnonymous(), true);
+		Assert.assertEquals(c2.isDeleted(), false);
 	}
 	
 	@Test
 	public void testRetrieveUserWithAllFields() {
 		Customer c1 = new  Customer("Ben", "Len", "NTNU", 7047,
-				"Unspecified", 44, 3, true, cdc.create(extendedCustomer));
+				"Unspecified", 44, 3, true, cdc.create(extendedCustomer), false);
 
 		Customer c2 = cdc.retrieve(c1.getID());
 		Assert.assertEquals(c1.getFirstName(), c2.getFirstName());
@@ -120,10 +130,11 @@ public class CustomerDatabaseControllerTest {
 		Assert.assertEquals(c1.getNumberOfPersonsInHousehold(), c2.getNumberOfPersonsInHousehold());
 		Assert.assertEquals(c1.getGender(), c2.getGender());
 		Assert.assertEquals(c1.getAnonymous(), c2.getAnonymous());
+		Assert.assertEquals(c1.isDeleted(), c2.isDeleted());
 	}
 	
 	@Test
-	public void ItestDeleteUserExpectAllNullValues() {
+	public void testDeleteUserExpectAllNullValues() {
 		cdc.delete(1);
 		Customer c1 = cdc.retrieve(1);
 
