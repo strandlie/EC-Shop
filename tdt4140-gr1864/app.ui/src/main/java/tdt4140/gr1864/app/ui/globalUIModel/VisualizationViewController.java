@@ -73,4 +73,11 @@ public class VisualizationViewController {
 		this.tableView.setDisable(disable);
 		this.tableView.setVisible(!disable);
 	}
+	
+	/**
+	 * Forces the tableView to sort itself. Is called after the UI polls the database, and updates itself. 
+	 */
+	public void sortTableView() {
+		this.tableView.sort();
+	}
 }

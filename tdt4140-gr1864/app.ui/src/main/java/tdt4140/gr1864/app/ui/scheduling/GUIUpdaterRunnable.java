@@ -38,6 +38,7 @@ public class GUIUpdaterRunnable implements Runnable {
 				throw new IllegalStateException("Not a valid modename");
 			
 		}
+		mc.visualizationViewTableViewSort();;
 	}
 
 }

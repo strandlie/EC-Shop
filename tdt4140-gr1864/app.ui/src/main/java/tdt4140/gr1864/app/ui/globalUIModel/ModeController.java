@@ -415,6 +415,13 @@ public class ModeController {
 		VisualizationSimplePlot plot = (VisualizationSimplePlot) getMode("Plot").getVisualizationElement();
 		plot.setData(shoppingTripList);
 	}
+	
+	/**
+	 * Calls the appropriate method to sort the TableView. Is called after the GUi updates itself.
+	 */
+	public void visualizationViewTableViewSort() {
+		this.visualizationViewController.sortTableView();
+	}
 
 	/**
 	 * Code to be run every few seconds.
