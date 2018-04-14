@@ -34,11 +34,11 @@ public class CustomerTest {
 	public static void createDatabase() {
 		viper = new DatabaseWiper();
 		tdl = new TestDataLoader();
-		viper.wipe();
 	}
 	
-	@Before
+	// The setup will only 
 	public void setup() {
+		viper.wipe();
 		s1 = new Shop("Kings Road 2", 10);
 		s1 = new Shop(s1.getAddress(),s1.getZip(), sdc.create(s1));
 
@@ -241,6 +241,7 @@ public class CustomerTest {
 	
 	@Test
 	public void testGiveRecommendationBoughtExpectProductIDEqualOne() {
+		setup();
 		int expectedProductID = 1;
 		c1.giveRecommendation();
 		Assert.assertEquals(expectedProductID, c1.getRecommendedProductID());
@@ -248,6 +249,7 @@ public class CustomerTest {
 	
 	@Test
 	public void testGiveRecommendationWhenNotBoughtExpectMostPopularEqualTwo() {
+		setup();
 		int expectedProductID = 2;
 		c2.giveRecommendation();
 		Assert.assertEquals(expectedProductID, c2.getRecommendedProductID());
@@ -255,6 +257,7 @@ public class CustomerTest {
 
 	@Test
 	public void testGiveRecommendationWhenCustomerAreAnonymousExpectProductIDEqualsMostPopularEqualsOne() {
+		setup();
 		int expectedProductID = 1;
 		c1.setAnonymous(true);
 		c1.giveRecommendation();
@@ -263,6 +266,7 @@ public class CustomerTest {
 	
 	@Test
 	public void testGiveRecommendationWhenShoppingTripsAreAnonymousExpectProductIDEqualZero() {
+		setup();
 		int expectedProductID = 0;
 		t1.setAnonymous(true);
 		stdc.update(t1);
@@ -272,6 +276,7 @@ public class CustomerTest {
 	
 	@Test
 	public void testGetStatisticsForAmountBoughtExpectSortedList() {
+		setup();
 		
 		List<ProductAmount> actualArray = c1.getStatisticsForAmountBought();
 		
