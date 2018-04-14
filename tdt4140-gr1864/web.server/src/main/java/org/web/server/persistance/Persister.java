@@ -135,10 +135,7 @@ public class Persister {
 		
 		List<ProductAmount> sl = customer.getStatisticsForAmountBought();
 		
-		String json = "{[";
-		for (ProductAmount p : sl)
-				json += Serializer.init().serialize( p, ProductAmount.class) + ", ";
-		return json.substring(0, json.length() - 2) + "]}";
+		return Serializer.init().serialize(sl, ProductAmount.class);
 	}
 	
 	/**

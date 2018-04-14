@@ -123,6 +123,7 @@ public class Serializer {
 		switch(ModelClasses.fromClass(c)) {
 			case RECEIPT: return serializeReceipt(o); // We deliberately do not cast here; it is handled in the method itself
 			case SHOPPING_TRIP: return serializeShoppingTrip(o);
+			case PRODUCTAMOUNT: return serializeProductAmount(o, c);
 			default:
 				try {
 					return serialize((Model) o, c);
@@ -131,6 +132,17 @@ public class Serializer {
 				}
 		}
 		return null;
+	}
+
+	private String serializeProductAmount(Object o, Class c) {
+		ObjectMapper mapper = new ObjectMapper();
+		String json = null;
+		try {
+			json = mapper.writeValueAsString(o);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return json;
 	}
 
 	/**
