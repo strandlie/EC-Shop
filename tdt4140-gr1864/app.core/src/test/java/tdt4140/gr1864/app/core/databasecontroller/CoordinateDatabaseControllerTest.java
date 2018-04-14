@@ -126,4 +126,10 @@ public class CoordinateDatabaseControllerTest {
 		Assert.assertEquals(c1.getTimeStamp(), c2.getTimeStamp());
 		Assert.assertEquals(c1.getShoppingTrip().getID(), c2.getShoppingTrip().getID());
 	}
+	
+	@Test
+	public void testRetrieveAllExpectListOfCoordinates() {
+		List<Coordinate> coords = cdc.retrieveAll(1);
+		Assert.assertEquals(1, coords.size());
+	}
 }
