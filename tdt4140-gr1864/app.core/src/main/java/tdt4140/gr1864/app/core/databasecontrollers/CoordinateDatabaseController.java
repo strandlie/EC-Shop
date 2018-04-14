@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import tdt4140.gr1864.app.core.Action;
 import tdt4140.gr1864.app.core.Coordinate;
 import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
 
@@ -154,26 +153,7 @@ public class CoordinateDatabaseController extends DatabaseController implements 
 	@Deprecated
 	@Override
 	public Object retrieve(int id) {
-		String sql = "SELECT shopping_trip_id, timestamp, x, y "
-					+ "WHERE shopping_trip_id=?";
-		try {
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
-			statement = connection.prepareStatement(sql);
-			statement.setInt(1, id);
-			ResultSet rs = statement.executeQuery();
-			
-			if (!rs.next()) {
-				connection.close();
-				return null;
-			}
-
-			connection.close();
-			/* not yet implemented */
-			return null;
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		System.err.println("Not implemented!");
 		return null;
 	}
 	
