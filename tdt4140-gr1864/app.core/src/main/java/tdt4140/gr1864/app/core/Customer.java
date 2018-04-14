@@ -55,7 +55,9 @@ public class Customer extends Observable implements Model, UserInterface {
 	
 	@JsonProperty
 	private int recommendedProductID = -1;
-	private boolean anonymous;
+	private boolean anonymous = false;
+	private boolean deleted = false;
+	
 	
 	/**
 	 * @param customerID		id provided by database
@@ -69,30 +71,11 @@ public class Customer extends Observable implements Model, UserInterface {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.shoppingTrips = shoppingTrips;
-		this.anonymous = false;
 	}
 	
-	public Customer() {
-		
-	}
+	/* Used by Jackson */
+	public Customer() {}
 	
-	/**
-	 * Constructor used by CustomerDatabaseController when there is an address
-	 * @param customerID		id provided by database
-	 * @param firstName			name of customer
-	 * @param lastName			name of customer
-	 */
-	public Customer(String firstName, String lastName, int customerID,
-			 String address, int zip, boolean anonymous) {
-		this.customerID = customerID;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.address = address;
-		this.zip = zip;
-		this.anonymous = anonymous;
-	}
-
-
 	/**
 	 * Constructor used when user have added additional information. Checks for each field being not null
 	 * Thsi is for not having exponentially many constructors
@@ -121,7 +104,6 @@ public class Customer extends Observable implements Model, UserInterface {
 		if (numberOfPersonsInHousehold != 0)
             this.numberOfPersonsInHousehold = numberOfPersonsInHousehold;
 
-		// Is a primitive and does not need a check
 		this.anonymous = anonymous;
 	}
 
@@ -140,25 +122,9 @@ public class Customer extends Observable implements Model, UserInterface {
 	 */
 	public Customer(String firstName, String lastName, String address, int zip, String gender,
 					int age, int numberOfPersonsInHousehold, boolean anonymous, int customerID) {
-		this.firstName = firstName;
-		this.lastName = lastName;
 
-		// Input validation
-		if (address != null)
-			this.address = address;
-		if (zip != 0)
-			this.zip = zip;
-		if (gender != null)
-			this.gender = gender;
-		if (age != 0)
-			this.age = age;
-		if (numberOfPersonsInHousehold != 0)
-			this.numberOfPersonsInHousehold = numberOfPersonsInHousehold;
-
-		// Is a primitive and does not need a check
-		this.anonymous = anonymous;
-
-		this.customerID = customerID;
+		this(firstName, lastName, address, zip, gender, age, numberOfPersonsInHousehold, anonymous);
+		setCustomerID(customerID);
 	}
 
 	/**
@@ -167,10 +133,8 @@ public class Customer extends Observable implements Model, UserInterface {
 	 * @param customerID		id provided by database
 	 */
 	public Customer(String firstName, String lastName, int customerID) { 
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.customerID = customerID;
-		this.anonymous = false;
+		this(firstName, lastName);
+		setCustomerID(customerID);
 	}
 	
 	/**
@@ -257,6 +221,29 @@ public class Customer extends Observable implements Model, UserInterface {
 	
 	public int getZip() {
 		return zip;
+	}
+	
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * Sets deleted field, and wipes all other fields if true
+	 * @param deleted
+	 */
+	public void setDeleted(boolean deleted) {
+		if (deleted) {
+			// delete all values
+			this.setAddress("null");
+			this.setAge(0);
+			this.setAnonymous(true);
+			this.setFirstName("null");
+			this.setLastName("null");
+			this.setGender("null");
+			this.setNumberOfPersonsInHousehold(0);
+			this.setZip(0);
+		}
+		this.deleted = deleted;
 	}
 
 	/**

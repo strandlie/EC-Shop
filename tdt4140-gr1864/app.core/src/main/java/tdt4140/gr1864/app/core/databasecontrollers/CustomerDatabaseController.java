@@ -139,7 +139,10 @@ public class CustomerDatabaseController extends DatabaseController implements Da
     public void update(Object object) {
     	Customer customer = objectIsCustomer(object);
     	String sql = "UPDATE customer "
-    				+ "SET first_name=?, last_name=?, address=?, zip=?, gender=?, age=?, num_persons_in_household=?, anonymous=?"
+    				+ "SET first_name=?, last_name=?, "
+    				+ "address=?, zip=?, gender=?, "
+    				+ "age=?, num_persons_in_household=?, "
+    				+ "anonymous=?, deleted=? "
     				+ "WHERE customer_id=?";
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
@@ -152,7 +155,8 @@ public class CustomerDatabaseController extends DatabaseController implements Da
 			statement.setInt(6, customer.getAge());
 			statement.setInt(7, customer.getNumberOfPersonsInHousehold());
 			statement.setBoolean(8, customer.getAnonymous());
-			statement.setInt(9, customer.getID());
+			statement.setBoolean(9, customer.isDeleted());
+			statement.setInt(10, customer.getID());
 			statement.executeUpdate();
 			connection.close();
 		} 
@@ -164,22 +168,14 @@ public class CustomerDatabaseController extends DatabaseController implements Da
 	}
 
     /**
-     * @see tdt4140.gr1864.app.core.interfaces.DatabaseCRUD#delete(int)
+     * Deletes all values from a Customer
+     * @param customerID	ID of Customer to "delete"
      */
     @Override
-    public void delete(int customerId) {
-    	String sql = "DELETE FROM customer "
-    				+ "WHERE customer_id=?";
-        try {
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
-            statement = connection.prepareStatement(sql);
-            statement.setInt(1, customerId);
-            statement.executeUpdate();
-            connection.close();
-        } 
-        catch (SQLException e) {
-        	e.printStackTrace();
-        }
+    public void delete(int customerID) {
+    	Customer customer = this.retrieve(customerID);
+    	customer.setDeleted(true);
+    	this.update(customer);
     }
     
     /**
