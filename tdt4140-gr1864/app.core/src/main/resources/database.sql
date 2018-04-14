@@ -8,6 +8,7 @@ gender varchar(31),
 age int,
 num_persons_in_household int,
 anonymous boolean,
+deleted boolean,
 foreign key(customer_id) references shopping_trip(customer_id)
 );
 
