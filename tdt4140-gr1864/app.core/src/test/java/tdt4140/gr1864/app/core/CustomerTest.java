@@ -34,9 +34,10 @@ public class CustomerTest {
 	public static void createDatabase() {
 		viper = new DatabaseWiper();
 		tdl = new TestDataLoader();
+		viper.wipe();
 	}
 	
-	// The setup will only be used by some of the tests and will therefore not have @Before
+	@Before
 	public void setup() {
 		viper.wipe();
 		s1 = new Shop("Kings Road 2", 10);
@@ -241,7 +242,6 @@ public class CustomerTest {
 	
 	@Test
 	public void testGiveRecommendationBoughtExpectProductIDEqualOne() {
-		setup();
 		int expectedProductID = 1;
 		c1.giveRecommendation();
 		Assert.assertEquals(expectedProductID, c1.getRecommendedProductID());
@@ -249,7 +249,6 @@ public class CustomerTest {
 	
 	@Test
 	public void testGiveRecommendationWhenNotBoughtExpectMostPopularEqualTwo() {
-		setup();
 		int expectedProductID = 2;
 		c2.giveRecommendation();
 		Assert.assertEquals(expectedProductID, c2.getRecommendedProductID());
@@ -266,7 +265,6 @@ public class CustomerTest {
 	
 	@Test
 	public void testGiveRecommendationWhenShoppingTripsAreAnonymousExpectProductIDEqualZero() {
-		setup();
 		int expectedProductID = 0;
 		t1.setAnonymous(true);
 		stdc.update(t1);
@@ -276,7 +274,6 @@ public class CustomerTest {
 	
 	@Test
 	public void testGetStatisticsForAmountBoughtExpectSortedList() {
-		setup();
 		
 		List<ProductAmount> actualArray = c1.getStatisticsForAmountBought();
 		
