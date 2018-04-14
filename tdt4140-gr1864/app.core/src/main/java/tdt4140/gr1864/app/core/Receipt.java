@@ -52,8 +52,7 @@ public class Receipt {
 				} else if (action.getActionType() == Action.PICK_UP) {
 					inventory.put(product, previous + 1);
 				}	
-		}
-		
+			}
 		}
 
 		ProductDatabaseController database = new ProductDatabaseController();
@@ -93,11 +92,9 @@ public class Receipt {
 		return prices.values().stream().mapToDouble(Double::valueOf).sum();
 	}
 	
-	
 	/**
 	 * A constructor to ease the testing of Shop.updateAmountInShelfsFromReceipt
-	 * 
-	 * @param inventory		The desired inventory
+	 * @param inventory	The desired inventory
 	 */
 	public Receipt(Map<Integer, Integer> inventory) {
 		this.inventory = inventory;
