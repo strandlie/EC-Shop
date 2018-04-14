@@ -11,6 +11,7 @@ import tdt4140.gr1864.app.core.Action;
 import tdt4140.gr1864.app.core.Coordinate;
 import tdt4140.gr1864.app.core.Customer;
 import tdt4140.gr1864.app.core.Product;
+import tdt4140.gr1864.app.core.ProductAmount;
 import tdt4140.gr1864.app.core.Receipt;
 import tdt4140.gr1864.app.core.Shop;
 import tdt4140.gr1864.app.core.ShoppingTrip;
@@ -35,6 +36,7 @@ public class Persister {
 		COORDINATE(Coordinate.class.getName()),
 		CUSTOMER(Customer.class.getName()),
 		PRODUCT(Product.class.getName()),
+		PRODUCTAMOUNT(ProductAmount.class.getName()),
 		RECEIPT(Receipt.class.getName()),
 		SHOP(Shop.class.getName()),
 		SHOPPING_TRIP(ShoppingTrip.class.getName()),
@@ -117,6 +119,7 @@ public class Persister {
 		
 		switch (ModelClasses.fromClass(c)) {
 		case CUSTOMER: json = readCustomer(customerID); break;
+		case PRODUCTAMOUNT: json = readProductAmount(customerID); break;
 		case RECEIPT: json = readReceipt(customerID); break;
 		case SHOPPING_TRIP: json = readShoppingTrips(customerID); break;
 		case PRODUCT: json = readProductRecommendation(customerID); break;
@@ -126,6 +129,19 @@ public class Persister {
 		return json;
 	}
 	
+
+	private String readProductAmount(int customerID) throws IOException {
+		controller = new CustomerDatabaseController();
+		Customer customer = (Customer) controller.retrieve(customerID);
+		
+		if (customer == null) throw new IllegalArgumentException();
+		
+		List<ProductAmount> sl = customer.getStatisticsForAmountBought();
+		
+		return Serializer.init().serialize(sl, ProductAmount.class);
+	}
+	
+
 	private String readProductRecommendation(int customerID) throws IOException {
 		controller = new CustomerDatabaseController();
 		Customer customer = (Customer) controller.retrieve(customerID);

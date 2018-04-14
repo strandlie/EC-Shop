@@ -22,6 +22,11 @@
   </servlet>
   
   <servlet>
+    <servlet-name>StatisticsServlet</servlet-name>
+    <servlet-class>org.web.server.StatisticsServlet</servlet-class>
+  </servlet>
+
+  <servlet>
     <servlet-name>RecommendationFetcher</servlet-name>
     <servlet-class>org.web.server.RecommendationServlet</servlet-class>
   </servlet>
@@ -44,5 +49,10 @@
   <servlet-mapping>
     <servlet-name>RecommendationFetcher</servlet-name>
     <url-pattern>/api/v1/customer/recommendation/</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>StatisticsServlet</servlet-name>
+    <url-pattern>/api/v1/customer/statistics/</url-pattern>
   </servlet-mapping>
 </web-app>
