@@ -25,6 +25,11 @@
     <servlet-name>StatisticsServlet</servlet-name>
     <servlet-class>org.web.server.StatisticsServlet</servlet-class>
   </servlet>
+
+  <servlet>
+    <servlet-name>RecommendationFetcher</servlet-name>
+    <servlet-class>org.web.server.RecommendationServlet</servlet-class>
+  </servlet>
   
   <servlet-mapping>
     <servlet-name>ShoppingTripServlet</servlet-name>
@@ -38,7 +43,12 @@
 
   <servlet-mapping>
     <servlet-name>ReceiptFetcher</servlet-name>
-    <url-pattern>/api/v1/user/receipt/</url-pattern>
+    <url-pattern>/api/v1/customer/receipt/</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>RecommendationFetcher</servlet-name>
+    <url-pattern>/api/v1/customer/recommendation/</url-pattern>
   </servlet-mapping>
   
   <servlet-mapping>

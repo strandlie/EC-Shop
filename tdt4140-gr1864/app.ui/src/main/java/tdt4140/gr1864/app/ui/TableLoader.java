@@ -79,7 +79,6 @@ public class TableLoader {
 	}
 	
 	/**
-<<<<<<< HEAD
 	 * Constructor for OnShelf Mode
 	 * @param productIDsOnShelf
 	 * @param table
@@ -147,13 +146,11 @@ public class TableLoader {
 	
 	/**
 	 * Wipes the table clear, and loads the data from the trips into the table to 
-=======
 	 * The constructor for CustomerList
->>>>>>> sprint-3
 	 * @param trips A list of shopping trips to load the table from
 	 * @param table A model-layer representation of a table shown to the user. Any changes made to this will reflect to the user immidiately
 	 */
-	public void loadMostPickedUpTable(List<ShoppingTrip> trips, VisualizationTable table) {
+	public static void loadMostPickedUpTable(List<ShoppingTrip> trips, VisualizationTable table) {
 		
 		table.wipeTable();
 		
@@ -222,7 +219,7 @@ public class TableLoader {
 	 * @param productIDsInStorage The Map of the productIDs with corresponding count in storage
 	 * @param table A model-layer representation of a table shown to the user. Any changes made to this will reflect to the user immidiately
 	 */
-	public void loadStockTable(Map<Integer, Integer> productIDsOnShelf, Map<Integer, Integer> productIDsInStorage, VisualizationTable table) {
+	public static void loadStockTable(Map<Integer, Integer> productIDsOnShelf, Map<Integer, Integer> productIDsInStorage, VisualizationTable table) {
 
 		table.wipeTable();
 		
@@ -269,7 +266,7 @@ public class TableLoader {
 	 * @param table
 	 * @param inputZero to differentiate the differetn tableloaders, no real function
 	 */
-	public void loadDemographicsTable(List<Customer> customers, VisualizationTable table) {
+	public static void loadDemographicsTable(List<Customer> customers, VisualizationTable table) {
 		
 		table.wipeTable();
 		
@@ -304,7 +301,7 @@ public class TableLoader {
 	 * @param productIDsOnShelf		A map of productIDs and amount on shelves
 	 * @param table					The visualization table for onShelfMode
 	 */
-	public void loadInShelvesTable(Map<Integer, Integer> productIDsOnShelf, VisualizationTable table) {
+	public static void loadInShelvesTable(Map<Integer, Integer> productIDsOnShelf, VisualizationTable table) {
 		
 		table.wipeTable();
 		
