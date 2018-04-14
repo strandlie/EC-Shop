@@ -76,10 +76,10 @@ public class CustomerDatabaseControllerTest {
 	}
 	
 	@Test
-	public void testCountCustomerExpectFour() {
+	public void testCountCustomerExpectOne() {
 		new Customer("hans", "nordmann", cdc.create(c0));
 		int countCustomer = cdc.countCustomers();
-		Assert.assertEquals(4, countCustomer);
+		Assert.assertEquals(1, countCustomer);
 	}
 	
 	@Test
@@ -87,7 +87,7 @@ public class CustomerDatabaseControllerTest {
 		List<Customer> customers = cdc.retrieveAll();
 		
 		Assert.assertEquals("Ola", customers.get(0).getFirstName());
-		Assert.assertEquals("Kari", customers.get(2).getFirstName());
+		Assert.assertEquals("Ben", customers.get(2).getFirstName());
 	}
 	
 	@Test

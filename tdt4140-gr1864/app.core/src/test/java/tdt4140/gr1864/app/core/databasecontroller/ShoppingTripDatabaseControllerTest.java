@@ -93,7 +93,7 @@ public class ShoppingTripDatabaseControllerTest {
 	@Test
 	public void testRetrieveAllShoppingTripsExpectSizeEqualOne() {
 		List<ShoppingTrip> trips = stdc.retrieveAllShoppingTrips();
-		Assert.assertEquals(2, trips.size());
+		Assert.assertEquals(1, trips.size());
 			
 	}
 	

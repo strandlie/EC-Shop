@@ -39,7 +39,6 @@ public class CustomerTest {
 	
 	@Before
 	public void setup() {
-		viper.wipe();
 		s1 = new Shop("Kings Road 2", 10);
 		s1 = new Shop(s1.getAddress(),s1.getZip(), sdc.create(s1));
 
