@@ -4,6 +4,8 @@ Shop :apple: :bacon: :hamburger: :stuffed_flatbread:</h1>
 <img src="https://gitlab.stud.iie.ntnu.no/tdt4140-2018/64/badges/master/build.svg">
 <img src="https://gitlab.stud.iie.ntnu.no/tdt4140-2018/64/badges/master/coverage.svg">
 
+This is a school project developed associated with the subject TDT4140 at NTNU.
+
 E.C. Shop is a system for tracking customers in a store, similarly to systems
 such as Amazon's Amazon Go. The system tracks customer inventories as they move
 through the store, and automatically charges their credit cards upon leaving
@@ -99,3 +101,14 @@ parts of the system.
 The `web.server` module uses its own instance of `app.core` to pass and receive
 data from customers. An external customer application could interact with the
 relevant data through this REST API.
+
+## List of tools we've used
+* Jetty - a http server and servlet engine used as webserver
+* Java servlet - a java program for web server
+* GitLab - the core program for this project with it's version control using Git.
+* Apache Maven - Dependency manager that describes how the programs are built and their dependencies and is used for automatically project building.
+* PostMan - API development environment to send http requests
+* Insomnia - Rest API client with cookie management, environment variables and code generation and authentication.
+* Eclipse - An open source IDE that is primarly used to develop in this project
+* JavaFX - A set of graphics and media packages.
+* JDBC - Short for Java Database Connectivity and is a standardized interface for java applications that communicates with a database. 
