@@ -274,9 +274,9 @@ public class DataMocker implements Runnable {
 			heap.add(new ThreadAction((int) (currentTime + Math.log(1 - ThreadLocalRandom.current().nextDouble()) / -0.0001)));
 			
 			ThreadAction action = heap.poll();
-			
+						
 			try {
-				Thread.sleep(5000);
+				Thread.sleep(10000);
 			} catch (InterruptedException e) {
 				// We simply exit early if the sleeping is interrupted.
 				break;
