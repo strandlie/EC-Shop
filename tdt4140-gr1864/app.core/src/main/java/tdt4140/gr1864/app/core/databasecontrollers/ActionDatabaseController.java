@@ -151,25 +151,7 @@ public class ActionDatabaseController extends DatabaseController implements Data
 	@Deprecated
 	@Override
 	public Object retrieve(int shopping_trip_id) {
-		String sql = "SELECT * "
-					+ "FROM action "
-					+ "WHERE shopping_trip_id=?";
-		try {
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
-			statement = connection.prepareStatement(sql);
-			statement.setInt(1, shopping_trip_id);
-			ResultSet rs = statement.executeQuery();
-			
-			if (!rs.next()) {
-				connection.close();
-				return null;
-			}
-			connection.close();
-			return null;
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		System.err.println("Not implemented!");
 		return null;
 	}
 

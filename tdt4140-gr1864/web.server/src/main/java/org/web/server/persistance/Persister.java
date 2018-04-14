@@ -242,4 +242,13 @@ public class Persister {
 	private void delete(Model object) {
 		controller.delete(object.getID());
 	}
+	
+	/**
+	 * Deletes a Customer
+	 * @param customerID 	id of Customer to delete
+	 */
+	public void deleteCustomer(int customerID) {
+		controller = new CustomerDatabaseController();
+		controller.delete(customerID);
+	}
 }

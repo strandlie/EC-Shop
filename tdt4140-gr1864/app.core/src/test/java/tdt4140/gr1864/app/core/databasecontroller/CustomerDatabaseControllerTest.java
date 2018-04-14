@@ -121,4 +121,14 @@ public class CustomerDatabaseControllerTest {
 		Assert.assertEquals(c1.getGender(), c2.getGender());
 		Assert.assertEquals(c1.getAnonymous(), c2.getAnonymous());
 	}
+	
+	@Test
+	public void ItestDeleteUserExpectAllNullValues() {
+		cdc.delete(1);
+		Customer c1 = cdc.retrieve(1);
+
+		Assert.assertEquals("null", c1.getAddress());
+		Assert.assertEquals("null", c1.getFirstName());
+		Assert.assertEquals(0, c1.getAge());
+	}
 }

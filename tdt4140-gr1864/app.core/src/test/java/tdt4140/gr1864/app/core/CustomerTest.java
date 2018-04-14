@@ -36,7 +36,7 @@ public class CustomerTest {
 		tdl = new TestDataLoader();
 	}
 	
-	// The setup will only 
+	// The setup will only be used by some of the tests and will therefore not have @Before
 	public void setup() {
 		viper.wipe();
 		s1 = new Shop("Kings Road 2", 10);
@@ -303,5 +303,19 @@ public class CustomerTest {
 		}
 		
 		Assert.assertEquals(true, correctList);
+	}
+	
+	@Test
+	public void testIsDeletedExpectFalse() {
+		Assert.assertFalse(c1.isDeleted());
+	}
+	
+	@Test
+	public void testSetDeletedExpectAllNullValues() {
+		c1.setAddress("Some Address");
+		c1.setAge(12);
+		c1.setDeleted(true);
+		Assert.assertEquals("null", c1.getAddress());
+		Assert.assertEquals(0, c1.getAge());
 	}
 }
