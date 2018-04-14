@@ -46,6 +46,9 @@ public class ReceiptSerializer extends StdSerializer<Receipt> {
     	// The shopping trip start time.
         jsonGenerator.writeNumberField("date", receipt.getShoppingTrip().getEnd());
         
+        // Whether the invoice has been paid or not.
+        jsonGenerator.writeBooleanField("charged", receipt.getShoppingTrip().getCharged());
+        
         // The total price of the shopping trip.
         jsonGenerator.writeNumberField("totalPrice", receipt.getTotalPrice());
         
