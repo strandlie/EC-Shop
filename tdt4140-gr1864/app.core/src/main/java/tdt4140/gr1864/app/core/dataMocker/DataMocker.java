@@ -28,7 +28,7 @@ public class DataMocker implements Runnable {
 	/**
 	 * The API URL test data will be sent to.
 	 */
-	private static String API_URL = "http://localhost:8080/api";
+	private static String API_URL = "http://localhost:8080/api/v1/shoppingtrip/";
 	
 	/**
 	 * A Rectangle containing the start and end of all paths. Typically the cashier desks.
@@ -243,16 +243,14 @@ public class DataMocker implements Runnable {
 	public void sendShoppingTripData(Trip trip) throws ClientProtocolException, IOException {
 		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 		String json = ow.writeValueAsString(trip);
-		System.out.println(json);
 		
 		DefaultHttpClient httpclient = new DefaultHttpClient();
-		HttpPost httpPost = new HttpPost(API_URL);
+		HttpPost httpPost = new HttpPost(API_URL + "?customer-id=" + trip.getCustomerID());
 		httpPost.addHeader("content-type", "application/json");
 		httpPost.setEntity(new StringEntity(json));
 		HttpResponse response2 = httpclient.execute(httpPost);
 
 		try {
-		    //System.out.println(response2.getStatusLine());
 		    HttpEntity entity2 = response2.getEntity();
 		    EntityUtils.consume(entity2);
 		} catch (Exception e) {
@@ -278,9 +276,10 @@ public class DataMocker implements Runnable {
 			ThreadAction action = heap.poll();
 			
 			try {
-				Thread.sleep(action.getTime() - currentTime);
+				Thread.sleep(5000);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				// We simply exit early if the sleeping is interrupted.
+				break;
 			}
 			
 			currentTime = action.getTime();
