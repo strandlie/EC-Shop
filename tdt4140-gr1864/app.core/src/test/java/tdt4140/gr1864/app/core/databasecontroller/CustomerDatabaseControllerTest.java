@@ -38,7 +38,7 @@ public class CustomerDatabaseControllerTest {
 	}
 	
 	@Test
-	public void AtestCreateExpectPresistedObject() {
+	public void testCreateExpectPresistedObject() {
 		Customer c2 = new Customer("Ola", "Normann", cdc.create(c0));
 		
 		
@@ -47,16 +47,16 @@ public class CustomerDatabaseControllerTest {
 	}
 	
 	@Test
-	public void BtestRetrieveExpectPresistedObject() {
+	public void testRetrieveExpectPresistedObject() {
 		Customer c2 = new Customer("Ola", "Normann", cdc.create(c0));
 		Customer c3 = (Customer) cdc.retrieve(c2.getID());
 		
-		Assert.assertEquals(c2.getFirstName(), c0.getFirstName());
-		Assert.assertEquals(c2.getLastName(), c0.getLastName());
+		Assert.assertEquals(c3.getFirstName(), c0.getFirstName());
+		Assert.assertEquals(c3.getLastName(), c0.getLastName());
 	}
 	
 	@Test
-	public void CtestUpdateExpectedNewlyPresistedObject() {
+	public void testUpdateExpectedNewlyPresistedObject() {
 		Customer c1 = new Customer(c0.getFirstName(), c0.getLastName(), cdc.create(c0));
 		c1 = new Customer("Kari", "Hansen", c1.getID());
 		cdc.update(c1);
@@ -68,7 +68,7 @@ public class CustomerDatabaseControllerTest {
 	}
 	
 	@Test
-	public void DtestDeleteExpectNull() {
+	public void testDeleteExpectNull() {
 		Customer c2 = new Customer("Ola", "Normann", cdc.create(c0));
 		cdc.delete(c2.getID());
 		
@@ -76,14 +76,14 @@ public class CustomerDatabaseControllerTest {
 	}
 	
 	@Test
-	public void EtestCountCustomerExpectFour() {
+	public void testCountCustomerExpectFour() {
 		new Customer("hans", "nordmann", cdc.create(c0));
 		int countCustomer = cdc.countCustomers();
 		Assert.assertEquals(4, countCustomer);
 	}
 	
 	@Test
-	public void FtestRetrieveAllExpectAllCustomers() {
+	public void testRetrieveAllExpectAllCustomers() {
 		List<Customer> customers = cdc.retrieveAll();
 		
 		Assert.assertEquals("Ola", customers.get(0).getFirstName());
@@ -91,7 +91,7 @@ public class CustomerDatabaseControllerTest {
 	}
 	
 	@Test
-	public void GtestCreateUserWithAllFields() {
+	public void testCreateUserWithAllFields() {
 		Customer c2 = new  Customer("Ben", "Len", "NTNU", 7047,
 				"Unspecified", 44, 3, true, cdc.create(extendedCustomer));
 		cdc.create(c2);
@@ -108,7 +108,7 @@ public class CustomerDatabaseControllerTest {
 	}
 	
 	@Test
-	public void HtestRetrieveUserWithAllFields() {
+	public void testRetrieveUserWithAllFields() {
 		Customer c1 = new  Customer("Ben", "Len", "NTNU", 7047,
 				"Unspecified", 44, 3, true, cdc.create(extendedCustomer));
 

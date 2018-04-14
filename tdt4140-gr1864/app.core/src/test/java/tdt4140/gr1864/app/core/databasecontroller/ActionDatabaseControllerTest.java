@@ -127,7 +127,7 @@ public class ActionDatabaseControllerTest {
 	}
 	
 	@Test
-	public void wTestRetrieveAllExpectActionListSizeNotZero() {
+	public void testRetrieveAllExpectActionListSizeNotZero() {
 		a1 = new Action(
 				Long.toString(a1.getTimeStamp()),
 				a1.getActionType(), 
