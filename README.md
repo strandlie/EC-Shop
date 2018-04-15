@@ -100,7 +100,7 @@ parts of the system.
 
 The `web.server` module uses its own instance of `app.core` to pass and receive
 data from customers. An external customer application could interact with the
-relevant data through this REST API. Documentation is found [here](#https://gitlab.stud.iie.ntnu.no/tdt4140-2018/64/blob/sprint-3/tdt4140-gr1864/web.server/README.md)
+relevant data through this REST API. Documentation is found [here.](https://gitlab.stud.iie.ntnu.no/tdt4140-2018/64/blob/sprint-3/tdt4140-gr1864/web.server/README.md)
 
 ## List of tools we've used
 * Jetty - a http server and servlet engine used as webserver
