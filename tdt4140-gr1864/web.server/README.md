@@ -6,7 +6,7 @@ of the database-base system in `app.core`.
 
 
 ## Dependencies
-* `app.core`-modul
+* `app.core`-module
 * Jetty 9.3.2
 * Servlet 3.1
 
