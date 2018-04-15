@@ -121,10 +121,11 @@ public class Customer extends Observable implements Model, UserInterface {
 	 * @param customerID CustomerId provided from database
 	 */
 	public Customer(String firstName, String lastName, String address, int zip, String gender,
-					int age, int numberOfPersonsInHousehold, boolean anonymous, int customerID) {
+					int age, int numberOfPersonsInHousehold, boolean anonymous, int customerID, boolean deleted) {
 
 		this(firstName, lastName, address, zip, gender, age, numberOfPersonsInHousehold, anonymous);
 		setCustomerID(customerID);
+		this.deleted = deleted;
 	}
 
 	/**
