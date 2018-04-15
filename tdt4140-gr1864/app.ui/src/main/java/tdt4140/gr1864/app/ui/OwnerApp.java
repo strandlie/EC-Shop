@@ -18,6 +18,10 @@ public class OwnerApp extends Application{
 	 */
 	private static Collection<AppListener> listeners = new HashSet<>();
 	
+	/**
+	 * Add an AppListener to the collection of listeners.
+	 * @param listener
+	 */
 	public static void addListener(AppListener listener) {
 		listeners.add(listener);
 	}	

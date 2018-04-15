@@ -276,6 +276,8 @@ public class DataMocker implements Runnable {
 			ThreadAction action = heap.poll();
 						
 			try {
+				// Always wait 10 seconds - it's not as realistic, but better for demonstrating, which is
+				// what the datamocker is supposed to do, anyway.
 				Thread.sleep(10000);
 			} catch (InterruptedException e) {
 				// We simply exit early if the sleeping is interrupted.
@@ -287,7 +289,6 @@ public class DataMocker implements Runnable {
 			if (action.getAction() == 0) {
 				Trip trip = generateRandomPath();
 				heap.add(new ThreadAction(currentTime + trip.getDuration(), trip));
-				// TODO: Send data to customer entering shop endpoint
 			} else {				
 				try {
 					sendShoppingTripData(action.getTrip());
