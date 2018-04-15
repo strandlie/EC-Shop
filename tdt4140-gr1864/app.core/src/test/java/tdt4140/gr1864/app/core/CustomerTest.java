@@ -37,6 +37,7 @@ public class CustomerTest {
 		viper.wipe();
 	}
 	
+	@Before
 	public void setup() {
 		s1 = new Shop("Kings Road 2", 10);
 		s1 = new Shop(s1.getAddress(),s1.getZip(), sdc.create(s1));
@@ -307,5 +308,19 @@ public class CustomerTest {
 		}
 		
 		Assert.assertEquals(true, correctList);
+	}
+	
+	@Test
+	public void testIsDeletedExpectFalse() {
+		Assert.assertFalse(c1.isDeleted());
+	}
+	
+	@Test
+	public void testSetDeletedExpectAllNullValues() {
+		c1.setAddress("Some Address");
+		c1.setAge(12);
+		c1.setDeleted(true);
+		Assert.assertEquals("null", c1.getAddress());
+		Assert.assertEquals(0, c1.getAge());
 	}
 }

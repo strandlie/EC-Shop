@@ -9,6 +9,8 @@ import org.json.simple.JSONObject;
 import org.web.server.persistance.Persister;
 import org.web.server.serializers.Serializer;
 
+import tdt4140.gr1864.app.core.Customer;
+
 public abstract class AbstractServlet extends HttpServlet{
 	
 	/**
@@ -128,7 +130,7 @@ public abstract class AbstractServlet extends HttpServlet{
 		}
 		
 		try {
-			serializer.deserialize(req.getReader(), cl, HTTPMethod.POST);
+			serializer.deserialize(req.getReader(), cl, HTTPMethod.DELETE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -188,7 +190,15 @@ public abstract class AbstractServlet extends HttpServlet{
 		}
 		
 		try {
-			serializer.deserialize(req.getReader(), cl, HTTPMethod.DELETE);
+			/*
+			 * Ugly implementation of deleting Customer
+			 * No other end-points should support deleting anyways...
+			 */
+			if (cl == Customer.class) {
+				persister.deleteCustomer(customerID);
+			} else {
+				serializer.deserialize(req.getReader(), cl, HTTPMethod.POST);
+			}
 		} catch (Exception e) {
 			resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;

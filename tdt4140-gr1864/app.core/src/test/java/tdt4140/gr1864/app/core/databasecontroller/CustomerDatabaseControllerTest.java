@@ -68,14 +68,6 @@ public class CustomerDatabaseControllerTest {
 	}
 	
 	@Test
-	public void DtestDeleteExpectNull() {
-		Customer c2 = new Customer("Ola", "Normann", cdc.create(c0));
-		cdc.delete(c2.getID());
-		
-		Assert.assertEquals(null, cdc.retrieve(c2.getID()));
-	}
-	
-	@Test
 	public void EtestCountCustomerExpectFour() {
 		new Customer("hans", "nordmann", cdc.create(c0));
 		int countCustomer = cdc.countCustomers();
@@ -120,5 +112,15 @@ public class CustomerDatabaseControllerTest {
 		Assert.assertEquals(c1.getNumberOfPersonsInHousehold(), c2.getNumberOfPersonsInHousehold());
 		Assert.assertEquals(c1.getGender(), c2.getGender());
 		Assert.assertEquals(c1.getAnonymous(), c2.getAnonymous());
+	}
+	
+	@Test
+	public void ItestDeleteUserExpectAllNullValues() {
+		cdc.delete(1);
+		Customer c1 = cdc.retrieve(1);
+
+		Assert.assertEquals("null", c1.getAddress());
+		Assert.assertEquals("null", c1.getFirstName());
+		Assert.assertEquals(0, c1.getAge());
 	}
 }
