@@ -23,15 +23,20 @@ items in stock, and visualizations of customer movements throughout the shop.
 ### Features for service providers / shop owners
 
 Most of the features for service providers are shown in the owner application
-user interface. 
-* In the first tab, owners can see 
-stats describing how often items are picked up, so that you can see which items
-are popular. 
-* In the second tab, owners can see how many items are remainding,
-so that you know when restocking is needed. 
-* The HeatMap and Plot tabs shows how
-customers move in the store, and which areas of the store usually have the
-largest amount of people. This can aid with the placement of items.
+user interface.
+
+* In the first tab, owners can see stats describing how often items are
+picked up, so that you can see which items are popular. 
+* In the second tab, owners can see how many items are remainding, so
+that you know when restocking is needed. 
+* The Demographics tab provides information about the customers
+visiting the shop.
+* The Shelves tab shows information about how many items are on
+shelves in the shop, so that shop workers know when to move items
+to the front of the store again.
+* The HeatMap and Plot tabs shows how customers move in the store, and
+which areas of the store usually have the largest amount of people. 
+This can aid with the placement of items. 
 
 ### Features for data providers / customers
 
@@ -41,6 +46,7 @@ endpoints providing recommendations for items to buy and descriptions of your
 shopping habits. 
 
 ## Installation
+
 To install the application for local development on your machine, start by
 cloning the repo by issuing the following command in the terminal.
 
