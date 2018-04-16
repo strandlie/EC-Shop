@@ -13,16 +13,33 @@ public class DemographicsTableRow implements TableRow {
 	private StringProperty lastName;
 	private StringProperty address;
 	private StringProperty zip;
+	private StringProperty gender;
+	private StringProperty age;
+	private StringProperty numOfPersonInHouse;
 	
 	private int size;
 
-	public DemographicsTableRow(String customerId, String firstName, String lastName, String address, String zip) {
+	public DemographicsTableRow(String customerId, String firstName, String lastName, String address, String zip, String gender, String age, String numOfPersonInHouse) {
 		setCustomerId(customerId);
 		setFirstName(firstName);
 		setLastName(lastName);
 		setAddress(address);
 		setZip(zip);
-		this.size = 5;
+		setGender(gender);
+		setAge(age);
+		setNumOfPersonInHouse(numOfPersonInHouse);
+		this.size = 8;
+	}
+	
+	public DemographicsTableRow(int customerId, String firstName, String lastName, String address, int zip, String gender, int age, int numOfPersonInHouse) {
+		setCustomerId(customerId);
+		setFirstName(firstName);
+		setLastName(lastName);
+		setAddress(address);
+		setZip(zip);
+		setGender(gender);
+		setAge(age);
+		setNumOfPersonInHouse(numOfPersonInHouse);
 	}
 
 
@@ -117,5 +134,58 @@ public class DemographicsTableRow implements TableRow {
 	
 	public String getZip() {
 		return this.zipProperty().getValue();
+	}
+	
+	public StringProperty genderProperty() {
+		if (this.gender == null) {
+			this.gender = new SimpleStringProperty(this, "gender");
+		}
+		return this.gender;
+	}
+	
+	public void setGender(String gender) {
+		this.genderProperty().setValue(gender);
+	}
+	
+	public String getGender() {
+		return this.genderProperty().getValue();
+	}
+	
+	public StringProperty ageProperty() {
+		if (this.age == null) {
+			this.age = new SimpleStringProperty(this, "age");
+		}
+		return this.age;
+	}
+	
+	public void setAge(int age) {
+		setAge(Integer.toString(age));
+	}
+	
+	public void setAge(String age) {
+		this.ageProperty().setValue(age);
+	}
+	
+	public String getAge() {
+		return this.ageProperty().getValue();
+	}
+	
+	public StringProperty numOfPersonInHouseProperty() {
+		if (this.numOfPersonInHouse == null) {
+			this.numOfPersonInHouse = new SimpleStringProperty(this, "numOfPersonInHouse");
+		}
+		return this.numOfPersonInHouse;
+	}
+	
+	public void setNumOfPersonInHouse(int numOfPersonInHouse) {
+		setNumOfPersonInHouse(Integer.toString(numOfPersonInHouse));
+	}
+	
+	public void setNumOfPersonInHouse(String numOfPersonInHouse) {
+		this.numOfPersonInHouseProperty().setValue(numOfPersonInHouse);
+	}
+	
+	public String getNumOfPersonInHouse() {
+		return this.numOfPersonInHouseProperty().getValue();
 	}
 }

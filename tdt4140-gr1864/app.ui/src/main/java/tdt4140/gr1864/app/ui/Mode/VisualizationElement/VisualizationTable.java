@@ -45,6 +45,10 @@ public class VisualizationTable extends VisualizationElement {
 		allowedColumnNames.put("address", "Address");
 		allowedColumnNames.put("zip", "ZIP");
 		allowedColumnNames.put("name", "Name");
+		allowedColumnNames.put("gender", "Gender");
+		allowedColumnNames.put("age", "Age");
+		allowedColumnNames.put("numOfPersonInHouse", "Number Of Persons In Household");
+		
 	}
 	
 	/**

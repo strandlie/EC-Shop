@@ -275,7 +275,7 @@ public class TableLoader {
 		}
 
 		for (Customer customer: customers) {
-			table.addData(new DemographicsTableRow(Integer.toString(customer.getID()), customer.getFirstName(), customer.getLastName(), customer.getAddress(), Integer.toString(customer.getZip())));
+			table.addData(new DemographicsTableRow(customer.getID(), customer.getFirstName(), customer.getLastName(), customer.getAddress(), customer.getZip(), customer.getGender(), customer.getAge(), customer.getNumberOfPersonsInHousehold()));
 		}
 	}
 
