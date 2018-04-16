@@ -81,7 +81,6 @@ public class ModeController {
 		 * has selected a different Mode
 		 */
 		menuViewController.setModeController(this);
-		DataLoader.main(null);
 		
 		/*
 		 * MostPickedUp
@@ -123,12 +122,6 @@ public class ModeController {
 		Mode durationMode = new Mode("", null);
 
 
-		/*
-		 * LOAD DATA
-		 */
-		// Load data into DB
-		DataLoader.main(null);
-		
 		/*
 		 * HEAT MAP MODE
 		 */

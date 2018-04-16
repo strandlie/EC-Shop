@@ -69,22 +69,14 @@ mvn clean install
 ```
 
 You should see the test suite running. If all tests pass, the project is fully
-functional. Once this is done, you can start the web server. The web server
-runs in the background and provides a simple REST API for interfacing with the
-application.
-
-```bash
-cd tdt4140-gr1864/web.server
-mvn jetty:start
-```
-
-Lastly, you should start the shop owner user interface, which is where the
-majority of the functionality is actually visualized. To start the user
-interface, open Eclipse, right click the file
-`app.ui/src/main/java/tdt4140.gr1864.app.ui`, and select `Run As > Java
-Application`. This should start the shop owner user interface.
+functional. Once this is done, you can start the application. The
+module `app` is responsible for starting the application. Open
+the `app` package and run the `app` class directly. This will start
+the web server and the owner application. To cleanly close the entire
+application, simply close the owner application user interface.
 
 ## System architecture
+
 The project is split into two main parts, `app.core` and `app.ui`. The
 `app.core` package contains all the business logic such as computing receipts
 and all the database handling/persistence, while `app.ui` contains the JavaFX
@@ -101,6 +93,8 @@ parts of the system.
 The `web.server` module uses its own instance of `app.core` to pass and receive
 data from customers. An external customer application could interact with the
 relevant data through this REST API. Documentation is found [here.](https://gitlab.stud.iie.ntnu.no/tdt4140-2018/64/blob/sprint-3/tdt4140-gr1864/web.server/README.md)
+
+The `app` module is responsible for starting and stopping the system cleanly.
 
 ## List of tools we've used
 * Jetty - a http server and servlet engine used as webserver
