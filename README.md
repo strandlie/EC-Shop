@@ -27,7 +27,7 @@ user interface.
 
 * In the first tab, owners can see stats describing how often items are
 picked up, so that you can see which items are popular. 
-* In the second tab, owners can see how many items are remainding, so
+* In the second tab, owners can see how many items are remaining, so
 that you know when restocking is needed. 
 * The Demographics tab provides information about the customers
 visiting the shop.
