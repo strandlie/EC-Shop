@@ -46,11 +46,17 @@ public class App implements AppListener {
 	 * @throws Exception
 	 */
 	private App() throws Exception {
+		// Populate database with data.
 		DataLoader.main(null);
+
+		// Listen for closing.
 		OwnerApp.addListener(this);
-        DataMocker mocker = new DataMocker();
-        mockerThread = new Thread(mocker);
-        mockerThread.start();
+		
+		// Start the data mocker in a separate thread.
+        // DataMocker mocker = new DataMocker();
+        // mockerThread = new Thread(mocker);
+        // mockerThread.start();
+        
         server = new JettyServer();
         server.start();
 	}
@@ -59,7 +65,7 @@ public class App implements AppListener {
 	 * Closes the application by stopping the mocker and the server when the UI closes.
 	 */
 	public void appClosed() throws Exception {
-		mockerThread.interrupt();
+		// mockerThread.interrupt();
 		server.stop();
 		System.exit(0);
 	}
