@@ -10,7 +10,7 @@ public class DemographicsTableRowTest {
 
 	@Before
 	public void setup() {
-		this.demographicsRow = new DemographicsTableRow("1", "Billy", "Marsvinsen", "Moose Road 5", "200");
+		this.demographicsRow = new DemographicsTableRow(1, "Billy", "Marsvinsen", "Moose Road 5", 200, "Male", 32, 2);
 	}
 	
 	@Test
@@ -36,6 +36,21 @@ public class DemographicsTableRowTest {
 	@Test
 	public void testGetZipExpect200() {
 		Assert.assertEquals("200", this.demographicsRow.getZip());
+	}
+	
+	@Test
+	public void testGetGenderExpectMale() {
+		Assert.assertEquals("Male", this.demographicsRow.getGender());
+	}
+	
+	@Test
+	public void testGetAgeExpect32() {
+		Assert.assertEquals("32", this.demographicsRow.getAge());
+	}
+	
+	@Test
+	public void testGetNumOFPersonInHouseExpect2() {
+		Assert.assertEquals("2", this.demographicsRow.getNumOfPersonInHouse());
 	}
 
 }

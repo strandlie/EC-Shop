@@ -109,6 +109,9 @@ public class ModeController {
 		demographicsTable.addColumn("lastName");
 		demographicsTable.addColumn("address");
 		demographicsTable.addColumn("zip");
+		demographicsTable.addColumn("gender");
+		demographicsTable.addColumn("age");
+		demographicsTable.addColumn("numOfPersonInHouse");
 		Mode demographicsMode = new Mode("Demographics", demographicsTable);
 
 		/*
