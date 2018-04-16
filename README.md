@@ -23,15 +23,20 @@ items in stock, and visualizations of customer movements throughout the shop.
 ### Features for service providers / shop owners
 
 Most of the features for service providers are shown in the owner application
-user interface. 
-* In the first tab, owners can see 
-stats describing how often items are picked up, so that you can see which items
-are popular. 
-* In the second tab, owners can see how many items are remainding,
-so that you know when restocking is needed. 
-* The HeatMap and Plot tabs shows how
-customers move in the store, and which areas of the store usually have the
-largest amount of people. This can aid with the placement of items.
+user interface.
+
+* In the first tab, owners can see stats describing how often items are
+picked up, so that you can see which items are popular. 
+* In the second tab, owners can see how many items are remaining, so
+that you know when restocking is needed. 
+* The Demographics tab provides information about the customers
+visiting the shop.
+* The Shelves tab shows information about how many items are on
+shelves in the shop, so that shop workers know when to move items
+to the front of the store again.
+* The HeatMap and Plot tabs shows how customers move in the store, and
+which areas of the store usually have the largest amount of people. 
+This can aid with the placement of items. 
 
 ### Features for data providers / customers
 
@@ -41,6 +46,7 @@ endpoints providing recommendations for items to buy and descriptions of your
 shopping habits. 
 
 ## Installation
+
 To install the application for local development on your machine, start by
 cloning the repo by issuing the following command in the terminal.
 
@@ -92,7 +98,8 @@ parts of the system.
 
 The `web.server` module uses its own instance of `app.core` to pass and receive
 data from customers. An external customer application could interact with the
-relevant data through this REST API. Documentation is found [here.](https://gitlab.stud.iie.ntnu.no/tdt4140-2018/64/blob/sprint-3/tdt4140-gr1864/web.server/README.md)
+relevant data through this REST API. Documentation is found [here.](https://gitlab.stud.iie.ntnu.no/tdt4140-2018/64/blob/master/tdt4140-gr1864/web.server/README.md)
+
 
 The `app` module is responsible for starting and stopping the system cleanly.
 
