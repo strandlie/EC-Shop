@@ -15,6 +15,12 @@ public class MenuCell extends ListCell<String> {
 		}
 		else {
 			setText(name);
+			if (name.contains("Average")) {
+				this.setDisable(true);
+			}
+			else {
+				this.setDisable(false);
+			}
 		}
 	}
 	

@@ -20,6 +20,7 @@ import tdt4140.gr1864.app.core.Action;
 import tdt4140.gr1864.app.core.Coordinate;
 import tdt4140.gr1864.app.core.Customer;
 import tdt4140.gr1864.app.core.Product;
+import tdt4140.gr1864.app.core.Receipt;
 import tdt4140.gr1864.app.core.Shop;
 import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
@@ -63,8 +64,8 @@ public class DataLoader {
 		loadCustomers();
 		loadProducts();
 		createShop();
-		loadShoppingTrips();
 		addProductsInShelfsInDB(products);
+		loadShoppingTrips();
 	}
 	
 	/**
@@ -245,8 +246,9 @@ public class DataLoader {
 	 * Loads JSON-data from string, creates ShoppingTrip object
 	 * This function is for the API
 	 * @param json	String with json-data of a ShoppingTrip
+	 * @return trip
 	 */
-	public static void loadShoppingTrip(String json) {
+	public static ShoppingTrip loadShoppingTrip(String json) {
 
 		JSONParser parser = new JSONParser();
 		
@@ -263,10 +265,10 @@ public class DataLoader {
 			
 			// create ShoppingTrip
 			trip = new ShoppingTrip(customer, shop, true);
-			trip = new ShoppingTrip(stdc.create(trip), trip.getCustomer(), trip.getShop(), true);
+			trip = new ShoppingTrip(stdc.create(trip), trip.getCustomer(), trip.getShop(), true, false);
 
 			// creating Coordinates
-			JSONArray coordsArray = (JSONArray) tripObject.get("path");
+			JSONArray coordsArray = (JSONArray) tripObject.get("coordinates");
 			coordinates = (ArrayList<Coordinate>) createCoordinates(coordsArray, trip);
 			
 			// creating Actions
@@ -279,6 +281,7 @@ public class DataLoader {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		return trip;
 	}
 	
 	/**
@@ -303,19 +306,19 @@ public class DataLoader {
 		
 		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
 		
-		Shop s1 = createShop();
+		Shop s1 = shop;
 		Customer c1 = getCustomer(1);
 
 		// We set the charged flag to true to prevent spamming the Stripe API.		
 		trip = new ShoppingTrip(c1, s1, true);
-		trip = new ShoppingTrip(stdc.create(trip), trip.getCustomer(), trip.getShop(), true);
+		trip = new ShoppingTrip(stdc.create(trip), trip.getCustomer(), trip.getShop(), true, false);
 		
 		try {
 			Object obj = parser.parse(new FileReader(relativePath + path));
 			JSONObject tripObject = (JSONObject) obj;
 			
 			// creating Coordinates
-			JSONArray coordsArray = (JSONArray) tripObject.get("path");
+			JSONArray coordsArray = (JSONArray) tripObject.get("coordinates");
 			coordinates = (ArrayList<Coordinate>) createCoordinates(coordsArray, trip);
 			
 			// creating Actions
@@ -324,7 +327,6 @@ public class DataLoader {
 			
 			// adds Coordinate and Action to ShoppingTrip
 			trip = createShoppingTrip(trip, coordinates, actions);
-			
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -341,9 +343,9 @@ public class DataLoader {
 	 */
 	private static ShoppingTrip createShoppingTrip(ShoppingTrip trip, List<Coordinate> coordinates, List<Action> actions) {
 		// We set the Charged flag to true to prevent spamming the Stripe API with charges.
-		ShoppingTrip newTrip = new ShoppingTrip(coordinates, actions, trip.getShoppingTripID(), true);
-		trip = newTrip;
-		return newTrip;
+		trip.setActions(actions);
+		trip.setCoordinates(coordinates);
+		return trip;
 	}
 	
 	/**
@@ -362,7 +364,7 @@ public class DataLoader {
 			JSONObject jsonCoord = (JSONObject) o;
 			x = (double) jsonCoord.get("x");
 			y = (double) jsonCoord.get("y");
-			timeStamp = Long.toString((long) jsonCoord.get("time"));
+			timeStamp = Long.toString((long) jsonCoord.get("timestamp"));
 
 			coordinate = new Coordinate(x, y, timeStamp, trip);
 			localCoordinates.add(coordinate);
@@ -412,9 +414,6 @@ public class DataLoader {
 	 * A function that adds products to the shelfs and storage of the shop, also updates the DB
 	 */
 	public static void addProductsInShelfsInDB(List<Product> products) {
-		ShopDatabaseController sdc = new ShopDatabaseController();
-		Shop shop = sdc.retrieve(1);
-		
 		int amountInStorage = 90;
 		int amountOnShelfs = 20;
 		OnShelfDatabaseController osdc = new OnShelfDatabaseController();

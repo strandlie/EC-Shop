@@ -8,8 +8,9 @@ import javafx.beans.property.StringProperty;
  * The class that makes up the content in the cells of a table. Because of the JavaFX-implmentation this 
  * needs to have all the variables and corresponding methods for all possible columns in any table. 
  * 
- * In furture versions this model needs updating. It doesnt allow modes with same number of columns
- * @author Hakon Strandlie
+ * Aggregates with two values now take a keyword in the constructor to set the right values.
+ * 
+ * @author Håkon Strandlie
  *
  */
 public class Row {
@@ -31,6 +32,9 @@ public class Row {
 	private StringProperty lastName;
 	private StringProperty address;
 	private StringProperty zipCode;
+	
+	// The variables for onShelvesMode
+	private StringProperty numberOnShelves;
 	
 	/**
 	 * The size of this Aggregate
@@ -55,13 +59,24 @@ public class Row {
 	}
 	
 	/**
-	 * The constructor for stockMode
+	 * The constructor for modes with two columns
 	 * @param productName
 	 * @param numberInStock
+	 * @param type 				the mode type
 	 */
-	public Row(String productName, String numberInStock) {
-		setProductName(productName);
-		setNumberInStock(numberInStock);
+	public Row(String productName, String amount, String type) {
+		switch (type) {
+		
+		case "stock":
+			setProductName(productName);
+			setNumberInStock(amount);
+			break;
+			
+		case "onShelves":
+			setProductName(productName);
+			setNumberOnShelves(amount);
+			break;
+		}
 		
 		this.size = 2;
 	}
@@ -188,6 +203,23 @@ public class Row {
 	
 	public String getNumberInStock() {
 		return numberInStockProperty().getValue();
+	}
+	
+	// Property methods for onShelves
+	
+	public StringProperty numberOnShelvesProperty() {
+		if (numberOnShelves == null) {
+			numberOnShelves = new SimpleStringProperty(this, "numberOnShelves");
+		}
+		return numberOnShelves;
+	}
+	
+	public void setNumberOnShelves(String number) {
+		this.numberOnShelvesProperty().setValue(number);
+	}
+	
+	public String getNumberOnShelves() {
+		return numberOnShelvesProperty().getValue();
 	}
 
 	public StringProperty customerIdProperty() {

@@ -31,6 +31,15 @@ public class VisualizationSimplePlot extends VisualizationElement {
 		
 		setData(shoppingTrips);
 	}
+	
+	public VisualizationSimplePlot(String name) {
+		super(name);
+		canvas = new Canvas(180, 100);
+		ctx = canvas.getGraphicsContext2D();
+		
+		ctx.setStroke(Color.BLACK);
+		ctx.setStroke(Color.BLACK);
+	}
 
 	private void drawArrow(int x1, int y1, int x2, int y2) {
 	    double dx = x2 - x1, dy = y2 - y1;
@@ -58,12 +67,12 @@ public class VisualizationSimplePlot extends VisualizationElement {
 	}
 
 	@Override
-	public void loadData(TableView<Row> tableView, ImageView imageView) {
+	public void loadData(TableView<TableRow> tableView, ImageView imageView) {
 		imageView.setImage(canvas.snapshot(null, null));
 	}
 
 	@Override
-	public void setAsActiveElement(VisualizationViewController vvc, TableView<Row> tableView, ImageView imageView) {
+	public void setAsActiveElement(VisualizationViewController vvc, TableView<TableRow> tableView, ImageView imageView) {
 		vvc.imageViewSetDisable(false);
 		vvc.tableViewSetDisable(true);
 		loadData(tableView, imageView);

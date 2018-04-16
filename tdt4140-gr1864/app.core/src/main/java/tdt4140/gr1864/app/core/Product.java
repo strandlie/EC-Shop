@@ -1,6 +1,13 @@
 package tdt4140.gr1864.app.core;
 
-public class Product {
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import tdt4140.gr1864.app.core.interfaces.Model;
+
+@JsonAutoDetect
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Product implements Model {
 
 	private String name;
 	private double price;
@@ -35,7 +42,7 @@ public class Product {
 		return this.price;
 	}
 	
-	public Integer getID() {
+	public int getID() {
 		return this.productID;
 	}
 }

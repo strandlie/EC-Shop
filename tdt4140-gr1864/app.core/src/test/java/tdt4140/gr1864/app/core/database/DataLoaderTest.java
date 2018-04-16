@@ -1,7 +1,15 @@
 package tdt4140.gr1864.app.core.database;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
 
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -11,6 +19,7 @@ import tdt4140.gr1864.app.core.Coordinate;
 import tdt4140.gr1864.app.core.Customer;
 import tdt4140.gr1864.app.core.Product;
 import tdt4140.gr1864.app.core.Shop;
+import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.CoordinateDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.CustomerDatabaseController;
@@ -61,10 +70,10 @@ public class DataLoaderTest {
 	@Test
 	public void testCoordinateLoadingFromFileExpectFirstCoordFromDataFile() {
 		CoordinateDatabaseController cdc = new CoordinateDatabaseController();
-		Coordinate coord = cdc.retrieve(1, 1520861376132L);
-		double expectedX = 8.12313777180195;
-		double expectedY = 4.330388562062142;
-		long expectedTime = 1520861376132L;
+		Coordinate coord = cdc.retrieve(1, 1523367344888L);
+		double expectedX = 5.988600917321573;
+		double expectedY = 1.6073608851323462;
+		long expectedTime = 1523367344888L;
 
 		Assert.assertEquals(expectedX, coord.getX(), 0);
 		Assert.assertEquals(expectedY, coord.getY(), 0);
@@ -74,10 +83,10 @@ public class DataLoaderTest {
 	@Test
 	public void testActionLoadingFromFileExpectFirstActionFromDataFile() {
 		ActionDatabaseController adc = new ActionDatabaseController();
-		Action action = adc.retrieve(1, 1520865366132L);
-		long expectedTime = 1520865366132L;
+		Action action = adc.retrieve(1, 1523367346313L);
+		long expectedTime = 1523367346313L;
 		int expectedType = 1;
-		int expectedProduct = 44;
+		int expectedProduct = 55;
 		
 		Assert.assertEquals(expectedTime, action.getTimeStamp());
 		Assert.assertEquals(expectedType, action.getActionType());
@@ -92,7 +101,32 @@ public class DataLoaderTest {
 		int expected_shop_id = 1;
 		int expected_product_id = 2;
 		int expected_amount_in_shelfs;
-		
-		
+	}
+	
+	@Test
+	public void testLoadShoppingtripExpectNewShoppingTripInDatabase() throws FileNotFoundException, IOException, ParseException {
+		String path = "../../src/main/resources/test-data.json";
+		String relativePath;
+		//Finds path by getting URL and converting to URI and then to path 
+		try {
+			URI rerelativeURI = getClass().getClassLoader().getResource(".").toURI();
+			relativePath = Paths.get(rerelativeURI).toFile().toString() + "/";
+			
+		} catch (URISyntaxException e1) {
+			//If fail to convert to URI use URL path instead
+			relativePath = getClass().getClassLoader().getResource(".").getPath();
+		}
+		// Read JSON from file
+		FileReader fr = new FileReader(relativePath+path);
+		BufferedReader reader = new BufferedReader(fr);		
+		String json = "";
+		String line;
+		while ((line = reader.readLine()) != null) {
+				json += line;
+			}	
+		reader.close();
+		ShoppingTrip trip = DataLoader.loadShoppingTrip(json);
+
+		Assert.assertEquals(2, trip.getID());
 	}
 }	

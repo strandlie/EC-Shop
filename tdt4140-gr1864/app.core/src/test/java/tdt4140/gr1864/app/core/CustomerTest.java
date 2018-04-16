@@ -9,6 +9,7 @@ import org.junit.*;
 
 import tdt4140.gr1864.app.core.database.DatabaseWiper;
 import tdt4140.gr1864.app.core.database.TestDataLoader;
+import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.CustomerDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShopDatabaseController;
@@ -20,24 +21,25 @@ public class CustomerTest {
 	CustomerDatabaseController cdc = new CustomerDatabaseController();
 	ProductDatabaseController pdc = new ProductDatabaseController();
 	ShopDatabaseController sdc = new ShopDatabaseController();
+	ActionDatabaseController adc = new ActionDatabaseController();
+	static TestDataLoader tdl;
 	static DatabaseWiper viper = new DatabaseWiper();
 	ShoppingTrip t1, t2, t3;
 	Customer c1, c2, c3;
 	Product p1, p2, p3;
 	Shop s1;
-	
-	List<Action> actions;
-	List<Coordinate> coords;
+	Action a1, a2;
 	
 	@BeforeClass
 	public static void createDatabase() {
 		viper = new DatabaseWiper();
-		//tdl = new TestDataLoader();
+		tdl = new TestDataLoader();
 		viper.wipe();
 	}
 	
 	@Before
 	public void setup() {
+		viper.wipe();
 		s1 = new Shop("Kings Road 2", 10);
 		s1 = new Shop(s1.getAddress(),s1.getZip(), sdc.create(s1));
 
@@ -51,15 +53,31 @@ public class CustomerTest {
 		c3 = new Customer(c3.getFirstName(), c3.getLastName(), cdc.create(c3));
 		
 		t1 = new ShoppingTrip(c1, s1, true);
-		t2 = new ShoppingTrip(c1, s1, true);
-		t3 = new ShoppingTrip(c2, s1, true);
+		t2 = new ShoppingTrip(c2, s1, true);
+		t3 = new ShoppingTrip(c3, s1, true);
 
-		p1 = new Product("chicken", 12);
-		p2 = new Product("beef", 32);
-		p3 = new Product("fish", 122);
+		p1 = new Product("Produt1", 1.0);
+		p1 = new Product(pdc.create(p1), p1.getName(), p1.getPrice());
+		p2 = new Product("Produt2", 2.0);
+		p2 = new Product(pdc.create(p2), p2.getName(), p2.getPrice());
+		p3 = new Product("Produt3", 3.0);
+		p3 = new Product(pdc.create(p3), p3.getName(), p3.getPrice());
 		
-		actions = new ArrayList<>();
-		coords = new ArrayList<>();
+		t1 = new ShoppingTrip(c1, s1, true);
+		t1 = new ShoppingTrip(stdc.create(t1), c1, s1, true, false);
+		List<ShoppingTrip> trips = new ArrayList<ShoppingTrip>();
+		trips.add(t1);
+		c1.setShoppingTrips(trips);		
+		cdc.update(c1);
+
+		a1 = new Action("1", 1, p1, t1);
+		adc.create(a1);
+		a1 = new Action("2", 1, p2, t1);
+		adc.create(a1);
+		a1 = new Action("3", 1, p2, t1);
+		adc.create(a1);
+		a1 = new Action("4", 1, p3, t1);
+		adc.create(a1);
 	}
 
 	/**
@@ -92,22 +110,22 @@ public class CustomerTest {
 	}
 
 	/**
-	 * Test method for {@link tdt4140.gr1864.app.core.Customer#getUserId()}.
+	 * Test method for {@link tdt4140.gr1864.app.core.Customer#getID()}.
 	 */
 	@Test
-	public void testGetUserId() {
+	public void testGetID() {
 		c1 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
-		assertEquals(c1.getUserId(), 1);
+		assertEquals(c1.getID(), 1);
 	}
 
 	/**
-	 * Test method for {@link tdt4140.gr1864.app.core.Customer#setUserId(int)}.
+	 * Test method for {@link tdt4140.gr1864.app.core.Customer#setCustomerId(int)}.
 	 */
 	@Test
-	public void testSetUserId() {
+	public void testSetID() {
 		c1 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
-		c1.setUserId(2);
-		assertEquals(c1.getUserId(), 2);
+		c1.setCustomerID(2);
+		assertEquals(c1.getID(), 2);
 	}
 
 	/**
@@ -133,9 +151,82 @@ public class CustomerTest {
 	 * Test method for {@link tdt4140.gr1864.app.core.Customer#getLastName()}.
 	 */
 	@Test
+	public void testGetAddress() {
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2, false);
+		assertEquals(c1.getAddress(), "NTNU");
+	}
+
+	/**
+	 * Test method for {@link tdt4140.gr1864.app.core.Customer#setLastName(java.lang.String)}.
+	 */
+	@Test
+	public void testSetAddress() {
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2, false);
+		c1.setAddress("UiB");
+		assertEquals(c1.getAddress(), "UiB");
+	}
+
+	@Test
+	public void testGetZip() {
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2, false);
+		assertEquals(c1.getZip(), 7047);
+	}
+
+	/**
+	 * Test method for {@link tdt4140.gr1864.app.core.Customer#setLastName(java.lang.String)}.
+	 */
+	@Test
+	public void testSetZip() {
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2, false);
+		c1.setZip(0001);
+		assertEquals(c1.getZip(), 0001);
+	}
+
+	@Test
+	public void testGetGender() {
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2, false);
+		assertEquals(c1.getGender(), "Unspecified");
+	}
+
+	/**
+	 * Test method for {@link tdt4140.gr1864.app.core.Customer#setLastName(java.lang.String)}.
+	 */
+	@Test
+	public void testSetGender() {
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2, false);
+		c1.setGender("Male");
+		assertEquals(c1.getGender(), "Male");
+	}
+
+	@Test
+	public void testGetAge() {
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2, false);
+		assertEquals(c1.getAge(), 44);
+	}
+
+	/**
+	 * Test method for {@link tdt4140.gr1864.app.core.Customer#setLastName(java.lang.String)}.
+	 */
+	@Test
+	public void testSetAge() {
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2, false);
+		c1.setAge(50);
+		assertEquals(c1.getAge(), 50);
+	}
+
+	@Test
 	public void testGetLastName() {
-		c1 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
-		assertEquals(c1.getLastName(), "Nilsen");
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2, false);
+		assertEquals(c1.getLastName(), "Len");
 	}
 
 	/**
@@ -143,55 +234,85 @@ public class CustomerTest {
 	 */
 	@Test
 	public void testSetLastName() {
-		c1 = new Customer(1, "Roger", "Nilsen", new ArrayList<ShoppingTrip>());
+		c1 = new Customer("Ben", "Len", "NTNU", 7047,
+				"Unspecified", 44, 3, true, 2, false);
 		c1.setLastName("Knudsen");
 		assertEquals(c1.getLastName(), "Knudsen");
 	}
 	
 	@Test
-	public void testGiveRecommendationWhenNotBought() {
-		/* work in progress
-		Action a1 = new Action("4352364321", 1, new Product("soup", 12));
-		Action a2 = new Action("4351642321", 2, new Product("beef", 32));
-		Action a3 = new Action("4356412321", 3, new Product("chick", 11));
-		
-		actions.add(a1);
-		actions.add(a2);
-		actions.add(a3);
-		
-		Coordinate coord1 = new Coordinate(1, 2, "232135123");
-		Coordinate coord2 = new Coordinate(2, 4, "232135234");
-		
-		coords.add(coord1);
-		coords.add(coord2);
-		
-		t1 = new ShoppingTrip(coords, actions, 1);
-		t1 = new ShoppingTrip(stdc.create(t1), c1, s1, true);
-		t1 = new ShoppingTrip(t1.getShoppingTripID(), c2, s1, true);
-		
-		stdc.update(t1);
-		t2 = stdc.retrieve(t1.getShoppingTripID());
-		
-		t3 = new ShoppingTrip(stdc.create(t3), c3, s1, true);
-		t3 = new ShoppingTrip(t3.getShoppingTripID(), c3, s1, true);
-		stdc.update(t3);
-		t3 = stdc.retrieve(t3.getShoppingTripID());
-		*/
-		/*
-		 * shopping_trip_id integer,
-		 * timestamp varchar(255),
-		 * action_type integer not null,
-		 * product_id integer not null,
-		 
-		System.out.println(stdc.retrieve(t3.getShoppingTripID()).getActions().size() + " t3's trip amount of actions");
-		
-		System.out.println(c2.giveRecommendation());
-		*/
-		//Assert.assertEquals(1, c2.getRecommendedProductID());
+	public void testGiveRecommendationBoughtExpectProductIDEqualOne() {
+		int expectedProductID = 1;
+		c1.giveRecommendation();
+		Assert.assertEquals(expectedProductID, c1.getRecommendedProductID());
 	}
 	
 	@Test
-	public void testGiveRecommendationWhenBought() {
-		//c1 = new Customer(1, "Karen", "Sommerville", trips);
+	public void testGiveRecommendationWhenNotBoughtExpectMostPopularEqualTwo() {
+		int expectedProductID = 2;
+		c2.giveRecommendation();
+		Assert.assertEquals(expectedProductID, c2.getRecommendedProductID());
+	}
+
+	@Test
+	public void testGiveRecommendationWhenCustomerAreAnonymousExpectProductIDEqualsMostPopularEqualsOne() {
+		setup();
+		int expectedProductID = 1;
+		c1.setAnonymous(true);
+		c1.giveRecommendation();
+		Assert.assertEquals(expectedProductID, c1.getRecommendedProductID());
+	}
+	
+	@Test
+	public void testGiveRecommendationWhenShoppingTripsAreAnonymousExpectProductIDEqualZero() {
+		int expectedProductID = 0;
+		t1.setAnonymous(true);
+		stdc.update(t1);
+		c2.giveRecommendation();
+		Assert.assertEquals(expectedProductID, c2.getRecommendedProductID());
+	}
+	
+	@Test
+	public void testGetStatisticsForAmountBoughtExpectSortedList() {
+		
+		List<ProductAmount> actualArray = c1.getStatisticsForAmountBought();
+		
+		List<ProductAmount> expectedArray = new ArrayList<>();
+		// index for max value = 2 (in DB), maxamount = 2
+		ProductAmount pa1 = new ProductAmount(2, pdc.retrieve(2));
+
+		// index for max value = 1 (in DB), maxamount = 1
+		ProductAmount pa2 = new ProductAmount(1, pdc.retrieve(1));
+
+		// index for max value = 3 (in DB), maxamount = 1
+		ProductAmount pa3 = new ProductAmount(1, pdc.retrieve(3));
+		
+		expectedArray.add(pa1);
+		expectedArray.add(pa2);
+		expectedArray.add(pa3);
+		
+		boolean correctList = true;
+		for (int i = 0; i < 3; i++) {
+			if (expectedArray.get(i).getAmount() != actualArray.get(i).getAmount() || 
+				expectedArray.get(i).getProduct().getID() != actualArray.get(i).getProduct().getID()) {
+				correctList = !correctList;
+			}
+		}
+		
+		Assert.assertEquals(true, correctList);
+	}
+	
+	@Test
+	public void testIsDeletedExpectFalse() {
+		Assert.assertFalse(c1.isDeleted());
+	}
+	
+	@Test
+	public void testSetDeletedExpectAllNullValues() {
+		c1.setAddress("Some Address");
+		c1.setAge(12);
+		c1.setDeleted(true);
+		Assert.assertEquals("null", c1.getAddress());
+		Assert.assertEquals(0, c1.getAge());
 	}
 }

@@ -19,6 +19,7 @@ import tdt4140.gr1864.app.core.Action;
 import tdt4140.gr1864.app.core.Coordinate;
 import tdt4140.gr1864.app.core.Customer;
 import tdt4140.gr1864.app.core.Product;
+import tdt4140.gr1864.app.core.Receipt;
 import tdt4140.gr1864.app.core.Shop;
 import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
@@ -28,6 +29,7 @@ import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShopDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
+
 
 public class TestDataLoader {
 	
@@ -58,8 +60,6 @@ public class TestDataLoader {
 		String pathToTrip = "../../../app.core/src/main/resources/test-data.json";
 		trip = this.loadShoppingTrip(pathToTrip);
 		
-		// Adds amounts of products to shelfs and storage of DB and updates DB
-		addProductsInShelfsInDB(products);
 	}
 	
 	/**
@@ -201,19 +201,20 @@ public class TestDataLoader {
 		JSONParser parser = new JSONParser();
 		
 		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
-		
+		ShopDatabaseController sdc = new ShopDatabaseController();
+
 		Shop s1 = createShop();
 		Customer c1 = createCustomer();
 		// We set the charged flag to true to prevent spamming the Stripe API.		
 		trip = new ShoppingTrip(c1, s1, true);
-		trip = new ShoppingTrip(stdc.create(trip), trip.getCustomer(), trip.getShop(), true);
+		trip = new ShoppingTrip(stdc.create(trip), trip.getCustomer(), trip.getShop(), true, false);
 		
 		try {
 			Object obj = parser.parse(new FileReader(relativePath + path));
 			JSONObject tripObject = (JSONObject) obj;
 			
 			// creating Coordinates
-			JSONArray coordsArray = (JSONArray) tripObject.get("path");
+			JSONArray coordsArray = (JSONArray) tripObject.get("coordinates");
 			coordinates = (ArrayList<Coordinate>) createCoordinates(coordsArray, trip);
 			
 			// creating Actions
@@ -236,7 +237,7 @@ public class TestDataLoader {
 	 */
 	public ShoppingTrip createShoppingTrip(ShoppingTrip trip, List<Coordinate> coordinates, List<Action> actions) {
 		// We set the Charged flag to true to prevent spamming the Stripe API with charges.
-		ShoppingTrip newTrip = new ShoppingTrip(coordinates, actions, trip.getShoppingTripID(), true);
+		ShoppingTrip newTrip = new ShoppingTrip(coordinates, actions, trip.getID(), true);
 		this.trip = newTrip;
 		return newTrip;
 	}
@@ -257,7 +258,7 @@ public class TestDataLoader {
 			JSONObject jsonCoord = (JSONObject) o;
 			x = (double) jsonCoord.get("x");
 			y = (double) jsonCoord.get("y");
-			timeStamp = Long.toString((long) jsonCoord.get("time"));
+			timeStamp = Long.toString((long) jsonCoord.get("timestamp"));
 
 			coordinate = new Coordinate(x, y, timeStamp, trip);
 			coordinates.add(coordinate);
@@ -300,21 +301,6 @@ public class TestDataLoader {
 		}
 		this.actions = actions;
 		return actions;
-	}
-	
-	/**
-	 * A function that adds products to the shelfs and storage of the shop, also updates the DB
-	 */
-	public void addProductsInShelfsInDB(List<Product> products) {
-		int amountInStorage = 90;
-		int amountOnShelfs = 20;
-		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
-		for(Product p : products) {
-			int productID = p.getID();
-			this.shop.setAmountInShelfs(productID, amountOnShelfs);
-			this.shop.setAmountInStorage(productID, amountInStorage);
-			osdc.create(this.shop, productID);
-		}
 	}
 	
 	public ShoppingTrip getTrip() {

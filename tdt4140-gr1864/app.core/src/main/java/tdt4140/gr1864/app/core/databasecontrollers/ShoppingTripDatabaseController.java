@@ -1,8 +1,5 @@
 package tdt4140.gr1864.app.core.databasecontrollers;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -10,29 +7,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
 
-public class ShoppingTripDatabaseController implements DatabaseCRUD {
+public class ShoppingTripDatabaseController extends DatabaseController implements DatabaseCRUD {
 
 	PreparedStatement statement;
-	String dbPath;
-	
-	public ShoppingTripDatabaseController() {
-		String path = "../../../app.core/src/main/resources/database.db";
-		String relativePath;
-		//Finds path by getting URL and converting to URI and then to path 
-		try {
-			URI rerelativeURI = this.getClass().getClassLoader().getResource(".").toURI();
-			relativePath = Paths.get(rerelativeURI).toFile().toString() + "/";
-			
-		} catch (URISyntaxException e1) {
-			//If fail to convert to URI use URL path instead
-			relativePath = this.getClass().getClassLoader().getResource(".").getPath();
-		} 
-		dbPath = relativePath + path;
-	}
 	
 	/**
 	 * @see tdt4140.gr1864.app.core.interfaces.DatabaseCRUD#create(java.lang.Object)
@@ -41,15 +21,16 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 	public int create(Object object) {
 		ShoppingTrip trip = this.objectIsShoppingTrip(object);
 		String sql = "INSERT INTO shopping_trip "
-					+ "(customer_id, shop_id, charged) "
-					+ "VALUES (?, ?, ?)";
+					+ "(customer_id, shop_id, charged, anonymous) "
+					+ "VALUES (?, ?, ?, ?)";
 					
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-			statement.setInt(1, trip.getCustomer().getUserId());
-			statement.setInt(2, trip.getShop().getShopID());
+			statement.setInt(1, trip.getCustomer().getID());
+			statement.setInt(2, trip.getShop().getID());
 			statement.setBoolean(3, trip.getCharged());
+			statement.setBoolean(4, trip.getAnonymous());
 			statement.executeUpdate();
 		
 			try {
@@ -77,17 +58,19 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 	 */
 	@Override
 	public void update(Object object) {
-		ShoppingTrip trip = this.objectIsShoppingTrip(object);
+		ShoppingTrip trip = this.objectIsShoppingTrip(object);		
 		String sql = "UPDATE shopping_trip "
-					+ "SET customer_id=?, shop_id=?, charged=? "
+					+ "SET customer_id=?, shop_id=?, charged=?, anonymous=? "
 					+ "WHERE shopping_trip_id=?";
 		try {
+			
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql);
-			statement.setInt(1, trip.getCustomer().getUserId());
-			statement.setInt(2, trip.getShop().getShopID());
+			statement.setInt(1, trip.getCustomer().getID());
+			statement.setInt(2, trip.getShop().getID());
 			statement.setBoolean(3, trip.getCharged());
-			statement.setInt(4, trip.getShoppingTripID());
+			statement.setBoolean(4, trip.getAnonymous());
+			statement.setInt(5, trip.getID());
 			statement.executeUpdate();
 			connection.close();
 			
@@ -95,43 +78,15 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 			e.printStackTrace();
 		}
 	}
-	
-	public List<ShoppingTrip> getTripsForCustomer(int customerID) {
-		String sql = "SELECT * "
-				   + "FROM shopping_trip "
-				   + "WHERE customer_id=?";
-		try {
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
-			statement = connection.prepareStatement(sql);
-			statement.setInt(1, customerID);
-			ResultSet rs = statement.executeQuery();
-			
-			CustomerDatabaseController cdc = new CustomerDatabaseController();
-			ShopDatabaseController sdc = new ShopDatabaseController();
-			ShoppingTrip trip;
-			List<ShoppingTrip> trips = new ArrayList<>();
-			while (rs.next()) {
-				trip = new ShoppingTrip(
-					rs.getInt("shopping_trip_id"), 
-					cdc.retrieve(rs.getInt("customer_id")),
-					sdc.retrieve(rs.getInt("shop_id")),
-					true);	
-				trips.add(trip);
-			}
-			connection.close();
-			return trips;
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
 
 	/**
 	 * @see tdt4140.gr1864.app.core.interfaces.DatabaseCRUD#retrieve(int)
 	 */
 	@Override
 	public ShoppingTrip retrieve(int id) {
+		CustomerDatabaseController cdc = new CustomerDatabaseController();
+		ShopDatabaseController sdc = new ShopDatabaseController();
+		
 		String sql = "SELECT * "
 					+ "FROM shopping_trip "
 					+ "WHERE shopping_trip_id=?";
@@ -146,13 +101,14 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 				return null;
 			}
 			
-			CustomerDatabaseController cdc = new CustomerDatabaseController();
-			ShopDatabaseController sdc = new ShopDatabaseController();
+			int tripID = rs.getInt("shopping_trip_id");
+			
 			ShoppingTrip trip = new ShoppingTrip(
-					rs.getInt("shopping_trip_id"), 
+					tripID, 
 					cdc.retrieve(rs.getInt("customer_id")),
 					sdc.retrieve(rs.getInt("shop_id")),
-					true);
+					rs.getBoolean(4),
+					rs.getBoolean("anonymous"));
 			connection.close();
 			return trip;
 
@@ -169,25 +125,32 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 	public List<ShoppingTrip> retrieveAllShoppingTrips() {
 		CustomerDatabaseController cdc = new CustomerDatabaseController();
 		ShopDatabaseController sdc = new ShopDatabaseController();
-		List<ShoppingTrip> shoppingTrips = new ArrayList<>();
+		ActionDatabaseController adc = new ActionDatabaseController();
+		ShoppingTrip trip;
+		List<ShoppingTrip> trips = new ArrayList<>();
 		
-		String sql = "SELECT * FROM shopping_trip";
+		String sql = "SELECT * FROM shopping_trip WHERE anonymous=?";
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql);
+			statement.setBoolean(1, false);
 			ResultSet rs = statement.executeQuery();
 			
 			while(rs.next()) {
-				shoppingTrips.add(new ShoppingTrip(
+				int tripID = rs.getInt(1);
+				trip = new ShoppingTrip(
 									rs.getInt(1), // ShopID
 									cdc.retrieve(rs.getInt(2)), // Customer object 
 									sdc.retrieve(rs.getInt(3)), // Shop object
-									rs.getBoolean(4)) // charged boolean
+									rs.getBoolean(4), // charged boolean
+									rs.getBoolean(5) // anonymous flag
 								);
+				trip.setActions(adc.retrieveAll(tripID));
+				trips.add(trip);
 			}
 			
 			connection.close();
-			return shoppingTrips;
+			return trips;
 			
 		
 		} catch (SQLException e) {
@@ -198,40 +161,51 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 	
 	/**
 	 * Retrieves and creates a list of shopping trip objects from the database
-	 * for the customer with ID = customerID
+	 * for the customer with ID = customerID and are not anonymized.
 	 * @param customerID The ID of the customer for the shopping trips
 	 * @return A list of ShoppingTrip objects corresponding to database instances
 	 */
 	public List<ShoppingTrip> retrieveAllShoppingTripsForCustomer(int customerID) {
 		CustomerDatabaseController cdc = new CustomerDatabaseController();
 		ShopDatabaseController sdc = new ShopDatabaseController();
-		List<ShoppingTrip> shoppingTrips = new ArrayList<>();
+		ActionDatabaseController adc = new ActionDatabaseController();
+		CoordinateDatabaseController corddc = new CoordinateDatabaseController();
+		ShoppingTrip trip;
+		List<ShoppingTrip> trips = new ArrayList<>();
 		
-		String sql = "SELECT * FROM shopping_trip WHERE customer_id=?";
+		String sql = "SELECT * "
+				   + "FROM shopping_trip "
+				   + "WHERE customer_id=? AND anonymous=?";
+		
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, customerID);
+			statement.setBoolean(2, false);
 			ResultSet rs = statement.executeQuery();
 			
-			while(rs.next()) {
-				shoppingTrips.add(new ShoppingTrip(
-									rs.getInt(1), // ShopID
-									cdc.retrieve(rs.getInt(2)), // Customer object 
-									sdc.retrieve(rs.getInt(3)), // Shop object
-									rs.getBoolean(4)) // charged boolean
-								);
+			while (rs.next()) {
+				int tripID = rs.getInt("shopping_trip_id");
+				trip = new ShoppingTrip(
+						rs.getInt(1), // ShopID
+						cdc.retrieve(rs.getInt(2)), // Customer object 
+						sdc.retrieve(rs.getInt(3)), // Shop object
+						rs.getBoolean(4), // charged boolean
+						rs.getBoolean(5) // anonymous flag
+					);	
+				trip.setActions(adc.retrieveAll(tripID));
+				trip.setCoordinates(corddc.retrieveAll(tripID));
+				trips.add(trip);
 			}
+			connection.close();
+			return trips;
 			
-			connection.close();	
-			return shoppingTrips;
-			
-		
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
+
 	/**
 	 * @see tdt4140.gr1864.app.core.interfaces.DatabaseCRUD#delete(int)
 	 */
@@ -257,11 +231,11 @@ public class ShoppingTripDatabaseController implements DatabaseCRUD {
 	 * @return shoppingTrip
 	 */
 	public ShoppingTrip objectIsShoppingTrip(Object object) {
-		ShoppingTrip trip = (ShoppingTrip) object;
-		if (!(object instanceof ShoppingTrip)) {
-			throw new IllegalArgumentException("Object is not instance of ShoppingTrip");
-		} else {
-			return trip;
+		try {
+			ShoppingTrip s = (ShoppingTrip) object;
+			return s;
+		} catch (ClassCastException e) {
+			throw new IllegalArgumentException("Object is not ShoppingTrip");
 		}
 	}
 }

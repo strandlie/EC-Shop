@@ -50,7 +50,7 @@ public class OnShelfDatabaseControllerTest {
 
 		Assert.assertEquals(shop.getAmountInShelfs(product.getID()), retrievedShop.getAmountInShelfs(product.getID()));
 		Assert.assertEquals(shop.getAmountInStorage(product.getID()), retrievedShop.getAmountInStorage(product.getID()));
-		Assert.assertEquals(shop.getShopID(), retrievedShop.getShopID());
+		Assert.assertEquals(shop.getID(), retrievedShop.getID());
 	}
 	
 	@Test
@@ -63,12 +63,12 @@ public class OnShelfDatabaseControllerTest {
 		
 		Assert.assertEquals(shop2.getAmountInShelfs(product2.getID()), retrievedShop.getAmountInShelfs(product2.getID()));
 		Assert.assertEquals(shop2.getAmountInStorage(product2.getID()), retrievedShop.getAmountInStorage(product2.getID()));
-		Assert.assertEquals(shop2.getShopID(), retrievedShop.getShopID());
+		Assert.assertEquals(shop2.getID(), retrievedShop.getID());
 	}
 	
 	@Test
 	public void testDeleteExcpectNull() {
-		osdc.delete(shop.getShopID(), product.getID());
+		osdc.delete(shop.getID(), product.getID());
 		Shop retrievedShop = osdc.retrieve(shop, product.getID());
 		Assert.assertEquals(null, retrievedShop);
 	}

@@ -7,20 +7,52 @@
    version="3.1">
 
   <servlet>
-    <servlet-name>DataFetcher</servlet-name>
+    <servlet-name>ShoppingTripServlet</servlet-name>
     <servlet-class>org.web.server.ShoppingTripServlet</servlet-class>
   </servlet>
-    <servlet>
-    <servlet-name>UserFetcher</servlet-name>
-    <servlet-class>org.web.server.UserServlet</servlet-class>
+
+  <servlet>
+    <servlet-name>CustomerServlet</servlet-name>
+    <servlet-class>org.web.server.CustomerServlet</servlet-class>
   </servlet>
+
+  <servlet>
+    <servlet-name>ReceiptFetcher</servlet-name>
+    <servlet-class>org.web.server.ReceiptServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>StatisticsServlet</servlet-name>
+    <servlet-class>org.web.server.StatisticsServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>RecommendationFetcher</servlet-name>
+    <servlet-class>org.web.server.RecommendationServlet</servlet-class>
+  </servlet>
+  
   <servlet-mapping>
-    <servlet-name>DataFetcher</servlet-name>
-    <url-pattern>/api/*</url-pattern>
+    <servlet-name>ShoppingTripServlet</servlet-name>
+    <url-pattern>/api/v1/shoppingtrip/</url-pattern>
   </servlet-mapping>
+  
   <servlet-mapping>
-    <servlet-name>UserFetcher</servlet-name>
-    <url-pattern>/api/v1/user</url-pattern>
+    <servlet-name>CustomerServlet</servlet-name>
+    <url-pattern>/api/v1/customer/</url-pattern>
   </servlet-mapping>
 
+  <servlet-mapping>
+    <servlet-name>ReceiptFetcher</servlet-name>
+    <url-pattern>/api/v1/customer/receipt/</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>RecommendationFetcher</servlet-name>
+    <url-pattern>/api/v1/customer/recommendation/</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>StatisticsServlet</servlet-name>
+    <url-pattern>/api/v1/customer/statistics/</url-pattern>
+  </servlet-mapping>
 </web-app>

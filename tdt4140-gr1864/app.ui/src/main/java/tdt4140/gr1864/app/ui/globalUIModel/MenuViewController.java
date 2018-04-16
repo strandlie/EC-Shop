@@ -71,6 +71,10 @@ public class MenuViewController  {
 		);
 	}
 	
+	public void updateTopMenuItem(String newValue) {
+		this.items.set(0, newValue);
+	}
+	
 	/**
 	 * Used to add another item to the menu. Just a String. Should match the name of a mode, or else the modeController will throw an error when the item is selected
 	 * Is called by the ModeController when a new mode is created. 

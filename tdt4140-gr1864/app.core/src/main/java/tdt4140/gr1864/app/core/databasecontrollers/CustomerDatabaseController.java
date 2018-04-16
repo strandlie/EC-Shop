@@ -1,8 +1,5 @@
 package tdt4140.gr1864.app.core.databasecontrollers;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -11,29 +8,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import tdt4140.gr1864.app.core.Coordinate;
 import tdt4140.gr1864.app.core.Customer;
-import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.interfaces.DatabaseCRUD;
 
-public class CustomerDatabaseController implements DatabaseCRUD {
+public class CustomerDatabaseController extends DatabaseController implements DatabaseCRUD {
 
 	PreparedStatement statement;
-	String dbPath;
-	
-	public CustomerDatabaseController() {
-		String path = "../../../app.core/src/main/resources/database.db";
-		String relativePath;
-		//Finds path by getting URL and converting to URI and then to path 
-		try {
-			URI rerelativeURI = this.getClass().getClassLoader().getResource(".").toURI();
-			relativePath = Paths.get(rerelativeURI).toFile().toString() + "/";
-			
-		} catch (URISyntaxException e1) {
-			//If fail to convert to URI use URL path instead
-			relativePath = this.getClass().getClassLoader().getResource(".").getPath();
-		} 
-		dbPath = relativePath + path;
-	}
 	
 	/**
 	 * @see tdt4140.gr1864.app.core.interfaces.DatabaseCRUD#create(java.lang.Object)
@@ -41,15 +22,20 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 	@Override
     public int create(Object object) {
     	Customer customer = objectIsCustomer(object);
-		String sql = "INSERT INTO customer (first_name, last_name, address, zip) "
-					+ "values (?, ?, ?, ?)";
+		String sql = "INSERT INTO customer (first_name, last_name, address, zip, gender, age, num_persons_in_household, anonymous, deleted) "
+					+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 			statement.setString(1, customer.getFirstName());
 			statement.setString(2, customer.getLastName());
 			statement.setString(3, customer.getAddress());
-			statement.setInt(4, customer.getUserId());
+			statement.setInt(4, customer.getZip());
+			statement.setString(5, customer.getGender());
+			statement.setInt(6, customer.getAge());
+			statement.setInt(7, customer.getNumberOfPersonsInHousehold());
+			statement.setBoolean(8, customer.getAnonymous());
+			statement.setBoolean(9, customer.isDeleted());
 			statement.executeUpdate();
 				
 			try {
@@ -76,13 +62,14 @@ public class CustomerDatabaseController implements DatabaseCRUD {
      * @see tdt4140.gr1864.app.core.interfaces.DatabaseCRUD#retrieve(int)
      */
     @Override
-    public Customer retrieve(int userId) {
+    public Customer retrieve(int customerID) {
 		String sql = "SELECT * "
 					+ "FROM customer "
-					+ "WHERE customer_id = " + userId;
+					+ "WHERE customer_id=?";
         try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
             statement = connection.prepareStatement(sql);
+            statement.setInt(1, customerID);
             ResultSet rs = statement.executeQuery();
 
             // Returned nothing
@@ -94,9 +81,15 @@ public class CustomerDatabaseController implements DatabaseCRUD {
             Customer user = new Customer(
             		rs.getString("first_name"), 
             		rs.getString("last_name"), 
-            		rs.getInt("customer_id"),
             		rs.getString("address"),
-            		rs.getInt("zip"));
+            		rs.getInt("zip"),
+					rs.getString("gender"),
+					rs.getInt("age"),
+					rs.getInt("num_persons_in_household"),
+            		rs.getBoolean("anonymous"),
+					rs.getInt("customer_id"),
+					rs.getBoolean("deleted")
+            		);
             statement.close();
             return user;
       
@@ -119,14 +112,18 @@ public class CustomerDatabaseController implements DatabaseCRUD {
     		ResultSet rs = statement.executeQuery();
 
     		List<Customer> customers = new ArrayList<>();
-    		Customer customer;
     		while (rs.next()) {
-    			customer = new Customer(
-					rs.getString("first_name"), 
-					rs.getString("last_name"), 
-					rs.getInt("customer_id"),
-					rs.getString("address"),
-					rs.getInt("zip"));
+				Customer customer = new Customer(
+						rs.getString("first_name"),
+						rs.getString("last_name"),
+						rs.getString("address"),
+						rs.getInt("zip"),
+						rs.getString("gender"),
+						rs.getInt("age"),
+						rs.getInt("num_persons_in_household"),
+						rs.getBoolean("anonymous"),
+						rs.getInt("customer_id"),
+						rs.getBoolean("deleted"));
     			customers.add(customer);
     		}
     		connection.close();
@@ -145,7 +142,10 @@ public class CustomerDatabaseController implements DatabaseCRUD {
     public void update(Object object) {
     	Customer customer = objectIsCustomer(object);
     	String sql = "UPDATE customer "
-    				+ "SET first_name=?, last_name=?, address=?, zip=? "
+    				+ "SET first_name=?, last_name=?, "
+    				+ "address=?, zip=?, gender=?, "
+    				+ "age=?, num_persons_in_household=?, "
+    				+ "anonymous=?, deleted=? "
     				+ "WHERE customer_id=?";
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
@@ -154,7 +154,12 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 			statement.setString(2, customer.getLastName());
 			statement.setString(3, customer.getAddress());
 			statement.setInt(4, customer.getZip());
-			statement.setInt(5, customer.getUserId());
+			statement.setString(5, customer.getGender());
+			statement.setInt(6, customer.getAge());
+			statement.setInt(7, customer.getNumberOfPersonsInHousehold());
+			statement.setBoolean(8, customer.getAnonymous());
+			statement.setBoolean(9, customer.isDeleted());
+			statement.setInt(10, customer.getID());
 			statement.executeUpdate();
 			connection.close();
 		} 
@@ -165,25 +170,15 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 
 	}
 
-
-    
     /**
-     * @see tdt4140.gr1864.app.core.interfaces.DatabaseCRUD#delete(int)
+     * Deletes all values from a Customer
+     * @param customerID	ID of Customer to "delete"
      */
     @Override
-    public void delete(int customerId) {
-    	String sql = "DELETE FROM customer "
-    				+ "WHERE customer_id=?";
-        try {
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
-            statement = connection.prepareStatement(sql);
-            statement.setInt(1, customerId);
-            statement.executeUpdate();
-            connection.close();
-        } 
-        catch (SQLException e) {
-        	e.printStackTrace();
-        }
+    public void delete(int customerID) {
+    	Customer customer = this.retrieve(customerID);
+    	customer.setDeleted(true);
+    	this.update(customer);
     }
     
     /**
@@ -192,11 +187,11 @@ public class CustomerDatabaseController implements DatabaseCRUD {
 	 * @return The customer object if the object is an instance of customer
 	 */
 	public Customer objectIsCustomer(Object object) {
-		Customer customer = (Customer) object;
-		if (!(object instanceof Customer)) {
-			throw new IllegalArgumentException("Object is not instance of Customer");
-		} else {
-			return customer;
+		try {
+			Customer c = (Customer) object;
+			return c;
+		} catch (ClassCastException e) {
+			throw new IllegalArgumentException("Object is not Customer");
 		}
 	}
 	

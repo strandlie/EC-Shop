@@ -33,9 +33,7 @@ public class VisualizationTableTest {
 		try {
 			this.table.addColumn("notValidName");
 		}
-		catch (Exception e) {
-			System.out.println("Not valid");
-		}
+		catch (Exception e) {}
 		
 		Assert.assertFalse(this.table.hasColumn("Not valid"));
 	}
@@ -50,11 +48,9 @@ public class VisualizationTableTest {
 	@Test
 	public void canAddData() {
 		Assert.assertTrue(this.table.getData().size() == 0);
-		Row agg = new Row("Bolle", "1");
+		InStockTableRow agg = new InStockTableRow("Bolle", "1");
 		
 		this.table.addData(agg);
 		Assert.assertEquals(agg, this.table.getData().get(0));
 	}
-	
-
 }

@@ -6,7 +6,9 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -22,12 +24,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
-
 public class DataMocker implements Runnable {
 	/**
 	 * The API URL test data will be sent to.
 	 */
-	private static String API_URL = "http://localhost:8080/api";
+	private static String API_URL = "http://localhost:8080/api/v1/shoppingtrip/";
 	
 	/**
 	 * A Rectangle containing the start and end of all paths. Typically the cashier desks.
@@ -172,7 +173,24 @@ public class DataMocker implements Runnable {
 			
 			previous = target;
 			
-			actions.add(generateAction(inventory, time, box));
+			// Choose a random product.
+			Product product = box.getRandomItem();
+
+			int action = ThreadLocalRandom.current().nextInt(Action.DROP, Action.PICK_UP + 1);
+
+			boolean validAction = false;
+
+			if (action == Action.PICK_UP && product.canPickUp()) {
+				inventory.add(product);
+				validAction = true;
+			} else if (action == Action.DROP && inventory.contains(product)) {
+				inventory.remove(product);
+				validAction = true;
+			}
+
+			if (validAction) {
+				actions.add(new Action(product, time, action));
+			}
 		}
 		
 		Coordinate goal = generateRandomCoordinateInsideRectangle(home);
@@ -190,28 +208,6 @@ public class DataMocker implements Runnable {
 	 */
 	public Trip generateRandomPath() {
 		return generateRandomPath(5, 2, 15);
-	}
-	
-	/**
-	 * Generates an action at time where a product from the box is either picked up or
-	 * dropped. The product cannot be dropped if it has never been picked up.
-	 * @param time Date object for when the action happened
-	 * @param box A Rectangle object where a random product is picked from
-	 * @return Returns an action object with the product and time for whether the product was picked up or dropped.
-	 */
-	private Action generateAction(Inventory inventory, Date time, Rack box) {
-		// Choose a random product.
-		Product product = box.getRandomItem();
-		
-		int action = ThreadLocalRandom.current().nextInt(Action.DROP, Action.PICK_UP + 1);
-		
-		if (product.canPickUp() && inventory.contains(product) && action == 0 || inventory.contains(product) && action == 0) {			
-			inventory.remove(product);
-		} else if (product.canPickUp() && inventory.contains(product) && action == 1 || product.canPickUp() && action == 1) {
-			inventory.add(product);
-		}
-	
-		return new Action(product, time, action);
 	}
 	
 	/**
@@ -249,13 +245,12 @@ public class DataMocker implements Runnable {
 		String json = ow.writeValueAsString(trip);
 		
 		DefaultHttpClient httpclient = new DefaultHttpClient();
-		HttpPost httpPost = new HttpPost(API_URL);
+		HttpPost httpPost = new HttpPost(API_URL + "?customer-id=" + trip.getCustomerID());
 		httpPost.addHeader("content-type", "application/json");
 		httpPost.setEntity(new StringEntity(json));
 		HttpResponse response2 = httpclient.execute(httpPost);
 
 		try {
-		    //System.out.println(response2.getStatusLine());
 		    HttpEntity entity2 = response2.getEntity();
 		    EntityUtils.consume(entity2);
 		} catch (Exception e) {
@@ -279,11 +274,14 @@ public class DataMocker implements Runnable {
 			heap.add(new ThreadAction((int) (currentTime + Math.log(1 - ThreadLocalRandom.current().nextDouble()) / -0.0001)));
 			
 			ThreadAction action = heap.poll();
-			
+						
 			try {
-				Thread.sleep(action.getTime() - currentTime);
+				// Always wait 10 seconds - it's not as realistic, but better for demonstrating, which is
+				// what the datamocker is supposed to do, anyway.
+				Thread.sleep(10000);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				// We simply exit early if the sleeping is interrupted.
+				break;
 			}
 			
 			currentTime = action.getTime();
@@ -291,7 +289,6 @@ public class DataMocker implements Runnable {
 			if (action.getAction() == 0) {
 				Trip trip = generateRandomPath();
 				heap.add(new ThreadAction(currentTime + trip.getDuration(), trip));
-				// TODO: Send data to customer entering shop endpoint
 			} else {				
 				try {
 					sendShoppingTripData(action.getTrip());

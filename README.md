@@ -4,6 +4,8 @@ Shop :apple: :bacon: :hamburger: :stuffed_flatbread:</h1>
 <img src="https://gitlab.stud.iie.ntnu.no/tdt4140-2018/64/badges/master/build.svg">
 <img src="https://gitlab.stud.iie.ntnu.no/tdt4140-2018/64/badges/master/coverage.svg">
 
+This is a school project developed associated with the subject TDT4140 at NTNU.
+
 E.C. Shop is a system for tracking customers in a store, similarly to systems
 such as Amazon's Amazon Go. The system tracks customer inventories as they move
 through the store, and automatically charges their credit cards upon leaving
@@ -67,22 +69,14 @@ mvn clean install
 ```
 
 You should see the test suite running. If all tests pass, the project is fully
-functional. Once this is done, you can start the web server. The web server
-runs in the background and provides a simple REST API for interfacing with the
-application.
-
-```bash
-cd tdt4140-gr1864/web.server
-mvn jetty:start
-```
-
-Lastly, you should start the shop owner user interface, which is where the
-majority of the functionality is actually visualized. To start the user
-interface, open Eclipse, right click the file
-`app.ui/src/main/java/tdt4140.gr1864.app.ui`, and select `Run As > Java
-Application`. This should start the shop owner user interface.
+functional. Once this is done, you can start the application. The
+module `app` is responsible for starting the application. Open
+the `app` package and run the `app` class directly. This will start
+the web server and the owner application. To cleanly close the entire
+application, simply close the owner application user interface.
 
 ## System architecture
+
 The project is split into two main parts, `app.core` and `app.ui`. The
 `app.core` package contains all the business logic such as computing receipts
 and all the database handling/persistence, while `app.ui` contains the JavaFX
@@ -98,4 +92,17 @@ parts of the system.
 
 The `web.server` module uses its own instance of `app.core` to pass and receive
 data from customers. An external customer application could interact with the
-relevant data through this REST API.
+relevant data through this REST API. Documentation is found [here.](https://gitlab.stud.iie.ntnu.no/tdt4140-2018/64/blob/sprint-3/tdt4140-gr1864/web.server/README.md)
+
+The `app` module is responsible for starting and stopping the system cleanly.
+
+## List of tools we've used
+* Jetty - a http server and servlet engine used as webserver
+* Java servlet - a java program for web server
+* GitLab - the core program for this project with it's version control using Git.
+* Apache Maven - Dependency manager that describes how the programs are built and their dependencies and is used for automatically project building.
+* PostMan - API development environment to send http requests
+* Insomnia - Rest API client with cookie management, environment variables and code generation and authentication.
+* Eclipse - An open source IDE that is primarly used to develop in this project
+* JavaFX - A set of graphics and media packages.
+* JDBC - Short for Java Database Connectivity and is a standardized interface for java applications that communicates with a database. 

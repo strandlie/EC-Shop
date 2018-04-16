@@ -15,7 +15,7 @@ public class Trip {
 	/**
 	 * The Path of the person this trip is describing.
 	 */
-	private List<Position> path;
+	private List<Position> coordinates;
 	
 	/**
 	 * Actions performed by the simulated user.
@@ -25,11 +25,11 @@ public class Trip {
 	/**
 	 * Data simulating user movements and actions through a shop.
 	 * CustomerID (0-10) will be generated and will be set to "user" of this trip
-	 * @param path The Path of the user.
+	 * @param coordinates The Path of the user.
 	 * @param actions The actions executed along the way.
 	 */
-	public Trip(List<Position> path, List<Action> actions) {
-		this.path = path;
+	public Trip(List<Position> coordinates, List<Action> actions) {
+		this.coordinates = coordinates;
 		this.actions = actions;
 		this.customerID = ThreadLocalRandom.current().nextInt(1, 11);
 	}
@@ -37,8 +37,8 @@ public class Trip {
 	/**
 	 * @return The Path of the simulated person.
 	 */
-	public List<Position> getPath() {
-		return path;
+	public List<Position> getCoordinates() {
+		return coordinates;
 	}
 	
 	/**
@@ -49,7 +49,7 @@ public class Trip {
 	}
 	
 	public long getDuration() {
-		return path.get(path.size() - 1).getTime().getTime() - path.get(0).getTime().getTime();
+		return coordinates.get(coordinates.size() - 1).getTimestamp().getTime() - coordinates.get(0).getTimestamp().getTime();
 	}
 	
 	/**

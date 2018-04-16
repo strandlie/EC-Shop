@@ -1,65 +1,141 @@
 package tdt4140.gr1864.app.core;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Observable;
+import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import tdt4140.gr1864.app.core.databasecontrollers.ActionDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.CustomerDatabaseController;
+import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
 import tdt4140.gr1864.app.core.databasecontrollers.ShoppingTripDatabaseController;
+import tdt4140.gr1864.app.core.interfaces.Model;
 import tdt4140.gr1864.app.core.interfaces.UserInterface;
 
-public class Customer extends Observable implements UserInterface {
+@JsonAutoDetect
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Customer extends Observable implements Model, UserInterface {
 
-	private int customerId;
+	// Controller for handling database request for customer
+	CustomerDatabaseController cdc = new CustomerDatabaseController();
+	
+	// Controller for handling database requests shopping trip
+	ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
+	
+	// Controller for retrieving actions from database
+	ActionDatabaseController adc = new ActionDatabaseController();
+	
+	@JsonProperty("customerID")
+	private int customerID;
 
+	@JsonProperty
 	private String firstName;
+	@JsonProperty	
 	private String lastName;
+
 	/* has a default value for Customers without demographic data */
+	@JsonProperty
 	private String address = null;
+
+	@JsonProperty
 	private int zip = 0;
 
+	// Extra data, is optional
+	private String gender = null; //Have to consider more than just male and female
+	private int age = 0;
+	private int numberOfPersonsInHousehold = 1; //default with 1 person in household
+
 	private List<ShoppingTrip> shoppingTrips;
+	
+	@JsonProperty
 	private int recommendedProductID = -1;
-	private boolean hasUpdated;
+	private boolean anonymous = false;
+	private boolean deleted = false;
+	
 	
 	/**
-	 * @param customerId		id provided by database
+	 * @param customerID		id provided by database
 	 * @param firstName			name of customer
 	 * @param lastName			name of customer
 	 * @param shoppingTrips 	trips of customer
 	 */
-	public Customer(int customerId, String firstName, String lastName, 
+	public Customer(int customerID, String firstName, String lastName, 
 			List<ShoppingTrip> shoppingTrips) {
-		this.customerId = customerId;
+		this.customerID = customerID;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.shoppingTrips = shoppingTrips;
-		this.hasUpdated = false;
 	}
 	
+	/* Used by Jackson */
+	public Customer() {}
+	
 	/**
-	 * Constructor used by CustomerDatabaseController when there is an address
-	 * @param customerId		id provided by database
-	 * @param firstName			name of customer
-	 * @param lastName			name of customer
+	 * Constructor used when user have added additional information. Checks for each field being not null
+	 * Thsi is for not having exponentially many constructors
+	 * @param firstName
+	 * @param lastName
+	 * @param address
+	 * @param zip
+	 * @param gender
+	 * @param age
+	 * @param numberOfPersonsInHousehold
 	 */
-	public Customer(String firstName, String lastName, int customerId,
-			 String address, int zip) {
-		this.customerId = customerId;
+	public Customer(String firstName, String lastName, String address, int zip, String gender,
+					int age, int numberOfPersonsInHousehold, boolean anonymous) {
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.address = address;
-		this.zip = zip;
+
+		// Input validation
+		if (address != null)
+			this.address = address;
+		if (zip != 0)
+            this.zip = zip;
+		if (gender != null)
+            this.gender = gender;
+		if (age != 0)
+            this.age = age;
+		if (numberOfPersonsInHousehold != 0)
+            this.numberOfPersonsInHousehold = numberOfPersonsInHousehold;
+
+		this.anonymous = anonymous;
+	}
+
+	/**
+	 * Constructor used when user have added additional information. Checks for each field being not null
+	 * This is for not having exponentially many constructors.
+	 * Also includes customerid from database
+	 * @param firstName
+	 * @param lastName
+	 * @param address
+	 * @param zip
+	 * @param gender
+	 * @param age
+	 * @param numberOfPersonsInHousehold
+	 * @param customerID CustomerId provided from database
+	 */
+	public Customer(String firstName, String lastName, String address, int zip, String gender,
+					int age, int numberOfPersonsInHousehold, boolean anonymous, int customerID, boolean deleted) {
+
+		this(firstName, lastName, address, zip, gender, age, numberOfPersonsInHousehold, anonymous);
+		setCustomerID(customerID);
+		this.deleted = deleted;
 	}
 
 	/**
 	 * @param firstName			name of customer
 	 * @param lastName			name of customer
-	 * @param customerId		id provided by database
+	 * @param customerID		id provided by database
 	 */
-	public Customer(String firstName, String lastName, int customerId) { 
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.customerId = customerId;
+	public Customer(String firstName, String lastName, int customerID) { 
+		this(firstName, lastName);
+		setCustomerID(customerID);
 	}
 	
 	/**
@@ -71,12 +147,17 @@ public class Customer extends Observable implements UserInterface {
 		this.lastName = lastName;
 	}
 
-	public int getUserId() {
-		return customerId;
+	@JsonIgnore
+	public int getID() {
+		return customerID;
+	}
+	
+	public int getCustomerID() {
+		return customerID;
 	}
 
-	public void setUserId(int userId) {
-		this.customerId = userId;
+	public void setCustomerID(int customerID) {
+		this.customerID = customerID;
 	}
 
 	public String getFirstName() {
@@ -107,6 +188,120 @@ public class Customer extends Observable implements UserInterface {
 		return this.recommendedProductID;
 	}
 	
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public int getNumberOfPersonsInHousehold() {
+		return numberOfPersonsInHousehold;
+	}
+
+	public void setNumberOfPersonsInHousehold(int numberOfPersonsInHousehold) {
+		this.numberOfPersonsInHousehold = numberOfPersonsInHousehold;
+	}
+	
+	public boolean getAnonymous() {
+		return this.anonymous;
+	}
+
+	public void setAnonymous(boolean anonymous) {
+		this.anonymous = anonymous;
+	}
+	
+	public int getZip() {
+		return zip;
+	}
+	
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	/**
+	 * Sets deleted field, and wipes all other fields if true
+	 * @param deleted
+	 */
+	public void setDeleted(boolean deleted) {
+		if (deleted) {
+			// delete all values
+			this.setAddress("null");
+			this.setAge(0);
+			this.setAnonymous(true);
+			this.setFirstName("null");
+			this.setLastName("null");
+			this.setGender("null");
+			this.setNumberOfPersonsInHousehold(0);
+			this.setZip(0);
+		}
+		this.deleted = deleted;
+	}
+
+	/**
+	 * Sets new zip code and notifies observer
+	 * @param zip new zip code
+	 */
+	public void setZip(int zip) {
+        setChanged();
+		notifyObservers();
+		clearChanged();
+		this.zip = zip;
+	}
+	
+	public String getAddress() {
+		return address;
+	}
+
+	/**
+	 * Sets new address and notifies observer
+	 * @param address new address
+	 */
+	public void setAddress(String address) {
+		setChanged();
+		notifyObservers();
+		clearChanged();
+		this.address = address;
+	}
+	
+	/**
+	 * Creates a relation between product objects and amount based on amount of bought for customer
+	 * and a sorted list sorted based on amount bought.
+	 * @return A sorted list (desc) consisting of relations between product and amount bought
+	 */
+	@JsonIgnore
+	public List<ProductAmount> getStatisticsForAmountBought() {
+		ProductDatabaseController pdc = new ProductDatabaseController();
+		int amountOfProducts = 64;
+		
+		// Get the amount of bought products for this customer
+		int[] temp = getBoughtProductList();
+
+		// the list for storing the sorted products
+		List<ProductAmount> sortedList = new ArrayList<>();
+		
+		for (int i = 0; i < amountOfProducts; i++) {
+			// temp[i] is the amount, i+1 is the index of product in database (0-index vs. 1-index)
+			ProductAmount pa = new ProductAmount(temp[i], pdc.retrieve(i+1));
+			sortedList.add(pa);
+		}
+		
+		// Sorts the ProductAmount Desc based on the amount
+		sortedList.sort((a1, a2) -> a2.getAmount().compareTo(a1.getAmount()));
+		
+		return sortedList;
+		
+	}
+	
 	/**
 	 *  The recommendation is based on shopping trips stored in the database and 
 	 *  gives the recommendation based on to occasions:
@@ -118,21 +313,16 @@ public class Customer extends Observable implements UserInterface {
 	 *      for all customers and the total amount of bought products for this customer.
 	 *      Also, this difference is only relevant for when the total average is larger than 
 	 *      the customers total amount of bought products
-	 * @return productID	The ID of the product that is recommended to the customer
+	 * 
+	 * Sets the ID of the product that is recommended to the customer
 	 */
 	
-	public int giveRecommendation() {
-		// Controller for handling database request for customer
-		CustomerDatabaseController cdc = new CustomerDatabaseController();
-		
-		// Controller for handling database requests shopping trip
-		ShoppingTripDatabaseController stdc = new ShoppingTripDatabaseController();
-		
+	public void giveRecommendation() {
 		// List of all shopping trips for all customers
 		List<ShoppingTrip> allTrips = stdc.retrieveAllShoppingTrips();
-		
+
 		// List of all shopping trips for this customer	
-		List<ShoppingTrip> customerTrips = stdc.retrieveAllShoppingTripsForCustomer(this.customerId);
+		List<ShoppingTrip> customerTrips = stdc.retrieveAllShoppingTripsForCustomer(this.customerID);
 		
 		// Amount of customers (registered)
 		int countCustomers = cdc.countCustomers();
@@ -146,16 +336,29 @@ public class Customer extends Observable implements UserInterface {
 		int[] productsBoughtInTotal = new int[amountOfProducts];
 		
 		// Updating the productsBoughtInTotal based on all shopping trips
-		System.out.println("alltrips size in recommendation " + allTrips.size());
-		if (allTrips.size() == 0) return -1;
-		
+		if (allTrips.size() == 0) {
+			this.recommendedProductID = 0;
+			return;
+		}
+
 		for (ShoppingTrip st : allTrips) {
-			for (Action action : st.getActions()) {
-				/* 
-				 * Adds to total bought products (by 1) by converting the 1-indexed
-				 * productID to be 0-indexed (int[]-index != dbTable-index)
-				 */
-				productsBoughtInTotal[action.getProduct().getID()-1]++;
+			
+			List<Action> currentActions = st.getActions();
+			
+			// Checks for empty action lists
+			if (currentActions != null && currentActions.size() > 0) {
+				for (Action action : currentActions) {
+					/* 
+					 * Adds to the amount of bought products in total (by 1) by converting the 1-indexed
+					 * productID to be 0-indexed (int[]'s index == dbTable's index - 1)
+					 */
+					if (action.getActionType() == Action.DROP) {
+						productsBoughtInTotal[action.getProduct().getID()-1]--;
+						
+					} else if (action.getActionType() == Action.PICK_UP) {
+						productsBoughtInTotal[action.getProduct().getID()-1]++;
+					}
+				}
 			}
 		}
 		
@@ -164,17 +367,8 @@ public class Customer extends Observable implements UserInterface {
 		 * will be set to the most popular one among all customers' shopping trips
 		 */
 		if (customerTrips.size() == 0) {
-			int mostAmount = 0;
-			int productID = 0;
-			
-			for (int i = 0; i < amountOfProducts; i++) {
-				if (mostAmount < productsBoughtInTotal[i]) {
-					mostAmount = productsBoughtInTotal[i];
-					productID = i;
-				}
-			}
-			
-			return productID;
+			setMostPopularProductAsRecommended(amountOfProducts, productsBoughtInTotal);
+			return;
 		}
 		
 		/**
@@ -182,21 +376,8 @@ public class Customer extends Observable implements UserInterface {
 		 * customerProducts[0] gives amount of products with productID = 1 (1-indexed in db) 
 		 * that this customer bought in total
 		 */
-		int[] customerBoughtProductsInTotal= new int[amountOfProducts];
+		int[] customerBoughtProductsInTotal= getBoughtProductList();
 		
-		/* 
-		 * Updating the customerBoughtProductsInTotal based on all 
-		 * shopping trips for this customer
-		 */
-		for (ShoppingTrip st : customerTrips) {
-			for (Action action : st.getActions()) {
-				/* 
-				 * Adds to total bought products (by 1) for customer by converting the 1-indexed
-				 * productID to be 0-indexed (int[]-index != dbTable-index)
-				 */
-				customerBoughtProductsInTotal[action.getProduct().getID()-1]++;
-			}
-		}
 		
 		// Average bought products for all customers based on productsBoughtInTotal / customerAmount
 		double[] avgAmountOfProdBoughtByAll = new double[amountOfProducts];
@@ -273,75 +454,91 @@ public class Customer extends Observable implements UserInterface {
 		
 		/* 
 		 * Converts back from 0-indexing to 1-indexing
-		 * Adding '++' before the variable increments the productID by 1 before returning.
+		 * Adding '++' before the variable increments the productID by 1 before setting recommended product.
 		 */
-		return ++productID;
+		this.recommendedProductID = ++productID;
 	}
 	
-	public int getZip() {
-		return zip;
-	}
-
 	/**
-	 * Sets new zip code and notifies observer
-	 * @param zip new zip code
+	 * A private method only used by giveRecommendation() 
+	 * @param amountOfProducts
+	 * @param productsBoughtInTotal
 	 */
-	public void setZip(int zip) {
-        setChanged();
-		notifyObservers();
-		clearChanged();
-		this.zip = zip;
+	private void setMostPopularProductAsRecommended(int amountOfProducts, int[] productsBoughtInTotal) {
+		int mostAmount = 0;
+		int productID = 0;
+		
+		for (int i = 0; i < amountOfProducts; i++) {
+			if (mostAmount < productsBoughtInTotal[i]) {
+				mostAmount = productsBoughtInTotal[i];
+				productID = i;
+			}
+		}
+		this.recommendedProductID = ++productID;
 	}
 	
-	public String getAddress() {
-		return address;
+	/**
+	 * Creates a list for all trips for this customer
+	 * Adds products equally to each action the customer has done. 
+	 * The list consists of the total amount of bought product.
+	 * @return int[] array list for the amount of products bought with productID = int[ID]
+	 */
+	private int[] getBoughtProductList() {
+		// List of all shopping trips for this customer	
+		List<ShoppingTrip> customerTrips = stdc.retrieveAllShoppingTripsForCustomer(this.customerID);
+		
+		/**
+		 * An overview for amount of products the customer bought in total since registering.
+		 * customerProducts[0] gives amount of products with productID = 1 (1-indexed in db) 
+		 * that this customer bought in total
+		 */
+		int amountOfProducts = 64;
+		int[] customerBoughtProductsInTotal= new int[amountOfProducts];
+		
+		/* 
+		 * Updating the customerBoughtProductsInTotal based on all 
+		 * shopping trips for this customer
+		 */
+		for (ShoppingTrip st : customerTrips) {
+			for (Action action : st.getActions()) {
+				/* 
+				 * Adds to the amount of bought products in total (by 1) by converting the 1-indexed
+				 * productID to be 0-indexed (int[]'s index == dbTable's index - 1)
+				 */
+				if (action.getActionType() == Action.DROP) {
+					customerBoughtProductsInTotal[action.getProduct().getID()-1]--;
+					
+				} else if (action.getActionType() == Action.PICK_UP) {
+					customerBoughtProductsInTotal[action.getProduct().getID()-1]++;
+				}
+			}
+		}
+		
+		return customerBoughtProductsInTotal;
 	}
 
-	/**
-	 * Sets new address and notifies observer
-	 * @param address new address
-	 */
-	public void setAddress(String address) {
-		setChanged();
-		notifyObservers();
-		clearChanged();
-		this.address = address;
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Customer customer = (Customer) o;
+		return customerID == customer.customerID &&
+				zip == customer.zip &&
+				age == customer.age &&
+				numberOfPersonsInHousehold == customer.numberOfPersonsInHousehold &&
+				recommendedProductID == customer.recommendedProductID &&
+				Objects.equals(firstName, customer.firstName) &&
+				Objects.equals(lastName, customer.lastName) &&
+				Objects.equals(address, customer.address) &&
+				Objects.equals(gender, customer.gender) &&
+				Objects.equals(shoppingTrips, customer.shoppingTrips);
 	}
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-		result = prime * result + customerId;
-		return result;
-	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Customer other = (Customer) obj;
-		if (firstName == null) {
-			if (other.firstName != null)
-				return false;
-		} 
-		else if (!firstName.equals(other.firstName))
-			return false;
-		if (lastName == null) {
-			if (other.lastName != null)
-				return false;
-		} 
-		else if (!lastName.equals(other.lastName))
-			return false;
-		if (customerId != other.customerId)
-			return false;
-		return true;
+		return Objects.hash(customerID, firstName, lastName, address, zip, gender, age, numberOfPersonsInHousehold, shoppingTrips, recommendedProductID);
 	}
 }
+
 
