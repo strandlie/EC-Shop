@@ -129,16 +129,23 @@ public abstract class AbstractServlet extends HttpServlet{
 			return;
 		}
 		
+		int id = -1;
 		try {
-			serializer.deserialize(req.getReader(), cl, HTTPMethod.DELETE);
+			id = serializer.deserialize(req.getReader(), cl, HTTPMethod.POST);
 		} catch (Exception e) {
 			e.printStackTrace();
 			resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		}
 		
+		// For returning ID of posted object
+		JSONObject jID = new JSONObject();
+		jID.put("id", id);
+		
 		resp.setContentType(JSONRespons);
 		resp.setStatus(HttpServletResponse.SC_OK);
+		resp.getWriter().println(jID.toJSONString());
+
 	}
 	
 	@Override

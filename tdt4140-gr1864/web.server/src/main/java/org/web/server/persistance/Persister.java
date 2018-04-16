@@ -92,19 +92,21 @@ public class Persister {
 	 * @param method	Persist-method to perform (CRUD)
 	 */
 	@SuppressWarnings("rawtypes")
-	public void persist(Object object, Class c, HTTPMethod method) {
+	public int persist(Object object, Class c, HTTPMethod method) {
 		switch(ModelClasses.fromClass(c)) {
 		case CUSTOMER: controller = new CustomerDatabaseController(); break;
-		case SHOPPING_TRIP: return;
+		case SHOPPING_TRIP: return -1;
 		default:
 			throw new IllegalArgumentException("No controller for this class");
 		}
 		
 		switch(method) {
-			case POST: 		create(object); break;
-			case PUT: 		update(object); break;
-			case DELETE: 	delete((Model) object); break;
+			case POST: 		return create(object);
+			case PUT: 		update(object); return -1;
+			case DELETE: 	delete((Model) object); return -1;
 		}
+
+		return -1;
 	}
 	
 	/**
@@ -222,9 +224,10 @@ public class Persister {
 	/**
 	 * Creates object in database
 	 * @param object
+	 * @return id of object
 	 */
-	private void create(Object object) {
-		controller.create(object);
+	private int create(Object object) {
+		return controller.create(object);
 	}
 	
 	/**

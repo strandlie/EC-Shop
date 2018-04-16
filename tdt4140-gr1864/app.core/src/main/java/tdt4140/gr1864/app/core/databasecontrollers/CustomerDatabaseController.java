@@ -30,7 +30,7 @@ public class CustomerDatabaseController extends DatabaseController implements Da
 			statement.setString(1, customer.getFirstName());
 			statement.setString(2, customer.getLastName());
 			statement.setString(3, customer.getAddress());
-			statement.setInt(4, customer.getID());
+			statement.setInt(4, customer.getZip());
 			statement.setString(5, customer.getGender());
 			statement.setInt(6, customer.getAge());
 			statement.setInt(7, customer.getNumberOfPersonsInHousehold());

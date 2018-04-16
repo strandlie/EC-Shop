@@ -63,14 +63,14 @@ public class Serializer {
 	 * @param method 	HTTP method
 	 */
 	@SuppressWarnings({ "rawtypes" })
-	public void deserialize(BufferedReader reader, Class c, HTTPMethod method) {
+	public int deserialize(BufferedReader reader, Class c, HTTPMethod method) {
 		
 		/* For classes that needs more advanced serializing */
 		switch(ModelClasses.fromClass(c)) {
 			case SHOPPING_TRIP: object = deserializeShoppingTrip(reader); break;
 			default: object = genericDeserialize(reader, c);break;
 		}
-		persister.persist(object, c, method);
+		return persister.persist(object, c, method);
 	}
 	
 	/**
