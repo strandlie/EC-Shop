@@ -22,8 +22,8 @@ public class CustomerDatabaseController extends DatabaseController implements Da
 	@Override
     public int create(Object object) {
     	Customer customer = objectIsCustomer(object);
-		String sql = "INSERT INTO customer (first_name, last_name, address, zip, gender, age, num_persons_in_household, anonymous) "
-					+ "values (?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO customer (first_name, last_name, address, zip, gender, age, num_persons_in_household, anonymous, deleted) "
+					+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		try {
 			Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
 			statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -35,6 +35,7 @@ public class CustomerDatabaseController extends DatabaseController implements Da
 			statement.setInt(6, customer.getAge());
 			statement.setInt(7, customer.getNumberOfPersonsInHousehold());
 			statement.setBoolean(8, customer.getAnonymous());
+			statement.setBoolean(9, customer.isDeleted());
 			statement.executeUpdate();
 				
 			try {
