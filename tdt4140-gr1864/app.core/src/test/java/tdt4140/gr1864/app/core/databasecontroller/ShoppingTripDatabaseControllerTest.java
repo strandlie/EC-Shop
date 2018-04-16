@@ -93,7 +93,7 @@ public class ShoppingTripDatabaseControllerTest {
 	@Test
 	public void testRetrieveAllShoppingTripsExpectSizeEqualOne() {
 		List<ShoppingTrip> trips = stdc.retrieveAllShoppingTrips();
-		Assert.assertEquals(2, trips.size());
+		Assert.assertEquals(1, trips.size());
 			
 	}
 	
@@ -149,7 +149,7 @@ public class ShoppingTripDatabaseControllerTest {
 	}
 	
 	@Test
-	public void wTestRetrieveAllShoppingTripsForCustomerExpectSizeEqualOne() {
+	public void testRetrieveAllShoppingTripsForCustomerExpectSizeEqualOne() {
 		t1 = new ShoppingTrip(stdc.create(t1), c1, s1, true, false);	
 		List<ShoppingTrip> customerTrips = stdc.retrieveAllShoppingTripsForCustomer(c1.getID());
 

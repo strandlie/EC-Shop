@@ -303,21 +303,6 @@ public class TestDataLoader {
 		return actions;
 	}
 	
-	/**
-	 * A function that adds products to the shelfs and storage of the shop, also updates the DB
-	 */
-	public void addProductsInShelfsInDB(List<Product> products) {
-		int amountInStorage = 90;
-		int amountOnShelfs = 20;
-		OnShelfDatabaseController osdc = new OnShelfDatabaseController();
-		for(Product p : products) {
-			int productID = p.getID();
-			this.shop.setAmountInShelfs(productID, amountOnShelfs);
-			this.shop.setAmountInStorage(productID, amountInStorage);
-			osdc.create(this.shop, productID);
-		}
-	}
-	
 	public ShoppingTrip getTrip() {
 		return trip;
 	}

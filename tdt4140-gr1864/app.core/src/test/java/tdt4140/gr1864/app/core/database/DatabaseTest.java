@@ -49,7 +49,22 @@ public class DatabaseTest {
 	}
 	
 	@Test
-	public void AconnectionTest() {
+	public void testDatabaseFunctionality() throws SQLException {
+		// Test if connection throws exception
+		connection();
+		
+		// Test if writing throws exception
+		write();
+		
+		// Test if select throws exception
+		select();
+
+		// Test if delete throws exception
+		delete();
+	}
+	
+	// Method for test purpose.
+	public void connection() {
 		
 		Connection connection = null;
       
@@ -62,9 +77,9 @@ public class DatabaseTest {
 		}
 		assertNotEquals(connection, null);
 	}
-	
-	@Test
-	public void BwriteTest() {
+
+	// Method for test purpose.
+	public void write() {
 		Connection connection = null;
 		java.sql.Statement statement = null;
 	      
@@ -83,9 +98,9 @@ public class DatabaseTest {
 	         System.exit(0);
 	      }
 	}
-	
-	@Test
-	public void CselectTest() throws SQLException {
+
+	// Method for test purpose.
+	public void select() throws SQLException {
 		Connection connection = null;
 		java.sql.Statement statement = null;
 	    ResultSet resultSet = null; 
@@ -106,9 +121,9 @@ public class DatabaseTest {
 	         System.exit(0);
 	      }
 	}
-	
-	@Test
-	public void DdeleteTest() throws SQLException {
+
+	// Method for test purpose.
+	public void delete() throws SQLException {
 		Connection connection = null;
 		java.sql.Statement statement = null;
 	    ResultSet resultSet = null;   

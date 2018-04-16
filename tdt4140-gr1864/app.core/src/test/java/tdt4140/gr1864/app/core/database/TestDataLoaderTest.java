@@ -17,7 +17,8 @@ import tdt4140.gr1864.app.core.Shop;
 import tdt4140.gr1864.app.core.ShoppingTrip;
 import tdt4140.gr1864.app.core.database.DatabaseWiper;
 import tdt4140.gr1864.app.core.databasecontrollers.OnShelfDatabaseController;
-import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;;
+import tdt4140.gr1864.app.core.databasecontrollers.ProductDatabaseController;
+import tdt4140.gr1864.app.core.databasecontrollers.ShopDatabaseController;;
 
 /* Uses test-data.json for testing */
 public class TestDataLoaderTest {
@@ -94,7 +95,5 @@ public class TestDataLoaderTest {
 		Shop retrievedShop = osdc.retrieve(testShop, productID);
 		
 		Assert.assertEquals(shop.getAmountInShelfs(productID), retrievedShop.getAmountInShelfs(productID));
-		
 	}
-
 }

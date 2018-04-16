@@ -86,7 +86,8 @@ public class CustomerDatabaseController extends DatabaseController implements Da
 					rs.getInt("age"),
 					rs.getInt("num_persons_in_household"),
             		rs.getBoolean("anonymous"),
-					rs.getInt("customer_id")
+					rs.getInt("customer_id"),
+					rs.getBoolean("deleted")
             		);
             statement.close();
             return user;
@@ -120,7 +121,8 @@ public class CustomerDatabaseController extends DatabaseController implements Da
 						rs.getInt("age"),
 						rs.getInt("num_persons_in_household"),
 						rs.getBoolean("anonymous"),
-						rs.getInt("customer_id"));
+						rs.getInt("customer_id"),
+						rs.getBoolean("deleted"));
     			customers.add(customer);
     		}
     		connection.close();

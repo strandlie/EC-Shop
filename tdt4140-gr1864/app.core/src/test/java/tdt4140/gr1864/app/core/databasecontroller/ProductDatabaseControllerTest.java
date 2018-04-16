@@ -34,7 +34,7 @@ public class ProductDatabaseControllerTest {
 	}
 	
 	@Test
-	public void AtestCreateAndRetrieveExpectCreatedProduct() {
+	public void testCreateAndRetrieveExpectCreatedProduct() {
 		p1 = new Product(pdc.create(p1), "tomatoes", 9.23);
 		Product storedP1 = (Product) pdc.retrieve(p1.getID());
 		Assert.assertEquals(p1.getName(), storedP1.getName());
@@ -42,7 +42,7 @@ public class ProductDatabaseControllerTest {
 	}
 	
 	@Test
-	public void BtestCreateAndRetrieveExpectCreatedProduct2() {
+	public void testCreateAndRetrieveExpectCreatedProduct2() {
 		p2 = new Product(pdc.create(p2), "beef", 50.5);
 		Product storedP2 = (Product) pdc.retrieve(p2.getID());
 		Assert.assertEquals(p2.getName(), storedP2.getName());
@@ -50,7 +50,7 @@ public class ProductDatabaseControllerTest {
 	}
 	
 	@Test
-	public void CtestCreateAndUpdateExpectUpdatedProduct() {
+	public void testCreateAndUpdateExpectUpdatedProduct() {
 		p2 = new Product(pdc.create(p2), p2.getName(), p2.getPrice());
 		p2 = new Product(p2.getID(), p3.getName(), p3.getPrice());
 		pdc.update(p2);
@@ -62,7 +62,7 @@ public class ProductDatabaseControllerTest {
 	}
 	
 	@Test
-	public void DtestDeleteExpectNull() {
+	public void testDeleteExpectNull() {
 		p1 = new Product(pdc.create(p1), p1.getName(), p1.getPrice());
 		pdc.delete(p1.getID());
 		Assert.assertEquals(pdc.retrieve(p1.getID()), null);

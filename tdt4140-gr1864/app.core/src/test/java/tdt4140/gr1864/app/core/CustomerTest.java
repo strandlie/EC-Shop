@@ -39,6 +39,7 @@ public class CustomerTest {
 	
 	@Before
 	public void setup() {
+		viper.wipe();
 		s1 = new Shop("Kings Road 2", 10);
 		s1 = new Shop(s1.getAddress(),s1.getZip(), sdc.create(s1));
 
@@ -152,7 +153,7 @@ public class CustomerTest {
 	@Test
 	public void testGetAddress() {
 		c1 = new Customer("Ben", "Len", "NTNU", 7047,
-				"Unspecified", 44, 3, true, 2);
+				"Unspecified", 44, 3, true, 2, false);
 		assertEquals(c1.getAddress(), "NTNU");
 	}
 
@@ -162,7 +163,7 @@ public class CustomerTest {
 	@Test
 	public void testSetAddress() {
 		c1 = new Customer("Ben", "Len", "NTNU", 7047,
-				"Unspecified", 44, 3, true, 2);
+				"Unspecified", 44, 3, true, 2, false);
 		c1.setAddress("UiB");
 		assertEquals(c1.getAddress(), "UiB");
 	}
@@ -170,7 +171,7 @@ public class CustomerTest {
 	@Test
 	public void testGetZip() {
 		c1 = new Customer("Ben", "Len", "NTNU", 7047,
-				"Unspecified", 44, 3, true, 2);
+				"Unspecified", 44, 3, true, 2, false);
 		assertEquals(c1.getZip(), 7047);
 	}
 
@@ -180,7 +181,7 @@ public class CustomerTest {
 	@Test
 	public void testSetZip() {
 		c1 = new Customer("Ben", "Len", "NTNU", 7047,
-				"Unspecified", 44, 3, true, 2);
+				"Unspecified", 44, 3, true, 2, false);
 		c1.setZip(0001);
 		assertEquals(c1.getZip(), 0001);
 	}
@@ -188,7 +189,7 @@ public class CustomerTest {
 	@Test
 	public void testGetGender() {
 		c1 = new Customer("Ben", "Len", "NTNU", 7047,
-				"Unspecified", 44, 3, true, 2);
+				"Unspecified", 44, 3, true, 2, false);
 		assertEquals(c1.getGender(), "Unspecified");
 	}
 
@@ -198,7 +199,7 @@ public class CustomerTest {
 	@Test
 	public void testSetGender() {
 		c1 = new Customer("Ben", "Len", "NTNU", 7047,
-				"Unspecified", 44, 3, true, 2);
+				"Unspecified", 44, 3, true, 2, false);
 		c1.setGender("Male");
 		assertEquals(c1.getGender(), "Male");
 	}
@@ -206,7 +207,7 @@ public class CustomerTest {
 	@Test
 	public void testGetAge() {
 		c1 = new Customer("Ben", "Len", "NTNU", 7047,
-				"Unspecified", 44, 3, true, 2);
+				"Unspecified", 44, 3, true, 2, false);
 		assertEquals(c1.getAge(), 44);
 	}
 
@@ -216,7 +217,7 @@ public class CustomerTest {
 	@Test
 	public void testSetAge() {
 		c1 = new Customer("Ben", "Len", "NTNU", 7047,
-				"Unspecified", 44, 3, true, 2);
+				"Unspecified", 44, 3, true, 2, false);
 		c1.setAge(50);
 		assertEquals(c1.getAge(), 50);
 	}
@@ -224,7 +225,7 @@ public class CustomerTest {
 	@Test
 	public void testGetLastName() {
 		c1 = new Customer("Ben", "Len", "NTNU", 7047,
-				"Unspecified", 44, 3, true, 2);
+				"Unspecified", 44, 3, true, 2, false);
 		assertEquals(c1.getLastName(), "Len");
 	}
 
@@ -234,15 +235,13 @@ public class CustomerTest {
 	@Test
 	public void testSetLastName() {
 		c1 = new Customer("Ben", "Len", "NTNU", 7047,
-				"Unspecified", 44, 3, true, 2);
+				"Unspecified", 44, 3, true, 2, false);
 		c1.setLastName("Knudsen");
 		assertEquals(c1.getLastName(), "Knudsen");
 	}
 	
 	@Test
 	public void testGiveRecommendationBoughtExpectProductIDEqualOne() {
-		viper.wipe();
-		setup();
 		int expectedProductID = 1;
 		c1.giveRecommendation();
 		Assert.assertEquals(expectedProductID, c1.getRecommendedProductID());
@@ -250,8 +249,6 @@ public class CustomerTest {
 	
 	@Test
 	public void testGiveRecommendationWhenNotBoughtExpectMostPopularEqualTwo() {
-		viper.wipe();
-		setup();
 		int expectedProductID = 2;
 		c2.giveRecommendation();
 		Assert.assertEquals(expectedProductID, c2.getRecommendedProductID());
@@ -259,7 +256,6 @@ public class CustomerTest {
 
 	@Test
 	public void testGiveRecommendationWhenCustomerAreAnonymousExpectProductIDEqualsMostPopularEqualsOne() {
-		viper.wipe();
 		setup();
 		int expectedProductID = 1;
 		c1.setAnonymous(true);
@@ -269,8 +265,6 @@ public class CustomerTest {
 	
 	@Test
 	public void testGiveRecommendationWhenShoppingTripsAreAnonymousExpectProductIDEqualZero() {
-		viper.wipe();
-		setup();
 		int expectedProductID = 0;
 		t1.setAnonymous(true);
 		stdc.update(t1);
@@ -280,8 +274,6 @@ public class CustomerTest {
 	
 	@Test
 	public void testGetStatisticsForAmountBoughtExpectSortedList() {
-		viper.wipe();
-		setup();
 		
 		List<ProductAmount> actualArray = c1.getStatisticsForAmountBought();
 		
