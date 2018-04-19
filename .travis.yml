@@ -1,5 +1,5 @@
 language: java
 sudo: false
-script: mvn clean verify
+script: mvn clean verify -f tdt4140-gr1864/pom.xml $MAVEN_CLI_OPTS
 notifications:
       email: false
