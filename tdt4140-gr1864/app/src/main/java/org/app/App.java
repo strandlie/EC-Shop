@@ -20,7 +20,7 @@ public class App implements AppListener {
 	private static App app;
 	
 	/**
-	 * The Thread running the DataMocker.
+	 * The Thread for running the DataMocker.
 	 */
 	private Thread mockerThread;
 	
