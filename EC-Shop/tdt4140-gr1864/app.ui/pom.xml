@@ -1,0 +1,97 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>tdt4140-gr1864.app.ui</artifactId>
+
+	<parent>
+		<groupId>tdt4140-gr1864</groupId>
+		<artifactId>tdt4140-gr1864</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	
+	<profiles>
+		<profile>
+			<id>gitlab-ci</id>
+			<activation>
+				<property>
+					<name>gitlab-ci</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<!-- 
+			<properties>
+				<skip-ui-tests>true</skip-ui-tests>
+			</properties>
+			 -->
+			<dependencies>
+				<dependency>
+		            <groupId>org.testfx</groupId>
+		            <artifactId>openjfx-monocle</artifactId>
+		            <version>8u76-b04</version> <!-- jdk-9+181 for Java 9 -->
+		            <scope>test</scope>
+		        </dependency>
+			</dependencies>
+		</profile>
+	</profiles>
+
+	<dependencies>
+		<dependency>
+		    <groupId>eu.hansolo.fx</groupId>
+		    <artifactId>charts</artifactId>
+		    <version>1.0.5</version>
+	            <scope>system</scope>
+		    <systemPath>${project.basedir}/libs/charts-1.0.5.jar</systemPath>
+		</dependency>
+
+		<dependency>
+			<groupId>tdt4140-gr1864</groupId>
+			<artifactId>tdt4140-gr1864.app.core</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testfx</groupId>
+			<artifactId>testfx-core</artifactId>
+			<version>4.0.10-alpha</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testfx</groupId>
+			<artifactId>testfx-junit</artifactId>
+			<version>4.0.10-alpha</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.0</version>
+				<executions>
+					<execution>
+						<id>pre-unit-test</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>post-unit-test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
