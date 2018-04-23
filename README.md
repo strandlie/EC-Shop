@@ -2,7 +2,7 @@
 Shop :apple: :bacon: :hamburger: :stuffed_flatbread:</h1>
 
 <img src="https://travis-ci.org/strandlie/EC-Shop.svg?branch=master">
-<img src="https://gitlab.stud.iie.ntnu.no/tdt4140-2018/64/badges/master/coverage.svg">
+<img src="https://codecov.io/gh/strandlie/EC-Shop/branch/master/graph/badge.svg">
 
 This is a school project developed associated with the subject TDT4140 at NTNU.
 The project was developed using SCRUM, split into three sprints. A private

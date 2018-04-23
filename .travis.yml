@@ -1,5 +1,9 @@
 language: java
+jdk:
+    - oraclejdk8
 sudo: false
-script: mvn clean verify -f tdt4140-gr1864/pom.xml $MAVEN_CLI_OPTS
+script: mvn clean install -f tdt4140-gr1864/pom.xml $MAVEN_CLI_OPTS
 notifications:
       email: false
+after_success:
+    - bash <(curl -s https://codecov.io/bash)
