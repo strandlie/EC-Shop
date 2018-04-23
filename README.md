@@ -1,11 +1,13 @@
 <h1><img src="https://i.imgur.com/NaEWdZ3.png" width="100" />&nbsp; &nbsp; E.C.
 Shop :apple: :bacon: :hamburger: :stuffed_flatbread:</h1>
 
-
-<img src="https://gitlab.stud.iie.ntnu.no/tdt4140-2018/64/badges/master/build.svg">
+<img src="https://travis-ci.org/strandlie/EC-Shop.svg?branch=master">
 <img src="https://gitlab.stud.iie.ntnu.no/tdt4140-2018/64/badges/master/coverage.svg">
 
 This is a school project developed associated with the subject TDT4140 at NTNU.
+The project was developed using SCRUM, split into three sprints. A private
+Gitlab-instance was used - this repo is a clone of the final release. Issues,
+wiki and pull-requests were not migrated.
 
 E.C. Shop is a system for tracking customers in a store, similarly to systems
 such as Amazon's Amazon Go. The system tracks customer inventories as they move
@@ -19,6 +21,8 @@ items in stock, and visualizations of customer movements throughout the shop.
 	- [Data providers](#features-for-data-providers-customers)
 - [Installation](#installation)
 - [System Architecture](#system-architecture)
+- [Tools we've used](#list-of-tools-weve-used)
+- [Documentation](#documentation)
 
 ## Feature overview
 ### Features for service providers / shop owners
@@ -114,3 +118,7 @@ The `app` module is responsible for starting and stopping the system cleanly.
 * Eclipse - An open source IDE that is primarly used to develop in this project
 * JavaFX - A set of graphics and media packages.
 * JDBC - Short for Java Database Connectivity and is a standardized interface for java applications that communicates with a database. 
+
+## Documentation
+[REST-API documentation is found here.](https://github.com/strandlie/EC-Shop/blob/master/tdt4140-gr1864/web.server/README.md)
+
